@@ -14,4 +14,4 @@ nlp = StanfordNLP()
 while(True):
   line=input("")
   result = nlp.parse(line)
-  print(result['sentences'][0]['dependencies'])
+  print(result['sentences'][0]['indexeddependencies'])
