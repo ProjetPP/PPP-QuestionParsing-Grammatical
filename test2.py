@@ -1,6 +1,7 @@
 import json
 #from jsonrpc import ServerProxy, JsonRpc20, TransportTcpIp
 import jsonrpclib
+import fileinput
 
 class StanfordNLP:
     def __init__(self, port_number=8080):
@@ -10,6 +11,8 @@ class StanfordNLP:
         return json.loads(self.server.parse(text))
 
 nlp = StanfordNLP()
-result = nlp.parse("What is birth date of the wife of the first black president of the United States?")
 
-print(result['sentences'][0]['dependencies'])
+while(True):
+  line=input("")
+  result = nlp.parse(line)
+  print(result['sentences'][0]['dependencies'])
