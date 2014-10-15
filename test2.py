@@ -1,7 +1,6 @@
 import json
 #from jsonrpc import ServerProxy, JsonRpc20, TransportTcpIp
 import jsonrpclib
-import fileinput
 
 class StanfordNLP:
     def __init__(self, port_number=8080):
