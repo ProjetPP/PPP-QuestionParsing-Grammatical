@@ -39,3 +39,13 @@ For example, we can have the following predicates:
 * `where`: `location`
 * `when`: `date` or `event`
 * `how`: `way` or `mean`
+
+**Other solution:**
+
+We may not care of the question word. For instance, several questions are possible
+about the French revolution: `When was the French revolution?` or `Where was the 
+French revolution?`. Then, either we answer precisely (e.g. `1789` for the date, 
+`Paris` for the location), or we output a short summary which would be identical 
+for each question word. In the later case, simply drop the question word and the 
+auxiliary. This lake of precision is unsatisfying (in comparison with existing
+tools), but it would be better than nothing.
