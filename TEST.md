@@ -35,3 +35,5 @@ You can have a dot file using the following: `python3 > test.dot` (then, write
 your sentence).
 
 You can also have directly a ps file using the following: `python3 test3.py | dot -Tps > test.ps`
+
+More laziness: `echo "What is the birth date of the first president of the United States?" | python3 test3.py | dot -Tps > test.ps`
