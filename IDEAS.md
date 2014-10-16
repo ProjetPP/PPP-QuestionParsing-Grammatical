@@ -29,6 +29,29 @@ Name entity recognition can be useful in two ways:
   - tag and group some parts of the question (ex: name 'Barack Obama', location 'Paris').
   - replace references in sentences (ex: 'What Nadal does when he has to serve?' -> 'What Nadal does when Nadal has to serve?')
   
+I made new experiments with the StanfordNLP library. All worked well for the sentence
+`Barack Obama is the president of the United States.`: the `parsetree` attribute 
+of the resulting object put `George` and `Washington` in a same nominal group. Idem 
+for `United` and `States`. The result in the dependency tree is great too: `George` 
+is a subnode of `Washington` and `United` is a subnode of `States`.
+
+So I hoped to have a good entity recognition tool with StanfordNLP.
+
+Then I tried `Who is the United States president?`. Big fail. In the parse tree, 
+it groups `the United States president` in one nominal group, but does not make 
+a subgroup with only `United States`.
+The dependency tree is even worst. There is a subtree for the whole group, with 
+`president` on top, with two children: `United` and `States`. Thus, these two words 
+are separated, which looks pretty bad.
+
+I will search other ways, maybe with NLTK library...
+
+**Interesting:** StanfordNLP also provide the meaning of some words in the `words`
+attribute. For instance, words `George` and `Washington` are recognized as `person`,
+whereas words `United` and `States` are recognized as `location`, in the sentence
+`George Washington is the president of the United States.`. It could be very
+useful.
+  
 ## Pattern recognition
 
 We can observe some incoherencies. 
@@ -72,5 +95,5 @@ French revolution?`. Then, either we answer precisely (e.g. `1789` for the date,
 for each question word. In the later case, simply drop the question word and the 
 auxiliary. This lake of precision is unsatisfying (in comparison with existing
 tools), but it would be better than nothing. This can be even worst for other
-questions: `Who is Washingon?` and `Where is Washington?` refer to two different
+questions: `Who is Washington?` and `Where is Washington?` refer to two different
 things (the person or the town).
