@@ -48,4 +48,6 @@ French revolution?`. Then, either we answer precisely (e.g. `1789` for the date,
 `Paris` for the location), or we output a short summary which would be identical 
 for each question word. In the later case, simply drop the question word and the 
 auxiliary. This lake of precision is unsatisfying (in comparison with existing
-tools), but it would be better than nothing.
+tools), but it would be better than nothing. This can be even worst for other
+questions: `Who is Washingon?` and `Where is Washington?` refer to two different
+things (the person or the town).
