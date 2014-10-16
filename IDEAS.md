@@ -49,7 +49,7 @@ I will search other ways, maybe with NLTK library...
 As far as I know the NLTK library does not provide a statistical parser (= you cannot have immediately a parse tree, you must design a grammar before). However, it seems that there is a name entity recognition toolkit included in. Otherwise, you can try the online demo of the name entity recognition system provided by coreNLP (called NER, see: http://nlp.stanford.edu/software/corenlp.shtml) here : http://nlp.stanford.edu:8080/ner/process. NER claims to be able to recognize PERSON, LOCATION, ORGANIZATION, MISC, DATE, TIME, MONEY, NUMBER and it works on the example `Who is the United States president?`
 
 **Interesting:** StanfordNLP also provide the meaning of some words in the `words`
-attribute. For instance, words `George` and `Washington` are recognized as `person`,
+attribute (__did you find a description of what this attribute contains ?__). For instance, words `George` and `Washington` are recognized as `person`,
 whereas words `United` and `States` are recognized as `location`, in the sentence
 `George Washington is the president of the United States.`. It could be very
 useful.
@@ -61,7 +61,7 @@ Consider the two sentences `Who is the president of France?` and `Where does the
 singer of Led Zeppelin live?`. The question word is not placed at the same place 
 in the obtained tree.
 
--> It's probably due to the specific role holding by "be" in the Stanford parser. See section 4.7 of the manual, there is a way to avoid this (and always have the verb at the top of the tree?) but I don't how adding the flag required.
+It's probably due to the specific role held by "be" in the Stanford parser. See section 4.7 of the manual, there is a way to avoid this (and always have the verb at the top of the tree?) but I don't how adding the flag required.
 
 A solution could be to compute these questions specifically:
 
