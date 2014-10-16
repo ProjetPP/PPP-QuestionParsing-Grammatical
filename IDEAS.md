@@ -6,9 +6,9 @@ about them.
 Please have a look at the graphs generated with the Stanford library, and try
 your own experimentations.
 
-## First idea
+## Pre-processing
 
-### Tree simplification
+#### Tree simplification
 
 Return the tree given by the Stanford library, with some modifications.
 
@@ -21,7 +21,7 @@ France). The same transformation can be applied to the parsing result of
 
 This gives a nice recursive function.
 
-### Name entity recognition
+#### Name entity recognition
 
 There may be a way to group "same entities" together (ex: George Washington). It's call "name entity recognition". See the pad (http://pad.aliens-lyon.fr/p/ppp-nlp) for some (basic) resources.
 
@@ -29,7 +29,7 @@ Name entity recognition can be useful in two ways:
   - tag and group some parts of the question (ex: name 'Barack Obama', location 'Paris').
   - replace references in sentences (ex: 'What Nadal does when he has to serve?' -> 'What Nadal does when Nadal has to serve?')
   
-### Critics and improvement
+## Pattern recognition
 
 We can observe some incoherencies. 
 Consider the two sentences `Who is the president of France?` and `Where does the
