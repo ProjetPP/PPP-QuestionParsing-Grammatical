@@ -12,8 +12,29 @@ class Node:
     self.dep = dependency       # Relation with the parent node (e.g. 'nn' or 'det' or 'root')
     self.child = subnodes       # List of children nodes
                                 # parent attribute will be available after computaiton of the tree
-
-      
+                                
+  def string(self):
+    # Concatenation of the words of the root
+    w = ''
+    for x in self.words:
+      w += x[:x.rindex('-')] + ' '
+    w = w[:len(w)-1]
+    s=''
+    # Adding the definition of the root (dot format)
+    t=''
+    if(self.tag != 'O' and self.tag != 'undef'):
+      t+= " ["+self.tag+"]"
+    s+="\t\"{0}\"[label=\"{1}{2}\",shape=box];\n".format(self.words[0],w,t)
+    # Adding definitions of the edges
+    for n in self.child:
+      s+="\t\"{0}\" -> \"{1}\"[label=\"{2}\"];\n".format(self.words[0],n.words[0],n.dependency)
+    # Recursive calls
+    for n in self.child:
+      s+=n.string()+'\n'
+    return s
+    
+  def __str__(self):
+    return 'digraph relations {\n'+self.string()+'}\n'     
 
 def compute_tree(r):
   """
@@ -45,6 +66,11 @@ def compute_tree(r):
     if word[0].isalnum() or word[0] == '$' or  word[0] == '%':
       w=word[0]+'-'+str(index) # key in the name_to_nodes map
       index+=1
-      n = name_to_nodes[w]
-      n.tag = word[1]['NamedEntityTag']
+      try:
+        n = name_to_nodes[w]
+        n.tag = word[1]['NamedEntityTag']
+      except KeyError:        # this node does not exists (e.g. 'of' preposition)
+        pass
   return name_to_nodes['ROOT-0']
+  
+  
