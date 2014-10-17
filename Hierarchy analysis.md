@@ -1,4 +1,4 @@
-Here we try to analyse the grammatical relations used by the Stanford Parser. The hierarchy of types dependencies bellow is taken from the manual ("The grammatical relations defined in the above section stand in a hierarchy. The most generic grammatical relation, dependent (dep), will be used when a more precise relation in the hierarchy does not exist or cannot be retrieved by the system.")
+Here we try to analyse the grammatical relations used by the Stanford Parser. The hierarchy of types dependencies below is taken from the manual ("The grammatical relations defined in the above section stand in a hierarchy. The most generic grammatical relation, dependent (dep), will be used when a more precise relation in the hierarchy does not exist or cannot be retrieved by the system.")
 
 The elements with the symbol (-) don't appear in the hierarchy, but are explained in the part 2 of the manuel (the contrary also happens). 
 
