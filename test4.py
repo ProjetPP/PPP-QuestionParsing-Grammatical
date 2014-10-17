@@ -17,3 +17,5 @@ def get_tree():
   nlp = StanfordNLP()
   result = nlp.parse("George Washington was the first president of the United States.")
   return parsetree_to_triple.compute_tree(result['sentences'][0])
+  
+print(get_tree())
