@@ -62,11 +62,19 @@ does exactly what I said). For instance, words `George` and `Washington` are rec
 whereas words `United` and `States` are recognized as `location`, in the sentence
 `George Washington is the president of the United States.`. It could be very
 useful.
+
 Even more interesting, in the sentence `What is Pkofjqdaeo Zllitjtpq hair colour?` 
 it recognizes `Pkofjqdaeo` and `Zllitjtpq` as a person (although there is certainly 
 not these words in the dictionary).
 Limit: in the sentence `What is the president of Pkofjqdaeo Zllitjtpq?`, the two 
 last words are still considered as a person.
+
+The date recognition works also well. Parse the sentence `Turing was born on June 23, 1912.`.
+It will recognize `June`, `23` and `1912` as a date, and for each one there is an
+attribute `NormalizedNamedEntityTag` with value `'1912-06-23'` and an attribute
+`Timex` with value `'<TIMEX3 tid="t1" type="DATE" value="1912-06-23">June 23, 1912</TIMEX3>'`
+(yes these values are strings, which is sad).
+
   
 ## Pattern recognition
 
