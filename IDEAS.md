@@ -44,6 +44,9 @@ The dependency tree is even worst. There is a subtree for the whole group, with
 `president` on top, with two children: `United` and `States`. Thus, these two words 
 are separated, which looks pretty bad.
 
+Surprisingly, the parsing of `What is John Smith hair colour?` works very well.
+The dependencies are correct, and it recognizes `John` and `Smith` as `person`.
+
 I will search other ways, maybe with NLTK library...
 
 As far as I know the NLTK library does not provide a statistical parser (= you cannot have immediately a parse tree, you must design a grammar before). However, it seems that there is a name entity recognition toolkit included in. Otherwise, you can try the online demo of the name entity recognition system provided by coreNLP (called NER, see: http://nlp.stanford.edu/software/corenlp.shtml) here : http://nlp.stanford.edu:8080/ner/process. NER claims to be able to recognize PERSON, LOCATION, ORGANIZATION, MISC, DATE, TIME, MONEY, NUMBER and it works on the example `Who is the United States president?`
@@ -59,6 +62,11 @@ does exactly what I said). For instance, words `George` and `Washington` are rec
 whereas words `United` and `States` are recognized as `location`, in the sentence
 `George Washington is the president of the United States.`. It could be very
 useful.
+Even more interesting, in the sentence `What is Pkofjqdaeo Zllitjtpq hair colour?` 
+it recognizes `Pkofjqdaeo` and `Zllitjtpq` as a person (although there is certainly 
+not these words in the dictionary).
+Limit: in the sentence `What is the president of Pkofjqdaeo Zllitjtpq?`, the two 
+last words are still considered as a person.
   
 ## Pattern recognition
 
