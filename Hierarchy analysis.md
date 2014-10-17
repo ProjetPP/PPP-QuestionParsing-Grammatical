@@ -92,7 +92,7 @@ The elements with the symbol (-) don't appear in the hierarchy, but are explaine
 
 >>> **mwe - multi-word expression modifier**
 
->> merge nodes
+>>> merge nodes
 
 >>>> **mark - marker (word introducing an advcl or ccomp**
 
@@ -120,7 +120,7 @@ The elements with the symbol (-) don't appear in the hierarchy, but are explaine
 
 >>> **prepc - prepositional clausal modifier (-)**
 
->>> collapsed tree
+>>> collapsed tree only
 
 >>> **poss - possession modifier**
 
