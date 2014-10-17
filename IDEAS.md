@@ -21,6 +21,13 @@ France). The same transformation can be applied to the parsing result of
 
 This gives a nice recursive function.
 
+The Stanford Parser can output 5 differents types of dependency graph (see the manual for a description of them). It may be interessant not to work with the standard one (the collapsed tree could be useful).
+
+We must take care of the properties we want to preserve on our graph:
+  - connected: before removing a node (determinant for example), be sure that it is a leaf
+  - acyclic: depending on the format chosen, the graph can have some cycles (the basic dependency graph is acyclic)
+  - ...
+
 #### Name entity recognition
 
 There may be a way to group "same entities" together (ex: George Washington). It's call "name entity recognition". See the pad (http://pad.aliens-lyon.fr/p/ppp-nlp) for some (basic) resources.
@@ -68,6 +75,7 @@ it recognizes `Pkofjqdaeo` and `Zllitjtpq` as a person (although there is certai
 not these words in the dictionary).
 Limit: in the sentence `What is the president of Pkofjqdaeo Zllitjtpq?`, the two 
 last words are still considered as a person.
+-> WolframAlpha answers: "brown" and "No president, it's a monarchy"...
 
 The date recognition works also well. Parse the sentence `Turing was born on June 23, 1912.`.
 It will recognize `June`, `23` and `1912` as a date, and for each one there is an
@@ -121,3 +129,5 @@ auxiliary. This lake of precision is unsatisfying (in comparison with existing
 tools), but it would be better than nothing. This can be even worst for other
 questions: `Who is Washington?` and `Where is Washington?` refer to two different
 things (the person or the town).
+
+
