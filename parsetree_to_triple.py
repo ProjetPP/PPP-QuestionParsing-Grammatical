@@ -20,8 +20,10 @@ def compute_tree(r):
     Compute the dependence tree.
     Take in input a piece of the result produced by StanfordNLP.
     If foo is this result, then r = foo['sentences'][0]
+    Return the root of the tree (word 'ROOT-0').
   """
-  name_to_nodes = {} # find the nodes with their original string
+  name_to_nodes = {} # map from the original string to the node
+  # Computation of the edges of the tree
   for edge in r['indexeddependencies']:
     try:
       n1 = name_to_nodes[edge[1]]
@@ -38,6 +40,7 @@ def compute_tree(r):
     n2.parent = n1
     n2.dependency = edge[0]
   index=1
+  # Computation of the tags of the nodes
   for word in r['words']:
     if word[0].isalnum() or word[0] == '$' or  word[0] == '%':
       w=word[0]+'-'+str(index) # key in the name_to_nodes map
