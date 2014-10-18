@@ -8,14 +8,14 @@ Run (example):
 Launching a server
 ==================
 
-Go into Scripts directory
-Run:
-  python corenlp-python/corenlp/corenlp.py
-  
 May need to install [jsonrpclib](https://github.com/tcalmant/jsonrpclib) (for python3).
-  
-and to replace line 47 (in Scripts/corenlp-python/corenlp/corenlp.py): 
-  `DIRECTORY = "stanford-corenlp-full-2014-08-27"`
+
+Go to the folder where CoreNLP is installed (usually the Scripts/ folder)
+and run:
+  CORENLP="stanford-corenlp-full-2014-08-27" python3 -m corenlp
+
+Or, if it does not work (older version of corenlp-python):
+  CORENLP="stanford-corenlp-full-2014-08-27" python3 corenlp-python/corenlp/corenlp.py
      
 Parsing using a server
 ======================
