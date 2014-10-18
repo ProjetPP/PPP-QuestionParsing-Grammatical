@@ -132,6 +132,7 @@ Some common questions (from http://ailab.ijs.si/delia_rusu/Papers/www_ssws_2009.
 
 See also: http://www.aclweb.org/anthology/A00-1023.pdf
 
+
 **Other solution:**
 
 We may not care of the question word. For instance, several questions are possible
@@ -143,5 +144,48 @@ auxiliary. This lake of precision is unsatisfying (in comparison with existing
 tools), but it would be better than nothing. This can be even worst for other
 questions: `Who is Washington?` and `Where is Washington?` refer to two different
 things (the person or the town).
+
+## Overall algorithm
+
+Here is a first proposition of overall algorithm:
+
+INPUT: question
+
+OUTPUT: conjunction of triples, with at least one hole by triple
+
+1. Compute the dependency tree
+2. Apply name entity recognition for merging some nodes and attach description on them (location, name...)
+3. Apply as many simplifications (merge, delete...) as possible on the tree. Obtain a new tree that uses a _restricted_ set of dependencies (not 50 dependencies possible, as in Stanford dependency)
+4. Identify the "question word" (or type of question)
+5. Produce the triples involved by the question type
+6. Add the triples involved by other parts of the tree
+7. Output the conjunction of all the triples
+
+I think we cannot avoid "hardcoding" the step 5, ie determine (in advance) __all the types__ of possible questions and what triples must be directly produced by each question. In fact, the most difficult thing is to place the "holes" in triples. Analyzing the dependency tree without pre-learned patterns will never allow us to find "from scratch" where holes must be.
+
+Example: Where is born Barack Obama's wife?
+
+1. Parse tree
+2. "Barack Obama" is recognized as a name. The 2 nodes are merged
+3. Simplifications
+4. Question word: where. 
+  * The verb is identified ("bear") and the subject ("Barack Obama's wife")
+  * The pattern attached to "where" is: `<where> <verb> <subject>` -> `verbIn(subject,x)` where x is the final answer
+5. The triple `bearIn(y=Barack Obama's wife,x)` is produced
+6. The system produces an extra triple:
+  * "Barack Obama's wife" is recognized as a relation of possession. 
+  * The triple `wifeOf(y,Barack Obama)` is produce
+7. Output: `bearIn(y,x) /\ wifeOf(y,Barack Obama)`
+
+Here we can see that "Barack Obama's wife" can be firstly not considered as an unknown (step 5, in `bearIn(Barack Obama's wife,x)`), and in a second time some additionnal information "destruct" it in a triple (`wifeOf(y,Barack Obama)`). This is interesting because we have progressively "simplified" the set of triples (it's difficult to query `bearIn(Barack Obama's wife,x)` but it's easy to query `wifeOf(y,Barack Obama)`, obtain `y=Michelle Obama` and then query `bearIn(Michelle Obama,x)`).
+
+The big difference between the transformation in triples we perform and transformations in text simplification for example (automatic summarization: only extract triples, without holes) is the __holes__. Produce some triples without holes is much more simpler that what we do. However, I think we can say that the above algorithm places in fact only __one real hole__ (x, the answer we search). Indeed, in the example we could output `bearIn(Barack Obama's wife,x) /\ wifeOf(Barack Obama's wife,Barack Obama)` and then perform as many simplifications on triples as possible. For example:
+  - we query `wifeOf(Barack Obama's wife,_)` (_ is a hole). The database gives no answer.
+  - we query `wifeOf(_,Barack Obama)`. The database finds `Michelle Obama`. We replace `Barack Obama's wife` everywhere it appears
+  - we continue until we success to find the really unknown x
+  
+Triples such as `wifeOf(Barack Obama's wife,Barack Obama)` can be found directly from the tree, but the only real hole cannot be placed from scratch. This is why we have to study all types of questions patterns.
+
+
 
 
