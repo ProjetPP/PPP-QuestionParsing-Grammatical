@@ -24,7 +24,7 @@ Using a server enables to parse quicker (< 1s) than loading the module each time
 
 
 Presentation of the output using dot
-==========================
+====================================
 
 We assume that a server is launched.
 

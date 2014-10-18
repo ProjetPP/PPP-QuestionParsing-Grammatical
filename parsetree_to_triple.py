@@ -11,7 +11,7 @@ class DependenciesTree:
         self.namedEntityTag = namedentitytag
         self.dependency = dependency
         self.child = child or []
-        # parent attribute will also be available after computaiton of the tree
+        # parent attribute will also be available after computation of the tree
 
     def string(self):
         # Concatenation of the words of the root
