@@ -6,11 +6,11 @@ class DependenciesTree:
         One node of the parse tree.
         It is a group of words of same NamedEntityTag (e.g. George Washington).
     """
-    def __init__(self, word_list, namedentitytag='undef', dependency='undef', child=[]):
+    def __init__(self, word_list, namedentitytag='undef', dependency='undef', child=None):
         self.wordList = word_list
         self.namedEntityTag = namedentitytag
         self.dependency = dependency
-        self.child = child
+        self.child = child or []
         # parent attribute will also be available after computaiton of the tree
 
     def string(self):
