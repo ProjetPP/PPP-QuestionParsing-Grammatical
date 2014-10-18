@@ -21,14 +21,26 @@ France). The same transformation can be applied to the parsing result of
 
 This gives a nice recursive function.
 
-The Stanford Parser can output 5 differents types of dependency graph (see the manual for a description of them). It may be interessant not to work with the standard one (the collapsed tree could be useful).
+The Stanford Parser can output 5 different types of dependency graph (see the manual for a description of them). It may be interesting not to work with the standard one (the collapsed tree could be useful).
 -> I agree, it seems very interesting. I did not see such a representation in the wrapper written in python. 
-Maybe we would have to write it ourselves...
+The python wrapper seems to provide the `collapsed tree` representation. You can
+see it by parsing the sentence `Bell, based in Los Angeles, makes and distributes 
+electronic, computer and building products.`: the two words `based in` are collapsed,
+but we keep a tree structure. The question is: is it collapsed enough for us? A
+non-tree structure may be tricky to handle...
 
 We must take care of the properties we want to preserve on our graph:
   - connected: before removing a node (determinant for example), be sure that it is a leaf
   - acyclic: depending on the format chosen, the graph can have some cycles (the basic dependency graph is acyclic)
   - ...
+  
+We could try to collapse additional elements. For instance, it would be great
+to have only one node for `George Washington`.
+An idea could be to merge two nodes if one is the parent of the other, and they
+both have the same (non null) tag.
+We could even merge two nodes which have the same parent and the same (non null)
+tag (by doing this, we would merge `United States` in the sentence `Who was the
+first United States president?`, which is what we want).
 
 #### Name entity recognition
 
