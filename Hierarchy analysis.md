@@ -1,6 +1,6 @@
 Here we try to analyse the grammatical relations used by the Stanford Parser. The hierarchy of types dependencies below is taken from the manual ("The grammatical relations defined in the above section stand in a hierarchy. The most generic grammatical relation, dependent (dep), will be used when a more precise relation in the hierarchy does not exist or cannot be retrieved by the system.")
 
-The elements with the symbol (-) don't appear in the hierarchy, but are explained in the part 2 of the manuel (the contrary also happens). 
+The elements with the symbol (-) don't appear in the hierarchy, but are explained in the part 2 of the manual (the contrary also happens). 
 
 > **root - root**
 
@@ -10,9 +10,9 @@ The elements with the symbol (-) don't appear in the hierarchy, but are explaine
 
 > parser fails to find a dependency.
 
-> remove the subtree.
+> remove the subtree...
 
-> merge all the subtree (ex:  Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?)
+> or ...merge all the subtree (ex:  Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?)
 
 >> **aux - auxiliary**
 

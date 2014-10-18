@@ -12,7 +12,7 @@ class StanfordNLP:
 
 nlp = StanfordNLP()
 
-def print_dot(relations):
+def print_dot(relations,line):
   obj_set = set([])
   print("digraph relations {")
   for r in relations:
@@ -24,8 +24,10 @@ def print_dot(relations):
   for r in relations:
     #if r[0] != "det":
       print("\t\"{0}\" -> \"{1}\"[label=\"{2}\"];".format(r[1],r[2],r[0]))
+  print("\tlabelloc=\"t\"");
+  print("\tlabel=\"%s\";" % line)
   print("}")
 
 line=input("")
 result = nlp.parse(line)
-print_dot(result['sentences'][0]['indexeddependencies'])
+print_dot(result['sentences'][0]['indexeddependencies'],line)
