@@ -22,6 +22,8 @@ France). The same transformation can be applied to the parsing result of
 This gives a nice recursive function.
 
 The Stanford Parser can output 5 differents types of dependency graph (see the manual for a description of them). It may be interessant not to work with the standard one (the collapsed tree could be useful).
+-> I agree, it seems very interesting. I did not see such a representation in the wrapper written in python. 
+Maybe we would have to write it ourselves...
 
 We must take care of the properties we want to preserve on our graph:
   - connected: before removing a node (determinant for example), be sure that it is a leaf

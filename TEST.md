@@ -12,7 +12,7 @@ Go into Scripts directory
 Run:
   python corenlp-python/corenlp/corenlp.py
   
-May need to install [jsonrpclib](https://github.com/tcalmant/jsonrpclib) (for python3).
+On Python 3 you need [a fork of jsonrpclib](https://github.com/tcalmant/jsonrpclib).
   
 and to replace line 47 (in Scripts/corenlp-python/corenlp/corenlp.py): 
   `DIRECTORY = "stanford-corenlp-full-2014-08-27"`
