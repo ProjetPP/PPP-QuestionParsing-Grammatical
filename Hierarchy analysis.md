@@ -12,6 +12,8 @@ The elements with the symbol (-) don't appear in the hierarchy, but are explaine
 
 > remove the subtree.
 
+> merge all the subtree (ex:  Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?)
+
 >> **aux - auxiliary**
 
 >> merge and simplify (aux (born,was) -> bear) 
@@ -72,6 +74,8 @@ The elements with the symbol (-) don't appear in the hierarchy, but are explaine
 
 >>> **amod - adjectival modifier**
 
+>>> merge
+
 >>> **appos - appositional modifier**
 
 >>> **advcl - adverbial clause modifier**
@@ -83,6 +87,8 @@ The elements with the symbol (-) don't appear in the hierarchy, but are explaine
 >>> can link a word to a "question word"
 
 >>> ex : “Which book do you prefer?” -> det(book, which)
+
+>>> ex: What debts did Qintex group leave?
 
 >>> **predet - predeterminer**
 
@@ -120,7 +126,7 @@ The elements with the symbol (-) don't appear in the hierarchy, but are explaine
 
 >>> **prepc - prepositional clausal modifier (-)**
 
->>> collapsed tree only
+>>> appear on collapsed tree only
 
 >>> **poss - possession modifier**
 
