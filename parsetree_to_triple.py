@@ -11,6 +11,7 @@ class DependenciesTree:
         self.namedEntityTag = namedentitytag
         self.dependency = dependency
         self.child = child or []
+        self.text = "" # only relevant for the root node
         # parent attribute will also be available after computation of the tree
 
     def string(self):
@@ -31,7 +32,7 @@ class DependenciesTree:
         return s
 
     def __str__(self):
-        return 'digraph relations {\n%s}\n' % self.string()
+        return "digraph relations {"+"\n{0}\tlabelloc=\"t\"\tlabel=\"{1}\";\n".format(self.string(),self.text)+"}\n"
 
 def compute_edges(r,name_to_nodes):
     """
@@ -83,6 +84,7 @@ def compute_tree(r):
     name_to_nodes = {} # map from the original string to the node
     compute_edges(r,name_to_nodes)
     compute_tags(r,name_to_nodes)
+    name_to_nodes['ROOT-0'].text = r['text']
     return name_to_nodes['ROOT-0']
 
 
