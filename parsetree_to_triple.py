@@ -1,15 +1,15 @@
 import sys
-    
+
 
 class DependenciesTree:
-    """ 
+    """
         One node of the parse tree.
-        It is a group of words of same NamedEntityTag (e.g. George Washington).        
+        It is a group of words of same NamedEntityTag (e.g. George Washington).
     """
     def __init__(self, word_list, namedentitytag='undef', dependency='undef', child=[]):
         self.wordList = word_list
         self.namedEntityTag = namedentitytag
-        self.dependency = dependency            
+        self.dependency = dependency
         self.child = child
         # parent attribute will also be available after computaiton of the tree
 
@@ -32,14 +32,14 @@ class DependenciesTree:
         for n in self.child:
             s+=n.string()+'\n'
         return s
-        
+
     def __str__(self):
-        return 'digraph relations {\n'+self.string()+'}\n'     
+        return 'digraph relations {\n'+self.string()+'}\n'
 
 def compute_edges(r,name_to_nodes):
     """
         Compute the edges of the dependence tree.
-        Take in input a piece of the result produced by StanfordNLP, and the 
+        Take in input a piece of the result produced by StanfordNLP, and the
         map from names to nodes.
     """
     for edge in r['indexeddependencies']:
@@ -57,11 +57,11 @@ def compute_edges(r,name_to_nodes):
         n1.child = n1.child+[n2]
         n2.parent = n1
         n2.dependency = edge[0]
-        
+
 def compute_tags(r,name_to_nodes):
     """
         Compute the tags of the dependence tree nodes.
-        Take in input a piece of the result produced by StanfordNLP, and the 
+        Take in input a piece of the result produced by StanfordNLP, and the
         map from names to nodes.
     """
     index=1
@@ -87,5 +87,5 @@ def compute_tree(r):
     compute_edges(r,name_to_nodes)
     compute_tags(r,name_to_nodes)
     return name_to_nodes['ROOT-0']
-    
-    
+
+
