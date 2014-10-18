@@ -15,15 +15,12 @@ class DependenciesTree:
 
     def string(self):
         # Concatenation of the words of the root
-        w = ''
-        for x in self.wordList:
-            w += x[:x.rindex('-')] + ' '
-        w = w[:len(w)-1]
+        w = ' '.join(x.split('-', 1)[0] for x in self.wordList)
         s=''
         # Adding the definition of the root (dot format)
         t=''
         if(self.namedEntityTag != 'O' and self.namedEntityTag != 'undef'):
-            t+= " ["+self.namedEntityTag+"]"
+            t+= " [%s]" % self.namedEntityTag
         s+="\t\"{0}\"[label=\"{1}{2}\",shape=box];\n".format(self.wordList[0],w,t)
         # Adding definitions of the edges
         for n in self.child:
@@ -34,7 +31,7 @@ class DependenciesTree:
         return s
 
     def __str__(self):
-        return 'digraph relations {\n'+self.string()+'}\n'
+        return 'digraph relations {\n%s}\n' % self.string()
 
 def compute_edges(r,name_to_nodes):
     """
