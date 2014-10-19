@@ -1,0 +1,10 @@
+checks:
+    python:
+        code_rating: true
+        duplicate_code: true
+
+tools:
+    #    pylint:
+    #        python_version: 3
+    #        config_file: '.pylintrc'
+    external_code_coverage: true
