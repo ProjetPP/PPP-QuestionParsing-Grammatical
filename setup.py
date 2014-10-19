@@ -7,7 +7,7 @@ setup(
     version='0.1',
     description='Natural language processing module for the PPP.',
     url='https://github.com/ProjetPP',
-    author='Projet Pensées Profondes'
+    author='Projet Pensées Profondes',
     author_email='ppp2014@listes.ens-lyon.fr',
     license='MIT',
     classifiers=[

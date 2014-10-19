@@ -1,8 +1,8 @@
-"""Router of the module."""
+"""Request handler of the module."""
 
 from ppp_core.exceptions import ClientError
 
-class Router:
+class RequestHandler:
     def __init__(self, request):
         # TODO: Implement this
         pass
