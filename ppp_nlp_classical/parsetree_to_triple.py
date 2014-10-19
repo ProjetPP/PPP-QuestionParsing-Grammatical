@@ -70,7 +70,8 @@ def compute_tags(r,name_to_nodes):
             index+=1
             try:
                 n = name_to_nodes[w]
-                n.namedEntityTag = word[1]['NamedEntityTag']
+                if word[1]['NamedEntityTag'] != 'O':
+                    n.namedEntityTag = word[1]['NamedEntityTag']
             except KeyError:        # this node does not exists (e.g. 'of' preposition)
                 pass
 

@@ -6,89 +6,61 @@ from unittest import TestCase
 
 # Parsing result of "George Washington is the first president of the United States."
 def give_result():
-         return {'coref': [[[['the first president of the United states', 0, 5, 3, 10],
-                ['George Washington', 0, 1, 0, 2]]]],
-                'sentences': [{'dependencies': [['root', 'ROOT', 'president'],
-                ['nn', 'Washington', 'George'],
-                ['nsubj', 'president', 'Washington'],
-                ['cop', 'president', 'is'],
-                ['det', 'president', 'the'],
-                ['amod', 'president', 'first'],
-                ['det', 'states', 'the'],
-                ['nn', 'states', 'United'],
-                ['prep_of', 'president', 'states']],
-                'indexeddependencies': [['root', 'ROOT-0', 'president-6'],
-                ['nn', 'Washington-2', 'George-1'],
-                ['nsubj', 'president-6', 'Washington-2'],
-                ['cop', 'president-6', 'is-3'],
-                ['det', 'president-6', 'the-4'],
-                ['amod', 'president-6', 'first-5'],
-                ['det', 'states-10', 'the-8'],
-                ['nn', 'states-10', 'United-9'],
-                ['prep_of', 'president-6', 'states-10']],
-                'parsetree': '(ROOT (S (NP (NNP George) (NNP Washington)) (VP (VBZ is) (NP (NP (DT the) (JJ first) (NN president)) (PP (IN of) (NP (DT the) (NNP United) (NNS states)))))))',
-                'text': 'George Washington is the first president of the United states',
-                'words': [['George',
-                {'CharacterOffsetBegin': '0',
-                'CharacterOffsetEnd': '6',
-                'Lemma': 'George',
-                'NamedEntityTag': 'PERSON',
-                'PartOfSpeech': 'NNP'}],
-                ['Washington',
-                {'CharacterOffsetBegin': '7',
-                'CharacterOffsetEnd': '17',
-                'Lemma': 'Washington',
-                'NamedEntityTag': 'PERSON',
-                'PartOfSpeech': 'NNP'}],
-                ['is',
-                {'CharacterOffsetBegin': '18',
-                'CharacterOffsetEnd': '20',
-                'Lemma': 'be',
-                'NamedEntityTag': 'O',
-                'PartOfSpeech': 'VBZ'}],
-                ['the',
-                {'CharacterOffsetBegin': '21',
-                'CharacterOffsetEnd': '24',
-                'Lemma': 'the',
-                'NamedEntityTag': 'O',
-                'PartOfSpeech': 'DT'}],
-                ['first',
-                {'CharacterOffsetBegin': '25',
-                'CharacterOffsetEnd': '30',
-                'Lemma': 'first',
-                'NamedEntityTag': 'ORDINAL',
-                'NormalizedNamedEntityTag': '1.0',
-                'PartOfSpeech': 'JJ'}],
-                ['president',
-                {'CharacterOffsetBegin': '31',
-                'CharacterOffsetEnd': '40',
-                'Lemma': 'president',
-                'NamedEntityTag': 'O',
-                'PartOfSpeech': 'NN'}],
-                ['of',
-                {'CharacterOffsetBegin': '41',
-                'CharacterOffsetEnd': '43',
-                'Lemma': 'of',
-                'NamedEntityTag': 'O',
-                'PartOfSpeech': 'IN'}],
-                ['the',
-                {'CharacterOffsetBegin': '44',
-                'CharacterOffsetEnd': '47',
-                'Lemma': 'the',
-                'NamedEntityTag': 'O',
-                'PartOfSpeech': 'DT'}],
-                ['United',
-                {'CharacterOffsetBegin': '48',
-                'CharacterOffsetEnd': '54',
-                'Lemma': 'United',
-                'NamedEntityTag': 'ORGANIZATION',
-                'PartOfSpeech': 'NNP'}],
-                ['states',
-                {'CharacterOffsetBegin': '55',
-                'CharacterOffsetEnd': '61',
-                'Lemma': 'state',
-                'NamedEntityTag': 'O',
-                'PartOfSpeech': 'NNS'}]]}]}
+         return {'sentences': [{'dependencies': [['root', 'ROOT', 'lives'],
+                    ['nn', 'Smith', 'John'],
+                    ['nsubj', 'lives', 'Smith'],
+                    ['nn', 'Kingdom', 'United'],
+                    ['prep_in', 'lives', 'Kingdom']],
+                   'indexeddependencies': [['root', 'ROOT-0', 'lives-3'],
+                    ['nn', 'Smith-2', 'John-1'],
+                    ['nsubj', 'lives-3', 'Smith-2'],
+                    ['nn', 'Kingdom-6', 'United-5'],
+                    ['prep_in', 'lives-3', 'Kingdom-6']],
+                   'parsetree': '(ROOT (S (NP (NNP John) (NNP Smith)) (VP (VBZ lives) (PP (IN in) (NP (NNP United) (NNP Kingdom)))) (. .)))',
+                   'text': 'John Smith lives in United Kingdom.',
+                   'words': [['John',
+                     {'CharacterOffsetBegin': '0',
+                      'CharacterOffsetEnd': '4',
+                      'Lemma': 'John',
+                      'NamedEntityTag': 'PERSON',
+                      'PartOfSpeech': 'NNP'}],
+                    ['Smith',
+                     {'CharacterOffsetBegin': '5',
+                      'CharacterOffsetEnd': '10',
+                      'Lemma': 'Smith',
+                      'NamedEntityTag': 'PERSON',
+                      'PartOfSpeech': 'NNP'}],
+                    ['lives',
+                     {'CharacterOffsetBegin': '11',
+                      'CharacterOffsetEnd': '16',
+                      'Lemma': 'live',
+                      'NamedEntityTag': 'O',
+                      'PartOfSpeech': 'VBZ'}],
+                    ['in',
+                     {'CharacterOffsetBegin': '17',
+                      'CharacterOffsetEnd': '19',
+                      'Lemma': 'in',
+                      'NamedEntityTag': 'O',
+                      'PartOfSpeech': 'IN'}],
+                    ['United',
+                     {'CharacterOffsetBegin': '20',
+                      'CharacterOffsetEnd': '26',
+                      'Lemma': 'United',
+                      'NamedEntityTag': 'LOCATION',
+                      'PartOfSpeech': 'NNP'}],
+                    ['Kingdom',
+                     {'CharacterOffsetBegin': '27',
+                      'CharacterOffsetEnd': '34',
+                      'Lemma': 'Kingdom',
+                      'NamedEntityTag': 'LOCATION',
+                      'PartOfSpeech': 'NNP'}],
+                    ['.',
+                     {'CharacterOffsetBegin': '34',
+                      'CharacterOffsetEnd': '35',
+                      'Lemma': '.',
+                      'NamedEntityTag': 'O',
+                      'PartOfSpeech': '.'}]]}]}
+
 
 class DependenciesTreeTests(TestCase):
 
@@ -103,3 +75,45 @@ class DependenciesTreeTests(TestCase):
         
     def testTreeGeneration(self):
         tree=compute_tree(give_result()['sentences'][0])
+        root=tree
+        # Root
+        self.assertEqual(root.wordList,["ROOT-0"])
+        self.assertEqual(root.namedEntityTag,'undef')
+        self.assertEqual(root.dependency,'undef')
+        self.assertRaises(AttributeError, lambda: root.parent)        
+        self.assertEqual(len(root.child),1)
+        # Lives
+        lives=root.child[0]
+        self.assertEqual(lives.wordList,["lives-3"])
+        self.assertEqual(lives.namedEntityTag,'undef')
+        self.assertEqual(lives.dependency,'root')
+        self.assertEqual(lives.parent,tree)        
+        self.assertEqual(len(lives.child),2)
+        # Smith
+        smith=lives.child[0]
+        self.assertEqual(smith.wordList,["Smith-2"])
+        self.assertEqual(smith.namedEntityTag,'PERSON')
+        self.assertEqual(smith.dependency,'nsubj')
+        self.assertEqual(smith.parent,lives)        
+        self.assertEqual(len(smith.child),1)
+        # John
+        john=smith.child[0]
+        self.assertEqual(john.wordList,["John-1"])
+        self.assertEqual(john.namedEntityTag,'PERSON')
+        self.assertEqual(john.dependency,'nn')
+        self.assertEqual(john.parent,smith)        
+        self.assertEqual(len(john.child),0)
+        # Kingdom
+        kingdom=lives.child[1]
+        self.assertEqual(kingdom.wordList,["Kingdom-6"])
+        self.assertEqual(kingdom.namedEntityTag,'LOCATION')
+        self.assertEqual(kingdom.dependency,'prep_in')
+        self.assertEqual(kingdom.parent,lives)        
+        self.assertEqual(len(kingdom.child),1)   
+        # United
+        united=kingdom.child[0]
+        self.assertEqual(united.wordList,["United-5"])
+        self.assertEqual(united.namedEntityTag,'LOCATION')
+        self.assertEqual(united.dependency,'nn')
+        self.assertEqual(united.parent,kingdom)        
+        self.assertEqual(len(united.child),0)     
