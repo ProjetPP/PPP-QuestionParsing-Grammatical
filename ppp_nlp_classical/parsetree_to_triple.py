@@ -87,5 +87,3 @@ def compute_tree(r):
     compute_tags(r,name_to_nodes)
     name_to_nodes['ROOT-0'].text = r['text']
     return name_to_nodes['ROOT-0']
-
-

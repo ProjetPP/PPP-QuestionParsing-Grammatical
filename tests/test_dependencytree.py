@@ -80,40 +80,40 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(root.wordList,["ROOT-0"])
         self.assertEqual(root.namedEntityTag,'undef')
         self.assertEqual(root.dependency,'undef')
-        self.assertRaises(AttributeError, lambda: root.parent)        
+        self.assertRaises(AttributeError, lambda: root.parent)
         self.assertEqual(len(root.child),1)
         # Lives
         lives=root.child[0]
         self.assertEqual(lives.wordList,["lives-3"])
         self.assertEqual(lives.namedEntityTag,'undef')
         self.assertEqual(lives.dependency,'root')
-        self.assertEqual(lives.parent,tree)        
+        self.assertEqual(lives.parent,tree)
         self.assertEqual(len(lives.child),2)
         # Smith
         smith=lives.child[0]
         self.assertEqual(smith.wordList,["Smith-2"])
         self.assertEqual(smith.namedEntityTag,'PERSON')
         self.assertEqual(smith.dependency,'nsubj')
-        self.assertEqual(smith.parent,lives)        
+        self.assertEqual(smith.parent,lives)
         self.assertEqual(len(smith.child),1)
         # John
         john=smith.child[0]
         self.assertEqual(john.wordList,["John-1"])
         self.assertEqual(john.namedEntityTag,'PERSON')
         self.assertEqual(john.dependency,'nn')
-        self.assertEqual(john.parent,smith)        
+        self.assertEqual(john.parent,smith)
         self.assertEqual(len(john.child),0)
         # Kingdom
         kingdom=lives.child[1]
         self.assertEqual(kingdom.wordList,["Kingdom-6"])
         self.assertEqual(kingdom.namedEntityTag,'LOCATION')
         self.assertEqual(kingdom.dependency,'prep_in')
-        self.assertEqual(kingdom.parent,lives)        
-        self.assertEqual(len(kingdom.child),1)   
+        self.assertEqual(kingdom.parent,lives)
+        self.assertEqual(len(kingdom.child),1)
         # United
         united=kingdom.child[0]
         self.assertEqual(united.wordList,["United-5"])
         self.assertEqual(united.namedEntityTag,'LOCATION')
         self.assertEqual(united.dependency,'nn')
-        self.assertEqual(united.parent,kingdom)        
-        self.assertEqual(len(united.child),0)     
+        self.assertEqual(united.parent,kingdom)
+        self.assertEqual(len(united.child),0)
