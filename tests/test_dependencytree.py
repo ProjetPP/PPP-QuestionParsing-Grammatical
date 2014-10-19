@@ -4,7 +4,7 @@ from ppp_nlp_classical import DependenciesTree, compute_tree
 
 from unittest import TestCase
 
-# Parsing result of "George Washington is the first president of the United States."
+# Parsing result of "John Smith lives in United Kingdom."
 def give_result():
          return {'sentences': [{'dependencies': [['root', 'ROOT', 'lives'],
                     ['nn', 'Smith', 'John'],
