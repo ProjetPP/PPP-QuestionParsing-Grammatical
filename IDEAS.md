@@ -100,6 +100,9 @@ If we plan to merge nodes that are of the same type, there are 2 ways of doing t
   - merging 2 nodes when one is the descendant of the other
   - merging 2 nodes when they have the same parent
 
+The sentence `John likes Yoko.` show that merging two nodes when they have a same 
+parend and a same tag is not a good idea.
+
 Be sure this procedure is correct (is it always relevant to merge 2 nodes with the same parents?). An other way to proceed is:
   1. apply Name Entity Recognition
   2. in the __original sentence__ merge all consecutive words of the same type
