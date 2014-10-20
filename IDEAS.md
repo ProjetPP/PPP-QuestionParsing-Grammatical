@@ -102,6 +102,7 @@ If we plan to merge nodes that are of the same type, there are 2 ways of doing t
 
 The sentence `John likes Yoko.` show that merging two nodes when they have a same 
 parend and a same tag is not a good idea.
+-> perhaps we must add "same dependency to their parent" (here we have nsubj et dobj)
 
 Be sure this procedure is correct (is it always relevant to merge 2 nodes with the same parents?). An other way to proceed is:
   1. apply Name Entity Recognition
