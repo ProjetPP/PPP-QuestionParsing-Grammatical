@@ -2,7 +2,7 @@ import json
 #from jsonrpc import ServerProxy, JsonRpc20, TransportTcpIp
 import jsonrpclib
 import fileinput
-import parsetree_to_triple
+import ppp_nlp_classical
 
 class StanfordNLP:
     def __init__(self, port_number=8080):
@@ -16,6 +16,8 @@ class StanfordNLP:
 def get_tree():
   nlp = StanfordNLP()
   result = nlp.parse(input(""))
-  return parsetree_to_triple.compute_tree(result['sentences'][0])
-  
+  tree = ppp_nlp_classical.compute_tree(result['sentences'][0])
+  ppp_nlp_classical.simplify(tree)
+  return tree
+
 print(get_tree())

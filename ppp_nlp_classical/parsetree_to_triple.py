@@ -33,6 +33,16 @@ class DependenciesTree:
 
     def __str__(self):
         return "digraph relations {"+"\n{0}\tlabelloc=\"t\"\tlabel=\"{1}\";\n".format(self.string(),self.text)+"}\n"
+        
+    def merge(self,other):
+        """
+            Merge the root of the two given trees into one single node.
+            The result is stored in node 'self'.
+        """
+        self.child += other.child
+        self.wordList = other.wordList + self.wordList
+        other.parent.child.remove(other)
+        other.wordList = ["should not be used"]
 
 def compute_edges(r,name_to_nodes):
     """
@@ -70,7 +80,8 @@ def compute_tags(r,name_to_nodes):
             index+=1
             try:
                 n = name_to_nodes[w]
-                n.namedEntityTag = word[1]['NamedEntityTag']
+                if word[1]['NamedEntityTag'] != 'O':
+                    n.namedEntityTag = word[1]['NamedEntityTag']
             except KeyError:        # this node does not exists (e.g. 'of' preposition)
                 pass
 
@@ -87,4 +98,55 @@ def compute_tree(r):
     name_to_nodes['ROOT-0'].text = r['text']
     return name_to_nodes['ROOT-0']
 
+def remove_det(t):
+    """
+        Remove all nodes with 'det' dependency.
+    """
+    for c in t.child:
+        remove_det(c)
+    if t.dependency == 'det':
+        for c in t.child:
+            c.parent = t.parent
+        t.parent.child += t.child
+        t.parent.child.remove(t)
 
+def mergeNamedEntityTagChildParent(t):
+    """
+        Merge all nodes n1,n2 such that:
+            * n1 is parent of n2
+            * n1 and n2 have a same namedEntityTag
+    """
+    for c in t.child:
+        mergeNamedEntityTagChildParent(c)
+    same_tag_child = set()
+    if t.namedEntityTag != 'undef':
+        for c in t.child:
+            if c.namedEntityTag == t.namedEntityTag:
+                same_tag_child.add(c)
+        for c in same_tag_child:
+            t.merge(c)
+
+def mergeNamedEntityTagSisterBrother(t):
+    """
+        Merge all nodes n1,n2 such that:
+            * n1 and n2 have a same parent
+            * n1 and n2 have a same namedEntityTag
+    """
+    for c in t.child:
+        mergeNamedEntityTagSisterBrother(c)
+    tagToNodes = {}
+    for c in t.child:
+        if c.namedEntityTag != 'undef':
+            try:
+                tagToNodes[c.namedEntityTag+c.dependency].add(c)
+            except KeyError:
+                tagToNodes[c.namedEntityTag+c.dependency] = set([c])
+    for sameTag in tagToNodes.values():
+        x = sameTag.pop()
+        for other in sameTag:
+            x.merge(other)
+
+def simplify(t):
+    remove_det(t)
+    mergeNamedEntityTagChildParent(t)
+    mergeNamedEntityTagSisterBrother(t)
