@@ -87,3 +87,18 @@ def compute_tree(r):
     compute_tags(r,name_to_nodes)
     name_to_nodes['ROOT-0'].text = r['text']
     return name_to_nodes['ROOT-0']
+    
+def remove_det(r):
+    """
+        Remove all nodes with 'det' dependency.
+    """
+    for c in r.child:
+        remove_det(c)
+    if r.dependency == 'det':
+        for c in r.child:
+            c.parent = r.parent
+        r.parent.child += r.child
+        r.parent.child.remove(r)
+        
+def simplify(r):
+    remove_det(r)
