@@ -98,17 +98,33 @@ def compute_tree(r):
     name_to_nodes['ROOT-0'].text = r['text']
     return name_to_nodes['ROOT-0']
     
-def remove_det(r):
+def remove_det(t):
     """
         Remove all nodes with 'det' dependency.
     """
-    for c in r.child:
+    for c in t.child:
         remove_det(c)
-    if r.dependency == 'det':
-        for c in r.child:
-            c.parent = r.parent
-        r.parent.child += r.child
-        r.parent.child.remove(r)
-        
-def simplify(r):
-    remove_det(r)
+    if t.dependency == 'det':
+        for c in t.child:
+            c.parent = t.parent
+        t.parent.child += t.child
+        t.parent.child.remove(t)
+
+def mergeNamedEntityTagChildParent(t):
+    """
+        Merge all nodes n1,n2 such that:
+            * n1 is parent of n2
+            * n1 and n2 have a same namedEntityTag
+    """
+    print("TODO")
+
+def mergeNamedEntityTagSisterBrother(t):
+    """
+        Merge all nodes n1,n2 such that:
+            * n1 and n2 have a same parent
+            * n1 and n2 have a same namedEntityTag
+    """
+    print("TODO")
+
+def simplify(t):
+    remove_det(t)
