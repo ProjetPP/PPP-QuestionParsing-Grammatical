@@ -138,9 +138,9 @@ def mergeNamedEntityTagSisterBrother(t):
     for c in t.child:
         if c.namedEntityTag != 'undef':
             try:
-                tagToNodes[c.namedEntityTag].add(c)
+                tagToNodes[c.namedEntityTag+c.dependency].add(c)
             except KeyError:
-                tagToNodes[c.namedEntityTag] = set([c])
+                tagToNodes[c.namedEntityTag+c.dependency] = set([c])
     for sameTag in tagToNodes.values():
         x = sameTag.pop()
         for other in sameTag:
