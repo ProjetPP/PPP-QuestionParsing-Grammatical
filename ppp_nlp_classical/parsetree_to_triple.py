@@ -132,8 +132,21 @@ def mergeNamedEntityTagSisterBrother(t):
             * n1 and n2 have a same parent
             * n1 and n2 have a same namedEntityTag
     """
-    print("TODO")
+    for c in t.child:
+        mergeNamedEntityTagSisterBrother(c)
+    tagToNodes = {}
+    for c in t.child:
+        if c.namedEntityTag != 'undef':
+            try:
+                tagToNodes[c.namedEntityTag].add(c)
+            except KeyError:
+                tagToNodes[c.namedEntityTag] = set([c])
+    for sameTag in tagToNodes.values():
+        x = sameTag.pop()
+        for other in sameTag:
+            x.merge(other)
 
 def simplify(t):
     remove_det(t)
     mergeNamedEntityTagChildParent(t)
+    mergeNamedEntityTagSisterBrother(t)
