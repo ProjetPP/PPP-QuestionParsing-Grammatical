@@ -33,6 +33,16 @@ class DependenciesTree:
 
     def __str__(self):
         return "digraph relations {"+"\n{0}\tlabelloc=\"t\"\tlabel=\"{1}\";\n".format(self.string(),self.text)+"}\n"
+        
+    def merge(self,other):
+        """
+            Merge the root of the two given trees into one single node.
+            The result is stored in node 'self'.
+        """
+        self.child += other.child
+        self.wordList += other.wordList
+        other.parent.child.remove(other)
+        other.wordList = ["should not be used"]
 
 def compute_edges(r,name_to_nodes):
     """

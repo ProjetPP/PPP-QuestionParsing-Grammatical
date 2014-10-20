@@ -8,5 +8,5 @@ def app(environ, start_response):
     """Function called by the WSGI server."""
     return HttpRequestHandler(environ, start_response, RequestHandler) \
             .dispatch()
-            
+
 __all__ = ['DependenciesTree','compute_tree','simplify']

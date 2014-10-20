@@ -81,6 +81,24 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(n.text,"")
         self.assertRaises(AttributeError, lambda: n.parent)
         
+    def testMerge(self):
+        root1 = DependenciesTree(['root1'])
+        root2 = DependenciesTree(['root2'])
+        node1 = DependenciesTree(['n1'],'tag1','dep1',[DependenciesTree(['childn1'])])
+        node1.parent = root1
+        root1.child += [node1]
+        node2 = DependenciesTree(['n2'],'tag2','dep2',[DependenciesTree(['childn2'])])
+        node2.parent = root2
+        root2.child += [node2]
+        node1.merge(node2)
+        self.assertEqual(len(root2.child),0)
+        self.assertEqual(len(root1.child),1)
+        self.assertEqual(len(node1.child),2)
+        self.assertEqual(node1.wordList,['n1','n2'])
+        self.assertEqual(node1.namedEntityTag,'tag1')
+        self.assertEqual(node1.dependency,'dep1')
+        self.assertEqual(node1.parent,root1)
+        
     def testTreeGeneration(self):
         tree=compute_tree(give_result()['sentences'][0])
         root=tree
@@ -124,7 +142,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(the.namedEntityTag,'undef')
         self.assertEqual(the.dependency,'det')
         self.assertEqual(the.parent,kingdom)
-        self.assertEqual(len(the.child),0)        
+        self.assertEqual(len(the.child),0)
         # United
         united=kingdom.child[1]
         self.assertEqual(united.wordList,["United-6"])

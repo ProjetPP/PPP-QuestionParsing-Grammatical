@@ -19,5 +19,5 @@ def get_tree():
   tree = ppp_nlp_classical.compute_tree(result['sentences'][0])
   ppp_nlp_classical.simplify(tree)
   return tree
-  
+
 print(get_tree())
