@@ -1,6 +1,6 @@
 import json
 
-from ppp_nlp_classical import DependenciesTree, compute_tree
+from ppp_nlp_classical import DependenciesTree, compute_tree, simplify
 
 from unittest import TestCase
 
@@ -94,7 +94,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(len(root2.child),0)
         self.assertEqual(len(root1.child),1)
         self.assertEqual(len(node1.child),2)
-        self.assertEqual(node1.wordList,['n1','n2'])
+        self.assertEqual(node1.wordList,['n2','n1'])
         self.assertEqual(node1.namedEntityTag,'tag1')
         self.assertEqual(node1.dependency,'dep1')
         self.assertEqual(node1.parent,root1)
@@ -150,3 +150,35 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(united.dependency,'nn')
         self.assertEqual(united.parent,kingdom)
         self.assertEqual(len(united.child),0)
+
+    def testTreeSimplification(self):
+        tree=compute_tree(give_result()['sentences'][0])
+        simplify(tree)
+        root=tree
+        # Root
+        self.assertEqual(root.wordList,["ROOT-0"])
+        self.assertEqual(root.namedEntityTag,'undef')
+        self.assertEqual(root.dependency,'undef')
+        self.assertRaises(AttributeError, lambda: root.parent)
+        self.assertEqual(len(root.child),1)
+        # Lives
+        lives=root.child[0]
+        self.assertEqual(lives.wordList,["lives-3"])
+        self.assertEqual(lives.namedEntityTag,'undef')
+        self.assertEqual(lives.dependency,'root')
+        self.assertEqual(lives.parent,tree)
+        self.assertEqual(len(lives.child),2)
+        # Smith
+        smith=lives.child[0]
+        self.assertEqual(smith.wordList,["John-1","Smith-2"])
+        self.assertEqual(smith.namedEntityTag,'PERSON')
+        self.assertEqual(smith.dependency,'nsubj')
+        self.assertEqual(smith.parent,lives)
+        self.assertEqual(len(smith.child),0)
+        # Kingdom
+        kingdom=lives.child[1]
+        self.assertEqual(kingdom.wordList,["United-6","Kingdom-7"])
+        self.assertEqual(kingdom.namedEntityTag,'LOCATION')
+        self.assertEqual(kingdom.dependency,'prep_in')
+        self.assertEqual(kingdom.parent,lives)
+        self.assertEqual(len(kingdom.child),0)

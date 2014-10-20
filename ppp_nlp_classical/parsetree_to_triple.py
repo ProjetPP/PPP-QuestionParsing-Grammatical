@@ -40,7 +40,7 @@ class DependenciesTree:
             The result is stored in node 'self'.
         """
         self.child += other.child
-        self.wordList += other.wordList
+        self.wordList = other.wordList + self.wordList
         other.parent.child.remove(other)
         other.wordList = ["should not be used"]
 
@@ -97,7 +97,7 @@ def compute_tree(r):
     compute_tags(r,name_to_nodes)
     name_to_nodes['ROOT-0'].text = r['text']
     return name_to_nodes['ROOT-0']
-    
+
 def remove_det(t):
     """
         Remove all nodes with 'det' dependency.
@@ -116,7 +116,15 @@ def mergeNamedEntityTagChildParent(t):
             * n1 is parent of n2
             * n1 and n2 have a same namedEntityTag
     """
-    print("TODO")
+    for c in t.child:
+        mergeNamedEntityTagChildParent(c)
+    same_tag_child = set()
+    if t.namedEntityTag != 'undef':
+        for c in t.child:
+            if c.namedEntityTag == t.namedEntityTag:
+                same_tag_child.add(c)
+        for c in same_tag_child:
+            t.merge(c)
 
 def mergeNamedEntityTagSisterBrother(t):
     """
@@ -128,3 +136,4 @@ def mergeNamedEntityTagSisterBrother(t):
 
 def simplify(t):
     remove_det(t)
+    mergeNamedEntityTagChildParent(t)
