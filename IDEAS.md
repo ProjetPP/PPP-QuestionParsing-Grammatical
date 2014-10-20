@@ -4,9 +4,9 @@ Some common draft of the ideas that we may have. The aim is to begin a discussio
 
 Please have a look at the graphs generated with the Stanford library, and try your own experimentations.
 
-## Pre-processing
+## 1. Pre-processing
 
-#### Stanford's output description
+#### 1.1. Stanford's output description
 
 ###### Graph properties
 
@@ -34,7 +34,7 @@ Consider the two sentences `Who is the president of France?` and `Where does the
 
 It's probably due to the specific role held by "be" in the Stanford parser (copula verb). See section 4.7 of the manual, there is a way to avoid this (and always have the verb at the top of the tree?): adding the flag -makeCopulaHead. I don't know if it's possible with the wrapper but it could simplify our work.
 
-#### Tree simplification
+#### 1.2. Tree simplification
 
 Return the tree given by the Stanford library, with some modifications.
 
@@ -53,7 +53,7 @@ We could try to collapse additional elements. For instance, it would be great to
 An idea could be to merge two nodes if one is the parent of the other, and they both have the same (non null) tag.
 We could even merge two nodes which have the same parent and the same (non null) tag (by doing this, we would merge `United States` in the sentence `Who was the first United States president?`, which is what we want).
 
-#### Name entity recognition
+#### 1.3. Name entity recognition
 
 There may be a way to group "same entities" together (ex: George Washington). It's call "name entity recognition". See the pad (http://pad.aliens-lyon.fr/p/ppp-nlp) for some (basic) resources.
 
@@ -105,7 +105,7 @@ Be sure this procedure is correct (is it always relevant to merge 2 nodes with t
   2. in the __original sentence__ merge all consecutive words of the same type
   3. in the tree, merge the nodes that has been merged in step 2
   
-## Pattern recognition
+## 2. Pattern recognition
 
 A solution could be to compute questions specifically:
 
@@ -147,7 +147,7 @@ tools), but it would be better than nothing. This can be even worst for other
 questions: `Who is Washington?` and `Where is Washington?` refer to two different
 things (the person or the town).
 
-## Overall algorithm
+## 3. Overall algorithm
 
 Here is a first proposition of overall algorithm:
 
