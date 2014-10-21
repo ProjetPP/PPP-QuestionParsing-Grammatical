@@ -73,28 +73,28 @@ def give_result():
 class DependenciesTreeTests(TestCase):
 
     def testBasicConstructor(self):
-        n = DependenciesTree(['foo'])
-        self.assertEqual(n.wordList, ['foo'])
+        n = DependenciesTree('foo-1')
+        self.assertEqual(n.wordList, [('foo',1)])
         self.assertEqual(n.namedEntityTag, 'undef')
         self.assertEqual(n.dependency, 'undef')
         self.assertEqual(n.child, [])
         self.assertEqual(n.text,"")
         self.assertRaises(AttributeError, lambda: n.parent)
-        
+
     def testMerge(self):
-        root1 = DependenciesTree(['root1'])
-        root2 = DependenciesTree(['root2'])
-        node1 = DependenciesTree(['n1'],'tag1','dep1',[DependenciesTree(['childn1'])])
+        root1 = DependenciesTree('root-1')
+        root2 = DependenciesTree('root-2')
+        node1 = DependenciesTree('n-1','tag1','dep1',[DependenciesTree('childn-1')])
         node1.parent = root1
         root1.child += [node1]
-        node2 = DependenciesTree(['n2'],'tag2','dep2',[DependenciesTree(['childn2'])])
+        node2 = DependenciesTree('n-2','tag2','dep2',[DependenciesTree('childn-2')])
         node2.parent = root2
         root2.child += [node2]
         node1.merge(node2)
         self.assertEqual(len(root2.child),0)
         self.assertEqual(len(root1.child),1)
         self.assertEqual(len(node1.child),2)
-        self.assertEqual(node1.wordList,['n2','n1'])
+        self.assertEqual(node1.wordList,[('n',1),('n',2)])
         self.assertEqual(node1.namedEntityTag,'tag1')
         self.assertEqual(node1.dependency,'dep1')
         self.assertEqual(node1.parent,root1)
@@ -103,49 +103,49 @@ class DependenciesTreeTests(TestCase):
         tree=compute_tree(give_result()['sentences'][0])
         root=tree
         # Root
-        self.assertEqual(root.wordList,["ROOT-0"])
+        self.assertEqual(root.wordList,[("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
         self.assertEqual(root.dependency,'undef')
         self.assertRaises(AttributeError, lambda: root.parent)
         self.assertEqual(len(root.child),1)
         # Lives
         lives=root.child[0]
-        self.assertEqual(lives.wordList,["lives-3"])
+        self.assertEqual(lives.wordList,[("lives",3)])
         self.assertEqual(lives.namedEntityTag,'undef')
         self.assertEqual(lives.dependency,'root')
         self.assertEqual(lives.parent,tree)
         self.assertEqual(len(lives.child),2)
         # Smith
         smith=lives.child[0]
-        self.assertEqual(smith.wordList,["Smith-2"])
+        self.assertEqual(smith.wordList,[("Smith",2)])
         self.assertEqual(smith.namedEntityTag,'PERSON')
         self.assertEqual(smith.dependency,'nsubj')
         self.assertEqual(smith.parent,lives)
         self.assertEqual(len(smith.child),1)
         # John
         john=smith.child[0]
-        self.assertEqual(john.wordList,["John-1"])
+        self.assertEqual(john.wordList,[("John",1)])
         self.assertEqual(john.namedEntityTag,'PERSON')
         self.assertEqual(john.dependency,'nn')
         self.assertEqual(john.parent,smith)
         self.assertEqual(len(john.child),0)
         # Kingdom
         kingdom=lives.child[1]
-        self.assertEqual(kingdom.wordList,["Kingdom-7"])
+        self.assertEqual(kingdom.wordList,[("Kingdom",7)])
         self.assertEqual(kingdom.namedEntityTag,'LOCATION')
         self.assertEqual(kingdom.dependency,'prep_in')
         self.assertEqual(kingdom.parent,lives)
         self.assertEqual(len(kingdom.child),2)
         # The
         the=kingdom.child[0]
-        self.assertEqual(the.wordList,["the-5"])
+        self.assertEqual(the.wordList,[("the",5)])
         self.assertEqual(the.namedEntityTag,'undef')
         self.assertEqual(the.dependency,'det')
         self.assertEqual(the.parent,kingdom)
         self.assertEqual(len(the.child),0)
         # United
         united=kingdom.child[1]
-        self.assertEqual(united.wordList,["United-6"])
+        self.assertEqual(united.wordList,[("United",6)])
         self.assertEqual(united.namedEntityTag,'LOCATION')
         self.assertEqual(united.dependency,'nn')
         self.assertEqual(united.parent,kingdom)
@@ -156,28 +156,28 @@ class DependenciesTreeTests(TestCase):
         simplify(tree)
         root=tree
         # Root
-        self.assertEqual(root.wordList,["ROOT-0"])
+        self.assertEqual(root.wordList,[("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
         self.assertEqual(root.dependency,'undef')
         self.assertRaises(AttributeError, lambda: root.parent)
         self.assertEqual(len(root.child),1)
         # Lives
         lives=root.child[0]
-        self.assertEqual(lives.wordList,["lives-3"])
+        self.assertEqual(lives.wordList,[("lives",3)])
         self.assertEqual(lives.namedEntityTag,'undef')
         self.assertEqual(lives.dependency,'root')
         self.assertEqual(lives.parent,tree)
         self.assertEqual(len(lives.child),2)
         # Smith
         smith=lives.child[0]
-        self.assertEqual(smith.wordList,["John-1","Smith-2"])
+        self.assertEqual(smith.wordList,[("John",1),("Smith",2)])
         self.assertEqual(smith.namedEntityTag,'PERSON')
         self.assertEqual(smith.dependency,'nsubj')
         self.assertEqual(smith.parent,lives)
         self.assertEqual(len(smith.child),0)
         # Kingdom
         kingdom=lives.child[1]
-        self.assertEqual(kingdom.wordList,["United-6","Kingdom-7"])
+        self.assertEqual(kingdom.wordList,[("United",6),("Kingdom",7)])
         self.assertEqual(kingdom.namedEntityTag,'LOCATION')
         self.assertEqual(kingdom.dependency,'prep_in')
         self.assertEqual(kingdom.parent,lives)

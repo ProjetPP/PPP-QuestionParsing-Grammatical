@@ -6,8 +6,8 @@ class DependenciesTree:
         One node of the parse tree.
         It is a group of words of same NamedEntityTag (e.g. George Washington).
     """
-    def __init__(self, word_list, namedentitytag='undef', dependency='undef', child=None):
-        self.wordList = word_list
+    def __init__(self, word, namedentitytag='undef', dependency='undef', child=None):
+        self.wordList = [(word[:word.rindex('-')],int(word[word.rindex('-')+1:]))]
         self.namedEntityTag = namedentitytag
         self.dependency = dependency
         self.child = child or []
@@ -16,16 +16,16 @@ class DependenciesTree:
 
     def string(self):
         # Concatenation of the words of the root
-        w = ' '.join(x.split('-', 1)[0] for x in self.wordList)
+        w = ' '.join(x[0] for x in self.wordList)
         s=''
         # Adding the definition of the root (dot format)
         t=''
         if(self.namedEntityTag != 'O' and self.namedEntityTag != 'undef'):
-            t+= " [%s]" % self.namedEntityTag
-        s+="\t\"{0}\"[label=\"{1}{2}\",shape=box];\n".format(self.wordList[0],w,t)
+            t+= " [{0}]".format(self.namedEntityTag)
+        s+="\t\"{0}\"[label=\"{1}{2}\",shape=box];\n".format(self.wordList[0][0]+str(self.wordList[0][1]),w,t)
         # Adding definitions of the edges
         for n in self.child:
-            s+="\t\"{0}\" -> \"{1}\"[label=\"{2}\"];\n".format(self.wordList[0],n.wordList[0],n.dependency)
+            s+="\t\"{0}\" -> \"{1}\"[label=\"{2}\"];\n".format(self.wordList[0][0]+str(self.wordList[0][1]),n.wordList[0][0]+str(n.wordList[0][1]),n.dependency)
         # Recursive calls
         for n in self.child:
             s+=n.string()+'\n'
@@ -41,6 +41,7 @@ class DependenciesTree:
         """
         self.child += other.child
         self.wordList = other.wordList + self.wordList
+        self.wordList.sort(key = lambda x: x[1])
         other.parent.child.remove(other)
         other.wordList = ["should not be used"]
 
@@ -54,12 +55,12 @@ def compute_edges(r,name_to_nodes):
         try:
             n1 = name_to_nodes[edge[1]]
         except KeyError:
-            n1 = DependenciesTree([edge[1]])
+            n1 = DependenciesTree(edge[1])
             name_to_nodes[edge[1]] = n1
         try:
             n2 = name_to_nodes[edge[2]]
         except KeyError:
-            n2 = DependenciesTree([edge[2]])
+            n2 = DependenciesTree(edge[2])
             name_to_nodes[edge[2]] = n2
         # n1 is the parent of n2
         n1.child = n1.child+[n2]
