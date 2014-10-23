@@ -37,6 +37,7 @@ class DependenciesTree:
     def merge(self,other,mergeWords):
         """
             Merge the root of the two given trees into one single node.
+            Merge the two wordList if mergeWords=True (otherwise only keep the WordList of self).
             The result is stored in node 'self'.
         """
         self.child += other.child
@@ -153,3 +154,57 @@ def simplify(t):
     mergeDependencies(t,{'det'})
     mergeNamedEntityTagChildParent(t)
     mergeNamedEntityTagSisterBrother(t)
+
+# The following maps all dependencies to their direct more general dependency.
+# Taken from StanfordDependenciesManual.pdf
+dependenciesMap = {
+    'root'      : 'root',
+    'dep'       : 'dep',
+        'aux'       : 'dep',
+            'auxpass'   : 'aux',
+            'cop'       : 'aux',
+        'arg'       : 'dep',
+            'agent'     : 'arg',
+            'comp'      : 'arg',
+                'acomp'     : 'comp',
+                'ccomp'     : 'comp',
+                'xcomp'     : 'comp',
+                'obj'       : 'comp',
+                    'dobj'      : 'obj',
+                    'iobj'      : 'obj',
+                    'pobj'      : 'obj',
+            'subj'      : 'arg',
+                'nsubj'     : 'subj',
+                'csubj'     : 'subj',
+        'cc'        : 'dep',
+        'conj'      : 'dep',
+        'expl'      : 'dep',
+        'mod'       : 'dep',
+            'amod'      : 'mod',
+            'appos'     : 'mod',
+            'advcl'     : 'mod',
+            'det'       : 'mod',
+            'predet'    : 'mod',
+            'preconj'   : 'mod',
+            'vmod'      : 'mod',
+            'mwe'       : 'mod',
+                'mark'      : 'mwe',
+            'advmod'    : 'mod',
+                'neg'       : 'advmod',
+            'rcmod'     : 'mod',
+            'quantmod'  : 'mod',
+            'nn'        : 'mod',
+            'npadvmod'  : 'mod',
+                'tmod'      : 'npadvmod',
+            'num'       : 'mod',
+            'number'    : 'mod',
+            'prep'      : 'mod',
+            'poss'      : 'mod',
+            'possessive': 'mod',
+            'prt'       : 'mod',
+        'parataxis' : 'dep',
+        'punct'     : 'dep',
+        'ref'       : 'dep',
+        'sdep'      : 'dep',
+            'xsubj'     : 'sdep'
+}
