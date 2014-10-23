@@ -208,3 +208,24 @@ dependenciesMap = {
         'sdep'      : 'dep',
             'xsubj'     : 'sdep'
 }
+
+allowed = { 'undef', 'root', 'dep', 'aux', 'agent', 'comp', 'subj', 'cc', 'conj',
+'expl', 'mod', 'prep_of', 'prep_in' }
+
+def collapseDependency(dep,depMap,allowedDep):
+    """
+        Return the first dependency in allowedDep which is a result of the 
+        application of depMap on dep.
+        Pre-condition: this first dependency exists.
+    """
+    if dep in allowedDep:
+        return dep
+    return collapseDependency(depMap[dep],depMap,allowedDep)
+    
+def collapseAllDependencies(t,depMap=dependenciesMap,allowedDep=allowed):
+    """
+        Apply collapseDependency on all nodes of the tree t.
+    """
+    t.dependency = collapseDependency(t.dependency,depMap,allowedDep)
+    for c in t.child:
+        collapseAllDependencies(c,depMap,allowedDep)
