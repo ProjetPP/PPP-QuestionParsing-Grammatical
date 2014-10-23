@@ -90,7 +90,7 @@ class DependenciesTreeTests(TestCase):
         node2 = DependenciesTree('n-2','tag2','dep2',[DependenciesTree('childn-2')])
         node2.parent = root2
         root2.child += [node2]
-        node1.merge(node2)
+        node1.merge(node2,True)
         self.assertEqual(len(root2.child),0)
         self.assertEqual(len(root1.child),1)
         self.assertEqual(len(node1.child),2)

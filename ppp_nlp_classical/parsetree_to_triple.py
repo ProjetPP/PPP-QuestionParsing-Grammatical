@@ -34,14 +34,15 @@ class DependenciesTree:
     def __str__(self):
         return "digraph relations {"+"\n{0}\tlabelloc=\"t\"\tlabel=\"{1}\";\n".format(self.string(),self.text)+"}\n"
         
-    def merge(self,other):
+    def merge(self,other,mergeWords):
         """
             Merge the root of the two given trees into one single node.
             The result is stored in node 'self'.
         """
         self.child += other.child
-        self.wordList = other.wordList + self.wordList
-        self.wordList.sort(key = lambda x: x[1])
+        if mergeWords:
+          self.wordList = other.wordList + self.wordList
+          self.wordList.sort(key = lambda x: x[1])
         other.parent.child.remove(other)
         other.wordList = ["should not be used"]
 
@@ -99,17 +100,17 @@ def compute_tree(r):
     name_to_nodes['ROOT-0'].text = r['text']
     return name_to_nodes['ROOT-0']
 
-def remove_det(t):
+def mergeDependencies(t,dep):
     """
-        Remove all nodes with 'det' dependency.
+        Merge all nodes which have a dependency in dep.
+        Do not keep their list of words.
     """
     for c in t.child:
-        remove_det(c)
-    if t.dependency == 'det':
-        for c in t.child:
-            c.parent = t.parent
-        t.parent.child += t.child
-        t.parent.child.remove(t)
+        mergeDependencies(c,dep)
+    for c in t.child:
+      if c.dependency in dep:
+        t.merge(c,False)
+  
 
 def mergeNamedEntityTagChildParent(t):
     """
@@ -125,7 +126,7 @@ def mergeNamedEntityTagChildParent(t):
             if c.namedEntityTag == t.namedEntityTag:
                 same_tag_child.add(c)
         for c in same_tag_child:
-            t.merge(c)
+            t.merge(c,True)
 
 def mergeNamedEntityTagSisterBrother(t):
     """
@@ -146,9 +147,9 @@ def mergeNamedEntityTagSisterBrother(t):
     for sameTag in tagToNodes.values():
         x = sameTag.pop()
         for other in sameTag:
-            x.merge(other)
+            x.merge(other,True)
 
 def simplify(t):
-    remove_det(t)
+    mergeDependencies(t,{'det'})
     mergeNamedEntityTagChildParent(t)
     mergeNamedEntityTagSisterBrother(t)
