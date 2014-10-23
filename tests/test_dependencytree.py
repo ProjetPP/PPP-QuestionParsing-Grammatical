@@ -1,6 +1,6 @@
 import json
 
-from ppp_nlp_classical import DependenciesTree, compute_tree, simplify
+from ppp_nlp_classical import DependenciesTree, computeTree, simplify
 
 from unittest import TestCase
 
@@ -100,7 +100,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(node1.parent,root1)
         
     def testTreeGeneration(self):
-        tree=compute_tree(give_result()['sentences'][0])
+        tree=computeTree(give_result()['sentences'][0])
         root=tree
         # Root
         self.assertEqual(root.wordList,[("ROOT",0)])
@@ -152,7 +152,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(len(united.child),0)
 
     def testTreeSimplification(self):
-        tree=compute_tree(give_result()['sentences'][0])
+        tree=computeTree(give_result()['sentences'][0])
         simplify(tree)
         root=tree
         # Root

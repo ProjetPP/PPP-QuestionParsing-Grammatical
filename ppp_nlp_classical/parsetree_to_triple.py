@@ -47,7 +47,7 @@ class DependenciesTree:
         other.parent.child.remove(other)
         other.wordList = ["should not be used"]
 
-def compute_edges(r,name_to_nodes):
+def computeEdges(r,nameToNodes):
     """
         Compute the edges of the dependence tree.
         Take in input a piece of the result produced by StanfordNLP, and the
@@ -55,21 +55,21 @@ def compute_edges(r,name_to_nodes):
     """
     for edge in r['indexeddependencies']:
         try:
-            n1 = name_to_nodes[edge[1]]
+            n1 = nameToNodes[edge[1]]
         except KeyError:
             n1 = DependenciesTree(edge[1])
-            name_to_nodes[edge[1]] = n1
+            nameToNodes[edge[1]] = n1
         try:
-            n2 = name_to_nodes[edge[2]]
+            n2 = nameToNodes[edge[2]]
         except KeyError:
             n2 = DependenciesTree(edge[2])
-            name_to_nodes[edge[2]] = n2
+            nameToNodes[edge[2]] = n2
         # n1 is the parent of n2
         n1.child = n1.child+[n2]
         n2.parent = n1
         n2.dependency = edge[0]
 
-def compute_tags(r,name_to_nodes):
+def computeTags(r,nameToNodes):
     """
         Compute the tags of the dependence tree nodes.
         Take in input a piece of the result produced by StanfordNLP, and the
@@ -79,27 +79,27 @@ def compute_tags(r,name_to_nodes):
     # Computation of the tags of the nodes
     for word in r['words']:
         if word[0].isalnum() or word[0] == '$' or  word[0] == '%':
-            w=word[0]+'-'+str(index) # key in the name_to_nodes map
+            w=word[0]+'-'+str(index) # key in the nameToNodes map
             index+=1
             try:
-                n = name_to_nodes[w]
+                n = nameToNodes[w]
                 if word[1]['NamedEntityTag'] != 'O':
                     n.namedEntityTag = word[1]['NamedEntityTag']
             except KeyError:        # this node does not exists (e.g. 'of' preposition)
                 pass
 
-def compute_tree(r):
+def computeTree(r):
     """
         Compute the dependence tree.
         Take in input a piece of the result produced by StanfordNLP.
         If foo is this result, then r = foo['sentences'][0]
         Return the root of the tree (word 'ROOT-0').
     """
-    name_to_nodes = {} # map from the original string to the node
-    compute_edges(r,name_to_nodes)
-    compute_tags(r,name_to_nodes)
-    name_to_nodes['ROOT-0'].text = r['text']
-    return name_to_nodes['ROOT-0']
+    nameToNodes = {} # map from the original string to the node
+    computeEdges(r,nameToNodes)
+    computeTags(r,nameToNodes)
+    nameToNodes['ROOT-0'].text = r['text']
+    return nameToNodes['ROOT-0']
 
 def mergeDependencies(t,dep):
     """
@@ -121,12 +121,12 @@ def mergeNamedEntityTagChildParent(t):
     """
     for c in t.child:
         mergeNamedEntityTagChildParent(c)
-    same_tag_child = set()
+    sameTagChild = set()
     if t.namedEntityTag != 'undef':
         for c in t.child:
             if c.namedEntityTag == t.namedEntityTag:
-                same_tag_child.add(c)
-        for c in same_tag_child:
+                sameTagChild.add(c)
+        for c in sameTagChild:
             t.merge(c,True)
 
 def mergeNamedEntityTagSisterBrother(t):
