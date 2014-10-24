@@ -2,6 +2,11 @@ Here we try to analyse the grammatical relations used by the Stanford Parser. Th
 
 The elements with the symbol (-) don't appear in the hierarchy, but are explained in the part 2 of the manual (the contrary also happens). 
 
+Some transformations need to be perform in a certain order. For example, some relations, such as "agent", must be transform in "nsubjpass". So you need to analyze nsubjpass relation after "agent" for example.
+
+"Remove" means "remove the endpoint of the edge" (we assume it's a leaf, otherwise give me counterexamples). "Merge" means "merge the 2 nodes of the edge" (and so destroy the edge). "Collapse to x" means "replace the edge by a x-type edge".
+
+
 > **root - root**
 
 > root of the tree
@@ -10,53 +15,97 @@ The elements with the symbol (-) don't appear in the hierarchy, but are explaine
 
 > parser fails to find a dependency.
 
-> remove the subtree...
-
-> or ...merge all the subtree (ex:  Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?)
+> merge all the subtree? (ex:  Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?)
 
 >> **aux - auxiliary**
 
->> merge and simplify (aux (born,was) -> bear) 
+>> merge and simplify (aux (born,was) -> born/bear) 
 
 >>> **auxpass - passive auxiliary**
 
 >> merge and simplify
 
+>> or remove to "inverse" the verb (ex: The man has been killed by the police)
+
 >> the "passive information" will be treat in nsubjpass
 
 >>> **cop - copula**
 
+>> will not happen (thanks to makeCopulaHead), give me counterexamples otherwise
+
 >> **arg - argument**
+
+>> see cases below
 
 >>> **agent - agent**
 
+>>> always implies passive voice (?)
+
+>>> transform the subject relation nsubj (and csubj ?) to nsubjpass
+
+>>> perform the things of nsubjpass
+
 >>> **comp - complement**
+
+>>> ....
 
 >>>> **acomp - adjectival complement**
 
+>>>> collapse to comp
+
 >>>> **ccomp - clausal complement with internal subject**
+
+>>>> collapse to comp
 
 >>>> **xcomp - clausal complement with external subject**
 
+>>>> collapse to comp
+
 >>>> **pcomp - prepositional complement (-)**
+
+>>>> collapse to comp
 
 >>>> **obj - object**
 
 >>>>> **dobj - direct object**
 
+>>>>> collapse to comp
+
 >>>>> **iobj - indirect object**
 
 >>>>> **pobj - object of preposition**
 
+>>>>> doesn't appear in collapsed dependency?
+
+>>>>> or treat it as "prep_x" (x is "in", "on" ...)
+
 >>> **subj - subject**
 
+>>> ...
+
 >>>> **nsubj - nominal subject**
+
+>>>> collapse to subj
 
 >>>>> **nsubjpass - passive nominal subject**
 
 >>>>> passive voice, link the verb to the subject (that support the action)
 
 >>>>> need to search somewhere else the "actor of the verb"
+
+>>>>> we assume (need more verification to be sure) that there is always an agent ie the verb is followed by "by".
+
+>>>>> we assume the verb has already been "inversed" (just by removing "by" or "has been" for example?)
+
+>>>>> the agent is the "actor" of the (new) verb
+
+>>>>> transformations to remove "agent" and "nsubjpass" (miss some of the possible cases?) :
+
+>>>>>   - (The man has been killed by the police) `x <-nsubjpass- y -agent-> z` becomes `z <-nsubj- y -comp-> x` 
+
+>>>>>   - (Effects caused by the protein are important) `x -vmod-> y -agent-> z` becomes `z <-nsubj- y -comp-> x` (in the example, we obtain `important -nsubj-> caused -nsubj-> protein` and `caused -comp-> effects`. The example is very important (see the graph). Here we have made transformations that product grammatical relations (`important -nsubj-> caused`) that are probably irelevant from a "grammarian point of view" but that are very close to the triple representation. Indeed, we obtain directly 2 triples: `protein <-nsubj- caused -comp-> effects` (denoted by X) and `X <-nsubj- are --> important` (need to transform the copula before).
+
+>>>>>   - ... ?
 
 >>>> **csubj - clausal subject**
 
@@ -72,9 +121,11 @@ The elements with the symbol (-) don't appear in the hierarchy, but are explaine
 
 >> **mod - modifier**
 
+>> merge the 2 nodes 
+
 >>> **amod - adjectival modifier**
 
->>> merge
+>>> collapse to mod
 
 >>> **appos - appositional modifier**
 
@@ -89,6 +140,8 @@ The elements with the symbol (-) don't appear in the hierarchy, but are explaine
 >>> ex : “Which book do you prefer?” -> det(book, which)
 
 >>> ex: What debts did Qintex group leave?
+
+>>> not a problem because who analyze the question word before?
 
 >>> **predet - predeterminer**
 
@@ -126,13 +179,15 @@ The elements with the symbol (-) don't appear in the hierarchy, but are explaine
 
 >>> **prepc - prepositional clausal modifier (-)**
 
->>> appear on collapsed tree only
-
 >>> **poss - possession modifier**
+
+>>> important! produce a triple
 
 >>> **possessive - possessive modifier (’s)**
 
->>> same as "poss"
+>>> apparently could produce relations such that possessive(John, ’s) but I didn't an example. If this kind od relations appears, need some transformation
+
+>>> can assume in a first time this never happens (collapse to poss)
 
 >>> **prt - phrasal verb particle**
 

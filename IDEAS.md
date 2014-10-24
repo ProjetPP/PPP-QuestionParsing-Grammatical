@@ -175,17 +175,17 @@ _Example:_ Where is born Barack Obama's wife?
 2. "Barack Obama" is recognized as a name. The 2 nodes are merged
 3. Simplifications
 4. Question word: where. 
-  * The verb is identified ("bear") and the subject ("Barack Obama's wife")
+  * The verb is identified ("born") and the subject ("Barack Obama's wife")
   * The pattern attached to "where" is: `<where> <verb> <subject>` -> `verbIn(subject,x)` where x is the final answer
-5. The triple `bearIn(y=Barack Obama's wife,x)` is produced
+5. The triple `bornIn(y=Barack Obama's wife,x)` is produced
 6. The system produces an extra triple:
   * "Barack Obama's wife" is recognized as a relation of possession. 
   * The triple `wifeOf(y,Barack Obama)` is produce
-7. Output: `bearIn(y,x) /\ wifeOf(y,Barack Obama)`
+7. Output: `bornIn(y,x) /\ wifeOf(y,Barack Obama)`
 
-Here we can see that "Barack Obama's wife" can be firstly not considered as an unknown (step 5, in `bearIn(Barack Obama's wife,x)`), and in a second time some additionnal information "destruct" it in a triple (`wifeOf(y,Barack Obama)`). This is interesting because we have progressively "simplified" the set of triples (it's difficult to query `bearIn(Barack Obama's wife,x)` but it's easy to query `wifeOf(y,Barack Obama)`, obtain `y=Michelle Obama` and then query `bearIn(Michelle Obama,x)`).
+Here we can see that "Barack Obama's wife" can be firstly not considered as an unknown (step 5, in `bornIn(Barack Obama's wife,x)`), and in a second time some additionnal information "destruct" it in a triple (`wifeOf(y,Barack Obama)`). This is interesting because we have progressively "simplified" the set of triples (it's difficult to query `bornIn(Barack Obama's wife,x)` but it's easy to query `wifeOf(y,Barack Obama)`, obtain `y=Michelle Obama` and then query `bornIn(Michelle Obama,x)`).
 
-The big difference between the transformation in triples we perform and transformations in text simplification for example (automatic summarization: only extract triples, without holes) is the __holes__. Produce some triples without holes is much more simpler that what we do. However, I think we can say that the above algorithm places in fact only __one real hole__ (x, the answer we search). Indeed, in the example we could output `bearIn(Barack Obama's wife,x) /\ wifeOf(Barack Obama's wife,Barack Obama)` and then perform as many simplifications on triples as possible. For example:
+The big difference between the transformation in triples we perform and transformations in text simplification for example (automatic summarization: only extract triples, without holes) is the __holes__. Produce some triples without holes is much more simpler that what we do. However, I think we can say that the above algorithm places in fact only __one real hole__ (x, the answer we search). Indeed, in the example we could output `bornIn(Barack Obama's wife,x) /\ wifeOf(Barack Obama's wife,Barack Obama)` and then perform as many simplifications on triples as possible. For example:
   - we query `wifeOf(Barack Obama's wife,_)` (_ is a hole). The database gives no answer.
   - we query `wifeOf(_,Barack Obama)`. The database finds `Michelle Obama`. We replace `Barack Obama's wife` everywhere it appears
   - we continue until we success to find the really unknown x

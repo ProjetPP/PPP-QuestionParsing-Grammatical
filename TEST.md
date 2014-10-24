@@ -10,9 +10,13 @@ Launching a server
 
 May need to install [jsonrpclib](https://github.com/tcalmant/jsonrpclib) (for python3).
 
-Go to the folder where CoreNLP is installed (usually the Scripts/ folder)
-and run:
+Go to the folder where CoreNLP is installed (usually the Scripts/ folder) and run:
+
   CORENLP="stanford-corenlp-full-2014-08-27" python3 -m corenlp
+
+To remove copula relations (other flags can be passed in the same way):
+
+  CORENLP="stanford-corenlp-full-2014-08-27" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp
      
 Parsing using a server
 ======================
@@ -20,7 +24,7 @@ Parsing using a server
 Run (example):
   python3 test2.py
   
-Using a server enables to parse quicker (< 1s) than loading the module each time.
+Using a server enables to parse quicker than loading the module each time.
 
 
 Presentation of the output using dot
