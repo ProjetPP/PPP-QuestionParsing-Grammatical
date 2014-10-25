@@ -1,4 +1,4 @@
-Here we try to analyse the grammatical relations used by the Stanford Parser. The hierarchy of types dependencies below is taken from the manual ("The grammatical relations defined in the above section stand in a hierarchy. The most generic grammatical relation, dependent (dep), will be used when a more precise relation in the hierarchy does not exist or cannot be retrieved by the system.")
+Here we try to analyze the grammatical relations used by the Stanford Parser. The hierarchy of types dependencies below is taken from the manual ("The grammatical relations defined in the above section stand in a hierarchy. The most generic grammatical relation, dependent (dep), will be used when a more precise relation in the hierarchy does not exist or cannot be retrieved by the system.")
 
 The elements with the symbol (-) don't appear in the hierarchy, but are explained in the part 2 of the manual (the contrary also happens). 
 
@@ -6,11 +6,22 @@ Some transformations need to be perform in a certain order. For example, some re
 
 Some vocabulary:
 * Remove: remove the endpoint of the edge (we assume it's a leaf, otherwise give me counterexamples). 
-* Ignore: remove, don't take into account for the moment (even if it's important to understant the sentence)
+* Ignore: remove but it could be interesting to analyze it later
 * Merge: merge the 2 nodes of the edge (and so destroy the edge). 
 * Collapse to x: means "replace the edge by a x-type edge. 
 * Impossible: means "this relation doesn't appear in collapse dependency (give counterexamples otherwise).
 
+Restricted set of dependencies:
+* dep: unknown dependency
+* subj: subject
+* comp: subj verb comp
+* mod: modifier of an entity (adjective,...)
+* conj: conjonction (conj_and, conj_or...)
+* neg: negation
+* num: number
+* pos: possessive
+* prep: preposition (prep_in,prep_on,...)
+* Agent and nsubjpass could also be kept in a first time (in order not to perform the particular transformations they imply).
 
 > **root - root**
 
@@ -18,27 +29,25 @@ Some vocabulary:
 
 > **dep - dependent**
 
+> __*KEEP*__
+
 > parser fails to find a dependency.
 
-> ignore (in a first time)
-
-> merge all the subtree? (ex:  Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?)
+> merge all the subtree (ex:  Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?) and keep "dep"
 
 >> **aux - auxiliary**
 
 >> remove (aux (born,was) -> born) 
 
->> (or merge and simplify?)
-
 >>> **auxpass - passive auxiliary**
 
 >> remove (in order to "inverse" the verb, ex: The man has been killed by the police), the "passive information" will be treat in nsubjpass
 
->> (or merge and simplify?)
-
 >>> **cop - copula**
 
 >> impossible (thanks to makeCopulaHead)
+
+>> counterexamples: What is the brightest star visible from Earth?
 
 >> **arg - argument**
 
@@ -48,7 +57,7 @@ Some vocabulary:
 
 >>> always implies passive voice (?)
 
->>> transform the subject relation nsubj (and csubj ?) to nsubjpass (if it's not ever done)
+>>> transform the closest nsubj to nsubjpass (if it's not ever done)
 
 >>> perform the things of nsubjpass
 
@@ -80,9 +89,11 @@ Some vocabulary:
 
 >>>>> collapse to comp
 
+>>>>> __use it to find question word?__ (when qw is not subject)
+
 >>>>> **iobj - indirect object**
 
->>>>> remove (in a first time). please give example of questions with iobj
+>>>>> remove (in a first time). please give example of _questions_ with iobj
 
 >>>>> **pobj - object of preposition**
 
@@ -120,7 +131,11 @@ Some vocabulary:
 
 >>>> **csubj - clausal subject**
 
+>>>> impossible
+
 >>>>> **csubjpass - passive clausal subject**
+
+>>>>> impossible
 
 >> **cc - coordination**
 
@@ -130,21 +145,35 @@ Some vocabulary:
 
 >> __*KEEP*__
 
->> conj_x (conj_and, conj_or ...)
+>> conj_x (conj_and, conj_or ...) in practice
 
 >> **expl - expletive (expletive “there”)**
 
+>> ignore
+
+>> How many undiscovered blood groups are there?
+
+>> How Many Undiscovered Blood Groups Are There?
+
 >> **mod - modifier**
+
+>> __*KEEP*__ (mod is never displayed by the parser, see subcases below)
 
 >>> **amod - adjectival modifier**
 
+>>> collapse to mod
+
 >>> **appos - appositional modifier**
+
+>>> collapse to mod
 
 >>> **advcl - adverbial clause modifier**
 
+>>> collapse to mod (probably too difficult to be analyzed)
+
 >>> **det - determiner**
 
->>> could be removed in a lot of case
+>>> remove
 
 >>> can link a word to a "question word"
 
@@ -152,7 +181,7 @@ Some vocabulary:
 
 >>> ex: What debts did Qintex group leave?
 
->>> not a problem because who analyze the question word before?
+>>> not a problem if we analyze/remove the question word before
 
 >>> **predet - predeterminer**
 
@@ -164,6 +193,8 @@ Some vocabulary:
 
 >>> **vmod - reduced, non-finite verbal modifier**
 
+>>> collapse to mod (not very good...)
+
 >>> **mwe - multi-word expression modifier**
 
 >>> merge nodes
@@ -174,19 +205,31 @@ Some vocabulary:
 
 >>> **advmod - adverbial modifier**
 
+>>> merge __only if__ it's not the question word (question word is deleted)
+
 >>>> **neg - negation modifier**
 
 >>>>  __*KEEP*__
 
 >>> **rcmod - relative clause modifier**
 
+>>> ignore
+
 >>>> **quantmod - quantifier modifier**
+
+>>>> ignore
 
 >>> **nn - noun compound modifier**
 
+>>> merge (noun modifiers are more likely to form an entity with the NP they modified, than adjectives for ex)
+
 >>> **npadvmod - noun phrase adverbial modifier**
 
+>>> merge
+
 >>>> **tmod - temporal modifier**
+
+>>>> collapse to mod (later: keep the "temporal" info)
 
 >>> **num - numeric modifier**
 
@@ -198,29 +241,29 @@ Some vocabulary:
 
 >>> **prep - prepositional modifier**
 
->>> prep_x in collapse dependency
+>>>  __*KEEP*__
 
->>> see possibility of prep_x and prepc_x in the manual
+>>> prep_x in practice
+
+>>> see prep_x and prepc_x in the manual
 
 >>> ...
 
 >>> **prepc - prepositional clausal modifier (-)**
 
->>> prepc_x in collapse dependency
+>>> prepc_x in practice
 
 >>> collapse to prep_x
 
 >>> **poss - possession modifier**
 
->>> important! produce a triple
-
->>> ...
+>>> __*KEEP*__
 
 >>> **possessive - possessive modifier (’s)**
 
 >>> ignore
 
->>> apparently could produce relations such that possessive(John, ’s) but I didn't an example. If this kind od relations appears, need some transformation
+>>> apparently could produce relations such as possessive(John, ’s) but I didn't found an example. If this kind of relations appears, need some transformation
 
 >>> **prt - phrasal verb particle**
 
@@ -228,11 +271,15 @@ Some vocabulary:
 
 >> **parataxis - parataxis**
 
+>> ignore
+
 >> **punct - punctuation**
 
 >> impossible
 
 >> **ref - referent**
+
+>> impossible?
 
 >> **sdep - semantic dependent**
 
@@ -249,12 +296,5 @@ Some vocabulary:
 >> **discourse - discourse element (-)**
 
 >> remove
-
-
-
-
-
-
-
 
 
