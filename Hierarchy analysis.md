@@ -5,10 +5,11 @@ The elements with the symbol (-) don't appear in the hierarchy, but are explaine
 Some transformations need to be perform in a certain order. For example, some relations, such as "agent", must be transform in "nsubjpass". So you need to analyze nsubjpass relation after "agent" for example.
 
 Some vocabulary:
-* "Remove" means "remove the endpoint of the edge" (we assume it's a leaf, otherwise give me counterexamples). 
-* "Merge" means "merge the 2 nodes of the edge" (and so destroy the edge). 
-* "Collapse to x" means "replace the edge by a x-type edge". 
-* "Impossible" means "this relation doesn't appear in collapse dependency" (give counterexamples otherwise).
+* Remove: remove the endpoint of the edge (we assume it's a leaf, otherwise give me counterexamples). 
+* Ignore: remove, don't take into account for the moment (even if it's important to understant the sentence)
+* Merge: merge the 2 nodes of the edge (and so destroy the edge). 
+* Collapse to x: means "replace the edge by a x-type edge. 
+* Impossible: means "this relation doesn't appear in collapse dependency (give counterexamples otherwise).
 
 
 > **root - root**
@@ -18,6 +19,8 @@ Some vocabulary:
 > **dep - dependent**
 
 > parser fails to find a dependency.
+
+> ignore (in a first time)
 
 > merge all the subtree? (ex:  Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?)
 
@@ -29,7 +32,7 @@ Some vocabulary:
 
 >>> **auxpass - passive auxiliary**
 
->> remove (to "inverse" the verb, ex: The man has been killed by the police), the "passive information" will be treat in nsubjpass
+>> remove (in order to "inverse" the verb, ex: The man has been killed by the police), the "passive information" will be treat in nsubjpass
 
 >> (or merge and simplify?)
 
@@ -39,7 +42,7 @@ Some vocabulary:
 
 >> **arg - argument**
 
->> see cases below
+>> impossible (see cases below)
 
 >>> **agent - agent**
 
@@ -71,7 +74,7 @@ Some vocabulary:
 
 >>>> **obj - object**
 
->>>> impossible (always one the subcase below ?)
+>>>> impossible (always one of the cases below ?)
 
 >>>>> **dobj - direct object**
 
@@ -121,19 +124,19 @@ Some vocabulary:
 
 >> **cc - coordination**
 
+>> ignore
+
 >> **conj - conjunct**
 
->> duplicate the tree?
+>> __*KEEP*__
+
+>> conj_x (conj_and, conj_or ...)
 
 >> **expl - expletive (expletive “there”)**
 
 >> **mod - modifier**
 
->> merge the 2 nodes 
-
 >>> **amod - adjectival modifier**
-
->>> collapse to mod
 
 >>> **appos - appositional modifier**
 
@@ -153,7 +156,11 @@ Some vocabulary:
 
 >>> **predet - predeterminer**
 
+>>> ignore
+
 >>> **preconj - preconjunct**
+
+>>> ignore
 
 >>> **vmod - reduced, non-finite verbal modifier**
 
@@ -163,17 +170,19 @@ Some vocabulary:
 
 >>>> **mark - marker (word introducing an advcl or ccomp)**
 
+>>>> ignore
+
 >>> **advmod - adverbial modifier**
 
 >>>> **neg - negation modifier**
+
+>>>>  __*KEEP*__
 
 >>> **rcmod - relative clause modifier**
 
 >>>> **quantmod - quantifier modifier**
 
 >>> **nn - noun compound modifier**
-
->>>  __*KEEP*__
 
 >>> **npadvmod - noun phrase adverbial modifier**
 
@@ -209,7 +218,7 @@ Some vocabulary:
 
 >>> **possessive - possessive modifier (’s)**
 
->>> impossible
+>>> ignore
 
 >>> apparently could produce relations such that possessive(John, ’s) but I didn't an example. If this kind od relations appears, need some transformation
 
@@ -227,7 +236,11 @@ Some vocabulary:
 
 >> **sdep - semantic dependent**
 
+>> impossible (see cases below)
+
 >>> **xsubj - controlling subject**
+
+>>> collapse to comp
 
 >> **goeswith - error space (-)**
 
