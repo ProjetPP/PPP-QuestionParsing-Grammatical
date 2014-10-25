@@ -98,7 +98,7 @@ def computeTree(r):
     nameToNodes = {} # map from the original string to the node
     computeEdges(r,nameToNodes)
     computeTags(r,nameToNodes)
-    nameToNodes['ROOT-0'].text = r['text']
+    nameToNodes['ROOT-0'].text = r['text'].replace('"','\\\"')
     return nameToNodes['ROOT-0']
 
 def mergeDependencies(t,dep):
