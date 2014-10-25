@@ -4,7 +4,11 @@ The elements with the symbol (-) don't appear in the hierarchy, but are explaine
 
 Some transformations need to be perform in a certain order. For example, some relations, such as "agent", must be transform in "nsubjpass". So you need to analyze nsubjpass relation after "agent" for example.
 
-"Remove" means "remove the endpoint of the edge" (we assume it's a leaf, otherwise give me counterexamples). "Merge" means "merge the 2 nodes of the edge" (and so destroy the edge). "Collapse to x" means "replace the edge by a x-type edge".
+Some vocabulary:
+* "Remove" means "remove the endpoint of the edge" (we assume it's a leaf, otherwise give me counterexamples). 
+* "Merge" means "merge the 2 nodes of the edge" (and so destroy the edge). 
+* "Collapse to x" means "replace the edge by a x-type edge". 
+* "Impossible" means "this relation doesn't appear in collapse dependency" (give counterexamples otherwise).
 
 
 > **root - root**
@@ -19,19 +23,19 @@ Some transformations need to be perform in a certain order. For example, some re
 
 >> **aux - auxiliary**
 
->> merge and simplify (aux (born,was) -> born/bear) 
+>> remove (aux (born,was) -> born) 
+
+>> (or merge and simplify?)
 
 >>> **auxpass - passive auxiliary**
 
->> merge and simplify
+>> remove (to "inverse" the verb, ex: The man has been killed by the police), the "passive information" will be treat in nsubjpass
 
->> or remove to "inverse" the verb (ex: The man has been killed by the police)
-
->> the "passive information" will be treat in nsubjpass
+>> (or merge and simplify?)
 
 >>> **cop - copula**
 
->> will not happen (thanks to makeCopulaHead), give me counterexamples otherwise
+>> impossible (thanks to makeCopulaHead)
 
 >> **arg - argument**
 
@@ -41,13 +45,13 @@ Some transformations need to be perform in a certain order. For example, some re
 
 >>> always implies passive voice (?)
 
->>> transform the subject relation nsubj (and csubj ?) to nsubjpass
+>>> transform the subject relation nsubj (and csubj ?) to nsubjpass (if it's not ever done)
 
 >>> perform the things of nsubjpass
 
 >>> **comp - complement**
 
->>> ....
+>>> __*KEEP*__
 
 >>>> **acomp - adjectival complement**
 
@@ -67,21 +71,25 @@ Some transformations need to be perform in a certain order. For example, some re
 
 >>>> **obj - object**
 
+>>>> impossible (always one the subcase below ?)
+
 >>>>> **dobj - direct object**
 
 >>>>> collapse to comp
 
 >>>>> **iobj - indirect object**
 
+>>>>> remove (in a first time). please give example of questions with iobj
+
 >>>>> **pobj - object of preposition**
 
->>>>> doesn't appear in collapsed dependency?
+>>>>> impossible
 
->>>>> or treat it as "prep_x" (x is "in", "on" ...)
+>>>>> (or treat it as "prep_x" (x is "in", "on" ...))
 
 >>> **subj - subject**
 
->>> ...
+>>> __*KEEP*__
 
 >>>> **nsubj - nominal subject**
 
@@ -105,7 +113,7 @@ Some transformations need to be perform in a certain order. For example, some re
 
 >>>>>   - (Effects caused by the protein are important) `x -vmod-> y -agent-> z` becomes `z <-nsubj- y -comp-> x` (in the example, we obtain `important -nsubj-> caused -nsubj-> protein` and `caused -comp-> effects`. The example is very important (see the graph). Here we have made transformations that product grammatical relations (`important -nsubj-> caused`) that are probably irelevant from a "grammarian point of view" but that are very close to the triple representation. Indeed, we obtain directly 2 triples: `protein <-nsubj- caused -comp-> effects` (denoted by X) and `X <-nsubj- are --> important` (need to transform the copula before).
 
->>>>>   - ... ?
+>>>>>   - ???
 
 >>>> **csubj - clausal subject**
 
@@ -153,7 +161,7 @@ Some transformations need to be perform in a certain order. For example, some re
 
 >>> merge nodes
 
->>>> **mark - marker (word introducing an advcl or ccomp**
+>>>> **mark - marker (word introducing an advcl or ccomp)**
 
 >>> **advmod - adverbial modifier**
 
@@ -165,11 +173,15 @@ Some transformations need to be perform in a certain order. For example, some re
 
 >>> **nn - noun compound modifier**
 
+>>>  __*KEEP*__
+
 >>> **npadvmod - noun phrase adverbial modifier**
 
 >>>> **tmod - temporal modifier**
 
 >>> **num - numeric modifier**
+
+>>>  __*KEEP*__
 
 >>> **number - element of compound number**
 
@@ -177,27 +189,39 @@ Some transformations need to be perform in a certain order. For example, some re
 
 >>> **prep - prepositional modifier**
 
+>>> prep_x in collapse dependency
+
+>>> see possibility of prep_x and prepc_x in the manual
+
+>>> ...
+
 >>> **prepc - prepositional clausal modifier (-)**
+
+>>> prepc_x in collapse dependency
+
+>>> collapse to prep_x
 
 >>> **poss - possession modifier**
 
 >>> important! produce a triple
 
+>>> ...
+
 >>> **possessive - possessive modifier (’s)**
+
+>>> impossible
 
 >>> apparently could produce relations such that possessive(John, ’s) but I didn't an example. If this kind od relations appears, need some transformation
 
->>> can assume in a first time this never happens (collapse to poss)
-
 >>> **prt - phrasal verb particle**
 
->>> merge nodes
+>>> merge
 
 >> **parataxis - parataxis**
 
 >> **punct - punctuation**
 
->> can be removed, by default not output
+>> impossible
 
 >> **ref - referent**
 
@@ -207,7 +231,7 @@ Some transformations need to be perform in a certain order. For example, some re
 
 >> **goeswith - error space (-)**
 
->> concatenate the two nodes
+>> merge
 
 >> **discourse - discourse element (-)**
 
