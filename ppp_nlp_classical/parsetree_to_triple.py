@@ -11,7 +11,7 @@ class DependenciesTree:
         self.namedEntityTag = namedentitytag
         self.dependency = dependency
         self.child = child or []
-        self.text = "" # only relevant for the root node
+        self.text = "" # only relevant for the root node (whole sentence?)
         # parent attribute will also be available after computation of the tree
 
     def string(self):
@@ -46,7 +46,7 @@ class DependenciesTree:
           self.wordList.sort(key = lambda x: x[1])
         other.parent.child.remove(other)
         other.wordList = ["should not be used"]
-
+      
 def computeEdges(r,nameToNodes):
     """
         Compute the edges of the dependence tree.
@@ -149,7 +149,7 @@ def mergeNamedEntityTagSisterBrother(t):
         x = sameTag.pop()
         for other in sameTag:
             x.merge(other,True)
-
+            
 def simplify(t):
     mergeDependencies(t,{'det'})
     mergeNamedEntityTagChildParent(t)
@@ -229,3 +229,99 @@ def collapseAllDependencies(t,depMap=dependenciesMap,allowedDep=allowed):
     t.dependency = collapseDependency(t.dependency,depMap,allowedDep)
     for c in t.child:
         collapseAllDependencies(c,depMap,allowedDep)
+        
+##################################################################
+        
+def remove(t):
+    t.parent.child.remove(t)
+
+def impossible(t):
+    sys.stderr.write('%s is possible\n' % t)
+    remove(t)
+  
+def ignore(t):
+    remove(t)
+      
+def merge(t):
+    t.parent.merge(t,True)
+       
+dependenciesMap2 = {
+    'undef'     : 'undef',
+    'root'      : 'root',
+    'dep'       : 'dep',
+        'aux'       : remove,
+            'auxpass'   : remove,
+            'cop'       : impossible,
+        'arg'       : impossible,
+            'agent'     : 'agent',
+            'comp'      : 'comp',
+                'acomp'     : 'comp',
+                'ccomp'     : 'comp',
+                'xcomp'     : 'comp',
+                'pcomp'     : 'comp',
+                'obj'       : impossible,
+                    'dobj'      : 'comp',
+                    'iobj'      : impossible,
+                    'pobj'      : impossible,
+            'subj'      : 'subj',
+                'nsubj'     : 'subj',
+                    'nsubjpass'    : 'nsubjpass',
+                'csubj'     : impossible,
+                    'csubjpass'    : impossible,
+        'cc'        : ignore,
+        'conj'      : 'conj',
+        'expl'      : ignore,
+        'mod'       : 'mod',
+            'amod'      : 'mod',
+            'appos'     : 'mod',
+            'advcl'     : 'mod',
+            'det'       : remove,
+            'predet'    : ignore,
+            'preconj'   : ignore,
+            'vmod'      : 'mod',
+            'mwe'       : merge,
+                'mark'      : ignore,
+            'advmod'    : merge,
+                'neg'       : 'neg',
+            'rcmod'     : ignore,
+                'quantmod'  : ignore,
+            'nn'        : merge,
+            'npadvmod'  : merge,
+                'tmod'      : 'mod',
+            'num'       : 'num',
+            'number'    : merge,
+            'prep'      : 'prep',
+            'prepc'     : 'prep',
+            'poss'      : 'poss',
+            'possessive': impossible,
+            'prt'       : merge,
+        'parataxis' : ignore,
+        'punct'     : impossible,
+        'ref'       : impossible,
+        'sdep'      : impossible,
+            'xsubj'     : 'comp',
+        'goeswith'  : merge,
+        'discourse' : remove
+}
+
+def collapseDependency2(t,depMap=dependenciesMap2):
+    """
+        Return the first dependency in allowedDep which is a result of the 
+        application of depMap on dep.
+        Pre-condition: this first dependency exists.
+    """
+    temp = list(t.child) # copy, t.child is changed while iterating
+    for c in temp:
+        collapseDependency2(c,depMap)
+    try:
+        if isinstance(depMap[t.dependency], str):
+            t.dependency = depMap[t.dependency]
+        else:
+            depMap[t.dependency](t)
+    except KeyError:
+        pass
+        
+def simplify2(t):
+    mergeNamedEntityTagChildParent(t)
+    mergeNamedEntityTagSisterBrother(t)
+    collapseDependency2(t)

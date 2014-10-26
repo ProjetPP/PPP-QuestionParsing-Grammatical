@@ -231,6 +231,8 @@ Restricted set of dependencies:
 
 >>>> collapse to mod (later: keep the "temporal" info)
 
+>>>> merge all the subtree and add TIME identifier?
+
 >>> **num - numeric modifier**
 
 >>>  __*KEEP*__
@@ -261,7 +263,7 @@ Restricted set of dependencies:
 
 >>> **possessive - possessive modifier (’s)**
 
->>> ignore
+>>> impossible
 
 >>> apparently could produce relations such as possessive(John, ’s) but I didn't found an example. If this kind of relations appears, need some transformation
 

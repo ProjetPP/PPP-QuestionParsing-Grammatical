@@ -1,8 +1,8 @@
 
 ## Hierarchy_analysis review
 
-? : currend choice is bad
-! : current choice is good
+? : currend choice is very bad
+! : current choice is very good
 
 What was the monetary value of the Nobel Peace Prize in 1989? 
 What is the name of the managing director of Apricot Computer?

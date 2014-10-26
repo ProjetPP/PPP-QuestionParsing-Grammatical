@@ -38,3 +38,12 @@ your sentence).
 You can also have directly a ps file using the following: `python3 test3.py | dot -Tps > test.ps`
 
 More laziness: `echo "What is the birth date of the first president of the United States?" | python3 test3.py | dot -Tps > test.ps`
+
+Description of test files
+=========================
+
+* test1.py: parsing without a server. test1.py outputs the direct answer of CoreNLP
+* test2.py: Start server before. test2.py outputs the direct answer of CoreNLP
+* test3.py: Start server before. test3.py outputs the graph dependency produces by CoreNLP
+* test4.py: Start server before. test4.py uses functions defined in parsetree_to_triple
+
