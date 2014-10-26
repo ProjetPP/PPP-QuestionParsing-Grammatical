@@ -30,7 +30,13 @@ Where was George Washington born?
 What is the brightest star visible from Earth?
   cop not removed!
   change what <-> is
-  
+
+Where does most of the marijuana entering the United States come from?
+  ? merge prep (when it's not prep_x) 
+
+What did John Hinckley do to impress Jodie Foster?
+  ? collapse dobj to comp
+    
 * Treat nn as mod (and not merge)
 
 ## Question word to triples

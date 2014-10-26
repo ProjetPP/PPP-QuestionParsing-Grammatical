@@ -7,9 +7,10 @@ Here is a presentation of a (possible) algorithm. See IDEAS.md for other informa
 3. Merge quotation (with a "QUOTA" NER identifier), ex: Who is the author of "Twenty Thousand Leagues Under the Sea"? -> "Twenty Thousand Leagues Under the Sea" is merged in a single node
 4. Merge words in capital letters that are neighbors in the tree
 
-Two restrictions are necessaries in a first time:
+I think we can perform the following restrictions in a first time:
   - be case-sensitive. It simplifies a lot of things (and the stanford parser is case sensitive...). 
   - only process questions that start by a question word
+  - assume the question word is __only__ the first word of the question
 
 ### Tree simplification
 

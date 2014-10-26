@@ -93,7 +93,7 @@ Restricted set of dependencies:
 
 >>>>> **iobj - indirect object**
 
->>>>> remove (in a first time). please give example of _questions_ with iobj
+>>>>> impossible (in a first time). please give example of _questions_ with iobj
 
 >>>>> **pobj - object of preposition**
 
