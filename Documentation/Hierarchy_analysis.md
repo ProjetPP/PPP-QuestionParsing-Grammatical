@@ -18,7 +18,6 @@ Restricted set of dependencies:
 * mod: modifier of an entity (adjective,...)
 * conj: conjonction (conj_and, conj_or...)
 * neg: negation
-* num: number
 * pos: possessive
 * prep: preposition (prep_in,prep_on,...)
 * Agent and nsubjpass could also be kept in a first time (in order not to perform the particular transformations they imply).
@@ -98,6 +97,8 @@ Restricted set of dependencies:
 >>>>> **pobj - object of preposition**
 
 >>>>> impossible
+
+>>>>> Who is Bob according to you?
 
 >>>>> (or treat it as "prep_x" (x is "in", "on" ...))
 
@@ -235,7 +236,7 @@ Restricted set of dependencies:
 
 >>> **num - numeric modifier**
 
->>>  __*KEEP*__
+>>>  merge
 
 >>> **number - element of compound number**
 
