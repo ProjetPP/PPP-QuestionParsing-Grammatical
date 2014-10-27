@@ -81,7 +81,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(root.wordList,[("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
         self.assertEqual(root.dependency,'undef')
-        self.assertRaises(AttributeError, lambda: root.parent)
+        self.assertEqual(root.parent,None)
         self.assertEqual(len(root.child),1)
         # Is
         is_=root.child[0]
