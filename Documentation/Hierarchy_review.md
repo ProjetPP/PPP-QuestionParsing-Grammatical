@@ -65,6 +65,9 @@ What did John Hinckley do to impress Jodie Foster?
 pobj
 ====
 
+(map to comp temporarily)
+
+Who is the author of "Twenty Thousand Leagues Under the Sea"?
 Who is Bob according to you?
   ? pobj impossible 
 

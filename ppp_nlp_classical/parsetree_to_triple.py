@@ -380,7 +380,7 @@ dependenciesMap2 = {
                 'obj'       : impossible,
                     'dobj'      : 'comp',
                     'iobj'      : impossible,
-                    'pobj'      : impossible,
+                    'pobj'      : 'comp',
             'subj'      : 'subj',
                 'nsubj'     : 'subj',
                     'nsubjpass'    : 'nsubjpass',
