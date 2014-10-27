@@ -48,7 +48,7 @@ class DependenciesTree:
           self.wordList.sort(key = lambda x: x[1])
         if other.parent:
             other.parent.child.remove(other)
-        other.wordList = ["should not be used"]
+        other.wordList = [("merged",0)]
 
 def computeEdges(r,nameToNodes):
     """
@@ -91,35 +91,96 @@ def computeTags(r,nameToNodes):
             except KeyError:        # this node does not exists (e.g. 'of' preposition)
                 pass
 
-def mergeQuotations(r,nameToNodes):
+def findQuotations(r):
     """
-        Merge all nodes corresponding to quotations.
+        Return a list of elements of the form (begin,end,set of integers).
+        Each set is a set of words index belonging to a same quotation.
+        Begin and end are the index of the quotations marks
     """
     index=1
     inQuote=False
-    quotationNode=None
+    quotationList=[]
+    quotationSet = set()
     for word in r['words']:
-        w=word[0]+'-'+str(index) # key in the nameToNodes map
-        index+=1
         if word[0] == "``":
             assert not inQuote
             inQuote = True
-            continue
+            begin=index
         elif word[0] == "''":
             assert inQuote
             inQuote=False
-            quotationNode=None
-            continue
-        if inQuote:
-            try:
-                n = nameToNodes[w]
-            except KeyError:
-                n = DependenciesTree(w)
-            if not quotationNode:
-                quotationNode = n
-            else:
-                assert quotationNode.parent
-                quotationNode.merge(n,True)
+            quotationList+=[(begin,index,quotationSet)]
+            quotationSet = set()
+        elif inQuote:
+            quotationSet.add(index)
+        index+=1
+    assert not inQuote
+    return quotationList
+
+def matchingQuoteWord(w,quotationList):
+    """
+        Return the quotation set in which belong the word (None otherwise).
+        w must be of the form (word,index)
+    """
+    for quote in quotationList:
+        if w[1] in quote[2]:
+            return quote
+    return None
+
+def matchingQuote(wlist,quotationList):
+    """
+        Return the quotation set in which belong all the words of the list (None otherwise).
+        If two words does not belong to the same quotation, error.
+    """
+    quote=matchingQuoteWord(wlist[0],quotationList)
+    for w in wlist:
+        if matchingQuoteWord(w,quotationList) != quote:
+            sys.stderr.write('exit: node belong to several quotations (please, report your sentence)\n')
+            sys.stderr.write(' '.join(x[0] for x in self.wordList)+"\n")
+            sys.exit()
+    return quote
+
+def quotationTraversal(t,quotationList,quoteIndexToNode):
+    """
+        Traverse the tree to merge quotations, given a quotationList (computed
+            with findQuotation).
+        Fill quoteIndexToNode (map from the index of the beginning of the quote to the node.
+    """
+    childCopy = list(t.child)
+    for c in childCopy:
+        quotationTraversal(c,quotationList,quoteIndexToNode)
+    quote = matchingQuote(t.wordList,quotationList)
+    if not quote:
+        return
+    childCopy = list(t.child)
+    for c in childCopy:
+        if matchingQuote(c.wordList,quotationList) == quote:
+            t.merge(c,True)
+            quoteIndexToNode[quote[0]] = t
+
+def mergeQuotations(t,r,nameToNodes):
+    """
+        Merge all nodes corresponding to quotations.
+    """
+    quotationList = findQuotations(r)
+    quoteIndexToNode = {}
+    # Merge existing nodes belonging to quotations.
+    quotationTraversal(t,quotationList,quoteIndexToNode)
+    inQuote=False
+    quoteNode=None
+    index=1
+    # Add words which are not nodes
+    for word in r['words']:
+        if word[0] == "``":
+            inQuote = True
+            quoteNode=quoteIndexToNode[index]
+        elif word[0] == "''":
+            inQuote = False
+            quoteNode.wordList.sort(key = lambda x: x[1])
+        elif inQuote:
+            if (word[0],index) not in quoteNode.wordList:
+                quoteNode.wordList += [(word[0],index)]
+        index+=1
 
 def initText(t,s):
     """
@@ -140,7 +201,7 @@ def computeTree(r):
     computeEdges(r,nameToNodes)
     computeTags(r,nameToNodes)
     initText(nameToNodes['ROOT-0'],r['text'].replace('"','\\\"'))
-    mergeQuotations(r,nameToNodes)
+    mergeQuotations(nameToNodes['ROOT-0'],r,nameToNodes)
     return nameToNodes['ROOT-0']
 
 def mergeDependencies(t,dep):
