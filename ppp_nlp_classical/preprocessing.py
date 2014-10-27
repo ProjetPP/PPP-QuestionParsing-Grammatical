@@ -5,15 +5,15 @@ import sys
 class DependenciesTree:
     """
         One node of the parse tree.
-        It is a group of words of same NamedEntityTag (e.g. George Washington).
+        It is a group of words of the initial sentence.
     """
     def __init__(self, word, namedentitytag='undef', dependency='undef', child=None):
-        self.wordList = [(word[:word.rindex('-')],int(word[word.rindex('-')+1:]))]
-        self.namedEntityTag = namedentitytag
-        self.dependency = dependency
-        self.child = child or []
-        self.text = "" # whole sentence
-        self.parent=None
+        self.wordList = [(word[:word.rindex('-')],int(word[word.rindex('-')+1:]))] # words of the node
+        self.namedEntityTag = namedentitytag 
+        self.dependency = dependency # dependency from self to its parent
+        self.child = child or [] # children of self
+        self.text = "" # each node contains whole sentence
+        self.parent=None # parent of self
 
     def string(self):
         # Concatenation of the words of the root
@@ -33,6 +33,9 @@ class DependenciesTree:
         return s
 
     def __str__(self):
+        """
+            Print dependency graph in dot format
+        """
         return "digraph relations {"+"\n{0}\tlabelloc=\"t\"\tlabel=\"{1}\";\n".format(self.string(),self.text)+"}\n"
 
     def merge(self,other,mergeWords):
@@ -153,6 +156,8 @@ def quotationTraversal(t,quotationList,quoteIndexToNode):
     quote = matchingQuote(t.wordList,quotationList)
     if not quote:
         return
+    if not quote[0] in quoteIndexToNode: 
+        quoteIndexToNode[quote[0]] = t
     childCopy = list(t.child)
     for c in childCopy:
         if matchingQuote(c.wordList,quotationList) == quote:
