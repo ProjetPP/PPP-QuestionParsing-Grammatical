@@ -11,8 +11,8 @@ class DependenciesTree:
         self.namedEntityTag = namedentitytag
         self.dependency = dependency
         self.child = child or []
-        self.text = "" # only relevant for the root node (whole sentence?)
-        # parent attribute will also be available after computation of the tree
+        self.text = "" # whole sentence
+        self.parent=None
 
     def string(self):
         # Concatenation of the words of the root
@@ -33,7 +33,7 @@ class DependenciesTree:
 
     def __str__(self):
         return "digraph relations {"+"\n{0}\tlabelloc=\"t\"\tlabel=\"{1}\";\n".format(self.string(),self.text)+"}\n"
-        
+
     def merge(self,other,mergeWords):
         """
             Merge the root of the two given trees into one single node.
@@ -41,12 +41,15 @@ class DependenciesTree:
             The result is stored in node 'self'.
         """
         self.child += other.child
+        for c in other.child:
+            c.parent = self
         if mergeWords:
           self.wordList = other.wordList + self.wordList
           self.wordList.sort(key = lambda x: x[1])
-        other.parent.child.remove(other)
+        if other.parent:
+            other.parent.child.remove(other)
         other.wordList = ["should not be used"]
-      
+
 def computeEdges(r,nameToNodes):
     """
         Compute the edges of the dependence tree.
@@ -88,6 +91,44 @@ def computeTags(r,nameToNodes):
             except KeyError:        # this node does not exists (e.g. 'of' preposition)
                 pass
 
+def mergeQuotations(r,nameToNodes):
+    """
+        Merge all nodes corresponding to quotations.
+    """
+    index=1
+    inQuote=False
+    quotationNode=None
+    for word in r['words']:
+        w=word[0]+'-'+str(index) # key in the nameToNodes map
+        index+=1
+        if word[0] == "``":
+            assert not inQuote
+            inQuote = True
+            continue
+        elif word[0] == "''":
+            assert inQuote
+            inQuote=False
+            quotationNode=None
+            continue
+        if inQuote:
+            try:
+                n = nameToNodes[w]
+            except KeyError:
+                n = DependenciesTree(w)
+            if not quotationNode:
+                quotationNode = n
+            else:
+                assert quotationNode.parent
+                quotationNode.merge(n,True)
+
+def initText(t,s):
+    """
+        Set text attribute for all nodes, with string s.
+    """
+    t.text = s
+    for c in t.child:
+        initText(c,s)
+
 def computeTree(r):
     """
         Compute the dependence tree.
@@ -98,7 +139,8 @@ def computeTree(r):
     nameToNodes = {} # map from the original string to the node
     computeEdges(r,nameToNodes)
     computeTags(r,nameToNodes)
-    nameToNodes['ROOT-0'].text = r['text'].replace('"','\\\"')
+    initText(nameToNodes['ROOT-0'],r['text'].replace('"','\\\"'))
+    mergeQuotations(r,nameToNodes)
     return nameToNodes['ROOT-0']
 
 def mergeDependencies(t,dep):
@@ -111,7 +153,6 @@ def mergeDependencies(t,dep):
     for c in t.child:
       if c.dependency in dep:
         t.merge(c,False)
-  
 
 def mergeNamedEntityTagChildParent(t):
     """
@@ -149,7 +190,7 @@ def mergeNamedEntityTagSisterBrother(t):
         x = sameTag.pop()
         for other in sameTag:
             x.merge(other,True)
-            
+
 def simplify(t):
     mergeDependencies(t,{'det'})
     mergeNamedEntityTagChildParent(t)
@@ -229,7 +270,7 @@ def collapseAllDependencies(t,depMap=dependenciesMap,allowedDep=allowed):
     t.dependency = collapseDependency(t.dependency,depMap,allowedDep)
     for c in t.child:
         collapseAllDependencies(c,depMap,allowedDep)
-        
+
 ##################################################################
 
 def removeWord(t,word):
@@ -254,10 +295,10 @@ def impossible(t):
     sys.stderr.write('exit: %s dependency is possible (please, report your sentence)\n' % t)
     sys.exit() 
     #remove(t)
-  
+
 def ignore(t):
     remove(t)
-      
+
 def merge(t):
     t.parent.merge(t,True)
        
@@ -343,7 +384,7 @@ def firstWords(t,start):
             start[1] =n
     for c in t.child:
         firstWords(c,start)
-        
+
 def identifyQuestionWord(t):
     """
         Identify, remove and return the question word
@@ -359,7 +400,7 @@ def identifyQuestionWord(t):
         return start[0][0]
     else:
         sys.stderr.write('exit: question word not found (please, report your sentence)\n')
-                
+
 def collapseDependency2(t,depMap=dependenciesMap2):
     """
         Apply the rules of depMap to t
@@ -374,7 +415,7 @@ def collapseDependency2(t,depMap=dependenciesMap2):
             depMap[t.dependency](t)
     except KeyError: # prep_x, prepc_x
         pass
-        
+
 def simplify2(t):
     s = identifyQuestionWord(t) # identify and remove question word
     sys.stderr.write('question word is: %s\n' % s)
