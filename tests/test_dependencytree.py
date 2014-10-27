@@ -79,7 +79,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(n.dependency, 'undef')
         self.assertEqual(n.child, [])
         self.assertEqual(n.text,"")
-        self.assertRaises(AttributeError, lambda: n.parent)
+        self.assertEqual(n.parent,None)
 
     def testMerge(self):
         root1 = DependenciesTree('root-1')
@@ -106,7 +106,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(root.wordList,[("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
         self.assertEqual(root.dependency,'undef')
-        self.assertRaises(AttributeError, lambda: root.parent)
+        self.assertEqual(root.parent,None)
         self.assertEqual(len(root.child),1)
         # Lives
         lives=root.child[0]
@@ -159,7 +159,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(root.wordList,[("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
         self.assertEqual(root.dependency,'undef')
-        self.assertRaises(AttributeError, lambda: root.parent)
+        self.assertEqual(root.parent,None)
         self.assertEqual(len(root.child),1)
         # Lives
         lives=root.child[0]

@@ -11,8 +11,8 @@ class DependenciesTree:
         self.namedEntityTag = namedentitytag
         self.dependency = dependency
         self.child = child or []
-        self.text = "" # only relevant for the root node (whole sentence?)
-        # parent attribute will also be available after computation of the tree
+        self.text = "" # whole sentence
+        self.parent=None
 
     def string(self):
         # Concatenation of the words of the root
@@ -41,11 +41,14 @@ class DependenciesTree:
             The result is stored in node 'self'.
         """
         self.child += other.child
+        for c in other.child:
+            c.parent = self
         if mergeWords:
           self.wordList = other.wordList + self.wordList
           self.wordList.sort(key = lambda x: x[1])
-        other.parent.child.remove(other)
-        other.wordList = ["should not be used"]
+        if other.parent:
+            other.parent.child.remove(other)
+#        other.wordList = ["should not be used"]
       
 def computeEdges(r,nameToNodes):
     """
@@ -88,6 +91,44 @@ def computeTags(r,nameToNodes):
             except KeyError:        # this node does not exists (e.g. 'of' preposition)
                 pass
 
+def mergeQuotations(r,nameToNodes):
+    """
+        Merge all nodes corresponding to quotations.
+    """
+    index=1
+    inQuote=False
+    quotationNode=None
+    for word in r['words']:
+        w=word[0]+'-'+str(index) # key in the nameToNodes map
+        index+=1
+        if word[0] == "``":
+            assert not inQuote
+            inQuote = True
+            continue
+        elif word[0] == "''":
+            assert inQuote
+            inQuote=False
+            quotationNode=None
+            continue
+        if inQuote:
+            try:
+                n = nameToNodes[w]
+            except KeyError:
+                n = DependenciesTree(w)
+            if not quotationNode:
+                quotationNode = n
+            else:
+                assert quotationNode.parent
+                quotationNode.merge(n,True)
+
+def initText(t,s):
+    """
+        Set text attribute for all nodes, with string s.
+    """
+    t.text = s
+    for c in t.child:
+        initText(c,s)
+
 def computeTree(r):
     """
         Compute the dependence tree.
@@ -98,7 +139,8 @@ def computeTree(r):
     nameToNodes = {} # map from the original string to the node
     computeEdges(r,nameToNodes)
     computeTags(r,nameToNodes)
-    nameToNodes['ROOT-0'].text = r['text'].replace('"','\\\"')
+    initText(nameToNodes['ROOT-0'],r['text'].replace('"','\\\"'))
+    mergeQuotations(r,nameToNodes)
     return nameToNodes['ROOT-0']
 
 def mergeDependencies(t,dep):
