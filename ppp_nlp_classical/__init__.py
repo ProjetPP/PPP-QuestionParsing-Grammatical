@@ -2,7 +2,7 @@
 
 from ppp_core import HttpRequestHandler
 from .preprocessing import DependenciesTree, computeTree
-from .dependencyAnalysis import simplify2, identifyQuestionWord
+from .dependencyAnalysis import simplify, identifyQuestionWord
 #from .requesthandler import RequestHandler
 
 def app(environ, start_response):

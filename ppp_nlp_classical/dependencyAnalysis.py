@@ -32,7 +32,7 @@ def ignore(t):
 def merge(t):
     t.parent.merge(t,True)
 
-dependenciesMap2 = {
+dependenciesMap = {
     'undef'     : 'undef',
     'root'      : 'root',
     'dep'       : 'dep',
@@ -131,7 +131,7 @@ def identifyQuestionWord(t):
     else:
         sys.stderr.write('exit: question word not found (please, report your sentence)\n')
 
-def collapseDependency2(t,depMap=dependenciesMap2):
+def collapseDependency2(t,depMap=dependenciesMap):
     """
         Apply the rules of depMap to t
     """
@@ -146,7 +146,7 @@ def collapseDependency2(t,depMap=dependenciesMap2):
     except KeyError: # prep_x, prepc_x
         pass
 
-def simplify2(t):
+def simplify(t):
     s = identifyQuestionWord(t) # identify and remove question word
     sys.stderr.write('question word is: %s\n' % s)
     mergeNamedEntityTagChildParent(t) # NER merging

@@ -1,6 +1,6 @@
 import json
 
-from ppp_nlp_classical import DependenciesTree, computeTree, simplify2, identifyQuestionWord
+from ppp_nlp_classical import DependenciesTree, computeTree, simplify, identifyQuestionWord
 
 from unittest import TestCase
 
@@ -75,7 +75,7 @@ class HierarchyTests(TestCase):
         
     def testHierarchySimplification(self):
         tree=computeTree(give_result()['sentences'][0])
-        simplify2(tree)
+        simplify(tree)
         root=tree
         # Root
         self.assertEqual(root.wordList,[("ROOT",0)])
