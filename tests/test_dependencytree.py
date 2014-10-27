@@ -1,6 +1,6 @@
 import json
 
-from ppp_nlp_classical import DependenciesTree, computeTree, simplify
+from ppp_nlp_classical import DependenciesTree, computeTree
 
 from unittest import TestCase
 
@@ -277,38 +277,6 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(united.parent,kingdom)
         self.assertEqual(len(united.child),0)
 
-    def testTreeSimplification(self):
-        tree=computeTree(give_result1()['sentences'][0])
-        simplify(tree)
-        root=tree
-        # Root
-        self.assertEqual(root.wordList,[("ROOT",0)])
-        self.assertEqual(root.namedEntityTag,'undef')
-        self.assertEqual(root.dependency,'undef')
-        self.assertEqual(root.parent,None)
-        self.assertEqual(len(root.child),1)
-        # Lives
-        lives=root.child[0]
-        self.assertEqual(lives.wordList,[("lives",3)])
-        self.assertEqual(lives.namedEntityTag,'undef')
-        self.assertEqual(lives.dependency,'root')
-        self.assertEqual(lives.parent,tree)
-        self.assertEqual(len(lives.child),2)
-        # Smith
-        smith=lives.child[0]
-        self.assertEqual(smith.wordList,[("John",1),("Smith",2)])
-        self.assertEqual(smith.namedEntityTag,'PERSON')
-        self.assertEqual(smith.dependency,'nsubj')
-        self.assertEqual(smith.parent,lives)
-        self.assertEqual(len(smith.child),0)
-        # Kingdom
-        kingdom=lives.child[1]
-        self.assertEqual(kingdom.wordList,[("United",6),("Kingdom",7)])
-        self.assertEqual(kingdom.namedEntityTag,'LOCATION')
-        self.assertEqual(kingdom.dependency,'prep_in')
-        self.assertEqual(kingdom.parent,lives)
-        self.assertEqual(len(kingdom.child),0)
-        
     def testQuotationMerge(self):
         tree=computeTree(give_result2()['sentences'][0])
         root=tree
