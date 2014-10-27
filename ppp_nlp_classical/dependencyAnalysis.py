@@ -131,13 +131,13 @@ def identifyQuestionWord(t):
     else:
         sys.stderr.write('exit: question word not found (please, report your sentence)\n')
 
-def collapseDependency2(t,depMap=dependenciesMap):
+def collapseDependency(t,depMap=dependenciesMap):
     """
         Apply the rules of depMap to t
     """
     temp = list(t.child) # copy, t.child is changed while iterating
     for c in temp:
-        collapseDependency2(c,depMap)
+        collapseDependency(c,depMap)
     try:
         if isinstance(depMap[t.dependency], str):
             t.dependency = depMap[t.dependency]
@@ -151,4 +151,6 @@ def simplify(t):
     sys.stderr.write('question word is: %s\n' % s)
     mergeNamedEntityTagChildParent(t) # NER merging
     mergeNamedEntityTagSisterBrother(t) # NER merging
-    collapseDependency2(t) # apply dependency rules of collapsing
+    collapseDependency(t) # apply dependency rules of collapsing
+    
+    
