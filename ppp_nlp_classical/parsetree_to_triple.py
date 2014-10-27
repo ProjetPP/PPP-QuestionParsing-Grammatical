@@ -116,6 +116,7 @@ def mergeQuotations(r,nameToNodes):
             except KeyError:
                 n = DependenciesTree(w)
             if not quotationNode:
+                sys.stderr.write('%s\n' % n.dependency)
                 quotationNode = n
             else:
                 assert quotationNode.parent
