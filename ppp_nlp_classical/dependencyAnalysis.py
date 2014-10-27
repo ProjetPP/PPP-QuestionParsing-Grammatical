@@ -121,7 +121,7 @@ def identifyQuestionWord(t):
     """
     start = [None,None]
     firstWords(t,start)   
-    if start[0][0] + ' ' + start[1][0] in questionWord:
+    if start[1] and start[0][0] + ' ' + start[1][0] in questionWord:
         removeWord(t,start[0])
         removeWord(t,start[1])
         return start[0][0] + ' ' + start[1][0]
