@@ -2,6 +2,9 @@ import json
 #from jsonrpc import ServerProxy, JsonRpc20, TransportTcpIp
 import jsonrpclib
 import fileinput
+import os
+parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.sys.path.insert(0,parentdir) 
 import ppp_nlp_classical
 
 class StanfordNLP:
@@ -18,7 +21,6 @@ def get_tree():
   result = nlp.parse(input(""))
   tree = ppp_nlp_classical.computeTree(result['sentences'][0])
   ppp_nlp_classical.simplify(tree)
-#  ppp_nlp_classical.collapseAllDependencies(tree)
   return tree
 
 print(get_tree())

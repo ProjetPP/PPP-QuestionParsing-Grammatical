@@ -1,7 +1,8 @@
 """Natural language processing module for the PPP."""
 
 from ppp_core import HttpRequestHandler
-from .parsetree_to_triple import DependenciesTree, computeTree, simplify, collapseAllDependencies
+from .preprocessing import DependenciesTree, computeTree
+from .dependencyAnalysis import simplify, identifyQuestionWord
 #from .requesthandler import RequestHandler
 
 def app(environ, start_response):
@@ -9,4 +10,4 @@ def app(environ, start_response):
     return HttpRequestHandler(environ, start_response, RequestHandler) \
             .dispatch()
 
-__all__ = ['DependenciesTree','computeTree','simplify','collapseAllDependencies']
+__all__ = ['DependenciesTree','computeTree','simplify2', 'identifyQuestionWord']

@@ -32,7 +32,7 @@ This structure seems to be the most interesting one.
 
 Consider the two sentences `Who is the president of France?` and `Where does the singer of Led Zeppelin live?`. The question word is not placed at the same place in the obtained tree.
 
-It's probably due to the specific role held by "be" in the Stanford parser (copula verb). See section 4.7 of the manual, there is a way to avoid this (and always have the verb at the top of the tree?): adding the flag -makeCopulaHead. I don't know if it's possible with the wrapper but it could simplify our work.
+It's probably due to the specific role held by "be" in the Stanford parser (copula verb). See section 4.7 of the manual, there is a way to avoid this (and always have the verb at the top of the tree?): adding the flag -makeCopulaHead. ~~I don't know if it's possible with the wrapper but it could simplify our work.~~ done, see TEST.md
 
 #### 1.2. Tree simplification
 
@@ -153,7 +153,7 @@ things (the person or the town).
 
 ## 3. Overall algorithm
 
-Here is a first proposition of overall algorithm:
+Here is a proposition of overall algorithm:
 
 INPUT: question
 
