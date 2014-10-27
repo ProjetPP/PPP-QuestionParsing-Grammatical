@@ -372,7 +372,7 @@ def collapseDependency2(t,depMap=dependenciesMap2):
             t.dependency = depMap[t.dependency]
         else:
             depMap[t.dependency](t)
-    except KeyError:
+    except KeyError: # prep_x, prepc_x
         pass
         
 def simplify2(t):
@@ -381,3 +381,4 @@ def simplify2(t):
     mergeNamedEntityTagChildParent(t) # NER merging
     mergeNamedEntityTagSisterBrother(t) # NER merging
     collapseDependency2(t) # apply dependency rules of collapsing
+    

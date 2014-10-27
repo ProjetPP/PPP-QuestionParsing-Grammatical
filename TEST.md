@@ -43,7 +43,8 @@ Description of test files
 =========================
 
 * test1.py: parsing without a server. test1.py outputs the direct answer of CoreNLP
-* test2.py: Start server before. test2.py outputs the direct answer of CoreNLP
-* test3.py: Start server before. test3.py outputs the graph dependency produces by CoreNLP
+* test2.py: Start server before. test2.py outputs the dependency from CoreNLP
+* test3.py: Start server before. test3.py outputs the graph dependency produces from CoreNLP
 * test4.py: Start server before. test4.py uses functions defined in parsetree_to_triple
+
 
