@@ -1,28 +1,81 @@
 """ Third step of the algorithm."""
 
 import sys
+
+class Triple:
+    """
+        a triple is (subject,predicate,object)
+        for x in (subject,predicate,object), x is:
+            either a string (= fixed information)
+            or an int (= unknown)
+    """
+    def __init__(self, subjectT = None, predicateT = None, objectT = None ):
+        self.subjectT = subjectT
+        self.predicateT = predicateT
+        self.objectT = objectT
+
+    def renameUnknown(self,x,new_x):
+        """
+            unknown x is replaced by new_x everywhere it appears (means that x = x_new)
+        """
+        for u in [self.subjectT,self.predicateT,self.objectT]:
+            if u == x:
+                u  = new_x
+                          
+    def tripleUnit(self,t):
+        """
+            triple to string
+        """
+        if isinstance(t,int):
+            if t == 0:
+                return '??'
+            else:
+                return '?' + str(t)
+        else:
+            return t
+
+    def __str__(self):
+        return '(%s | %s | %s)' % (self.tripleUnit(self.subjectT),self.tripleUnit(self.predicateT),self.tripleUnit(self.objectT))
     
-def getWords(t):
+class TriplesBucket:
     """
-        concatenate all strings of the node (in wordList)
+        set of triples
     """
-    l = t.wordList
-    l.sort(key = lambda x: x[1]) 
-    s = ''
-    for w in l:
-        s += ' ' + w[0]
-    return s
+    def __init__(self, bucket = []):
+        self.bucket = bucket
+    
+    def addTriple(self,t):
+        self.bucket.append(t)
+        
+    def renameUnknown(self,x,new_x):
+        for t in self.bucket:
+            t.renameUnknown(x,new_x)
+
+    def __str__(self):
+        s = ''
+        for t in self.bucket:
+            s += '\n%s' % t
+        return s
+
+#####################
+# Triple production #
+#####################
+
+# Rules of production of triples
+
+def tripleProduce0(t,nodeToId,triplesBucket):
+    pass
     
 def tripleProduce1(t,nodeToID,triplesBucket):
     """
         a -b-> c : ?A = ?C
     """
     assert t.parent is not None
-    for tr in triplesBucket:
-        for i in range(0,3):
-            if tr[i] == nodeToID[t]:
-                tr[i] = nodeToID[t.parent]
-    nodeToID[t] = nodeToID[t.parent]
+    if not t.child: # Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?
+        tripleProduce2(t,nodeToID,triplesBucket)
+    else:
+        triplesBucket.renameUnknown(nodeToID[t],nodeToID[t.parent])
+        nodeToID[t] = nodeToID[t.parent]
     
 def tripleProduce2(t,nodeToID,triplesBucket,suffix=''):
     """
@@ -31,38 +84,40 @@ def tripleProduce2(t,nodeToID,triplesBucket,suffix=''):
         suffix: for prep_x
     """
     assert t.parent is not None
-    triplesBucket.append([nodeToID[t.parent],
-                          '%s %s' % (getWords(t.parent), +suffix),
-                          getWords(t)])
+    if not t.child:
+        triplesBucket.addTriple(Triple(nodeToID[t.parent],
+                                       '%s %s' % (t.parent.getWords(), suffix),
+                                       t.getWords()))
+    else:
+        triplesBucket.addTriple(Triple(nodeToID[t.parent],
+                                       '%s %s' % (t.parent.getWords(), suffix),
+                                       nodeToID[t]))     
 
 def tripleProduce3(t,nodeToID,triplesBucket):
     """
         a -b-> c : c(?A,a)
     """
     assert t.parent is not None
-    triplesBucket.append([nodeToID[t.parent],
-                          getWords(t),
-                          getWords(t.parent)])
+    triplesBucket.addTriple(Triple(nodeToID[t.parent],
+                                   t.getWords(),   
+                                   t.parent.getWords()))
         
 tripleMap = {
-    'root'    : tripleProduce1,
-    'subj'    : tripleProduce1,
-    'comp'    : tripleProduce2,
-    'pos'     : tripleProduce2,
-    'mod'     : tripleProduce3,
-    'amod'    : tripleProduce3,
-    'vmod'    : tripleProduce1
+    't0'    : tripleProduce0,
+    't1'    : tripleProduce1,
+    't2'    : tripleProduce2,
+    't3'    : tripleProduce3
 }
 
-def initIndexes(t,nodeToID,index):
+def initUnknowns(t,nodeToID,unknown):
     """
-        assign a different index to each node
+        assign a different unknown to each node
     """
-    nodeToID[t] = index
-    index += 1
+    nodeToID[t] = unknown
+    unknown += 1
     for c in t.child:
-        index = initIndexes(c,nodeToID,index)
-    return index
+        unknown = initUnknowns(c,nodeToID,unknown)
+    return unknown
 
 def fillBucket(t,nodeToID,triplesBucket,tmap=tripleMap):
     """
@@ -73,38 +128,43 @@ def fillBucket(t,nodeToID,triplesBucket,tmap=tripleMap):
     if t.dependency.startswith('prep'): # prep_x or prepc_x
         prep = t.dependency[t.dependency.rindex('_')+1:]
         tripleProduce2(t,nodeToID,triplesBucket,prep)
-    for c in t.child:
+    for c in t.child: # could become necessary to perform this step before
         fillBucket(c,nodeToID,triplesBucket)
 
-def buildBucket(t):
+questionMap = {   
+    'What'          : 'definition', 
+    'What kind'     : 'kind', 
+    'What type'     : 'type', 
+    'What sort'     : 'sort', 
+    'What time'     : 'time', 
+    'When'          : 'time', 
+    'Why'           : 'reason', 
+    'Where'         : 'location', 
+    'Who'           : 'identity', 
+    'How'           : 'way',
+    'How much'      : 'quantity', 
+    'How many'      : 'number',
+    'How old'       : 'age', 
+    'How far'       : 'distance', 
+    'How long'      : 'length', 
+    'How tall'      : 'height', 
+    'How deep'      : 'depth', 
+    'How wide'      : 'width', 
+    'How fast'      : 'speed', 
+    'How often'     : 'frequence', 
+    'How come'      : 'reason', 
+    'Which'         : 'identity', 
+    'Whom'          : 'identity', 
+    'Whose'         : 'identity'
+}
+
+def buildBucket(t,qw):
     """
-        return a set of 3-list (made of int = unknown, or words = str) 
+        return a TriplesBucket associated to tree t and question word qw
     """
     nodeToID = {}
-    triplesBucket = []
-    initIndexes(t,nodeToID,0)
+    triplesBucket = TriplesBucket()
+    initUnknowns(t,nodeToID,0)
+    triplesBucket.addTriple(Triple(nodeToID[t.child[0]],questionMap[qw],nodeToID[t])) # process the question word
     fillBucket(t,nodeToID,triplesBucket)
     return triplesBucket
-
-def printTriple(l):
-    """
-        print the triple l
-    """
-    s = [None] * 3
-    for i in range(0,3):
-        if isinstance(l[i], int):
-            if l[i] == 0: #root
-                s[i] = '??' # the answer of the question
-            else:
-                s[i] = '?%s' % l[i]
-        else:
-            s[i] = l[i]
-    print('(%s | %s | %s)' % (s[0], s[1], s[2]))
-       
-def printTriples(t):
-    """
-        print all the triples
-    """
-    triplesBucket = buildBucket(t)
-    for l in triplesBucket:
-        printTriple(l)

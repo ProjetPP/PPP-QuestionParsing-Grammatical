@@ -50,6 +50,13 @@ a -vmod-> b               : ?A = ?B
 a -mod-> b                : b(?A,a)
   not tested
    
+Dep
+===
+
+a -dep-> b               : a(?A,b)
+
+livre -dep-> titre
+
 Subj
 ====
 

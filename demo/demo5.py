@@ -20,7 +20,7 @@ def get_triple():
   nlp = StanfordNLP()
   result = nlp.parse(input(""))
   tree = ppp_nlp_classical.computeTree(result['sentences'][0])
-  ppp_nlp_classical.simplify(tree)
-  ppp_nlp_classical.printTriples(tree)
+  qw = ppp_nlp_classical.simplify(tree)
+  return ppp_nlp_classical.buildBucket(tree,qw)
 
-get_triple()
+print(get_triple())
