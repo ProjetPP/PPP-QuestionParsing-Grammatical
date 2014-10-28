@@ -17,7 +17,7 @@ def tripleProduce1(t,nodeToID,triplesBucket):
     """
         a -b-> c : ?A = ?C
     """
-    assert t.parent != None
+    assert t.parent is not None
     for tr in triplesBucket:
         for i in range(0,3):
             if tr[i] == nodeToID[t]:
@@ -30,18 +30,19 @@ def tripleProduce2(t,nodeToID,triplesBucket,suffix=''):
                    a(?A,?C) otherwise
         suffix: for prep_x
     """
-    assert t.parent != None
-    if not t.child:
-        triplesBucket.append([nodeToID[t.parent],getWords(t.parent)+' '+suffix,getWords(t)])
-    else:
-        triplesBucket.append([nodeToID[t.parent],getWords(t.parent)+' '+suffix,nodeToID[t]])
+    assert t.parent is not None
+    triplesBucket.append([nodeToID[t.parent],
+                          '%s %s' % (getWords(t.parent), +suffix),
+                          getWords(t)])
 
 def tripleProduce3(t,nodeToID,triplesBucket):
     """
-        a -b-> c : c(?A,a) is 
+        a -b-> c : c(?A,a)
     """
-    assert t.parent != None
-    triplesBucket.append([nodeToID[t.parent],getWords(t),getWords(t.parent)])
+    assert t.parent is not None
+    triplesBucket.append([nodeToID[t.parent],
+                          getWords(t),
+                          getWords(t.parent)])
         
 tripleMap = {
     'root'    : tripleProduce1,
@@ -95,7 +96,7 @@ def printTriple(l):
             if l[i] == 0: #root
                 s[i] = '??' # the answer of the question
             else:
-                s[i] = '?' + str(l[i])
+                s[i] = '?%s' % l[i]
         else:
             s[i] = l[i]
     print('(%s | %s | %s)' % (s[0], s[1], s[2]))
