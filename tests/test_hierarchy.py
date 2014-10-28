@@ -185,21 +185,21 @@ class HierarchyTests(TestCase):
         # Root
         self.assertEqual(root.wordList,[("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
-        self.assertEqual(root.dependency,'undef')
+        self.assertEqual(root.dependency,'t0')
         self.assertEqual(root.parent,None)
         self.assertEqual(len(root.child),1)
         # Is
         is_=root.child[0]
         self.assertEqual(is_.wordList,[("is",2)])
         self.assertEqual(is_.namedEntityTag,'undef')
-        self.assertEqual(is_.dependency,'root')
+        self.assertEqual(is_.dependency,'t0')
         self.assertEqual(is_.parent,root)
         self.assertEqual(len(is_.child),1)
         # President
         president=is_.child[0]
         self.assertEqual(president.wordList,[("president",4)])
         self.assertEqual(president.namedEntityTag,'undef')
-        self.assertEqual(president.dependency,'subj')
+        self.assertEqual(president.dependency,'t1')
         self.assertEqual(president.parent,is_)
         self.assertEqual(len(president.child),1)
         # United States
@@ -217,14 +217,14 @@ class HierarchyTests(TestCase):
         # Root
         self.assertEqual(root.wordList,[("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
-        self.assertEqual(root.dependency,'undef')
+        self.assertEqual(root.dependency,'t0')
         self.assertEqual(root.parent,None)
         self.assertEqual(len(root.child),1)
         # Are
         are=root.child[0]
         self.assertEqual(are.wordList,[("are",3)])
         self.assertEqual(are.namedEntityTag,'undef')
-        self.assertEqual(are.dependency,'root')
+        self.assertEqual(are.dependency,'t0')
         self.assertEqual(are.parent,root)
         self.assertEqual(len(are.child),0)
 
@@ -235,20 +235,20 @@ class HierarchyTests(TestCase):
         # Root
         self.assertEqual(root.wordList,[("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
-        self.assertEqual(root.dependency,'undef')
+        self.assertEqual(root.dependency,'t0')
         self.assertEqual(root.parent,None)
         self.assertEqual(len(root.child),1)
         # Is
         is_=root.child[0]
         self.assertEqual(is_.wordList,[("is",2)])
         self.assertEqual(is_.namedEntityTag,'undef')
-        self.assertEqual(is_.dependency,'root')
+        self.assertEqual(is_.dependency,'t0')
         self.assertEqual(is_.parent,root)
         self.assertEqual(len(is_.child),1)
         # President
         president=is_.child[0]
         self.assertEqual(president.wordList,[("United",4),("States",5),("president",6)])
         self.assertEqual(president.namedEntityTag,'undef')
-        self.assertEqual(president.dependency,'subj')
+        self.assertEqual(president.dependency,'t1')
         self.assertEqual(president.parent,is_)
         self.assertEqual(len(president.child),0)

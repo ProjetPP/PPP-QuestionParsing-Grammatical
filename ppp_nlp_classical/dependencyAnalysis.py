@@ -7,8 +7,7 @@ def remove(t):
     t.parent.child.remove(t)
 
 def impossible(t):
-    sys.stderr.write('exit: %s dependency is possible (please, report your sentence)\n' % t)
-    sys.exit() 
+    sys.exit('exit: %s dependency is possible (please, report your sentence)\n' % t)
     #remove(t)
 
 def ignore(t):
