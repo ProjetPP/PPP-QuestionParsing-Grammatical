@@ -18,9 +18,12 @@ class Triple:
         """
             unknown x is replaced by new_x everywhere it appears (means that x = x_new)
         """
-        for u in [self.subjectT,self.predicateT,self.objectT]:
-            if u == x:
-                u  = new_x
+        if self.subjectT == x:
+            self.subjectT = new_x
+        if self.predicateT == x:
+            self.predicateT = new_x
+        if self.objectT == x:
+            self.objectT = new_x
                           
     def tripleUnit(self,t):
         """
@@ -35,7 +38,7 @@ class Triple:
             return t
 
     def __str__(self):
-        return '(%s | %s | %s)' % (self.tripleUnit(self.subjectT),self.tripleUnit(self.predicateT),self.tripleUnit(self.objectT))
+        return '(%s | %s | %s)' % (self.tripleUnit(self.subjectT),self.tripleUnit(self.predicateT),self.tripleUnit(self.objectT))
     
 class TriplesBucket:
     """
