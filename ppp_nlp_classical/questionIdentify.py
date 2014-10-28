@@ -45,6 +45,8 @@ def identifyQuestionWord(t):
     """
     start = [None,None]
     firstWords(t,start)   
+    if not start[0]:
+        sys.exit('only questions starting by a question word can be processed for the time\n')
     if start[1] and start[0][0] + ' ' + start[1][0] in questionWord:
         removeWord(t,start[0])
         removeWord(t,start[1])
