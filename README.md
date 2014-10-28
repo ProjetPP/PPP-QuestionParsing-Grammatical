@@ -2,7 +2,20 @@
 
 Natural Language Processing for the PPP using a classical approch
 
-## Installation
+## How to install
+
+With a recent version of pip:
+
 ```
-python3 setup.py install --user
+pip3 install git+https://github.com/ProjetPP/PPP-NLP-classical.git
 ```
+
+With an older one:
+
+```
+git clone https://github.com/ProjetPP/PPP-NLP-classical.git
+cd PPP-NLP-classical
+python3 setup.py install
+```
+
+Use the `--user` option if you want to install it only for the current user.
