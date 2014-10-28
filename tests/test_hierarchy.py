@@ -66,18 +66,18 @@ def give_result():
   'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['dep', 'is-2', 'Who-1'], ['det', 'president-4', 'the-3'], ['nsubj', 'is-2', 'president-4'], ['det', 'States-8', 'the-6'], ['nn', 'States-8', 'United-7'], ['prep_of', 'president-4', 'States-8']], 
   'parsetree': '(ROOT (SBARQ (WHNP (WP Who)) (SQ (VBZ is) (NP (NP (DT the) (NN president)) (PP (IN of) (NP (DT the) (NNP United) (NNPS States))))) (. ?)))'}]}
 
-# Parsing result of "How old are you?"
+# Parsing result of "How old are there?"
 def give_result2():
     return  {'sentences': [{'dependencies': [['root', 'ROOT', 'are'],
                 ['advmod', 'old', 'How'],
                 ['dep', 'are', 'old'],
-                ['nsubj', 'are', 'you']],
+                ['expl', 'are', 'there']],
                'indexeddependencies': [['root', 'ROOT-0', 'are-3'],
                 ['advmod', 'old-2', 'How-1'],
                 ['dep', 'are-3', 'old-2'],
-                ['nsubj', 'are-3', 'you-4']],
-               'parsetree': '(ROOT (SBARQ (WHADJP (WRB How) (JJ old)) (SQ (VBP are) (NP (PRP you))) (. ?)))',
-               'text': 'How old are you?',
+                ['expl', 'are-3', 'there-4']],
+               'parsetree': '(ROOT (SBARQ (WHADJP (WRB How) (JJ old)) (SQ (VBP are) (NP (EX there))) (. ?)))',
+               'text': 'How old are there?',
                'words': [['How',
                  {'CharacterOffsetBegin': '0',
                   'CharacterOffsetEnd': '3',
@@ -96,15 +96,15 @@ def give_result2():
                   'Lemma': 'be',
                   'NamedEntityTag': 'O',
                   'PartOfSpeech': 'VBP'}],
-                ['you',
+                ['there',
                  {'CharacterOffsetBegin': '12',
-                  'CharacterOffsetEnd': '15',
-                  'Lemma': 'you',
+                  'CharacterOffsetEnd': '17',
+                  'Lemma': 'there',
                   'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'PRP'}],
+                  'PartOfSpeech': 'EX'}],
                 ['?',
-                 {'CharacterOffsetBegin': '15',
-                  'CharacterOffsetEnd': '16',
+                 {'CharacterOffsetBegin': '17',
+                  'CharacterOffsetEnd': '18',
                   'Lemma': '?',
                   'NamedEntityTag': 'O',
                   'PartOfSpeech': '.'}]]}]}
@@ -150,4 +150,21 @@ class HierarchyTests(TestCase):
         self.assertEqual(us.dependency,'prep_of')
         self.assertEqual(us.parent,president)
         self.assertEqual(len(us.child),0)
-        
+
+    def testIgnore(self):
+        tree=computeTree(give_result2()['sentences'][0])
+        simplify(tree)
+        root=tree
+        # Root
+        self.assertEqual(root.wordList,[("ROOT",0)])
+        self.assertEqual(root.namedEntityTag,'undef')
+        self.assertEqual(root.dependency,'undef')
+        self.assertEqual(root.parent,None)
+        self.assertEqual(len(root.child),1)
+        # Are
+        are=root.child[0]
+        self.assertEqual(are.wordList,[("are",3)])
+        self.assertEqual(are.namedEntityTag,'undef')
+        self.assertEqual(are.dependency,'root')
+        self.assertEqual(are.parent,root)
+        self.assertEqual(len(are.child),0)
