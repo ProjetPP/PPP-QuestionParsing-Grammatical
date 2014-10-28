@@ -21,6 +21,8 @@ def get_tree():
   result = nlp.parse(input(""))
   tree = ppp_nlp_classical.computeTree(result['sentences'][0])
   ppp_nlp_classical.simplify(tree)
+  #ppp_nlp_classical.printTriples(tree)
   return tree
 
+#get_tree()
 print(get_tree())

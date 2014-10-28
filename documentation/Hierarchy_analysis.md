@@ -12,6 +12,7 @@ Some vocabulary:
 * Impossible: means "this relation doesn't appear in collapse dependency (give counterexamples otherwise).
 
 Restricted set of dependencies:
+* root
 * dep: unknown dependency
 * subj: subject
 * comp: subj verb comp

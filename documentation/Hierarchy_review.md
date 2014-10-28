@@ -16,12 +16,15 @@ What is the name of the managing director of Apricot Computer?
 Who held the endurance record for women pilots in 1929?
 Who is the prime minister of Japan?
 Who is the Greek God of the Sea?
+Who invented the hula hoop?
   ? not merge amod
   
 What country is the biggest producer of tungsten? 
 Who was the first Taiwanese President?
 Who was the first American in space?
 What is the largest city in Germany?
+Who was the 23rd president of the United States?
+Who is the tallest man in the world?
   ! not merge amod
 
 nn

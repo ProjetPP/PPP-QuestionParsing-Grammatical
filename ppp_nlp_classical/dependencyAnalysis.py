@@ -3,21 +3,6 @@
 import sys
 from .preprocessing import mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother
 
-def removeWord(t,word):
-    """
-        Remove word (of type str*int = word*position_in_sentence) in t
-        Assume word has no child
-    """
-    if word in t.wordList:
-        if not t.child:
-            t.parent.child.remove(t) 
-        else:
-            sys.stderr.write('exit: question word has child (please, report your sentence)\n')
-            sys.exit() 
-    else:
-        for c in t.child:
-            removeWord(c,word)
-
 def remove(t):
     t.parent.child.remove(t)
 
@@ -91,6 +76,21 @@ dependenciesMap = {
         'discourse' : remove
 }
 
+def collapseDependency(t,depMap=dependenciesMap):
+    """
+        Apply the rules of depMap to t
+    """
+    temp = list(t.child) # copy, t.child is changed while iterating
+    for c in temp:
+        collapseDependency(c,depMap)
+    try:
+        if isinstance(depMap[t.dependency], str):
+            t.dependency = depMap[t.dependency]
+        else:
+            depMap[t.dependency](t)
+    except KeyError: # prep_x, prepc_x
+        pass
+
 questionWord = [
     """
         Taken from: http://www.interopia.com/education/all-question-words-in-english/
@@ -103,6 +103,21 @@ questionWord = [
       # + What... for, What... like, Why don't
 ]
 
+def removeWord(t,word):
+    """
+        Remove word (of type str*int = word*position_in_sentence) in t
+        Assume word has no child
+    """
+    if word in t.wordList:
+        if not t.child:
+            t.parent.child.remove(t) 
+        else:
+            sys.stderr.write('exit: question word has child (please, report your sentence)\n')
+            sys.exit() 
+    else:
+        for c in t.child:
+            removeWord(c,word)
+            
 def firstWords(t,start):
     """
         Put the 2 first words of the sentence in start (list of size 2)
@@ -130,27 +145,11 @@ def identifyQuestionWord(t):
         return start[0][0]
     else:
         sys.stderr.write('exit: question word not found (please, report your sentence)\n')
-
-def collapseDependency(t,depMap=dependenciesMap):
-    """
-        Apply the rules of depMap to t
-    """
-    temp = list(t.child) # copy, t.child is changed while iterating
-    for c in temp:
-        collapseDependency(c,depMap)
-    try:
-        if isinstance(depMap[t.dependency], str):
-            t.dependency = depMap[t.dependency]
-        else:
-            depMap[t.dependency](t)
-    except KeyError: # prep_x, prepc_x
-        pass
-
+        
 def simplify(t):
     s = identifyQuestionWord(t) # identify and remove question word
     sys.stderr.write('question word is: %s\n' % s)
     mergeNamedEntityTagChildParent(t) # NER merging
     mergeNamedEntityTagSisterBrother(t) # NER merging
     collapseDependency(t) # apply dependency rules of collapsing
-    
     
