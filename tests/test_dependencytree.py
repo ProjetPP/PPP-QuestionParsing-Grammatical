@@ -320,43 +320,27 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(lives.dependency,'root')
         self.assertEqual(lives.parent,tree)
         self.assertEqual(len(lives.child),2)
-        # Smith
-        smith=lives.child[0]
-        self.assertEqual(smith.wordList,[("Smith",2)])
-        self.assertEqual(smith.namedEntityTag,'PERSON')
-        self.assertEqual(smith.dependency,'nsubj')
-        self.assertEqual(smith.parent,lives)
-        self.assertEqual(len(smith.child),1)
-        # John
-        john=smith.child[0]
-        self.assertEqual(john.wordList,[("John",1)])
-        self.assertEqual(john.namedEntityTag,'PERSON')
-        self.assertEqual(john.dependency,'nn')
-        self.assertEqual(john.parent,smith)
-        self.assertEqual(len(john.child),0)
-        # Kingdom
-        kingdom=lives.child[1]
-        self.assertEqual(kingdom.wordList,[("Kingdom",7)])
-        self.assertEqual(kingdom.namedEntityTag,'LOCATION')
-        self.assertEqual(kingdom.dependency,'prep_in')
-        self.assertEqual(kingdom.parent,lives)
-        self.assertEqual(len(kingdom.child),2)
+        # John Smith
+        jsmith=lives.child[0]
+        self.assertEqual(jsmith.wordList,[("John",1),("Smith",2)])
+        self.assertEqual(jsmith.namedEntityTag,'PERSON')
+        self.assertEqual(jsmith.dependency,'nsubj')
+        self.assertEqual(jsmith.parent,lives)
+        self.assertEqual(len(jsmith.child),0)
+        # United Kingdom
+        ukingdom=lives.child[1]
+        self.assertEqual(ukingdom.wordList,[("United",6),("Kingdom",7)])
+        self.assertEqual(ukingdom.namedEntityTag,'LOCATION')
+        self.assertEqual(ukingdom.dependency,'prep_in')
+        self.assertEqual(ukingdom.parent,lives)
+        self.assertEqual(len(ukingdom.child),1)
         # The
-        the=kingdom.child[0]
+        the=ukingdom.child[0]
         self.assertEqual(the.wordList,[("the",5)])
         self.assertEqual(the.namedEntityTag,'undef')
         self.assertEqual(the.dependency,'det')
-        self.assertEqual(the.parent,kingdom)
+        self.assertEqual(the.parent,ukingdom)
         self.assertEqual(len(the.child),0)
-        # United
-        united=kingdom.child[1]
-        self.assertEqual(united.wordList,[("United",6)])
-        self.assertEqual(united.namedEntityTag,'LOCATION')
-        self.assertEqual(united.dependency,'nn')
-        self.assertEqual(united.parent,kingdom)
-        self.assertEqual(len(united.child),0)
-        self.maxDiff=None
-        self.assertEqual(str(root),give_string1())
 
     def testQuotationMerge(self):
         tree=computeTree(give_result2()['sentences'][0])
