@@ -4,7 +4,7 @@ from ppp_nlp_classical import DependenciesTree, computeTree
 
 from unittest import TestCase
 
-# Parsing result of "John Smith lives in United Kingdom."
+# Parsing result of "John Smith lives in the United Kingdom."
 def give_result1():
     return  {'sentences': [{'dependencies': [['root', 'ROOT', 'lives'],
                 ['nn', 'Smith', 'John'],
@@ -68,6 +68,28 @@ def give_result1():
                   'Lemma': '.',
                   'NamedEntityTag': 'O',
                   'PartOfSpeech': '.'}]]}]}
+
+def give_string1():
+    s="digraph relations {\n"
+    s+="\t\"ROOT0\"[label=\"ROOT\",shape=box];\n"
+    s+="\t\"ROOT0\" -> \"lives3\"[label=\"root\"];\n"
+    s+="\t\"lives3\"[label=\"lives\",shape=box];\n"
+    s+="\t\"lives3\" -> \"Smith2\"[label=\"nsubj\"];\n"
+    s+="\t\"lives3\" -> \"Kingdom7\"[label=\"prep_in\"];\n"
+    s+="\t\"Smith2\"[label=\"Smith [PERSON]\",shape=box];\n"
+    s+="\t\"Smith2\" -> \"John1\"[label=\"nn\"];\n"
+    s+="\t\"John1\"[label=\"John [PERSON]\",shape=box];\n"
+    s+="\t\"Kingdom7\"[label=\"Kingdom [LOCATION]\",shape=box];\n"
+    s+="\t\"Kingdom7\" -> \"the5\"[label=\"det\"];\n"
+    s+="\t\"Kingdom7\" -> \"United6\"[label=\"nn\"];\n"
+    s+="\t\"the5\"[label=\"the\",shape=box];\n"
+    s+="\t\"United6\"[label=\"United [LOCATION]\",shape=box];\n"
+    s+="\tlabelloc=\"t\"\tlabel=\"John Smith lives in the United Kingdom.\";\n"
+    s+="}"
+    return s
+
+
+
 
 # Parse result of "Who wrote \"Lucy in the Sky with Diamonds\" and \"Let It Be\"?"
 def give_result2():
@@ -276,6 +298,8 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(united.dependency,'nn')
         self.assertEqual(united.parent,kingdom)
         self.assertEqual(len(united.child),0)
+        self.maxDiff=None
+        self.assertEqual(str(root),give_string1())
 
     def testQuotationMerge(self):
         tree=computeTree(give_result2()['sentences'][0])

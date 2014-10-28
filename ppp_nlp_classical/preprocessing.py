@@ -29,14 +29,14 @@ class DependenciesTree:
             s+="\t\"{0}\" -> \"{1}\"[label=\"{2}\"];\n".format(self.wordList[0][0]+str(self.wordList[0][1]),n.wordList[0][0]+str(n.wordList[0][1]),n.dependency)
         # Recursive calls
         for n in self.child:
-            s+=n.string()+'\n'
+            s+=n.string()
         return s
 
     def __str__(self):
         """
             Print dependency graph in dot format
         """
-        return "digraph relations {"+"\n{0}\tlabelloc=\"t\"\tlabel=\"{1}\";\n".format(self.string(),self.text)+"}\n"
+        return "digraph relations {"+"\n{0}\tlabelloc=\"t\"\tlabel=\"{1}\";\n".format(self.string(),self.text)+"}"
 
     def merge(self,other,mergeWords):
         """
