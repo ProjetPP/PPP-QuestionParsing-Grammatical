@@ -1,6 +1,6 @@
 import json
 
-from ppp_nlp_classical import DependenciesTree, computeTree
+from ppp_nlp_classical import DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother
 
 from unittest import TestCase
 
@@ -87,9 +87,6 @@ def give_string1():
     s+="\tlabelloc=\"t\"\tlabel=\"John Smith lives in the United Kingdom.\";\n"
     s+="}"
     return s
-
-
-
 
 # Parse result of "Who wrote \"Lucy in the Sky with Diamonds\" and \"Let It Be\"?"
 def give_result2():
@@ -217,6 +214,66 @@ def give_result2():
                   'NamedEntityTag': 'O',
                   'PartOfSpeech': '.'}]]}]}
 
+# Parse result of "Obama is the United States president."
+def give_result3():
+    return  {'coref': [[[['the United States president', 0, 5, 2, 6],
+                ['Obama', 0, 0, 0, 1]]]],
+             'sentences': [{'dependencies': [['root', 'ROOT', 'is'],
+                ['nsubj', 'is', 'Obama'],
+                ['det', 'president', 'the'],
+                ['nn', 'president', 'United'],
+                ['nn', 'president', 'States'],
+                ['xcomp', 'is', 'president']],
+               'indexeddependencies': [['root', 'ROOT-0', 'is-2'],
+                ['nsubj', 'is-2', 'Obama-1'],
+                ['det', 'president-6', 'the-3'],
+                ['nn', 'president-6', 'United-4'],
+                ['nn', 'president-6', 'States-5'],
+                ['xcomp', 'is-2', 'president-6']],
+               'parsetree': '(ROOT (S (NP (NNP Obama)) (VP (VBZ is) (NP (DT the) (NNP United) (NNPS States) (NN president))) (. .)))',
+               'text': 'Obama is the United States president.',
+               'words': [['Obama',
+                 {'CharacterOffsetBegin': '0',
+                  'CharacterOffsetEnd': '5',
+                  'Lemma': 'Obama',
+                  'NamedEntityTag': 'PERSON',
+                  'PartOfSpeech': 'NNP'}],
+                ['is',
+                 {'CharacterOffsetBegin': '6',
+                  'CharacterOffsetEnd': '8',
+                  'Lemma': 'be',
+                  'NamedEntityTag': 'O',
+                  'PartOfSpeech': 'VBZ'}],
+                ['the',
+                 {'CharacterOffsetBegin': '9',
+                  'CharacterOffsetEnd': '12',
+                  'Lemma': 'the',
+                  'NamedEntityTag': 'O',
+                  'PartOfSpeech': 'DT'}],
+                ['United',
+                 {'CharacterOffsetBegin': '13',
+                  'CharacterOffsetEnd': '19',
+                  'Lemma': 'United',
+                  'NamedEntityTag': 'LOCATION',
+                  'PartOfSpeech': 'NNP'}],
+                ['States',
+                 {'CharacterOffsetBegin': '20',
+                  'CharacterOffsetEnd': '26',
+                  'Lemma': 'States',
+                  'NamedEntityTag': 'LOCATION',
+                  'PartOfSpeech': 'NNPS'}],
+                ['president',
+                 {'CharacterOffsetBegin': '27',
+                  'CharacterOffsetEnd': '36',
+                  'Lemma': 'president',
+                  'NamedEntityTag': 'O',
+                  'PartOfSpeech': 'NN'}],
+                ['.',
+                 {'CharacterOffsetBegin': '36',
+                  'CharacterOffsetEnd': '37',
+                  'Lemma': '.',
+                  'NamedEntityTag': 'O',
+                  'PartOfSpeech': '.'}]]}]}
 
 class DependenciesTreeTests(TestCase):
 
@@ -338,3 +395,88 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(let.dependency,'conj_and')
         self.assertEqual(let.parent,wrote)
         self.assertEqual(len(let.child),0)
+
+    def testEntityTagMerge1(self):
+        tree=computeTree(give_result1()['sentences'][0])
+        mergeNamedEntityTagChildParent(tree)
+        root=tree
+        # Root
+        self.assertEqual(root.wordList,[("ROOT",0)])
+        self.assertEqual(root.namedEntityTag,'undef')
+        self.assertEqual(root.dependency,'undef')
+        self.assertEqual(root.parent,None)
+        self.assertEqual(len(root.child),1)
+        # Lives
+        lives=root.child[0]
+        self.assertEqual(lives.wordList,[("lives",3)])
+        self.assertEqual(lives.namedEntityTag,'undef')
+        self.assertEqual(lives.dependency,'root')
+        self.assertEqual(lives.parent,tree)
+        self.assertEqual(len(lives.child),2)
+        # John Smith
+        smith=lives.child[0]
+        self.assertEqual(smith.wordList,[("John",1),("Smith",2)])
+        self.assertEqual(smith.namedEntityTag,'PERSON')
+        self.assertEqual(smith.dependency,'nsubj')
+        self.assertEqual(smith.parent,lives)
+        self.assertEqual(len(smith.child),0)
+        # United Kingdom
+        kingdom=lives.child[1]
+        self.assertEqual(kingdom.wordList,[("United",6),("Kingdom",7)])
+        self.assertEqual(kingdom.namedEntityTag,'LOCATION')
+        self.assertEqual(kingdom.dependency,'prep_in')
+        self.assertEqual(kingdom.parent,lives)
+        self.assertEqual(len(kingdom.child),1)
+        # The
+        the=kingdom.child[0]
+        self.assertEqual(the.wordList,[("the",5)])
+        self.assertEqual(the.namedEntityTag,'undef')
+        self.assertEqual(the.dependency,'det')
+        self.assertEqual(the.parent,kingdom)
+        self.assertEqual(len(the.child),0)
+
+    def testEntityTagMerge2(self):
+        tree=computeTree(give_result3()['sentences'][0])
+        mergeNamedEntityTagSisterBrother(tree)
+        root=tree
+        # Root
+        self.assertEqual(root.wordList,[("ROOT",0)])
+        self.assertEqual(root.namedEntityTag,'undef')
+        self.assertEqual(root.dependency,'undef')
+        self.assertEqual(root.parent,None)
+        self.assertEqual(len(root.child),1)
+        # Is
+        is_=root.child[0]
+        self.assertEqual(is_.wordList,[("is",2)])
+        self.assertEqual(is_.namedEntityTag,'undef')
+        self.assertEqual(is_.dependency,'root')
+        self.assertEqual(is_.parent,tree)
+        self.assertEqual(len(is_.child),2)
+        # Obama
+        obama=is_.child[0]
+        self.assertEqual(obama.wordList,[("Obama",1)])
+        self.assertEqual(obama.namedEntityTag,'PERSON')
+        self.assertEqual(obama.dependency,'nsubj')
+        self.assertEqual(obama.parent,is_)
+        self.assertEqual(len(obama.child),0)
+        # president
+        president =is_.child[1]
+        self.assertEqual(president.wordList,[("president",6)])
+        self.assertEqual(president.namedEntityTag,'undef')
+        self.assertEqual(president.dependency,'xcomp')
+        self.assertEqual(president.parent,is_)
+        self.assertEqual(len(president.child),2)
+        # The
+        the=president.child[0]
+        self.assertEqual(the.wordList,[("the",3)])
+        self.assertEqual(the.namedEntityTag,'undef')
+        self.assertEqual(the.dependency,'det')
+        self.assertEqual(the.parent,president)
+        self.assertEqual(len(the.child),0)
+        # United States
+        united=president.child[1]
+        self.assertEqual(united.wordList,[("United",4),("States",5)])
+        self.assertEqual(united.namedEntityTag,'LOCATION')
+        self.assertEqual(united.dependency,'nn')
+        self.assertEqual(united.parent,president)
+        self.assertEqual(len(united.child),0)
