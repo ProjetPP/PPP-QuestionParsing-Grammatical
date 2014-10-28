@@ -1,8 +1,6 @@
 """ Third step of the algorithm."""
 
 import sys
-
-# define a triple class ?
     
 def getWords(t):
     """
@@ -28,15 +26,19 @@ def tripleProduce1(t,nodeToID,triplesBucket):
     
 def tripleProduce2(t,nodeToID,triplesBucket,suffix=''):
     """
-        a -b-> c : a(?A,c)
+        a -b-> c : a(?A,c) is c is a leaf
+                   a(?A,?C) otherwise
         suffix: for prep_x
     """
     assert t.parent != None
-    triplesBucket.append([nodeToID[t.parent],getWords(t.parent)+' '+suffix,getWords(t)])
+    if not t.child:
+        triplesBucket.append([nodeToID[t.parent],getWords(t.parent)+' '+suffix,getWords(t)])
+    else:
+        triplesBucket.append([nodeToID[t.parent],getWords(t.parent)+' '+suffix,nodeToID[t]])
 
 def tripleProduce3(t,nodeToID,triplesBucket):
     """
-        a -b-> c : c(?A,a)
+        a -b-> c : c(?A,a) is 
     """
     assert t.parent != None
     triplesBucket.append([nodeToID[t.parent],getWords(t),getWords(t.parent)])
