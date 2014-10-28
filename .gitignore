@@ -1,5 +1,6 @@
 *~
 *.dot
+*.ps
 __pycache__
 build/
 dist/

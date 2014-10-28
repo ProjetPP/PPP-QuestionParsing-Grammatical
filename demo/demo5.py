@@ -16,11 +16,11 @@ class StanfordNLP:
 
 
 
-def get_tree():
+def get_triple():
   nlp = StanfordNLP()
   result = nlp.parse(input(""))
   tree = ppp_nlp_classical.computeTree(result['sentences'][0])
   ppp_nlp_classical.simplify(tree)
-  return tree
+  ppp_nlp_classical.printTriples(tree)
 
-print(get_tree())
+get_triple()
