@@ -19,7 +19,7 @@ def tripleProduce1(t,nodeToID,triplesBucket):
     """
         a -b-> c : ?A = ?C
     """
-    assert t.parent in not None
+    assert t.parent is not None
     for tr in triplesBucket:
         for i in range(0,3):
             if tr[i] == nodeToID[t]:
