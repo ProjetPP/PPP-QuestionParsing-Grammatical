@@ -90,9 +90,8 @@ def mergeQuotations(t,r,nameToNodes):
         elif word[0] == "''":
             inQuote = False
             quoteNode.wordList.sort(key = lambda x: x[1])
-        elif inQuote:
-            if (word[0],index) not in quoteNode.wordList:
-                quoteNode.wordList += [(word[0],index)]
+        elif inQuote and (word[0],index) not in quoteNode.wordList:
+            quoteNode.wordList += [(word[0],index)]
         index+=1
 
 ###################
@@ -108,12 +107,13 @@ def mergeNamedEntityTagChildParent(t):
     for c in t.child:
         mergeNamedEntityTagChildParent(c)
     sameTagChild = set()
-    if t.namedEntityTag != 'undef':
-        for c in t.child:
-            if c.namedEntityTag == t.namedEntityTag:
-                sameTagChild.add(c)
-        for c in sameTagChild:
-            t.merge(c,True)
+    if t.namedEntityTag == 'undef':
+        return
+    for c in t.child:
+        if c.namedEntityTag == t.namedEntityTag:
+            sameTagChild.add(c)
+    for c in sameTagChild:
+        t.merge(c,True)
 
 def mergeNamedEntityTagSisterBrother(t):
     """
@@ -126,11 +126,12 @@ def mergeNamedEntityTagSisterBrother(t):
         mergeNamedEntityTagSisterBrother(c)
     tagToNodes = {}
     for c in t.child:
-        if c.namedEntityTag != 'undef':
-            try:
-                tagToNodes[c.namedEntityTag+c.dependency].add(c)
-            except KeyError:
-                tagToNodes[c.namedEntityTag+c.dependency] = set([c])
+        if c.namedEntityTag == 'undef':
+            continue
+        try:
+            tagToNodes[c.namedEntityTag+c.dependency].add(c)
+        except KeyError:
+            tagToNodes[c.namedEntityTag+c.dependency] = set([c])
     for sameTag in tagToNodes.values():
         x = sameTag.pop()
         for other in sameTag:
