@@ -22,6 +22,9 @@ To remove copula relations (other flags can be passed in the same way):
   CORENLP="stanford-corenlp-full-2014-08-27" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp
 ```
 
+Current algorithm is designed to work with copula relations removed.
+
+
 Parsing using a server
 ======================
 
@@ -64,7 +67,9 @@ More conveniently, use the script `displaygraph`:
 Description of demo files
 =========================
 
-* `demo1.py`: parsing without a server. test1.py outputs the direct answer of CoreNLP
-* `demo2.py`: Start server before. Outputs the dependency from CoreNLP
-* `demo3.py`: Start server before. Outputs the graph dependency produces from CoreNLP
-* `demo4.py`: Start server before. Uses functions of the module (preprocessing and hierarchy analysis).
+* `demo1.py`: parsing without a server. Output the direct answer of CoreNLP (copula relations not removed)
+* `demo2.py`: Start server before. Output the dependency relations from CoreNLP
+* `demo3.py`: Start server before. Print the dependency graph from CoreNLP
+* `demo4.py`: Start server before. Print the dependency graph after preprocessing simplifications (merging of some nodes)
+* `demo5.py`: Start server before. Full algorithm, output triples from question
+
