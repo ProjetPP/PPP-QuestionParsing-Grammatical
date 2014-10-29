@@ -131,7 +131,7 @@ def fillBucket(t,nodeToID,triplesBucket,tmap=tripleMap):
     for c in t.child: # could become necessary to perform this step before
         fillBucket(c,nodeToID,triplesBucket)
 
-questionMap = {   
+questionMap = {
     'What'          : 'definition',
     'What kind'     : 'kind',
     'What type'     : 'type',
@@ -151,7 +151,7 @@ questionMap = {
     'How deep'      : 'depth',
     'How wide'      : 'width',
     'How fast'      : 'speed',
-    'How often'     : 'frequence',
+    'How often'     : 'frequency',
     'How come'      : 'reason',
     'Which'         : 'identity',
     'Whom'          : 'identity',
