@@ -10,23 +10,25 @@ def findQuotations(r):
         Each set is a set of words index belonging to a same quotation.
         Begin and end are the index of the quotations marks
     """
-    index=1
+    index=0
     inQuote=False
     quotationList=[]
     quotationSet = set()
     for word in r['words']:
+        index+=1
         if word[0] == "``":
             assert not inQuote
             inQuote = True
             begin=index
-        elif word[0] == "''":
+            continue
+        if word[0] == "''":
             assert inQuote
             inQuote=False
             quotationList+=[(begin,index,quotationSet)]
             quotationSet = set()
-        elif inQuote:
+            continue
+        if inQuote:
             quotationSet.add(index)
-        index+=1
     assert not inQuote
     return quotationList
 
