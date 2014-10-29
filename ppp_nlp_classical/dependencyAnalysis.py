@@ -7,7 +7,7 @@ def remove(t):
     t.parent.child.remove(t)
 
 def impossible(t):
-    sys.exit('exit: %s dependency is possible (please, report your sentence http://goo.gl/EkgO5l)\n' % t)
+    sys.exit('exit: %s dependency unexpected (please, report your sentence on http://goo.gl/EkgO5l)\n' % t)
     #remove(t)
 
 def ignore(t):
@@ -88,6 +88,8 @@ def collapseDependency(t,depMap=dependenciesMap):
         else:
             depMap[t.dependency](t)
     except KeyError: # prep_x, prepc_x
+        if (not isinstance(t.dependency, str)) or ( t.dependency[:t.dependency.rindex('_')] != 'prep' and t.dependency[:t.dependency.rindex('_')] != 'prepc'):
+            sys.exit('exit: dependency unknown (please, report your sentence on http://goo.gl/EkgO5l)\n')        
         pass
 
 

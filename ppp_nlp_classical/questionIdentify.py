@@ -21,7 +21,7 @@ def removeWord(t,word):
         if not t.child:
             t.parent.child.remove(t) 
         else:
-            sys.exit('exit: question word has child (please, report your sentence http://goo.gl/EkgO5l)\n')
+            sys.exit('exit: question word has child (please, report your sentence on http://goo.gl/EkgO5l)\n')
     else:
         for c in t.child:
             removeWord(c,word)
@@ -54,4 +54,4 @@ def identifyQuestionWord(t):
         removeWord(t,start[0])
         return start[0][0]
     else:
-        sys.exit('exit: question word not found (please, report your sentence http://goo.gl/EkgO5l)')
+        sys.exit('exit: question word not found (please, report your sentence on http://goo.gl/EkgO5l)')
