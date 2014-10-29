@@ -24,7 +24,7 @@ class Triple:
             self.predicateT = new_x
         if self.objectT == x:
             self.objectT = new_x
-                          
+
     def tripleUnit(self,t):
         """
             triple to string
@@ -39,26 +39,23 @@ class Triple:
 
     def __str__(self):
         return '(%s | %s | %s)' % (self.tripleUnit(self.subjectT),self.tripleUnit(self.predicateT),self.tripleUnit(self.objectT))
-    
+
 class TriplesBucket:
     """
         set of triples
     """
     def __init__(self, bucket = []):
         self.bucket = bucket
-    
+
     def addTriple(self,t):
         self.bucket.append(t)
-        
+
     def renameUnknown(self,x,new_x):
         for t in self.bucket:
             t.renameUnknown(x,new_x)
 
     def __str__(self):
-        s = ''
-        for t in self.bucket:
-            s += '\n%s' % t
-        return s
+        return '\n'.join(str(x) for x in self.bucket)
 
 #####################
 # Triple production #
@@ -68,7 +65,7 @@ class TriplesBucket:
 
 def tripleProduce0(t,nodeToId,triplesBucket):
     pass
-    
+
 def tripleProduce1(t,nodeToID,triplesBucket):
     """
         a -b-> c : ?A = ?C
@@ -79,7 +76,7 @@ def tripleProduce1(t,nodeToID,triplesBucket):
     else:
         triplesBucket.renameUnknown(nodeToID[t],nodeToID[t.parent])
         nodeToID[t] = nodeToID[t.parent]
-    
+
 def tripleProduce2(t,nodeToID,triplesBucket,suffix=''):
     """
         a -b-> c : a(?A,c) is c is a leaf
@@ -94,7 +91,7 @@ def tripleProduce2(t,nodeToID,triplesBucket,suffix=''):
     else:
         triplesBucket.addTriple(Triple(nodeToID[t.parent],
                                        '%s %s' % (t.parent.getWords(), suffix),
-                                       nodeToID[t]))     
+                                       nodeToID[t]))
 
 def tripleProduce3(t,nodeToID,triplesBucket):
     """
@@ -102,9 +99,9 @@ def tripleProduce3(t,nodeToID,triplesBucket):
     """
     assert t.parent is not None
     triplesBucket.addTriple(Triple(nodeToID[t.parent],
-                                   t.getWords(),   
+                                   t.getWords(),
                                    t.parent.getWords()))
-        
+
 tripleMap = {
     't0'    : tripleProduce0,
     't1'    : tripleProduce1,
@@ -135,29 +132,29 @@ def fillBucket(t,nodeToID,triplesBucket,tmap=tripleMap):
         fillBucket(c,nodeToID,triplesBucket)
 
 questionMap = {   
-    'What'          : 'definition', 
-    'What kind'     : 'kind', 
-    'What type'     : 'type', 
-    'What sort'     : 'sort', 
-    'What time'     : 'time', 
-    'When'          : 'time', 
-    'Why'           : 'reason', 
-    'Where'         : 'location', 
-    'Who'           : 'identity', 
+    'What'          : 'definition',
+    'What kind'     : 'kind',
+    'What type'     : 'type',
+    'What sort'     : 'sort',
+    'What time'     : 'time',
+    'When'          : 'time',
+    'Why'           : 'reason',
+    'Where'         : 'location',
+    'Who'           : 'identity',
     'How'           : 'way',
-    'How much'      : 'quantity', 
+    'How much'      : 'quantity',
     'How many'      : 'number',
-    'How old'       : 'age', 
-    'How far'       : 'distance', 
-    'How long'      : 'length', 
-    'How tall'      : 'height', 
-    'How deep'      : 'depth', 
-    'How wide'      : 'width', 
-    'How fast'      : 'speed', 
-    'How often'     : 'frequence', 
-    'How come'      : 'reason', 
-    'Which'         : 'identity', 
-    'Whom'          : 'identity', 
+    'How old'       : 'age',
+    'How far'       : 'distance',
+    'How long'      : 'length',
+    'How tall'      : 'height',
+    'How deep'      : 'depth',
+    'How wide'      : 'width',
+    'How fast'      : 'speed',
+    'How often'     : 'frequence',
+    'How come'      : 'reason',
+    'Which'         : 'identity',
+    'Whom'          : 'identity',
     'Whose'         : 'identity'
 }
 
