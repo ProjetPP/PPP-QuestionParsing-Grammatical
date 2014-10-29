@@ -1,6 +1,6 @@
 import json
 
-from ppp_nlp_classical import Triple, TriplesBucket, computeTree, simplify, buildBucket
+from ppp_nlp_classical import Triple, TriplesBucket, computeTree, simplify, buildBucket, DependenciesTree, tripleProduce1, tripleProduce2, tripleProduce3
 import data
 
 from unittest import TestCase
@@ -36,6 +36,32 @@ class TripleTests(TestCase):
         self.assertEqual('%s' % bt,"(?8 | President of | France)")
         bt.renameUnknown(8,0)
         self.assertEqual('%s' % bt,"(?? | President of | France)")
+
+    def testTripleProduction(self):
+        root = DependenciesTree("root-0")
+        child = DependenciesTree("child-1",dependency="dep",parent=root)
+        root.child = [child]
+        nodeToID = {root:0, child:1}
+        bt = TriplesBucket()
+        tripleProduce1(child,nodeToID,bt)
+        self.assertEqual(len(bt.bucket),1)
+        self.assertEqual(bt.bucket[0].subjectT,0)
+        self.assertEqual(bt.bucket[0].predicateT,"root")
+        self.assertEqual(bt.bucket[0].objectT,"child")
+        bt = TriplesBucket()
+        tripleProduce3(child,nodeToID,bt)
+        self.assertEqual(len(bt.bucket),1)
+        self.assertEqual(bt.bucket[0].subjectT,0)
+        self.assertEqual(bt.bucket[0].predicateT,"child")
+        self.assertEqual(bt.bucket[0].objectT,"root")
+        child.child = [DependenciesTree("leaf-2",dependency="dep",parent=child)]
+        nodeToID[child.child[0]] = 2
+        bt = TriplesBucket()
+        tripleProduce2(child,nodeToID,bt)
+        self.assertEqual(len(bt.bucket),1)
+        self.assertEqual(bt.bucket[0].subjectT,0)
+        self.assertEqual(bt.bucket[0].predicateT,"root")
+        self.assertEqual(bt.bucket[0].objectT,1)
 
     def testBuildBucket(self):
         tree = computeTree(data.give_president_of_USA()['sentences'][0])

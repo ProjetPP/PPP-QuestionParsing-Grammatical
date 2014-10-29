@@ -84,13 +84,15 @@ def tripleProduce2(t,nodeToID,triplesBucket,suffix=''):
         suffix: for prep_x
     """
     assert t.parent is not None
+    if suffix != '':
+        suffix = ' %s' % suffix
     if not t.child:
         triplesBucket.addTriple(Triple(nodeToID[t.parent],
-                                       '%s %s' % (t.parent.getWords(), suffix),
+                                       '%s%s' % (t.parent.getWords(), suffix),
                                        t.getWords()))
     else:
         triplesBucket.addTriple(Triple(nodeToID[t.parent],
-                                       '%s %s' % (t.parent.getWords(), suffix),
+                                       '%s%s' % (t.parent.getWords(), suffix),
                                        nodeToID[t]))
 
 def tripleProduce3(t,nodeToID,triplesBucket):
@@ -109,7 +111,7 @@ tripleMap = {
     't3'    : tripleProduce3
 }
 
-def initUnknowns(t,nodeToID,unknown):
+def initUnknowns(t,nodeToID,unknown=0):
     """
         assign a different unknown to each node
     """
@@ -164,7 +166,7 @@ def buildBucket(t,qw):
     """
     nodeToID = {}
     triplesBucket = TriplesBucket()
-    initUnknowns(t,nodeToID,0)
+    initUnknowns(t,nodeToID)
     triplesBucket.addTriple(Triple(nodeToID[t.child[0]],questionMap[qw],nodeToID[t])) # process the question word
     fillBucket(t,nodeToID,triplesBucket)
     return triplesBucket
