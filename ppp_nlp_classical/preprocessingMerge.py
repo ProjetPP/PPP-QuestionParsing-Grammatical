@@ -83,18 +83,20 @@ def mergeQuotations(t,r,nameToNodes):
     quotationTraversal(t,quotationList,quoteIndexToNode)
     inQuote=False
     quoteNode=None
-    index=1
+    index=0
     # Add words which are not nodes
     for word in r['words']:
+        index+=1
         if word[0] == "``":
             inQuote = True
             quoteNode=quoteIndexToNode[index]
-        elif word[0] == "''":
+            continue
+        if word[0] == "''":
             inQuote = False
             quoteNode.wordList.sort(key = lambda x: x[1])
-        elif inQuote and (word[0],index) not in quoteNode.wordList:
+            continue
+        if inQuote and (word[0],index) not in quoteNode.wordList:
             quoteNode.wordList += [(word[0],index)]
-        index+=1
 
 ###################
 # NER recognition #
