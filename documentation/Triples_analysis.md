@@ -4,14 +4,16 @@ How to produce triples from the dependency tree
 Generalities
 ============
 
-We associate an unknown to each node 
-  a -b-> c                  : ?A = unknown of the node of root a
+Notation: we denote a -b-> c the dependency relation b from node a to node c.
 
-The final answer will be ?R of the root r
+We associate one unknown to each node. In fact, it is one node by subtree.
+  a -b-> c                  : ?A = unknown of the node a
 
-At most 1 unknown?
+A triple is denoted predicat-///**/*/***//---e(subject,object). We give below what triple produce depending on each edge.
 
-+ comp, pos, subj, prep, def
+The final answer will be ?R of the root r.
+
++ comp, pos, subj, prep, dep, root
 
 =
 
@@ -19,7 +21,12 @@ At most 1 unknown?
 
 ? conj
 
-ignore : agent, nsubjpass, eg
+ignore : agent, nsubjpass, neg
+
+Root
+====
+
+a -root-> b               : ?A = ?B
 
 Comp
 ====
@@ -39,6 +46,16 @@ a -amod-> b               : b(?A,a)
 
 a -vmod-> b               : ?A = ?B
   Who was the second man to walk on the moon?
+
+a -mod-> b                : b(?A,a)
+  not tested
+   
+Dep
+===
+
+a -dep-> b               : a(?A,b)
+
+livre -dep-> titre
 
 Subj
 ====

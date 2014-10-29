@@ -10,7 +10,6 @@ Here is a presentation of a (possible) algorithm. See IDEAS.md for other informa
 I think we can perform the following restrictions in a first time:
   - be case-sensitive. It simplifies a lot of things (and the stanford parser is case sensitive...). 
   - only process questions that start by a question word
-  - assume the question word is __only__ the first word of the question
 
 ### Tree simplification
 

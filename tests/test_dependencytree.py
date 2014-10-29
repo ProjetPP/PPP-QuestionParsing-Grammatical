@@ -1,200 +1,9 @@
 import json
 
-from ppp_nlp_classical import DependenciesTree, computeTree
+from ppp_nlp_classical import DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother
+import data
 
 from unittest import TestCase
-
-# Parsing result of "John Smith lives in United Kingdom."
-def give_result1():
-    return  {'sentences': [{'dependencies': [['root', 'ROOT', 'lives'],
-                ['nn', 'Smith', 'John'],
-                ['nsubj', 'lives', 'Smith'],
-                ['det', 'Kingdom', 'the'],
-                ['nn', 'Kingdom', 'United'],
-                ['prep_in', 'lives', 'Kingdom']],
-               'indexeddependencies': [['root', 'ROOT-0', 'lives-3'],
-                ['nn', 'Smith-2', 'John-1'],
-                ['nsubj', 'lives-3', 'Smith-2'],
-                ['det', 'Kingdom-7', 'the-5'],
-                ['nn', 'Kingdom-7', 'United-6'],
-                ['prep_in', 'lives-3', 'Kingdom-7']],
-               'parsetree': '(ROOT (S (NP (NNP John) (NNP Smith)) (VP (VBZ lives) (PP (IN in) (NP (DT the) (NNP United) (NNP Kingdom)))) (. .)))',
-               'text': 'John Smith lives in the United Kingdom.',
-               'words': [['John',
-                 {'CharacterOffsetBegin': '0',
-                  'CharacterOffsetEnd': '4',
-                  'Lemma': 'John',
-                  'NamedEntityTag': 'PERSON',
-                  'PartOfSpeech': 'NNP'}],
-                ['Smith',
-                 {'CharacterOffsetBegin': '5',
-                  'CharacterOffsetEnd': '10',
-                  'Lemma': 'Smith',
-                  'NamedEntityTag': 'PERSON',
-                  'PartOfSpeech': 'NNP'}],
-                ['lives',
-                 {'CharacterOffsetBegin': '11',
-                  'CharacterOffsetEnd': '16',
-                  'Lemma': 'live',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'VBZ'}],
-                ['in',
-                 {'CharacterOffsetBegin': '17',
-                  'CharacterOffsetEnd': '19',
-                  'Lemma': 'in',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'IN'}],
-                ['the',
-                 {'CharacterOffsetBegin': '20',
-                  'CharacterOffsetEnd': '23',
-                  'Lemma': 'the',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'DT'}],
-                ['United',
-                 {'CharacterOffsetBegin': '24',
-                  'CharacterOffsetEnd': '30',
-                  'Lemma': 'United',
-                  'NamedEntityTag': 'LOCATION',
-                  'PartOfSpeech': 'NNP'}],
-                ['Kingdom',
-                 {'CharacterOffsetBegin': '31',
-                  'CharacterOffsetEnd': '38',
-                  'Lemma': 'Kingdom',
-                  'NamedEntityTag': 'LOCATION',
-                  'PartOfSpeech': 'NNP'}],
-                ['.',
-                 {'CharacterOffsetBegin': '38',
-                  'CharacterOffsetEnd': '39',
-                  'Lemma': '.',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': '.'}]]}]}
-
-# Parse result of "Who wrote \"Lucy in the Sky with Diamonds\" and \"Let It Be\"?"
-def give_result2():
-    return  {'coref': [[[['It', 0, 13, 13, 14], ['the Sky with Diamonds', 0, 6, 5, 9]]]],
-             'sentences': [{'dependencies': [['root', 'ROOT', 'wrote'],
-                ['nsubj', 'wrote', 'Who'],
-                ['dobj', 'wrote', 'Lucy'],
-                ['det', 'Sky', 'the'],
-                ['prep_in', 'Lucy', 'Sky'],
-                ['prep_with', 'Sky', 'Diamonds'],
-                ['conj_and', 'wrote', 'Let'],
-                ['nsubj', 'Be', 'It'],
-                ['ccomp', 'Let', 'Be']],
-               'indexeddependencies': [['root', 'ROOT-0', 'wrote-2'],
-                ['nsubj', 'wrote-2', 'Who-1'],
-                ['dobj', 'wrote-2', 'Lucy-4'],
-                ['det', 'Sky-7', 'the-6'],
-                ['prep_in', 'Lucy-4', 'Sky-7'],
-                ['prep_with', 'Sky-7', 'Diamonds-9'],
-                ['conj_and', 'wrote-2', 'Let-13'],
-                ['nsubj', 'Be-15', 'It-14'],
-                ['ccomp', 'Let-13', 'Be-15']],
-               'parsetree': "(ROOT (SBARQ (SBARQ (WHNP (WP Who)) (SQ (VP (VBD wrote) (`` ``) (NP (NP (NNP Lucy)) (PP (IN in) (NP (NP (DT the) (NN Sky)) (PP (IN with) (NP (NNP Diamonds)))))) ('' '')))) (CC and) (S (VP (`` ``) (VB Let) (S (NP (PRP It)) (VP (VB Be) ('' ''))))) (. ?)))",
-               'text': 'Who wrote "Lucy in the Sky with Diamonds" and "Let It Be"?',
-               'words': [['Who',
-                 {'CharacterOffsetBegin': '0',
-                  'CharacterOffsetEnd': '3',
-                  'Lemma': 'who',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'WP'}],
-                ['wrote',
-                 {'CharacterOffsetBegin': '4',
-                  'CharacterOffsetEnd': '9',
-                  'Lemma': 'write',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'VBD'}],
-                ['``',
-                 {'CharacterOffsetBegin': '10',
-                  'CharacterOffsetEnd': '11',
-                  'Lemma': '``',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': '``'}],
-                ['Lucy',
-                 {'CharacterOffsetBegin': '11',
-                  'CharacterOffsetEnd': '15',
-                  'Lemma': 'Lucy',
-                  'NamedEntityTag': 'PERSON',
-                  'PartOfSpeech': 'NNP'}],
-                ['in',
-                 {'CharacterOffsetBegin': '16',
-                  'CharacterOffsetEnd': '18',
-                  'Lemma': 'in',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'IN'}],
-                ['the',
-                 {'CharacterOffsetBegin': '19',
-                  'CharacterOffsetEnd': '22',
-                  'Lemma': 'the',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'DT'}],
-                ['Sky',
-                 {'CharacterOffsetBegin': '23',
-                  'CharacterOffsetEnd': '26',
-                  'Lemma': 'sky',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'NN'}],
-                ['with',
-                 {'CharacterOffsetBegin': '27',
-                  'CharacterOffsetEnd': '31',
-                  'Lemma': 'with',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'IN'}],
-                ['Diamonds',
-                 {'CharacterOffsetBegin': '32',
-                  'CharacterOffsetEnd': '39',
-                  'Lemma': 'Diamonds',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'NNP'}],
-                ["''",
-                 {'CharacterOffsetBegin': '39',
-                  'CharacterOffsetEnd': '40',
-                  'Lemma': "''",
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': "''"}],
-                ['and',
-                 {'CharacterOffsetBegin': '41',
-                  'CharacterOffsetEnd': '44',
-                  'Lemma': 'and',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'CC'}],
-                ['``',
-                 {'CharacterOffsetBegin': '45',
-                  'CharacterOffsetEnd': '46',
-                  'Lemma': '``',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': '``'}],
-                ['Let',
-                 {'CharacterOffsetBegin': '46',
-                  'CharacterOffsetEnd': '49',
-                  'Lemma': 'let',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'VB'}],
-                ['It',
-                 {'CharacterOffsetBegin': '50',
-                  'CharacterOffsetEnd': '52',
-                  'Lemma': 'it',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'PRP'}],
-                ['Be',
-                 {'CharacterOffsetBegin': '53',
-                  'CharacterOffsetEnd': '55',
-                  'Lemma': 'be',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'VB'}],
-                ["''",
-                 {'CharacterOffsetBegin': '55',
-                  'CharacterOffsetEnd': '56',
-                  'Lemma': "''",
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': "''"}],
-                ['?',
-                 {'CharacterOffsetBegin': '56',
-                  'CharacterOffsetEnd': '57',
-                  'Lemma': '?',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': '.'}]]}]}
-
 
 class DependenciesTreeTests(TestCase):
 
@@ -224,61 +33,14 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(node1.namedEntityTag,'tag1')
         self.assertEqual(node1.dependency,'dep1')
         self.assertEqual(node1.parent,root1)
-        
-    def testTreeGeneration(self):
-        tree=computeTree(give_result1()['sentences'][0])
-        root=tree
-        # Root
-        self.assertEqual(root.wordList,[("ROOT",0)])
-        self.assertEqual(root.namedEntityTag,'undef')
-        self.assertEqual(root.dependency,'undef')
-        self.assertEqual(root.parent,None)
-        self.assertEqual(len(root.child),1)
-        # Lives
-        lives=root.child[0]
-        self.assertEqual(lives.wordList,[("lives",3)])
-        self.assertEqual(lives.namedEntityTag,'undef')
-        self.assertEqual(lives.dependency,'root')
-        self.assertEqual(lives.parent,tree)
-        self.assertEqual(len(lives.child),2)
-        # Smith
-        smith=lives.child[0]
-        self.assertEqual(smith.wordList,[("Smith",2)])
-        self.assertEqual(smith.namedEntityTag,'PERSON')
-        self.assertEqual(smith.dependency,'nsubj')
-        self.assertEqual(smith.parent,lives)
-        self.assertEqual(len(smith.child),1)
-        # John
-        john=smith.child[0]
-        self.assertEqual(john.wordList,[("John",1)])
-        self.assertEqual(john.namedEntityTag,'PERSON')
-        self.assertEqual(john.dependency,'nn')
-        self.assertEqual(john.parent,smith)
-        self.assertEqual(len(john.child),0)
-        # Kingdom
-        kingdom=lives.child[1]
-        self.assertEqual(kingdom.wordList,[("Kingdom",7)])
-        self.assertEqual(kingdom.namedEntityTag,'LOCATION')
-        self.assertEqual(kingdom.dependency,'prep_in')
-        self.assertEqual(kingdom.parent,lives)
-        self.assertEqual(len(kingdom.child),2)
-        # The
-        the=kingdom.child[0]
-        self.assertEqual(the.wordList,[("the",5)])
-        self.assertEqual(the.namedEntityTag,'undef')
-        self.assertEqual(the.dependency,'det')
-        self.assertEqual(the.parent,kingdom)
-        self.assertEqual(len(the.child),0)
-        # United
-        united=kingdom.child[1]
-        self.assertEqual(united.wordList,[("United",6)])
-        self.assertEqual(united.namedEntityTag,'LOCATION')
-        self.assertEqual(united.dependency,'nn')
-        self.assertEqual(united.parent,kingdom)
-        self.assertEqual(len(united.child),0)
+
+    def testStr(self):
+        tree=computeTree(data.give_john_smith()['sentences'][0])
+        self.maxDiff=None
+        self.assertEqual(str(tree),data.give_john_smith_string())
 
     def testQuotationMerge(self):
-        tree=computeTree(give_result2()['sentences'][0])
+        tree=computeTree(data.give_LSD_LIB()['sentences'][0])
         root=tree
         # Root
         self.assertEqual(root.wordList,[("ROOT",0)])
@@ -314,3 +76,86 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(let.dependency,'conj_and')
         self.assertEqual(let.parent,wrote)
         self.assertEqual(len(let.child),0)
+
+    def testEntityTagMerge1(self):
+        tree=computeTree(data.give_john_smith()['sentences'][0])
+        root=tree
+        # Root
+        self.assertEqual(root.wordList,[("ROOT",0)])
+        self.assertEqual(root.namedEntityTag,'undef')
+        self.assertEqual(root.dependency,'undef')
+        self.assertEqual(root.parent,None)
+        self.assertEqual(len(root.child),1)
+        # Lives
+        lives=root.child[0]
+        self.assertEqual(lives.wordList,[("lives",3)])
+        self.assertEqual(lives.namedEntityTag,'undef')
+        self.assertEqual(lives.dependency,'root')
+        self.assertEqual(lives.parent,tree)
+        self.assertEqual(len(lives.child),2)
+        # John Smith
+        smith=lives.child[0]
+        self.assertEqual(smith.wordList,[("John",1),("Smith",2)])
+        self.assertEqual(smith.namedEntityTag,'PERSON')
+        self.assertEqual(smith.dependency,'nsubj')
+        self.assertEqual(smith.parent,lives)
+        self.assertEqual(len(smith.child),0)
+        # United Kingdom
+        kingdom=lives.child[1]
+        self.assertEqual(kingdom.wordList,[("United",6),("Kingdom",7)])
+        self.assertEqual(kingdom.namedEntityTag,'LOCATION')
+        self.assertEqual(kingdom.dependency,'prep_in')
+        self.assertEqual(kingdom.parent,lives)
+        self.assertEqual(len(kingdom.child),1)
+        # The
+        the=kingdom.child[0]
+        self.assertEqual(the.wordList,[("the",5)])
+        self.assertEqual(the.namedEntityTag,'undef')
+        self.assertEqual(the.dependency,'det')
+        self.assertEqual(the.parent,kingdom)
+        self.assertEqual(len(the.child),0)
+
+    def testEntityTagMerge2(self):
+        tree=computeTree(data.give_obama_president_usa()['sentences'][0])
+        root=tree
+        # Root
+        self.assertEqual(root.wordList,[("ROOT",0)])
+        self.assertEqual(root.namedEntityTag,'undef')
+        self.assertEqual(root.dependency,'undef')
+        self.assertEqual(root.parent,None)
+        self.assertEqual(len(root.child),1)
+        # Is
+        is_=root.child[0]
+        self.assertEqual(is_.wordList,[("is",2)])
+        self.assertEqual(is_.namedEntityTag,'undef')
+        self.assertEqual(is_.dependency,'root')
+        self.assertEqual(is_.parent,tree)
+        self.assertEqual(len(is_.child),2)
+        # Obama
+        obama=is_.child[0]
+        self.assertEqual(obama.wordList,[("Obama",1)])
+        self.assertEqual(obama.namedEntityTag,'PERSON')
+        self.assertEqual(obama.dependency,'nsubj')
+        self.assertEqual(obama.parent,is_)
+        self.assertEqual(len(obama.child),0)
+        # president
+        president =is_.child[1]
+        self.assertEqual(president.wordList,[("president",6)])
+        self.assertEqual(president.namedEntityTag,'undef')
+        self.assertEqual(president.dependency,'xcomp')
+        self.assertEqual(president.parent,is_)
+        self.assertEqual(len(president.child),2)
+        # The
+        the=president.child[0]
+        self.assertEqual(the.wordList,[("the",3)])
+        self.assertEqual(the.namedEntityTag,'undef')
+        self.assertEqual(the.dependency,'det')
+        self.assertEqual(the.parent,president)
+        self.assertEqual(len(the.child),0)
+        # United States
+        united=president.child[1]
+        self.assertEqual(united.wordList,[("United",4),("States",5)])
+        self.assertEqual(united.namedEntityTag,'LOCATION')
+        self.assertEqual(united.dependency,'nn')
+        self.assertEqual(united.parent,president)
+        self.assertEqual(len(united.child),0)
