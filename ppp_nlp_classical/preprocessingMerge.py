@@ -48,9 +48,7 @@ def matchingQuote(wlist,quotationList):
     quote=matchingQuoteWord(wlist[0],quotationList)
     for w in wlist:
         if matchingQuoteWord(w,quotationList) != quote:
-            sys.stderr.write('exit: node belong to several quotations (please, report your sentence)\n')
-            sys.stderr.write(self.getWords()+"\n")
-            sys.exit()
+            sys.exit('exit: node belong to several quotations (please, report your sentence)\n%s\n' % self.getWords())
     return quote
 
 def quotationTraversal(t,quotationList,quoteIndexToNode):

@@ -21,12 +21,11 @@ def removeWord(t,word):
         if not t.child:
             t.parent.child.remove(t) 
         else:
-            sys.stderr.write('exit: question word has child (please, report your sentence)\n')
-            sys.exit() 
+            sys.exit('exit: question word has child (please, report your sentence)\n')
     else:
         for c in t.child:
             removeWord(c,word)
-            
+
 def firstWords(t,start):
     """
         Put the 2 first words of the sentence in start (list of size 2)
@@ -46,7 +45,7 @@ def identifyQuestionWord(t):
     start = [None,None]
     firstWords(t,start)   
     if not start[0]:
-        sys.exit('only questions starting by a question word can be processed for the time\n')
+        sys.exit('only questions starting by a question word can be processed for the time')
     if start[1] and start[0][0] + ' ' + start[1][0] in questionWord:
         removeWord(t,start[0])
         removeWord(t,start[1])
@@ -55,4 +54,4 @@ def identifyQuestionWord(t):
         removeWord(t,start[0])
         return start[0][0]
     else:
-        sys.stderr.write('exit: question word not found (please, report your sentence)\n')
+        sys.exit('exit: question word not found (please, report your sentence)')
