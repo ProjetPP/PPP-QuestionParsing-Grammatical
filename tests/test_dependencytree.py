@@ -74,16 +74,12 @@ def give_string1():
     s+="\t\"ROOT0\"[label=\"ROOT\",shape=box];\n"
     s+="\t\"ROOT0\" -> \"lives3\"[label=\"root\"];\n"
     s+="\t\"lives3\"[label=\"lives\",shape=box];\n"
-    s+="\t\"lives3\" -> \"Smith2\"[label=\"nsubj\"];\n"
-    s+="\t\"lives3\" -> \"Kingdom7\"[label=\"prep_in\"];\n"
-    s+="\t\"Smith2\"[label=\"Smith [PERSON]\",shape=box];\n"
-    s+="\t\"Smith2\" -> \"John1\"[label=\"nn\"];\n"
-    s+="\t\"John1\"[label=\"John [PERSON]\",shape=box];\n"
-    s+="\t\"Kingdom7\"[label=\"Kingdom [LOCATION]\",shape=box];\n"
-    s+="\t\"Kingdom7\" -> \"the5\"[label=\"det\"];\n"
-    s+="\t\"Kingdom7\" -> \"United6\"[label=\"nn\"];\n"
+    s+="\t\"lives3\" -> \"John1\"[label=\"nsubj\"];\n"
+    s+="\t\"lives3\" -> \"United6\"[label=\"prep_in\"];\n"
+    s+="\t\"John1\"[label=\"John Smith [PERSON]\",shape=box];\n"
+    s+="\t\"United6\"[label=\"United Kingdom [LOCATION]\",shape=box];\n"
+    s+="\t\"United6\" -> \"the5\"[label=\"det\"];\n"
     s+="\t\"the5\"[label=\"the\",shape=box];\n"
-    s+="\t\"United6\"[label=\"United [LOCATION]\",shape=box];\n"
     s+="\tlabelloc=\"t\"\tlabel=\"John Smith lives in the United Kingdom.\";\n"
     s+="}"
     return s
@@ -303,44 +299,11 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(node1.namedEntityTag,'tag1')
         self.assertEqual(node1.dependency,'dep1')
         self.assertEqual(node1.parent,root1)
-        
-    def testTreeGeneration(self):
+
+    def testStr(self):
         tree=computeTree(give_result1()['sentences'][0])
-        root=tree
-        # Root
-        self.assertEqual(root.wordList,[("ROOT",0)])
-        self.assertEqual(root.namedEntityTag,'undef')
-        self.assertEqual(root.dependency,'undef')
-        self.assertEqual(root.parent,None)
-        self.assertEqual(len(root.child),1)
-        # Lives
-        lives=root.child[0]
-        self.assertEqual(lives.wordList,[("lives",3)])
-        self.assertEqual(lives.namedEntityTag,'undef')
-        self.assertEqual(lives.dependency,'root')
-        self.assertEqual(lives.parent,tree)
-        self.assertEqual(len(lives.child),2)
-        # John Smith
-        jsmith=lives.child[0]
-        self.assertEqual(jsmith.wordList,[("John",1),("Smith",2)])
-        self.assertEqual(jsmith.namedEntityTag,'PERSON')
-        self.assertEqual(jsmith.dependency,'nsubj')
-        self.assertEqual(jsmith.parent,lives)
-        self.assertEqual(len(jsmith.child),0)
-        # United Kingdom
-        ukingdom=lives.child[1]
-        self.assertEqual(ukingdom.wordList,[("United",6),("Kingdom",7)])
-        self.assertEqual(ukingdom.namedEntityTag,'LOCATION')
-        self.assertEqual(ukingdom.dependency,'prep_in')
-        self.assertEqual(ukingdom.parent,lives)
-        self.assertEqual(len(ukingdom.child),1)
-        # The
-        the=ukingdom.child[0]
-        self.assertEqual(the.wordList,[("the",5)])
-        self.assertEqual(the.namedEntityTag,'undef')
-        self.assertEqual(the.dependency,'det')
-        self.assertEqual(the.parent,ukingdom)
-        self.assertEqual(len(the.child),0)
+        self.maxDiff=None
+        self.assertEqual(str(tree),give_string1())
 
     def testQuotationMerge(self):
         tree=computeTree(give_result2()['sentences'][0])
@@ -382,7 +345,7 @@ class DependenciesTreeTests(TestCase):
 
     def testEntityTagMerge1(self):
         tree=computeTree(give_result1()['sentences'][0])
-        mergeNamedEntityTagChildParent(tree)
+#        mergeNamedEntityTagChildParent(tree)
         root=tree
         # Root
         self.assertEqual(root.wordList,[("ROOT",0)])
@@ -421,7 +384,7 @@ class DependenciesTreeTests(TestCase):
 
     def testEntityTagMerge2(self):
         tree=computeTree(give_result3()['sentences'][0])
-        mergeNamedEntityTagSisterBrother(tree)
+#        mergeNamedEntityTagSisterBrother(tree)
         root=tree
         # Root
         self.assertEqual(root.wordList,[("ROOT",0)])
