@@ -88,8 +88,8 @@ def collapseDependency(t,depMap=dependenciesMap):
         else:
             depMap[t.dependency](t)
     except KeyError: # prep_x, prepc_x
-        if (not isinstance(t.dependency, str)) or ( t.dependency[:t.dependency.rindex('_')] != 'prep' and t.dependency[:t.dependency.rindex('_')] != 'prepc'):
-            sys.exit('exit: dependency unknown (please, report your sentence on http://goo.gl/EkgO5l)\n')        
+        if (t.dependency[:t.dependency.rindex('_')] not in {'prep','prepc'}):
+            sys.exit('exit: dependency unknown (please, report your sentence on http://goo.gl/EkgO5l)\n')
         pass
 
 
