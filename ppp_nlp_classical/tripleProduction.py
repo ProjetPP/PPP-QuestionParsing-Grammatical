@@ -144,6 +144,27 @@ def fillBucket(t,nodeToID,triplesBucket,tmap=tripleMap):
         fillBucket(c,nodeToID,triplesBucket)
 
 questionMap = {
+    # close question word
+    'Is'            : 'yesno',
+    'Are'           : 'yesno',
+    'Am'            : 'yesno',
+    'Was'           : 'yesno',
+    'Were'          : 'yesno',
+    'Will'          : 'yesno',
+    'Do'            : 'yesno',
+    'Does'          : 'yesno',
+    'Did'           : 'yesno',
+    'Have'          : 'yesno',
+    'Had'           : 'yesno',
+    'Has'           : 'yesno',
+    'Can'           : 'yesno',
+    'Could'         : 'yesno',
+    'Should'        : 'yesno',
+    'Shall'         : 'yesno',
+    'May'           : 'yesno',
+    'Might'         : 'yesno',
+    'Would'         : 'yesno',
+    # open question word
     'What'          : 'definition',
     'What kind'     : 'kind',
     'What type'     : 'type',
