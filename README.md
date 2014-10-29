@@ -2,8 +2,9 @@
 
 Natural Language Processing for the PPP using a classical approch
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/badges/build.png?b=master)](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/build-status/master)
 [![Code Coverage](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/?branch=master)
 
 ## How to install
 
