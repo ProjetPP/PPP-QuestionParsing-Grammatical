@@ -84,7 +84,7 @@ class TripleTests(TestCase):
         bt = TriplesBucket()
         bt.addTriple(tp)
         bt.renameUnknown(4,8)
-        #self.assertEqual('%s' % bt,"\n(?8 | President of | France)")     
+        self.assertEqual('%s' % bt,"(?8 | President of | France)")
 
     def testBuildBucket(self):
         tree = computeTree(give_result()['sentences'][0])

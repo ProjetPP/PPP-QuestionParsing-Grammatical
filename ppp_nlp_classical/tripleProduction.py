@@ -44,8 +44,8 @@ class TriplesBucket:
     """
         set of triples
     """
-    def __init__(self, bucket = []):
-        self.bucket = bucket
+    def __init__(self, bucket = None):
+        self.bucket = bucket or []
 
     def addTriple(self,t):
         self.bucket.append(t)
