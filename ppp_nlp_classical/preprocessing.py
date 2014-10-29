@@ -8,13 +8,13 @@ class DependenciesTree:
         One node of the parse tree.
         It is a group of words of the initial sentence.
     """
-    def __init__(self, word, namedentitytag='undef', dependency='undef', child=None):
+    def __init__(self, word, namedentitytag='undef', dependency='undef', child=None, parent=None):
         self.wordList = [(word[:word.rindex('-')],int(word[word.rindex('-')+1:]))] # words of the node
         self.namedEntityTag = namedentitytag 
         self.dependency = dependency # dependency from self to its parent
         self.child = child or [] # children of self
         self.text = "" # each node contains whole sentence
-        self.parent=None # parent of self
+        self.parent=parent # parent of self
 
     def string(self):
         # Concatenation of the words of the root
