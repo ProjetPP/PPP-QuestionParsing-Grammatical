@@ -1,275 +1,9 @@
 import json
 
 from ppp_nlp_classical import DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother
+import data
 
 from unittest import TestCase
-
-# Parsing result of "John Smith lives in the United Kingdom."
-def give_result1():
-    return  {'sentences': [{'dependencies': [['root', 'ROOT', 'lives'],
-                ['nn', 'Smith', 'John'],
-                ['nsubj', 'lives', 'Smith'],
-                ['det', 'Kingdom', 'the'],
-                ['nn', 'Kingdom', 'United'],
-                ['prep_in', 'lives', 'Kingdom']],
-               'indexeddependencies': [['root', 'ROOT-0', 'lives-3'],
-                ['nn', 'Smith-2', 'John-1'],
-                ['nsubj', 'lives-3', 'Smith-2'],
-                ['det', 'Kingdom-7', 'the-5'],
-                ['nn', 'Kingdom-7', 'United-6'],
-                ['prep_in', 'lives-3', 'Kingdom-7']],
-               'parsetree': '(ROOT (S (NP (NNP John) (NNP Smith)) (VP (VBZ lives) (PP (IN in) (NP (DT the) (NNP United) (NNP Kingdom)))) (. .)))',
-               'text': 'John Smith lives in the United Kingdom.',
-               'words': [['John',
-                 {'CharacterOffsetBegin': '0',
-                  'CharacterOffsetEnd': '4',
-                  'Lemma': 'John',
-                  'NamedEntityTag': 'PERSON',
-                  'PartOfSpeech': 'NNP'}],
-                ['Smith',
-                 {'CharacterOffsetBegin': '5',
-                  'CharacterOffsetEnd': '10',
-                  'Lemma': 'Smith',
-                  'NamedEntityTag': 'PERSON',
-                  'PartOfSpeech': 'NNP'}],
-                ['lives',
-                 {'CharacterOffsetBegin': '11',
-                  'CharacterOffsetEnd': '16',
-                  'Lemma': 'live',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'VBZ'}],
-                ['in',
-                 {'CharacterOffsetBegin': '17',
-                  'CharacterOffsetEnd': '19',
-                  'Lemma': 'in',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'IN'}],
-                ['the',
-                 {'CharacterOffsetBegin': '20',
-                  'CharacterOffsetEnd': '23',
-                  'Lemma': 'the',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'DT'}],
-                ['United',
-                 {'CharacterOffsetBegin': '24',
-                  'CharacterOffsetEnd': '30',
-                  'Lemma': 'United',
-                  'NamedEntityTag': 'LOCATION',
-                  'PartOfSpeech': 'NNP'}],
-                ['Kingdom',
-                 {'CharacterOffsetBegin': '31',
-                  'CharacterOffsetEnd': '38',
-                  'Lemma': 'Kingdom',
-                  'NamedEntityTag': 'LOCATION',
-                  'PartOfSpeech': 'NNP'}],
-                ['.',
-                 {'CharacterOffsetBegin': '38',
-                  'CharacterOffsetEnd': '39',
-                  'Lemma': '.',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': '.'}]]}]}
-
-def give_string1():
-    s="digraph relations {\n"
-    s+="\t\"ROOT0\"[label=\"ROOT\",shape=box];\n"
-    s+="\t\"ROOT0\" -> \"lives3\"[label=\"root\"];\n"
-    s+="\t\"lives3\"[label=\"lives\",shape=box];\n"
-    s+="\t\"lives3\" -> \"John1\"[label=\"nsubj\"];\n"
-    s+="\t\"lives3\" -> \"United6\"[label=\"prep_in\"];\n"
-    s+="\t\"John1\"[label=\"John Smith [PERSON]\",shape=box];\n"
-    s+="\t\"United6\"[label=\"United Kingdom [LOCATION]\",shape=box];\n"
-    s+="\t\"United6\" -> \"the5\"[label=\"det\"];\n"
-    s+="\t\"the5\"[label=\"the\",shape=box];\n"
-    s+="\tlabelloc=\"t\"\tlabel=\"John Smith lives in the United Kingdom.\";\n"
-    s+="}"
-    return s
-
-# Parse result of "Who wrote \"Lucy in the Sky with Diamonds\" and \"Let It Be\"?"
-def give_result2():
-    return  {'coref': [[[['It', 0, 13, 13, 14], ['the Sky with Diamonds', 0, 6, 5, 9]]]],
-             'sentences': [{'dependencies': [['root', 'ROOT', 'wrote'],
-                ['nsubj', 'wrote', 'Who'],
-                ['dobj', 'wrote', 'Lucy'],
-                ['det', 'Sky', 'the'],
-                ['prep_in', 'Lucy', 'Sky'],
-                ['prep_with', 'Sky', 'Diamonds'],
-                ['conj_and', 'wrote', 'Let'],
-                ['nsubj', 'Be', 'It'],
-                ['ccomp', 'Let', 'Be']],
-               'indexeddependencies': [['root', 'ROOT-0', 'wrote-2'],
-                ['nsubj', 'wrote-2', 'Who-1'],
-                ['dobj', 'wrote-2', 'Lucy-4'],
-                ['det', 'Sky-7', 'the-6'],
-                ['prep_in', 'Lucy-4', 'Sky-7'],
-                ['prep_with', 'Sky-7', 'Diamonds-9'],
-                ['conj_and', 'wrote-2', 'Let-13'],
-                ['nsubj', 'Be-15', 'It-14'],
-                ['ccomp', 'Let-13', 'Be-15']],
-               'parsetree': "(ROOT (SBARQ (SBARQ (WHNP (WP Who)) (SQ (VP (VBD wrote) (`` ``) (NP (NP (NNP Lucy)) (PP (IN in) (NP (NP (DT the) (NN Sky)) (PP (IN with) (NP (NNP Diamonds)))))) ('' '')))) (CC and) (S (VP (`` ``) (VB Let) (S (NP (PRP It)) (VP (VB Be) ('' ''))))) (. ?)))",
-               'text': 'Who wrote "Lucy in the Sky with Diamonds" and "Let It Be"?',
-               'words': [['Who',
-                 {'CharacterOffsetBegin': '0',
-                  'CharacterOffsetEnd': '3',
-                  'Lemma': 'who',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'WP'}],
-                ['wrote',
-                 {'CharacterOffsetBegin': '4',
-                  'CharacterOffsetEnd': '9',
-                  'Lemma': 'write',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'VBD'}],
-                ['``',
-                 {'CharacterOffsetBegin': '10',
-                  'CharacterOffsetEnd': '11',
-                  'Lemma': '``',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': '``'}],
-                ['Lucy',
-                 {'CharacterOffsetBegin': '11',
-                  'CharacterOffsetEnd': '15',
-                  'Lemma': 'Lucy',
-                  'NamedEntityTag': 'PERSON',
-                  'PartOfSpeech': 'NNP'}],
-                ['in',
-                 {'CharacterOffsetBegin': '16',
-                  'CharacterOffsetEnd': '18',
-                  'Lemma': 'in',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'IN'}],
-                ['the',
-                 {'CharacterOffsetBegin': '19',
-                  'CharacterOffsetEnd': '22',
-                  'Lemma': 'the',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'DT'}],
-                ['Sky',
-                 {'CharacterOffsetBegin': '23',
-                  'CharacterOffsetEnd': '26',
-                  'Lemma': 'sky',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'NN'}],
-                ['with',
-                 {'CharacterOffsetBegin': '27',
-                  'CharacterOffsetEnd': '31',
-                  'Lemma': 'with',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'IN'}],
-                ['Diamonds',
-                 {'CharacterOffsetBegin': '32',
-                  'CharacterOffsetEnd': '39',
-                  'Lemma': 'Diamonds',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'NNP'}],
-                ["''",
-                 {'CharacterOffsetBegin': '39',
-                  'CharacterOffsetEnd': '40',
-                  'Lemma': "''",
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': "''"}],
-                ['and',
-                 {'CharacterOffsetBegin': '41',
-                  'CharacterOffsetEnd': '44',
-                  'Lemma': 'and',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'CC'}],
-                ['``',
-                 {'CharacterOffsetBegin': '45',
-                  'CharacterOffsetEnd': '46',
-                  'Lemma': '``',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': '``'}],
-                ['Let',
-                 {'CharacterOffsetBegin': '46',
-                  'CharacterOffsetEnd': '49',
-                  'Lemma': 'let',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'VB'}],
-                ['It',
-                 {'CharacterOffsetBegin': '50',
-                  'CharacterOffsetEnd': '52',
-                  'Lemma': 'it',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'PRP'}],
-                ['Be',
-                 {'CharacterOffsetBegin': '53',
-                  'CharacterOffsetEnd': '55',
-                  'Lemma': 'be',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'VB'}],
-                ["''",
-                 {'CharacterOffsetBegin': '55',
-                  'CharacterOffsetEnd': '56',
-                  'Lemma': "''",
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': "''"}],
-                ['?',
-                 {'CharacterOffsetBegin': '56',
-                  'CharacterOffsetEnd': '57',
-                  'Lemma': '?',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': '.'}]]}]}
-
-# Parse result of "Obama is the United States president."
-def give_result3():
-    return  {'coref': [[[['the United States president', 0, 5, 2, 6],
-                ['Obama', 0, 0, 0, 1]]]],
-             'sentences': [{'dependencies': [['root', 'ROOT', 'is'],
-                ['nsubj', 'is', 'Obama'],
-                ['det', 'president', 'the'],
-                ['nn', 'president', 'United'],
-                ['nn', 'president', 'States'],
-                ['xcomp', 'is', 'president']],
-               'indexeddependencies': [['root', 'ROOT-0', 'is-2'],
-                ['nsubj', 'is-2', 'Obama-1'],
-                ['det', 'president-6', 'the-3'],
-                ['nn', 'president-6', 'United-4'],
-                ['nn', 'president-6', 'States-5'],
-                ['xcomp', 'is-2', 'president-6']],
-               'parsetree': '(ROOT (S (NP (NNP Obama)) (VP (VBZ is) (NP (DT the) (NNP United) (NNPS States) (NN president))) (. .)))',
-               'text': 'Obama is the United States president.',
-               'words': [['Obama',
-                 {'CharacterOffsetBegin': '0',
-                  'CharacterOffsetEnd': '5',
-                  'Lemma': 'Obama',
-                  'NamedEntityTag': 'PERSON',
-                  'PartOfSpeech': 'NNP'}],
-                ['is',
-                 {'CharacterOffsetBegin': '6',
-                  'CharacterOffsetEnd': '8',
-                  'Lemma': 'be',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'VBZ'}],
-                ['the',
-                 {'CharacterOffsetBegin': '9',
-                  'CharacterOffsetEnd': '12',
-                  'Lemma': 'the',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'DT'}],
-                ['United',
-                 {'CharacterOffsetBegin': '13',
-                  'CharacterOffsetEnd': '19',
-                  'Lemma': 'United',
-                  'NamedEntityTag': 'LOCATION',
-                  'PartOfSpeech': 'NNP'}],
-                ['States',
-                 {'CharacterOffsetBegin': '20',
-                  'CharacterOffsetEnd': '26',
-                  'Lemma': 'States',
-                  'NamedEntityTag': 'LOCATION',
-                  'PartOfSpeech': 'NNPS'}],
-                ['president',
-                 {'CharacterOffsetBegin': '27',
-                  'CharacterOffsetEnd': '36',
-                  'Lemma': 'president',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': 'NN'}],
-                ['.',
-                 {'CharacterOffsetBegin': '36',
-                  'CharacterOffsetEnd': '37',
-                  'Lemma': '.',
-                  'NamedEntityTag': 'O',
-                  'PartOfSpeech': '.'}]]}]}
 
 class DependenciesTreeTests(TestCase):
 
@@ -301,12 +35,12 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(node1.parent,root1)
 
     def testStr(self):
-        tree=computeTree(give_result1()['sentences'][0])
+        tree=computeTree(data.give_john_smith()['sentences'][0])
         self.maxDiff=None
-        self.assertEqual(str(tree),give_string1())
+        self.assertEqual(str(tree),data.give_john_smith_string())
 
     def testQuotationMerge(self):
-        tree=computeTree(give_result2()['sentences'][0])
+        tree=computeTree(data.give_LSD_LIB()['sentences'][0])
         root=tree
         # Root
         self.assertEqual(root.wordList,[("ROOT",0)])
@@ -344,7 +78,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(len(let.child),0)
 
     def testEntityTagMerge1(self):
-        tree=computeTree(give_result1()['sentences'][0])
+        tree=computeTree(data.give_john_smith()['sentences'][0])
         root=tree
         # Root
         self.assertEqual(root.wordList,[("ROOT",0)])
@@ -382,7 +116,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(len(the.child),0)
 
     def testEntityTagMerge2(self):
-        tree=computeTree(give_result3()['sentences'][0])
+        tree=computeTree(data.give_obama_president_usa()['sentences'][0])
         root=tree
         # Root
         self.assertEqual(root.wordList,[("ROOT",0)])
