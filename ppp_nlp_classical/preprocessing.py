@@ -18,7 +18,7 @@ class DependenciesTree:
 
     def string(self):
         # Concatenation of the words of the root
-        w = ' '.join(x[0] for x in self.wordList)
+        w = self.getWords()
         s=''
         # Adding the definition of the root (dot format)
         t=''
@@ -54,17 +54,14 @@ class DependenciesTree:
         if other.parent:
             other.parent.child.remove(other)
         other.wordList = [("merged",0)]
-        
+
     def getWords(self):
         """
             concatenate all strings of the node (in wordList)
         """
         self.wordList.sort(key = lambda x: x[1]) 
-        s = ''
-        for w in self.wordList:
-            s += ' ' + w[0]
-        return s    
-    
+        return ' '.join(x[0] for x in self.wordList)
+
 def computeEdges(r,nameToNodes):
     """
         Compute the edges of the dependence tree.

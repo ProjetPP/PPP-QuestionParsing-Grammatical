@@ -49,7 +49,7 @@ def matchingQuote(wlist,quotationList):
     for w in wlist:
         if matchingQuoteWord(w,quotationList) != quote:
             sys.stderr.write('exit: node belong to several quotations (please, report your sentence)\n')
-            sys.stderr.write(' '.join(x[0] for x in self.wordList)+"\n")
+            sys.stderr.write(self.getWords()+"\n")
             sys.exit()
     return quote
 
