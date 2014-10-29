@@ -345,7 +345,6 @@ class DependenciesTreeTests(TestCase):
 
     def testEntityTagMerge1(self):
         tree=computeTree(give_result1()['sentences'][0])
-#        mergeNamedEntityTagChildParent(tree)
         root=tree
         # Root
         self.assertEqual(root.wordList,[("ROOT",0)])
@@ -384,7 +383,6 @@ class DependenciesTreeTests(TestCase):
 
     def testEntityTagMerge2(self):
         tree=computeTree(give_result3()['sentences'][0])
-#        mergeNamedEntityTagSisterBrother(tree)
         root=tree
         # Root
         self.assertEqual(root.wordList,[("ROOT",0)])

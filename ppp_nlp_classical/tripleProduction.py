@@ -79,7 +79,7 @@ def tripleProduce1(t,nodeToID,triplesBucket):
 
 def tripleProduce2(t,nodeToID,triplesBucket,suffix=''):
     """
-        a -b-> c : a(?A,c) is c is a leaf
+        a -b-> c : a(?A,c) if c is a leaf
                    a(?A,?C) otherwise
         suffix: for prep_x
     """

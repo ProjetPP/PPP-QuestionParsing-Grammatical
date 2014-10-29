@@ -95,5 +95,5 @@ class TripleTests(TestCase):
         self.assertEqual(tBucket.bucket[0].predicateT, "identity")
         self.assertEqual(tBucket.bucket[0].objectT, 0)
         self.assertEqual(tBucket.bucket[1].subjectT, 1)
-        self.assertEqual(tBucket.bucket[1].predicateT, " president of")
-        self.assertEqual(tBucket.bucket[1].objectT, " United States")
+        self.assertEqual(tBucket.bucket[1].predicateT, "president of")
+        self.assertEqual(tBucket.bucket[1].objectT, "United States")
