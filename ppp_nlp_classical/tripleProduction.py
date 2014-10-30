@@ -50,10 +50,20 @@ class TriplesBucket:
     def addTriple(self,t):
         self.bucket.append(t)
 
+    def removeTriple(self,t):
+        self.bucket.remove(t)
+        
     def renameUnknown(self,x,new_x):
         for t in self.bucket:
             t.renameUnknown(x,new_x)
 
+    def extractTriple(self,x): # extract a triple that contains the unknown x
+        for t in self.bucket:
+            if t.subjectT == x or t.predicateT == x or t.objectT == x:
+                self.removeTriple(t)
+                return t
+        return None
+    
     def __str__(self):
         return '\n'.join(str(x) for x in self.bucket)
 

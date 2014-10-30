@@ -8,7 +8,6 @@ from .dependencyAnalysis import simplify
 from .tripleProduction import buildBucket, Triple, TriplesBucket, tripleProduce1, tripleProduce2, tripleProduce3
 from .treeTranslation import buildTree
 
-
 from .requesthandler import RequestHandler
 
 def app(environ, start_response):
@@ -16,4 +15,4 @@ def app(environ, start_response):
     return HttpRequestHandler(environ, start_response, RequestHandler) \
             .dispatch()
 
-__all__ = ['DependenciesTree','computeTree','mergeNamedEntityTagChildParent','mergeNamedEntityTagSisterBrother','mergeNamedEntityTag','simplify', 'identifyQuestionWord','buildBucket','Triple','TriplesBucket', 'tripleProduce1', 'tripleProduce2', 'tripleProduce3']
+__all__ = ['DependenciesTree','computeTree','mergeNamedEntityTagChildParent','mergeNamedEntityTagSisterBrother','mergeNamedEntityTag','simplify', 'identifyQuestionWord','buildBucket','Triple','TriplesBucket', 'tripleProduce1', 'tripleProduce2', 'tripleProduce3','buildTree']
