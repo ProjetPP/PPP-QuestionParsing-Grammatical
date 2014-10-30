@@ -138,7 +138,7 @@ def fillBucket(t,nodeToID,triplesBucket,tmap=tripleMap):
     if t.dependency in tmap:
         tmap[t.dependency](t,nodeToID,triplesBucket)
     if t.dependency.startswith('prep'): # prep_x or prepc_x
-        prep = t.dependency[t.dependency.rindex('_')+1:]
+        prep = t.dependency[t.dependency.index('_')+1:]
         tripleProduce2(t,nodeToID,triplesBucket,prep)
     for c in t.child: # could become necessary to perform this step before
         fillBucket(c,nodeToID,triplesBucket)

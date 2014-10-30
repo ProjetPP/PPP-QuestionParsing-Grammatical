@@ -41,6 +41,9 @@ dependenciesMap = {
                     'csubjpass'    : impossible,
         'cc'        : ignore,
         'conj'      : 't0',
+            'conj_and'  : ignore,
+            'conj_or'   : ignore,
+            'conj_negcc': ignore, #?
         'expl'      : ignore,
         'mod'       : 't3',
             'amod'      : 't3',
@@ -87,8 +90,8 @@ def collapseDependency(t,depMap=dependenciesMap):
             t.dependency = depMap[t.dependency]
         else:
             depMap[t.dependency](t)
-    except KeyError: # prep_x, prepc_x
-        if (t.dependency[:t.dependency.rindex('_')] not in {'prep','prepc'}):
+    except KeyError: # prep_x, prepc_x,... (others?) see the manual
+        if (t.dependency[:t.dependency.index('_')] not in {'prep','prepc'}):
             sys.exit('exit: dependency unknown (please, report your sentence on http://goo.gl/EkgO5l)\n')
         pass
 
@@ -99,6 +102,5 @@ def simplify(t):
             collapse dependencies of tree t
     """
     s = identifyQuestionWord(t) # identify and remove question word
-    #sys.stderr.write('question word is: %s\n' % s)
     collapseDependency(t) # apply dependency rules of collapsing
     return s
