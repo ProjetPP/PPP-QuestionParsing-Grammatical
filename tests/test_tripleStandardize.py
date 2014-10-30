@@ -13,7 +13,7 @@ class StandardTripleTests(TestCase):
         qw = simplify(tree)
         triple = buildTree(buildBucket(tree,qw))
         self.assertIsInstance(triple,Triple)
-        self.assertEqual(triple.get("predicate"),Resource("identity"))
+        self.assertEqual(triple.get("predicate"),Resource("person"))
         self.assertEqual(triple.get("object"),Missing())
         subj=triple.get("subject")
         self.assertEqual(subj.get("subject"),Missing())

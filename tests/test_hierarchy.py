@@ -9,11 +9,11 @@ class HierarchyTests(TestCase):
 
     def testQuestion(self):
         tree=computeTree(data.give_president_of_USA()['sentences'][0])
-        self.assertEqual(simplify(tree),'Who')
+        self.assertEqual(simplify(tree),'who')
 
     def testQuestion2(self):
         tree=computeTree(data.give_how_hold()['sentences'][0])
-        self.assertEqual(simplify(tree),'How old')
+        self.assertEqual(simplify(tree),'how old')
 
     def testHierarchySimplification(self):
         tree=computeTree(data.give_president_of_USA()['sentences'][0])
