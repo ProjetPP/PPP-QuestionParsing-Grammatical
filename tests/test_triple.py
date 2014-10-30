@@ -85,4 +85,4 @@ class TripleTests(TestCase):
         self.assertEqual(t.objectT,"United States")
         self.assertEqual(len(tBucket.bucket), 0)
         t=tBucket.extractTriple(1)
-        self.assertEqual(t,None)
+        self.assertIsNone(t)
