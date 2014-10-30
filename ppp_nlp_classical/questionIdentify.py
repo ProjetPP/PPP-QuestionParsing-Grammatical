@@ -1,22 +1,17 @@
 import sys
 
+# Taken from: http://www.interopia.com/education/all-question-words-in-english/
+
 closeQuestionWord = [
-    """
-        Taken from: http://www.interopia.com/education/all-question-words-in-english/
-    """
     # Yes/no question
     'Is', 'Are', 'Am', 'Was', 'Were', 'Will', 'Do', 'Does', 'Did', 'Have', 'Had', 'Has', 'Can', 'Could', 'Should', 'Shall', 'May', 'Might', 'Would'
 ]
 
 openQuestionWord = [
-    """
-        Open-ended questions
-        Taken from: http://www.interopia.com/education/all-question-words-in-english/
-        Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
-    """
     # Open-ended questions 
     'What', 'What kind', 'What type', 'What sort', 'What time', 'When', 'Why', 'Where', 'Who', 'How', 'How much', 'How many', 'How old', 'How far', 'How long', 'How tall', 'How deep', 'How wide', 'How fast', 'How often', 'How come', 'Which', 'Whom', 'Whose'
-      # + What... for, What... like, Why don't, Where from?
+    # + What... for, What... like, Why don't, Where from?
+    # Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
 ]
 
 def removeWord(t,word):
