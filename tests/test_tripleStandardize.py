@@ -8,7 +8,7 @@ from unittest import TestCase
 
 class StandardTripleTests(TestCase):
 
-    def testBuildBucket(self):
+    def testBuildFromBucket(self):
         tree = computeTree(data.give_president_of_USA()['sentences'][0])
         qw = simplify(tree)
         triple = buildTree(buildBucket(tree,qw))
