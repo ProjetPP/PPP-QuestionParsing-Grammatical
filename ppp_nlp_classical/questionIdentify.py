@@ -1,10 +1,8 @@
 import sys
 
+# Taken from: http://www.interopia.com/education/all-question-words-in-english/
+# Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
 questionWord = [
-    """
-        Taken from: http://www.interopia.com/education/all-question-words-in-english/
-        Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
-    """
     # Yes/no question
     'Is', 'Are', 'Am', 'Was', 'Were', 'Will', 'Do', 'Does', 'Did', 'Have', 'Had', 'Has', 'Can', 'Could', 'Should', 'Shall', 'May', 'Might', 'Would',
     # Open-ended questions 
@@ -50,8 +48,7 @@ def identifyQuestionWord(t):
         removeWord(t,start[0])
         removeWord(t,start[1])
         return start[0][0] + ' ' + start[1][0]
-    elif start[0][0] in questionWord: 
+    if start[0][0] in questionWord: 
         removeWord(t,start[0])
         return start[0][0]
-    else:
-        sys.exit('exit: question word not found (please, report your sentence on http://goo.gl/EkgO5l)')
+    sys.exit('exit: question word not found (please, report your sentence on http://goo.gl/EkgO5l)')

@@ -72,4 +72,4 @@ Description of demo files
 * `demo3.py`: Start server before. Print the dependency graph from CoreNLP
 * `demo4.py`: Start server before. Print the dependency graph after preprocessing simplifications (merging of some nodes)
 * `demo5.py`: Start server before. Full algorithm, output triples from question
-
+* `demo6.py`: Start server before. Full algorithm, output standardized triples tree from question
