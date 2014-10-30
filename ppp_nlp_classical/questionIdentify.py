@@ -50,8 +50,7 @@ def identifyQuestionWord(t):
         removeWord(t,start[0])
         removeWord(t,start[1])
         return start[0][0] + ' ' + start[1][0]
-    elif start[0][0] in questionWord: 
+    if start[0][0] in questionWord: 
         removeWord(t,start[0])
         return start[0][0]
-    else:
-        sys.exit('exit: question word not found (please, report your sentence on http://goo.gl/EkgO5l)')
+    sys.exit('exit: question word not found (please, report your sentence on http://goo.gl/EkgO5l)')
