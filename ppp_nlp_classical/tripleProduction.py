@@ -166,17 +166,17 @@ questionMap = {
     'would'         : 'yesno',
     # open question word
     'what'          : 'definition',
-    'what kind'     : 'kind',
+    'what kind'     : 'description',
     'what type'     : 'type',
-    'what sort'     : 'sort',
+    'what sort'     : 'type',
     'what time'     : 'time',
     'when'          : 'time',
     'why'           : 'reason',
-    'where'         : 'location',
-    'who'           : 'identity',
-    'how'           : 'way',
-    'how much'      : 'quantity',
-    'how many'      : 'number',
+    'where'         : 'place',
+    'who'           : 'person',
+    'how'           : 'manner',
+    'how much'      : 'amount',
+    'how many'      : 'quantity',
     'how old'       : 'age',
     'how far'       : 'distance',
     'how long'      : 'length',
@@ -186,9 +186,9 @@ questionMap = {
     'how fast'      : 'speed',
     'how often'     : 'frequency',
     'how come'      : 'reason',
-    'which'         : 'identity',
-    'whom'          : 'identity',
-    'whose'         : 'identity'
+    'which'         : 'choice',
+    'whom'          : 'person',
+    'whose'         : 'possession'
 }
 
 def buildBucket(t,qw):
