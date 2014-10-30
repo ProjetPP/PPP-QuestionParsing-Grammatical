@@ -4,12 +4,12 @@ import sys
 
 closeQuestionWord = [
     # Yes/no question
-    'Is', 'Are', 'Am', 'Was', 'Were', 'Will', 'Do', 'Does', 'Did', 'Have', 'Had', 'Has', 'Can', 'Could', 'Should', 'Shall', 'May', 'Might', 'Would'
+    'is', 'are', 'am', 'was', 'were', 'will', 'do', 'does', 'did', 'have', 'had', 'has', 'can', 'could', 'should', 'shall', 'may', 'might', 'would'
 ]
 
 openQuestionWord = [
     # Open-ended questions 
-    'What', 'What kind', 'What type', 'What sort', 'What time', 'When', 'Why', 'Where', 'Who', 'How', 'How much', 'How many', 'How old', 'How far', 'How long', 'How tall', 'How deep', 'How wide', 'How fast', 'How often', 'How come', 'Which', 'Whom', 'Whose'
+    'what', 'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'who', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'which', 'whom', 'whose'
     # + What... for, What... like, Why don't, Where from?
     # Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
 ]
@@ -48,13 +48,13 @@ def identifyQuestionWord(t):
     firstWords(t,start)
     if not start[0]:
         sys.exit('exit: i don\'t understand (please, report your sentence on http://goo.gl/EkgO5l)')
-    if start[1] and start[0][0] + ' ' + start[1][0] in openQuestionWord:
+    if start[1] and start[0][0].lower() + ' ' + start[1][0].lower() in openQuestionWord:
         removeWord(t,start[0])
         removeWord(t,start[1])
-        return start[0][0] + ' ' + start[1][0]    
-    if start[0][0] in openQuestionWord: 
+        return start[0][0].lower() + ' ' + start[1][0].lower()
+    if start[0][0].lower() in openQuestionWord: 
         removeWord(t,start[0])
-        return start[0][0]
-    if start[0][0] in closeQuestionWord: 
-        return start[0][0]
+        return start[0][0].lower()
+    if start[0][0].lower() in closeQuestionWord: 
+        return start[0][0].lower()
     sys.exit('exit: question word not found (please, report your sentence on http://goo.gl/EkgO5l)')
