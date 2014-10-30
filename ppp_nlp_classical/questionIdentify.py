@@ -15,7 +15,7 @@ openQuestionWord = [
         Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
     """
     # Open-ended questions 
-    'Whe','What', 'What kind', 'What type', 'What sort', 'What time', 'When', 'Why', 'Where', 'Who', 'How', 'How much', 'How many', 'How old', 'How far', 'How long', 'How tall', 'How deep', 'How wide', 'How fast', 'How often', 'How come', 'Which', 'Whom', 'Whose'
+    'What', 'What kind', 'What type', 'What sort', 'What time', 'When', 'Why', 'Where', 'Who', 'How', 'How much', 'How many', 'How old', 'How far', 'How long', 'How tall', 'How deep', 'How wide', 'How fast', 'How often', 'How come', 'Which', 'Whom', 'Whose'
       # + What... for, What... like, Why don't, Where from?
 ]
 
