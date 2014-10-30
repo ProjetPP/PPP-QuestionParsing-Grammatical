@@ -8,7 +8,7 @@ python:
   - pypy3
 
 install:
-    - pip install scrutinizer-ocular coverage webtest httmock requests ppp_datamodel ppp_core
+    - pip install scrutinizer-ocular coverage webtest httmock requests ppp_datamodel ppp_core jsonrpclib-pelix
 
 before_script:
   - ./setup.py install
