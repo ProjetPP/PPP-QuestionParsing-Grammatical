@@ -24,8 +24,8 @@ setup(
         'Topic :: Software Development :: Libraries',
     ],
     install_requires=[
-        'ppp_datamodel',
-        'ppp_core',
+        'ppp_datamodel>=0.5,<0.6',
+        'ppp_core>=0.5,<0.6',
     ],
     packages=[
         'ppp_nlp_classical',

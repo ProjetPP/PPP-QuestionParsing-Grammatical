@@ -6,9 +6,10 @@ from .preprocessing import DependenciesTree, computeTree
 from .questionIdentify import identifyQuestionWord
 from .dependencyAnalysis import simplify
 from .tripleProduction import buildBucket, Triple, TriplesBucket, tripleProduce1, tripleProduce2, tripleProduce3
+from .treeTranslation import buildTree
 
 
-#from .requesthandler import RequestHandler
+from .requesthandler import RequestHandler
 
 def app(environ, start_response):
     """Function called by the WSGI server."""
