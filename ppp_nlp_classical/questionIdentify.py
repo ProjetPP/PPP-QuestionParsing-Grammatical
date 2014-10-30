@@ -10,11 +10,12 @@ closeQuestionWord = [
 
 openQuestionWord = [
     """
+        Open-ended questions
         Taken from: http://www.interopia.com/education/all-question-words-in-english/
         Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
     """
     # Open-ended questions 
-    'What', 'What kind', 'What type', 'What sort', 'What time', 'When', 'Why', 'Where', 'Who', 'How', 'How much', 'How many', 'How old', 'How far', 'How long', 'How tall', 'How deep', 'How wide', 'How fast', 'How often', 'How come', 'Which', 'Whom', 'Whose'
+    'Whe','What', 'What kind', 'What type', 'What sort', 'What time', 'When', 'Why', 'Where', 'Who', 'How', 'How much', 'How many', 'How old', 'How far', 'How long', 'How tall', 'How deep', 'How wide', 'How fast', 'How often', 'How come', 'Which', 'Whom', 'Whose'
       # + What... for, What... like, Why don't, Where from?
 ]
 
@@ -49,17 +50,16 @@ def identifyQuestionWord(t):
         Identify, remove (if open qw) and return the question word
     """
     start = [None,None]
-    firstWords(t,start)   
+    firstWords(t,start)
     if not start[0]:
         sys.exit('exit: i don\'t understand (please, report your sentence on http://goo.gl/EkgO5l)')
     if start[1] and start[0][0] + ' ' + start[1][0] in openQuestionWord:
         removeWord(t,start[0])
         removeWord(t,start[1])
         return start[0][0] + ' ' + start[1][0]    
-    elif start[0][0] in openQuestionWord: 
+    if start[0][0] in openQuestionWord: 
         removeWord(t,start[0])
         return start[0][0]
-    elif start[0][0] in closeQuestionWord: 
+    if start[0][0] in closeQuestionWord: 
         return start[0][0]
-    else:
-        sys.exit('exit: question word not found (please, report your sentence on http://goo.gl/EkgO5l)')
+    sys.exit('exit: question word not found (please, report your sentence on http://goo.gl/EkgO5l)')

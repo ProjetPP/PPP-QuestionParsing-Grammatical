@@ -64,7 +64,8 @@ dobj
 
 What did John Hinckley do to impress Jodie Foster?
   ? collapse dobj to comp
-
+  ? dobj is impossible
+  
 pobj
 ====
 
