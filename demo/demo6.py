@@ -21,4 +21,4 @@ def get_answer():
     qw = ppp_nlp_classical.simplify(tree)
     return ppp_nlp_classical.buildTree(ppp_nlp_classical.buildBucket(tree,qw))
 
-print(get_answer().as_json())
+print(json.dumps(get_answer().as_dict(), indent=4))
