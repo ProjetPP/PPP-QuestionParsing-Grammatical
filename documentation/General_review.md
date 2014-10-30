@@ -7,6 +7,11 @@
     - prime minister
 * Who wrote "The Pines of Rome"?
   
+## Yes/no question
+
+* Product dobj relation?
+* Need to delete the qw, but more difficult
+
 
 ## Dependency restriction 
 

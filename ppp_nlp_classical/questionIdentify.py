@@ -1,13 +1,17 @@
 import sys
 
 # Taken from: http://www.interopia.com/education/all-question-words-in-english/
-# Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
-questionWord = [
+
+closeQuestionWord = [
     # Yes/no question
-    'Is', 'Are', 'Am', 'Was', 'Were', 'Will', 'Do', 'Does', 'Did', 'Have', 'Had', 'Has', 'Can', 'Could', 'Should', 'Shall', 'May', 'Might', 'Would',
+    'Is', 'Are', 'Am', 'Was', 'Were', 'Will', 'Do', 'Does', 'Did', 'Have', 'Had', 'Has', 'Can', 'Could', 'Should', 'Shall', 'May', 'Might', 'Would'
+]
+
+openQuestionWord = [
     # Open-ended questions 
     'What', 'What kind', 'What type', 'What sort', 'What time', 'When', 'Why', 'Where', 'Who', 'How', 'How much', 'How many', 'How old', 'How far', 'How long', 'How tall', 'How deep', 'How wide', 'How fast', 'How often', 'How come', 'Which', 'Whom', 'Whose'
-      # + What... for, What... like, Why don't, Where from?
+    # + What... for, What... like, Why don't, Where from?
+    # Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
 ]
 
 def removeWord(t,word):
@@ -38,17 +42,19 @@ def firstWords(t,start):
 
 def identifyQuestionWord(t):
     """
-        Identify, remove and return the question word
+        Identify, remove (if open qw) and return the question word
     """
     start = [None,None]
-    firstWords(t,start)   
+    firstWords(t,start)
     if not start[0]:
-        sys.exit('only questions starting by a question word can be processed for the time')
-    if start[1] and start[0][0] + ' ' + start[1][0] in questionWord:
+        sys.exit('exit: i don\'t understand (please, report your sentence on http://goo.gl/EkgO5l)')
+    if start[1] and start[0][0] + ' ' + start[1][0] in openQuestionWord:
         removeWord(t,start[0])
         removeWord(t,start[1])
-        return start[0][0] + ' ' + start[1][0]
-    if start[0][0] in questionWord: 
+        return start[0][0] + ' ' + start[1][0]    
+    if start[0][0] in openQuestionWord: 
         removeWord(t,start[0])
+        return start[0][0]
+    if start[0][0] in closeQuestionWord: 
         return start[0][0]
     sys.exit('exit: question word not found (please, report your sentence on http://goo.gl/EkgO5l)')
