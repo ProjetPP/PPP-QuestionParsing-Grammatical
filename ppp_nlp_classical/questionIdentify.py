@@ -1,10 +1,8 @@
 import sys
 
+# Taken from: http://www.interopia.com/education/all-question-words-in-english/
+# Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
 questionWord = [
-    """
-        Taken from: http://www.interopia.com/education/all-question-words-in-english/
-        Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
-    """
     # Yes/no question
     'Is', 'Are', 'Am', 'Was', 'Were', 'Will', 'Do', 'Does', 'Did', 'Have', 'Had', 'Has', 'Can', 'Could', 'Should', 'Shall', 'May', 'Might', 'Would',
     # Open-ended questions 
