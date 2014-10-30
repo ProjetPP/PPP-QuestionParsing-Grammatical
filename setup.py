@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ppp_nlp_classical',
-    version='0.1',
+    version='0.1.1',
     description='Natural language processing module for the PPP.',
     url='https://github.com/ProjetPP',
     author='Projet Pensées Profondes',
