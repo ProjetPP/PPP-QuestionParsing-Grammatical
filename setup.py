@@ -4,9 +4,9 @@ from setuptools import setup, find_packages
 
 setup(
     name='ppp_nlp_classical',
-    version='0.1.1',
+    version='0.2',
     description='Natural language processing module for the PPP.',
-    url='https://github.com/ProjetPP',
+    url='https://github.com/ProjetPP/PPP-NLP-Classical',
     author='Projet Pensées Profondes',
     author_email='ppp2014@listes.ens-lyon.fr',
     license='MIT',
@@ -15,6 +15,7 @@ setup(
         'Development Status :: 1 - Planning',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
