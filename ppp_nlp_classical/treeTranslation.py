@@ -30,4 +30,7 @@ def buildTree(triplesBucket):
     """
     t = triplesBucket.extractTriple(0) # 0 = main unknown
     assert t # != None
-    return newNode(triplesBucket,t)
+    tree = newNode(triplesBucket,t)
+    if not triplesBucket.isEmpty():
+        sys.exit('exit: tree translation not completed (please, report your sentence on http://goo.gl/EkgO5l)\n')
+    return tree
