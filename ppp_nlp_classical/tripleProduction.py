@@ -81,7 +81,8 @@ def tripleProduce0(t,nodeToId,triplesBucket):
 
 def tripleProduce1(t,nodeToID,triplesBucket):
     """
-        a -b-> c : ?A = ?C
+        a -b-> c : (?A,a,c) if c is a leaf
+                   ?A = ?C otherwise
     """
     assert t.parent is not None
     if not t.child: # Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?
@@ -92,8 +93,8 @@ def tripleProduce1(t,nodeToID,triplesBucket):
 
 def tripleProduce2(t,nodeToID,triplesBucket,suffix=''):
     """
-        a -b-> c : a(?A,c) if c is a leaf
-                   a(?A,?C) otherwise
+        a -b-> c : (?A,a,c) if c is a leaf
+                   (?A,a,?C) otherwise
         suffix: for prep_x
     """
     assert t.parent is not None
@@ -110,18 +111,50 @@ def tripleProduce2(t,nodeToID,triplesBucket,suffix=''):
 
 def tripleProduce3(t,nodeToID,triplesBucket):
     """
-        a -b-> c : c(?A,a)
+        a -b-> c : (?A,c,a)
     """
     assert t.parent is not None
     triplesBucket.addTriple(Triple(nodeToID[t.parent],
                                    t.getWords(),
                                    t.parent.getWords()))
 
+def tripleProduce4(t,nodeToID,triplesBucket): #_+
+    """
+        a -b-> c : (c,a,?A) if c is a leaf
+                   (?C,a,?A) otherwise
+    """
+    assert t.parent is not None
+    if not t.child:
+        triplesBucket.addTriple(Triple(t.getWords(),
+                                       t.parent.getWords(),
+                                       nodeToID[t.parent]))
+    else:
+        triplesBucket.addTriple(Triple(nodeToID[t],
+                                       t.parent.getWords(),
+                                       nodeToID[t.parent]))
+
+def tripleProduce5(t,nodeToID,triplesBucket): #_+
+    """
+        a -b-> c : (a,c,?A) if c is a leaf
+                   (a,?C,?A) otherwise <-- or exit error
+    """
+    assert t.parent is not None
+    if not t.child:
+        triplesBucket.addTriple(Triple(t.parent.getWords(),
+                                       t.getWords(),
+                                       nodeToID[t.parent]))
+    else:
+        triplesBucket.addTriple(Triple(t.parent.getWords(),
+                                       nodeToID[t],
+                                       nodeToID[t.parent]))
+                                                                                                        
 tripleMap = {
     't0'    : tripleProduce0,
     't1'    : tripleProduce1,
     't2'    : tripleProduce2,
-    't3'    : tripleProduce3
+    't3'    : tripleProduce3,
+    't4'    : tripleProduce4,
+    't5'    : tripleProduce5
 }
 
 def initUnknowns(t,nodeToID,unknown=0):
@@ -141,8 +174,8 @@ def fillBucket(t,nodeToID,triplesBucket,tmap=tripleMap):
     if t.dependency in tmap:
         tmap[t.dependency](t,nodeToID,triplesBucket)
     if t.dependency.startswith('prep'): # prep_x or prepc_x
-        prep = t.dependency[t.dependency.index('_')+1:]
-        tripleProduce2(t,nodeToID,triplesBucket,prep)
+        prep = t.dependency[t.dependency.index('_')+1:] #_+ could be removed
+        tripleProduce4(t,nodeToID,triplesBucket) #_+ au lieu de tripleProduce2(t,nodeToID,triplesBucket,prep) <--- preposition systématiquement del mnt
     for c in t.child: # could become necessary to perform this step before
         fillBucket(c,nodeToID,triplesBucket)
 
@@ -192,6 +225,7 @@ questionMap = {
     'which'         : 'choice',
     'whom'          : 'person',
     'whose'         : 'possession'
+        # how big
 }
 
 def buildBucket(t,qw):
@@ -201,6 +235,7 @@ def buildBucket(t,qw):
     nodeToID = {}
     triplesBucket = TriplesBucket()
     initUnknowns(t,nodeToID)
-    triplesBucket.addTriple(Triple(nodeToID[t.child[0]],questionMap[qw],nodeToID[t])) # process the question word
+    #_+ triplesBucket.addTriple(Triple(nodeToID[t.child[0]],questionMap[qw],nodeToID[t])) # process the question word
+    tripleProduce1(t.child[0],nodeToID,triplesBucket) #_+ instead of question word
     fillBucket(t,nodeToID,triplesBucket)
     return triplesBucket
