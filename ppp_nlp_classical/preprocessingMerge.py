@@ -73,14 +73,10 @@ def quotationTraversal(t,quotationList,quoteIndexToNode):
             t.merge(c,True)
             quoteIndexToNode[quote[0]] = t
 
-def mergeQuotations(t,r,nameToNodes):
+def handleLostQuotationWords(r,quoteIndexToNode):
     """
-        Merge all nodes corresponding to quotations.
+        Add quotation words deleted by Stanford CoreNLP, such as "in" or "of".
     """
-    quotationList = findQuotations(r)
-    quoteIndexToNode = {}
-    # Merge existing nodes belonging to quotations.
-    quotationTraversal(t,quotationList,quoteIndexToNode)
     inQuote=False
     quoteNode=None
     index=0
@@ -97,6 +93,24 @@ def mergeQuotations(t,r,nameToNodes):
             continue
         if inQuote and (word[0],index) not in quoteNode.wordList:
             quoteNode.wordList += [(word[0],index)]
+
+def addQuotationTag(quoteIndexToNode):
+    """
+        Add the tag "QUOTATION" to all nodes in quoteIndexToNode.
+    """
+    for c in quoteIndexToNode.values():
+        c.namedEntityTag="QUOTATION"
+
+def mergeQuotations(t,r):
+    """
+        Merge all nodes corresponding to quotations.
+    """
+    quotationList = findQuotations(r)
+    quoteIndexToNode = {}
+    # Merge existing nodes belonging to quotations.
+    quotationTraversal(t,quotationList,quoteIndexToNode)
+    handleLostQuotationWords(r,quoteIndexToNode)
+    addQuotationTag(quoteIndexToNode)
 
 ###################
 # NER recognition #

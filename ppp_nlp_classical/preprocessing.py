@@ -123,6 +123,6 @@ def computeTree(r):
     computeTags(r,nameToNodes)
     tree = nameToNodes['ROOT-0']
     initText(tree,r['text'].replace('"','\\\"'))
-    mergeQuotations(tree,r,nameToNodes) # quotation merging
+    mergeQuotations(tree,r) # quotation merging
     mergeNamedEntityTag(tree) # NER merging
     return tree
