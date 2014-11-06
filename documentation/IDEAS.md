@@ -153,6 +153,8 @@ things (the person or the town).
 
 ## 3. Overall algorithm
 
+#### 3.1. First proposition
+
 Here is a proposition of overall algorithm:
 
 INPUT: question
@@ -192,6 +194,24 @@ The big difference between the transformation in triples we perform and transfor
   
 Triples such as `wifeOf(Barack Obama's wife,Barack Obama)` can be found directly from the tree, but the only real hole cannot be placed from scratch. This is why we have to study all types of questions patterns.
 
+#### 3.1. Second proposition
 
+####### Preprocessing
+
+1. Identify and remove (from the tree) the question word
+2. Merge via Name Entity Recognition (NER) (LOCATION, PERSON...)
+3. Merge quotation (with a "QUOTA" NER identifier), ex: Who is the author of "Twenty Thousand Leagues Under the Sea"? -> "Twenty Thousand Leagues Under the Sea" is merged in a single node
+4. Merge words in capital letters that are neighbors in the tree
+
+####### Tree simplification
+
+5. See Hierarchy_analysis.md for the restricted set of dependencies to use and the transformations to perform.
+
+####### Triples production
+
+6. Produce the triple(s) involved by the question word
+7. Add the triples involved by other parts of the tree
+
+A better description of steps 6 and 7 is provided in Hierarchy_analysis.md
 
 
