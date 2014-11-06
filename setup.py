@@ -27,6 +27,8 @@ setup(
     install_requires=[
         'ppp_datamodel>=0.5,<0.6',
         'ppp_core>=0.5,<0.6',
+        'jsonrpclib-pelix',
+        'nltk'
     ],
     packages=[
         'ppp_nlp_classical',
