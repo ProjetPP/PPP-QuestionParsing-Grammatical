@@ -11,7 +11,9 @@ class StandardTripleTests(TestCase):
     def testBuildFromBucket(self):
         tree = computeTree(data.give_president_of_USA()['sentences'][0])
         qw = simplify(tree)
-        triple = buildTree(buildBucket(tree,qw))
+        bucket = buildBucket(tree,qw)
+        triple = buildTree(bucket)
+        self.assertTrue(bucket.isEmpty())
         self.assertIsInstance(triple,Triple)
         self.assertEqual(triple.get("predicate"),Resource("person"))
         self.assertEqual(triple.get("object"),Missing())

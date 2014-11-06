@@ -53,6 +53,9 @@ class TriplesBucket:
     def removeTriple(self,t):
         self.bucket.remove(t)
         
+    def isEmpty(self): # true iff empty
+        return not self.bucket
+        
     def renameUnknown(self,x,new_x):
         for t in self.bucket:
             t.renameUnknown(x,new_x)
