@@ -21,7 +21,7 @@ def get_tree():
   nlp = StanfordNLP()
   result = nlp.parse(input(""))
   tree = ppp_nlp_classical.computeTree(result['sentences'][0])
-  #ppp_nlp_classical.simplify(tree)
+  ppp_nlp_classical.simplify(tree)
   return tree
 
 print(get_tree())
