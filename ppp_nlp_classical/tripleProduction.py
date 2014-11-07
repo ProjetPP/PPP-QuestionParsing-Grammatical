@@ -16,7 +16,7 @@ class Triple:
 
     def renameUnknown(self,x,new_x):
         """
-            unknown x is replaced by new_x everywhere it appears (means that x = x_new)
+            unknown x is replaced by new_x everywhere it appears (means that x = x_new), x_new can also be a word (=replace an unknown by words)
         """
         if self.subjectT == x:
             self.subjectT = new_x
@@ -153,14 +153,23 @@ def tripleProduce5(t,nodeToID,triplesBucket):
         triplesBucket.addTriple(Triple(t.parent.getWords(),
                                        nodeToID[t],
                                        nodeToID[t.parent]))
-                                                                                                        
+                                       
+def tripleProduce6(t,nodeToID,triplesBucket):
+    """
+        a -b-> c : ?A = c
+    """
+    assert t.parent is not None
+    triplesBucket.renameUnknown(nodeToID[t.parent],t.getWords())
+
+                                                                                                                
 tripleMap = {
     't0'    : tripleProduce0,
     't1'    : tripleProduce1,
     't2'    : tripleProduce2,
     't3'    : tripleProduce3,
     't4'    : tripleProduce4,
-    't5'    : tripleProduce5
+    't5'    : tripleProduce5,
+    't6'    : tripleProduce6
 }
 
 def initUnknowns(t,nodeToID,unknown=0):

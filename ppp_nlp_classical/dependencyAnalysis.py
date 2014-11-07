@@ -19,7 +19,7 @@ def merge(t):
 dependenciesMap = {
     'undef'     : 't0', # personnal tag, should not happen?
     'root'      : 't0',
-    'dep'       : 't1',
+    'dep'       : 't6', # ? instead of t1
         'aux'       : remove,
             'auxpass'   : remove,
             'cop'       : impossible,
