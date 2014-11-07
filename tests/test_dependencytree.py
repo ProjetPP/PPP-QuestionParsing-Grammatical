@@ -65,14 +65,14 @@ class DependenciesTreeTests(TestCase):
         # Lucy in the Sky with Diamondss
         lucy=wrote.child[1]
         self.assertEqual(lucy.wordList,[("Lucy",4),("in",5),("the",6),("Sky",7),("with",8),("Diamonds",9)])
-        self.assertEqual(lucy.namedEntityTag,'undef')
+        self.assertEqual(lucy.namedEntityTag,'QUOTATION')
         self.assertEqual(lucy.dependency,'dobj')
         self.assertEqual(lucy.parent,wrote)
         self.assertEqual(len(lucy.child),0)
         # Let it be
         let=wrote.child[2]
         self.assertEqual(let.wordList,[("Let",13),("It",14),("Be",15)])
-        self.assertEqual(let.namedEntityTag,'undef')
+        self.assertEqual(let.namedEntityTag,'QUOTATION')
         self.assertEqual(let.dependency,'conj_and')
         self.assertEqual(let.parent,wrote)
         self.assertEqual(len(let.child),0)
