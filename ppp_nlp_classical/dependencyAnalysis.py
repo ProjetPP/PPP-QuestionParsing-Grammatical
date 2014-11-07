@@ -31,12 +31,12 @@ dependenciesMap = {
                 'xcomp'     : 't2',
                 'pcomp'     : 't2', # -
                 'obj'       : impossible,
-                    'dobj'      : 't2',
+                    'dobj'      : 't4', #_+ instead of t2
                     'iobj'      : 't2',
                     'pobj'      : 't2', # -
             'subj'      : impossible,
                 'nsubj'     : 't1',
-                    'nsubjpass'    : 't3', # ?
+                    'nsubjpass'    : 't4', #_+ ? instead of  t3
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
         'cc'        : impossible,

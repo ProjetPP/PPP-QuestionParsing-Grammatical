@@ -12,6 +12,10 @@
 * How much did Mercury spend on advertising in 1993?
 * How far is Yaroslavl from Moscow?
 * What effect does a prism have on light?
+* Where was the movie "Somewhere in Time" filmed?
+* What city is Purdue University in?
+* Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?
+* What U.S. state is Fort Knox in?
 
 ## Todo
 
@@ -25,4 +29,7 @@ nsubjpass:
     
 subj <-> obj:
     How many films did Ingmar Bergman make?
+    
+and:
+    When did Rococo painting and architecture flourish?
 

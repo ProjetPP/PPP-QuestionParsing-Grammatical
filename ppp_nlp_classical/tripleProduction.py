@@ -81,12 +81,12 @@ def tripleProduce0(t,nodeToId,triplesBucket):
 
 def tripleProduce1(t,nodeToID,triplesBucket):
     """
-        a -b-> c : (?A,a,c) if c is a leaf
+        a -b-> c : (c,a,?A) if c is a leaf
                    ?A = ?C otherwise
     """
     assert t.parent is not None
-    if not t.child: # Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?
-        tripleProduce2(t,nodeToID,triplesBucket)
+    if not t.child:
+        tripleProduce4(t,nodeToID,triplesBucket)
     else:
         triplesBucket.renameUnknown(nodeToID[t],nodeToID[t.parent])
         nodeToID[t] = nodeToID[t.parent]
@@ -111,14 +111,20 @@ def tripleProduce2(t,nodeToID,triplesBucket,suffix=''):
 
 def tripleProduce3(t,nodeToID,triplesBucket):
     """
-        a -b-> c : (?A,c,a)
+        a -b-> c : (?A,c,a) if c is a leaf
+                   (?A,?C,a) otherwise
     """
     assert t.parent is not None
-    triplesBucket.addTriple(Triple(nodeToID[t.parent],
-                                   t.getWords(),
-                                   t.parent.getWords()))
-
-def tripleProduce4(t,nodeToID,triplesBucket): #_+
+    if not t.child:
+        triplesBucket.addTriple(Triple(nodeToID[t.parent],
+                                       t.getWords(),
+                                       t.parent.getWords()))
+    else:
+        triplesBucket.addTriple(Triple(nodeToID[t.parent],
+                                       nodeToID[t],
+                                       t.parent.getWords()))
+                                           
+def tripleProduce4(t,nodeToID,triplesBucket):
     """
         a -b-> c : (c,a,?A) if c is a leaf
                    (?C,a,?A) otherwise
@@ -133,10 +139,10 @@ def tripleProduce4(t,nodeToID,triplesBucket): #_+
                                        t.parent.getWords(),
                                        nodeToID[t.parent]))
 
-def tripleProduce5(t,nodeToID,triplesBucket): #_+
+def tripleProduce5(t,nodeToID,triplesBucket):
     """
         a -b-> c : (a,c,?A) if c is a leaf
-                   (a,?C,?A) otherwise <-- or exit error
+                   (a,?C,?A) otherwise <-- or exit error? because ?C is strange
     """
     assert t.parent is not None
     if not t.child:
@@ -175,7 +181,7 @@ def fillBucket(t,nodeToID,triplesBucket,tmap=tripleMap):
         tmap[t.dependency](t,nodeToID,triplesBucket)
     if t.dependency.startswith('prep'): # prep_x or prepc_x
         prep = t.dependency[t.dependency.index('_')+1:] #_+ could be removed
-        tripleProduce4(t,nodeToID,triplesBucket) #_+ au lieu de tripleProduce2(t,nodeToID,triplesBucket,prep) <--- preposition systématiquement del mnt
+        tripleProduce4(t,nodeToID,triplesBucket) #_+ instead of tripleProduce2(t,nodeToID,triplesBucket,prep) <--- preposition always remove now
     for c in t.child: # could become necessary to perform this step before
         fillBucket(c,nodeToID,triplesBucket)
 
