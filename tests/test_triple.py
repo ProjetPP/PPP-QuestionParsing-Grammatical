@@ -1,6 +1,6 @@
 import json
 
-from ppp_nlp_classical import Triple, TriplesBucket, computeTree, simplify, buildBucket, DependenciesTree, tripleProduce1, tripleProduce2, tripleProduce3
+from ppp_nlp_classical import Triple, TriplesBucket, computeTree, simplify, buildBucket, DependenciesTree, tripleProduce1, tripleProduce2, tripleProduce3, tripleProduce4
 import data
 
 from unittest import TestCase
@@ -62,27 +62,25 @@ class TripleTests(TestCase):
         self.assertEqual(bt.bucket[0].subjectT,0)
         self.assertEqual(bt.bucket[0].predicateT,"root")
         self.assertEqual(bt.bucket[0].objectT,1)
+        bt = TriplesBucket()
+        tripleProduce4(child,nodeToID,bt)
+        self.assertEqual(len(bt.bucket),1)
+        self.assertEqual(bt.bucket[0].subjectT,1)
+        self.assertEqual(bt.bucket[0].predicateT,"root")
+        self.assertEqual(bt.bucket[0].objectT,0)
 
     def testBuildBucket(self):
         tree = computeTree(data.give_president_of_USA()['sentences'][0])
         qw = simplify(tree)
         tBucket = buildBucket(tree,qw)
-        self.assertEqual(len(tBucket.bucket), 2)
-        self.assertEqual(tBucket.bucket[0].subjectT, 1)
-        self.assertEqual(tBucket.bucket[0].predicateT, "person")
-        self.assertEqual(tBucket.bucket[0].objectT, 0)
-        self.assertEqual(tBucket.bucket[1].subjectT, 1)
-        self.assertEqual(tBucket.bucket[1].predicateT, "president of")
-        self.assertEqual(tBucket.bucket[1].objectT, "United States")
-        t=tBucket.extractTriple("person")
-        self.assertEqual(t.subjectT,1)
-        self.assertEqual(t.predicateT,"person")
-        self.assertEqual(t.objectT,0)
         self.assertEqual(len(tBucket.bucket), 1)
-        t=tBucket.extractTriple(1)
-        self.assertEqual(t.subjectT,1)
-        self.assertEqual(t.predicateT,"president of")
-        self.assertEqual(t.objectT,"United States")
+        self.assertEqual(tBucket.bucket[0].subjectT, "United States")
+        self.assertEqual(tBucket.bucket[0].predicateT, "president")
+        self.assertEqual(tBucket.bucket[0].objectT, 0)
+        t=tBucket.extractTriple(0)
+        self.assertEqual(t.subjectT,"United States")
+        self.assertEqual(t.predicateT,"president")
+        self.assertEqual(t.objectT,0)
         self.assertEqual(len(tBucket.bucket), 0)
         t=tBucket.extractTriple(1)
         self.assertIsNone(t)
