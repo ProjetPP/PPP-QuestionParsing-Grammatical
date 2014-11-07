@@ -34,3 +34,8 @@ setup(
         'ppp_nlp_classical',
     ],
 )
+
+import sys
+if 'install' in sys.argv:
+    import nltk
+    nltk.download("wordnet")
