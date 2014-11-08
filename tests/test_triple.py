@@ -37,23 +37,25 @@ class TripleTests(TestCase):
         bt.renameUnknown(8,0)
         self.assertEqual('%s' % bt,"(?? | President of | France)")
 
-    def testTripleProduction(self):
-        root = DependenciesTree("root-0")
-        child = DependenciesTree("child-1",dependency="dep",parent=root)
-        root.child = [child]
-        nodeToID = {root:0, child:1}
-        bt = TriplesBucket()
+    def testTripleProduce1(self):
+        (root,nodeToID,bt)=data.tripleProductionData()
+        child=root.child[0]
         tripleProduce1(child,nodeToID,bt)
         self.assertEqual(len(bt.bucket),1)
         self.assertEqual(bt.bucket[0].subjectT,"child")
         self.assertEqual(bt.bucket[0].predicateT,"root")
         self.assertEqual(bt.bucket[0].objectT,0)
-        bt = TriplesBucket()
+    def testTripleProduce3(self):
+        (root,nodeToID,bt)=data.tripleProductionData()
+        child=root.child[0]
         tripleProduce3(child,nodeToID,bt)
         self.assertEqual(len(bt.bucket),1)
         self.assertEqual(bt.bucket[0].subjectT,0)
         self.assertEqual(bt.bucket[0].predicateT,"child")
         self.assertEqual(bt.bucket[0].objectT,"root")
+    def testTripleProduce2(self):
+        (root,nodeToID,bt)=data.tripleProductionData()
+        child=root.child[0]
         child.child = [DependenciesTree("leaf-2",dependency="dep",parent=child)]
         nodeToID[child.child[0]] = 2
         bt = TriplesBucket()
@@ -62,6 +64,10 @@ class TripleTests(TestCase):
         self.assertEqual(bt.bucket[0].subjectT,0)
         self.assertEqual(bt.bucket[0].predicateT,"root")
         self.assertEqual(bt.bucket[0].objectT,1)
+    def testTripleProduce4(self):
+        (root,nodeToID,bt)=data.tripleProductionData()
+        child=root.child[0]
+        child.child = [DependenciesTree("leaf-2",dependency="dep",parent=child)]
         bt = TriplesBucket()
         tripleProduce4(child,nodeToID,bt)
         self.assertEqual(len(bt.bucket),1)
