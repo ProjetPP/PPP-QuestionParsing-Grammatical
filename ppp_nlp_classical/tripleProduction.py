@@ -74,9 +74,33 @@ class TriplesBucket:
 # Triple production #
 #####################
 
+def genericProduce(t,nodeToID,rule):
+    """
+        Produce an element of a triple.
+        The rule is a string in {'a','?A','c','?C'}
+    """
+    if rule == 'a':
+        return t.parent.getWords()
+    if rule == '?A':
+        return nodeToID[t.parent]
+    if rule == 'c':
+        return t.getWords()
+    if rule == '?C':
+        return nodeToID[t]
+
+def genericTripleProduce(t,nodeToID,rule):
+    """
+        Produce a triple, following the given rule.
+        The rule is a 3-tuple of string, representing a triple.
+        Example: rule=('?A','a','?C')
+    """
+    return Triple(genericProduce(t,nodeToID,rule[0]),
+                    genericProduce(t,nodeToID,rule[1]),
+                    genericProduce(t,nodeToID,rule[2]))
+
 # Rules of production of triples
 
-def tripleProduce0(t,nodeToId,triplesBucket):
+def tripleProduce0(t,nodeToID,triplesBucket):
     pass
 
 def tripleProduce1(t,nodeToID,triplesBucket):
@@ -86,7 +110,7 @@ def tripleProduce1(t,nodeToID,triplesBucket):
     """
     assert t.parent is not None
     if not t.child:
-        tripleProduce4(t,nodeToID,triplesBucket)
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('c','a','?A')))
     else:
         triplesBucket.renameUnknown(nodeToID[t],nodeToID[t.parent])
         nodeToID[t] = nodeToID[t.parent]
@@ -116,14 +140,10 @@ def tripleProduce3(t,nodeToID,triplesBucket):
     """
     assert t.parent is not None
     if not t.child:
-        triplesBucket.addTriple(Triple(nodeToID[t.parent],
-                                       t.getWords(),
-                                       t.parent.getWords()))
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('?A','c','a')))
     else:
-        triplesBucket.addTriple(Triple(nodeToID[t.parent],
-                                       nodeToID[t],
-                                       t.parent.getWords()))
-                                           
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('?A','?C','a')))
+
 def tripleProduce4(t,nodeToID,triplesBucket):
     """
         a -b-> c : (c,a,?A) if c is a leaf
@@ -131,13 +151,9 @@ def tripleProduce4(t,nodeToID,triplesBucket):
     """
     assert t.parent is not None
     if not t.child:
-        triplesBucket.addTriple(Triple(t.getWords(),
-                                       t.parent.getWords(),
-                                       nodeToID[t.parent]))
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('c','a','?A')))
     else:
-        triplesBucket.addTriple(Triple(nodeToID[t],
-                                       t.parent.getWords(),
-                                       nodeToID[t.parent]))
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('?C','a','?A')))
 
 def tripleProduce5(t,nodeToID,triplesBucket):
     """
@@ -146,14 +162,10 @@ def tripleProduce5(t,nodeToID,triplesBucket):
     """
     assert t.parent is not None
     if not t.child:
-        triplesBucket.addTriple(Triple(t.parent.getWords(),
-                                       t.getWords(),
-                                       nodeToID[t.parent]))
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('a','c','?A')))
     else:
-        triplesBucket.addTriple(Triple(t.parent.getWords(),
-                                       nodeToID[t],
-                                       nodeToID[t.parent]))
-                                       
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('a','?C','?A')))
+
 def tripleProduce6(t,nodeToID,triplesBucket):
     """
         a -b-> c : ?A = c
