@@ -161,7 +161,7 @@ def tripleProduce6(t,nodeToID,triplesBucket):
     assert t.parent is not None
     triplesBucket.renameUnknown(nodeToID[t.parent],t.getWords())
 
-                                                                                                                
+
 tripleMap = {
     't0'    : tripleProduce0,
     't1'    : tripleProduce1,
