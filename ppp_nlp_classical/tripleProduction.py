@@ -74,28 +74,30 @@ class TriplesBucket:
 # Triple production #
 #####################
 
-def genericProduce(t,nodeToID,rule):
+def genericProduce(t,nodeToID,rule,suffix=""):
     """
         Produce an element of a triple.
         The rule is a string in {'a','?A','c','?C'}
     """
+    if suffix != '':
+        suffix = ' %s' % suffix
     if rule == 'a':
-        return t.parent.getWords()
+        return '%s%s' % (t.parent.getWords(), suffix)
     if rule == '?A':
         return nodeToID[t.parent]
     if rule == 'c':
-        return t.getWords()
+        return '%s%s' % (t.getWords(), suffix)
     if rule == '?C':
         return nodeToID[t]
 
-def genericTripleProduce(t,nodeToID,rule):
+def genericTripleProduce(t,nodeToID,rule,suffix=""):
     """
         Produce a triple, following the given rule.
         The rule is a 3-tuple of string, representing a triple.
         Example: rule=('?A','a','?C')
     """
     return Triple(genericProduce(t,nodeToID,rule[0]),
-                    genericProduce(t,nodeToID,rule[1]),
+                    genericProduce(t,nodeToID,rule[1],suffix),
                     genericProduce(t,nodeToID,rule[2]))
 
 # Rules of production of triples
@@ -122,16 +124,10 @@ def tripleProduce2(t,nodeToID,triplesBucket,suffix=''):
         suffix: for prep_x
     """
     assert t.parent is not None
-    if suffix != '':
-        suffix = ' %s' % suffix
     if not t.child:
-        triplesBucket.addTriple(Triple(nodeToID[t.parent],
-                                       '%s%s' % (t.parent.getWords(), suffix),
-                                       t.getWords()))
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('?A','a','c'),suffix))
     else:
-        triplesBucket.addTriple(Triple(nodeToID[t.parent],
-                                       '%s%s' % (t.parent.getWords(), suffix),
-                                       nodeToID[t]))
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('?A','a','?C'),suffix))
 
 def tripleProduce3(t,nodeToID,triplesBucket):
     """
