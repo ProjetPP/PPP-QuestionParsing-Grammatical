@@ -1,6 +1,6 @@
 import json
 
-from ppp_nlp_classical import Triple, TriplesBucket, computeTree, simplify, buildBucket, DependenciesTree, tripleProduce1, tripleProduce2, tripleProduce3, tripleProduce4
+from ppp_nlp_classical import Triple, TriplesBucket, computeTree, simplify, buildBucket, DependenciesTree, tripleProduce1, tripleProduce2, tripleProduce3, tripleProduce4, tripleProduce5, tripleProduce6
 import data
 
 from unittest import TestCase
@@ -50,6 +50,7 @@ class TripleTests(TestCase):
         (root,nodeToID,bt)=data.tripleProductionData()
         child=root.child[0]
         child.child = [DependenciesTree("leaf-2",dependency="dep",parent=child)]
+        nodeToID[child.child[0]] = 2
         tripleProduce1(child,nodeToID,bt)
         self.assertEqual(len(bt.bucket),0)
         self.assertEqual(nodeToID[root],nodeToID[child])
@@ -83,15 +84,63 @@ class TripleTests(TestCase):
         self.assertEqual(bt.bucket[0].predicateT,"child")
         self.assertEqual(bt.bucket[0].objectT,"root")
 
-    def testTripleProduce4(self):
+    def testTripleProduce3bis(self):
         (root,nodeToID,bt)=data.tripleProductionData()
         child=root.child[0]
         child.child = [DependenciesTree("leaf-2",dependency="dep",parent=child)]
+        nodeToID[child.child[0]] = 2
+        tripleProduce3(child,nodeToID,bt)
+        self.assertEqual(len(bt.bucket),1)
+        self.assertEqual(bt.bucket[0].subjectT,0)
+        self.assertEqual(bt.bucket[0].predicateT,1)
+        self.assertEqual(bt.bucket[0].objectT,"root")
+
+    def testTripleProduce4(self):
+        (root,nodeToID,bt)=data.tripleProductionData()
+        child=root.child[0]
+        tripleProduce4(child,nodeToID,bt)
+        self.assertEqual(len(bt.bucket),1)
+        self.assertEqual(bt.bucket[0].subjectT,"child")
+        self.assertEqual(bt.bucket[0].predicateT,"root")
+        self.assertEqual(bt.bucket[0].objectT,0)
+
+    def testTripleProduce4bis(self):
+        (root,nodeToID,bt)=data.tripleProductionData()
+        child=root.child[0]
+        child.child = [DependenciesTree("leaf-2",dependency="dep",parent=child)]
+        nodeToID[child.child[0]] = 2
         tripleProduce4(child,nodeToID,bt)
         self.assertEqual(len(bt.bucket),1)
         self.assertEqual(bt.bucket[0].subjectT,1)
         self.assertEqual(bt.bucket[0].predicateT,"root")
         self.assertEqual(bt.bucket[0].objectT,0)
+
+    def testTripleProduce5(self):
+        (root,nodeToID,bt)=data.tripleProductionData()
+        child=root.child[0]
+        tripleProduce5(child,nodeToID,bt)
+        self.assertEqual(len(bt.bucket),1)
+        self.assertEqual(bt.bucket[0].subjectT,"root")
+        self.assertEqual(bt.bucket[0].predicateT,"child")
+        self.assertEqual(bt.bucket[0].objectT,0)
+
+    def testTripleProduce5bis(self):
+        (root,nodeToID,bt)=data.tripleProductionData()
+        child=root.child[0]
+        child.child = [DependenciesTree("leaf-2",dependency="dep",parent=child)]
+        nodeToID[child.child[0]] = 2
+        tripleProduce5(child,nodeToID,bt)
+        self.assertEqual(len(bt.bucket),1)
+        self.assertEqual(bt.bucket[0].subjectT,"root")
+        self.assertEqual(bt.bucket[0].predicateT,1)
+        self.assertEqual(bt.bucket[0].objectT,0)
+
+    def testTripleProduce6(self):
+        (root,nodeToID,bt)=data.tripleProductionData()
+        child=root.child[0]
+        child.child = [DependenciesTree("leaf-2",dependency="dep",parent=child)]
+        tripleProduce6(child,nodeToID,bt)
+        self.assertEqual(len(bt.bucket),0)
 
     def testBuildBucket(self):
         tree = computeTree(data.give_president_of_USA()['sentences'][0])
