@@ -27,7 +27,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(len(root.child),1)
         # Is
         is_=root.child[0]
-        self.assertEqual(is_.wordList,[("is",2)])
+        self.assertEqual(is_.wordList,[("be",2)])
         self.assertEqual(is_.namedEntityTag,'undef')
         self.assertEqual(is_.dependency,'t0')
         self.assertEqual(is_.parent,root)
@@ -59,7 +59,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(len(root.child),1)
         # Are
         are=root.child[0]
-        self.assertEqual(are.wordList,[("are",3)])
+        self.assertEqual(are.wordList,[("be",3)])
         self.assertEqual(are.namedEntityTag,'undef')
         self.assertEqual(are.dependency,'t0')
         self.assertEqual(are.parent,root)
@@ -77,7 +77,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(len(root.child),1)
         # Is
         is_=root.child[0]
-        self.assertEqual(is_.wordList,[("is",2)])
+        self.assertEqual(is_.wordList,[("be",2)])
         self.assertEqual(is_.namedEntityTag,'undef')
         self.assertEqual(is_.dependency,'t0')
         self.assertEqual(is_.parent,root)

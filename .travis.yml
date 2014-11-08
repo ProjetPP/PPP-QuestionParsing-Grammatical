@@ -8,7 +8,8 @@ python:
   - pypy3
 
 install:
-    - pip install scrutinizer-ocular coverage webtest httmock requests ppp_datamodel ppp_core jsonrpclib-pelix
+    - pip install scrutinizer-ocular coverage webtest httmock requests ppp_datamodel ppp_core jsonrpclib-pelix nltk
+    - python -m nltk.downloader wordnet
 
 before_script:
   - ./setup.py install
