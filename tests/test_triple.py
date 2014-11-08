@@ -45,14 +45,7 @@ class TripleTests(TestCase):
         self.assertEqual(bt.bucket[0].subjectT,"child")
         self.assertEqual(bt.bucket[0].predicateT,"root")
         self.assertEqual(bt.bucket[0].objectT,0)
-    def testTripleProduce3(self):
-        (root,nodeToID,bt)=data.tripleProductionData()
-        child=root.child[0]
-        tripleProduce3(child,nodeToID,bt)
-        self.assertEqual(len(bt.bucket),1)
-        self.assertEqual(bt.bucket[0].subjectT,0)
-        self.assertEqual(bt.bucket[0].predicateT,"child")
-        self.assertEqual(bt.bucket[0].objectT,"root")
+
     def testTripleProduce2(self):
         (root,nodeToID,bt)=data.tripleProductionData()
         child=root.child[0]
@@ -64,6 +57,16 @@ class TripleTests(TestCase):
         self.assertEqual(bt.bucket[0].subjectT,0)
         self.assertEqual(bt.bucket[0].predicateT,"root")
         self.assertEqual(bt.bucket[0].objectT,1)
+
+    def testTripleProduce3(self):
+        (root,nodeToID,bt)=data.tripleProductionData()
+        child=root.child[0]
+        tripleProduce3(child,nodeToID,bt)
+        self.assertEqual(len(bt.bucket),1)
+        self.assertEqual(bt.bucket[0].subjectT,0)
+        self.assertEqual(bt.bucket[0].predicateT,"child")
+        self.assertEqual(bt.bucket[0].objectT,"root")
+
     def testTripleProduce4(self):
         (root,nodeToID,bt)=data.tripleProductionData()
         child=root.child[0]
