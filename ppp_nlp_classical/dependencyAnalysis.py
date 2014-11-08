@@ -19,34 +19,34 @@ def merge(t):
 dependenciesMap = {
     'undef'     : 't0', # personnal tag, should not happen?
     'root'      : 't0',
-    'dep'       : 't1',
+    'dep'       : 't6', # ? instead of t1
         'aux'       : remove,
             'auxpass'   : remove,
             'cop'       : impossible,
         'arg'       : impossible,
-            'agent'     : 't2',
+            'agent'     : 't4',
             'comp'      : 't2',
                 'acomp'     : 't2',
                 'ccomp'     : 't2',
                 'xcomp'     : 't2',
-                'pcomp'     : 't2',
+                'pcomp'     : 't2', # -
                 'obj'       : impossible,
-                    'dobj'      : 't2',
-                    'iobj'      : impossible,
-                    'pobj'      : 't2',
-            'subj'      : 't1',
+                    'dobj'      : 't4', #_+ instead of t2
+                    'iobj'      : 't2',
+                    'pobj'      : 't2', # -
+            'subj'      : impossible,
                 'nsubj'     : 't1',
-                    'nsubjpass'    : 't1',
+                    'nsubjpass'    : 't4', #_+ ? instead of  t3
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
-        'cc'        : ignore,
+        'cc'        : impossible,
         'conj'      : 't0',
             'conj_and'  : ignore,
             'conj_or'   : ignore,
             'conj_negcc': ignore, #?
         'expl'      : ignore,
         'mod'       : 't3',
-            'amod'      : 't3',
+            'amod'      : 't5', #
             'appos'     : 't3',
             'advcl'     : 't3',
             'det'       : remove,
@@ -56,20 +56,20 @@ dependenciesMap = {
             'mwe'       : merge,
                 'mark'      : ignore,
             'advmod'    : merge,
-                'neg'       : 't0',
+                'neg'       : 't0', # need a NOT node
             'rcmod'     : ignore,
                 'quantmod'  : ignore,
             'nn'        : merge,
             'npadvmod'  : merge,
-                'tmod'      : 't3',
+                'tmod'      : 't2',
             'num'       : merge,
             'number'    : merge,
-            'prep'      : 't2',
-            'prepc'     : 't2',
-            'poss'      : 't2',
+            'prep'      : 't4', # ?
+            'prepc'     : 't4', # ?
+            'poss'      : 't4',
             'possessive': impossible,
             'prt'       : merge,
-        'parataxis' : ignore,
+        'parataxis' : ignore, #  ?
         'punct'     : impossible,
         'ref'       : impossible,
         'sdep'      : impossible,

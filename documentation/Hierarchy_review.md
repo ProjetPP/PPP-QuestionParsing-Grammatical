@@ -59,6 +59,12 @@ prep
 Where does most of the marijuana entering the United States come from?
   ? merge prep (when it's not prep_x) 
 
+Level up prep_x in order not to have a -prep-> b -prep-> c
+  Who was President of Afghanistan in 1994? (juste pour of -> in)
+  Who won two gold medals in skiing in the Olympic Games in Calgary?
+or not : 
+  Who followed Willy Brandt as chancellor of the Federal Republic of Germany?
+  
 dobj
 ====
 
@@ -75,5 +81,17 @@ Who is the author of "Twenty Thousand Leagues Under the Sea"?
 Who is Bob according to you?
   ? pobj impossible 
 
+dep
+===
 
+Who wrote the song, "Stardust"?
 
+vmod
+====
+
+Who was the second man to walk on the moon?
+
+nsubj
+=====
+
+only if a = is/was/... ?

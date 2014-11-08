@@ -5,7 +5,6 @@ import fileinput
 import os
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.sys.path.insert(0,parentdir) 
-os.environ['PPP_NLP_CLASSICAL_CONFIG'] = '../example_config.json'
 import ppp_nlp_classical
 
 class StanfordNLP:
@@ -15,11 +14,11 @@ class StanfordNLP:
     def parse(self, text):
         return json.loads(self.server.parse(text))
 
-def get_tree():
+def get_answer():
     nlp = StanfordNLP()
     result = nlp.parse(input(""))
     tree = ppp_nlp_classical.computeTree(result['sentences'][0])
     qw = ppp_nlp_classical.simplify(tree)
-    return tree
+    return ppp_nlp_classical.buildTree(ppp_nlp_classical.buildBucket(tree,qw))
 
-print(get_tree())
+print(json.dumps(get_answer().as_dict(), indent=4))

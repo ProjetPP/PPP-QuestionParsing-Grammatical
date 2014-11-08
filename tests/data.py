@@ -1,3 +1,5 @@
+from ppp_nlp_classical import Triple, TriplesBucket, computeTree, simplify, buildBucket, DependenciesTree, tripleProduce1, tripleProduce2, tripleProduce3, tripleProduce4
+
 # Parsing result of "John Smith lives in the United Kingdom."
 def give_john_smith():
     return  {'sentences': [{'dependencies': [['root', 'ROOT', 'lives'],
@@ -429,3 +431,14 @@ def give_president_of_USA():
   'dependencies': [['root', 'ROOT', 'is'], ['dep', 'is', 'Who'], ['det', 'president', 'the'], ['nsubj', 'is', 'president'], ['det', 'States', 'the'], ['nn', 'States', 'United'], ['prep_of', 'president', 'States']], 
   'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['dep', 'is-2', 'Who-1'], ['det', 'president-4', 'the-3'], ['nsubj', 'is-2', 'president-4'], ['det', 'States-8', 'the-6'], ['nn', 'States-8', 'United-7'], ['prep_of', 'president-4', 'States-8']], 
   'parsetree': '(ROOT (SBARQ (WHNP (WP Who)) (SQ (VBZ is) (NP (NP (DT the) (NN president)) (PP (IN of) (NP (DT the) (NNP United) (NNPS States))))) (. ?)))'}]}
+
+def tripleProductionData():
+    '''
+        Return data corresponding to a tree (root-0)--dep-->(child-1)
+    '''
+    root = DependenciesTree("root-0")
+    child = DependenciesTree("child-1",dependency="dep",parent=root)
+    root.child = [child]
+    nodeToID = {root:0, child:1}
+    bt = TriplesBucket()
+    return (root,nodeToID,bt)

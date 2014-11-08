@@ -16,7 +16,7 @@ class Triple:
 
     def renameUnknown(self,x,new_x):
         """
-            unknown x is replaced by new_x everywhere it appears (means that x = x_new)
+            unknown x is replaced by new_x everywhere it appears (means that x = x_new), x_new can also be a word (=replace an unknown by words)
         """
         if self.subjectT == x:
             self.subjectT = new_x
@@ -74,54 +74,110 @@ class TriplesBucket:
 # Triple production #
 #####################
 
+def genericProduce(t,nodeToID,rule,suffix=""):
+    """
+        Produce an element of a triple.
+        The rule is a string in {'a','?A','c','?C'}
+    """
+    if suffix != '':
+        suffix = ' %s' % suffix
+    if rule == 'a':
+        return '%s%s' % (t.parent.getWords(), suffix)
+    if rule == '?A':
+        return nodeToID[t.parent]
+    if rule == 'c':
+        return '%s%s' % (t.getWords(), suffix)
+    if rule == '?C':
+        return nodeToID[t]
+
+def genericTripleProduce(t,nodeToID,rule,suffix=""):
+    """
+        Produce a triple, following the given rule.
+        The rule is a 3-tuple of string, representing a triple.
+        Example: rule=('?A','a','?C')
+    """
+    return Triple(genericProduce(t,nodeToID,rule[0]),
+                    genericProduce(t,nodeToID,rule[1],suffix),
+                    genericProduce(t,nodeToID,rule[2]))
+
 # Rules of production of triples
 
-def tripleProduce0(t,nodeToId,triplesBucket):
+def tripleProduce0(t,nodeToID,triplesBucket):
     pass
 
 def tripleProduce1(t,nodeToID,triplesBucket):
     """
-        a -b-> c : ?A = ?C
+        a -b-> c : (c,a,?A) if c is a leaf
+                   ?A = ?C otherwise
     """
     assert t.parent is not None
-    if not t.child: # Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?
-        tripleProduce2(t,nodeToID,triplesBucket)
+    if not t.child:
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('c','a','?A')))
     else:
         triplesBucket.renameUnknown(nodeToID[t],nodeToID[t.parent])
         nodeToID[t] = nodeToID[t.parent]
 
 def tripleProduce2(t,nodeToID,triplesBucket,suffix=''):
     """
-        a -b-> c : a(?A,c) if c is a leaf
-                   a(?A,?C) otherwise
+        a -b-> c : (?A,a,c) if c is a leaf
+                   (?A,a,?C) otherwise
         suffix: for prep_x
     """
     assert t.parent is not None
-    if suffix != '':
-        suffix = ' %s' % suffix
     if not t.child:
-        triplesBucket.addTriple(Triple(nodeToID[t.parent],
-                                       '%s%s' % (t.parent.getWords(), suffix),
-                                       t.getWords()))
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('?A','a','c'),suffix))
     else:
-        triplesBucket.addTriple(Triple(nodeToID[t.parent],
-                                       '%s%s' % (t.parent.getWords(), suffix),
-                                       nodeToID[t]))
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('?A','a','?C'),suffix))
 
 def tripleProduce3(t,nodeToID,triplesBucket):
     """
-        a -b-> c : c(?A,a)
+        a -b-> c : (?A,c,a) if c is a leaf
+                   (?A,?C,a) otherwise
     """
     assert t.parent is not None
-    triplesBucket.addTriple(Triple(nodeToID[t.parent],
-                                   t.getWords(),
-                                   t.parent.getWords()))
+    if not t.child:
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('?A','c','a')))
+    else:
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('?A','?C','a')))
+
+def tripleProduce4(t,nodeToID,triplesBucket):
+    """
+        a -b-> c : (c,a,?A) if c is a leaf
+                   (?C,a,?A) otherwise
+    """
+    assert t.parent is not None
+    if not t.child:
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('c','a','?A')))
+    else:
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('?C','a','?A')))
+
+def tripleProduce5(t,nodeToID,triplesBucket):
+    """
+        a -b-> c : (a,c,?A) if c is a leaf
+                   (a,?C,?A) otherwise <-- or exit error? because ?C is strange
+    """
+    assert t.parent is not None
+    if not t.child:
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('a','c','?A')))
+    else:
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('a','?C','?A')))
+
+def tripleProduce6(t,nodeToID,triplesBucket):
+    """
+        a -b-> c : ?A = c
+    """
+    assert t.parent is not None
+    triplesBucket.renameUnknown(nodeToID[t.parent],t.getWords())
+
 
 tripleMap = {
     't0'    : tripleProduce0,
     't1'    : tripleProduce1,
     't2'    : tripleProduce2,
-    't3'    : tripleProduce3
+    't3'    : tripleProduce3,
+    't4'    : tripleProduce4,
+    't5'    : tripleProduce5,
+    't6'    : tripleProduce6
 }
 
 def initUnknowns(t,nodeToID,unknown=0):
@@ -141,8 +197,8 @@ def fillBucket(t,nodeToID,triplesBucket,tmap=tripleMap):
     if t.dependency in tmap:
         tmap[t.dependency](t,nodeToID,triplesBucket)
     if t.dependency.startswith('prep'): # prep_x or prepc_x
-        prep = t.dependency[t.dependency.index('_')+1:]
-        tripleProduce2(t,nodeToID,triplesBucket,prep)
+        prep = t.dependency[t.dependency.index('_')+1:] #_+ could be removed
+        tripleProduce4(t,nodeToID,triplesBucket) #_+ instead of tripleProduce2(t,nodeToID,triplesBucket,prep) <--- preposition always remove now
     for c in t.child: # could become necessary to perform this step before
         fillBucket(c,nodeToID,triplesBucket)
 
@@ -192,6 +248,7 @@ questionMap = {
     'which'         : 'choice',
     'whom'          : 'person',
     'whose'         : 'possession'
+        # how big
 }
 
 def buildBucket(t,qw):
@@ -201,6 +258,7 @@ def buildBucket(t,qw):
     nodeToID = {}
     triplesBucket = TriplesBucket()
     initUnknowns(t,nodeToID)
-    triplesBucket.addTriple(Triple(nodeToID[t.child[0]],questionMap[qw],nodeToID[t])) # process the question word
+    #_+ triplesBucket.addTriple(Triple(nodeToID[t.child[0]],questionMap[qw],nodeToID[t])) # process the question word
+    tripleProduce1(t.child[0],nodeToID,triplesBucket) #_+ instead of question word
     fillBucket(t,nodeToID,triplesBucket)
     return triplesBucket

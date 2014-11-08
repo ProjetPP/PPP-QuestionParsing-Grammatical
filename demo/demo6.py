@@ -15,11 +15,11 @@ class StanfordNLP:
     def parse(self, text):
         return json.loads(self.server.parse(text))
 
-def get_answer():
+def get_triple():
     nlp = StanfordNLP()
     result = nlp.parse(input(""))
     tree = ppp_nlp_classical.computeTree(result['sentences'][0])
     qw = ppp_nlp_classical.simplify(tree)
-    return ppp_nlp_classical.buildTree(ppp_nlp_classical.buildBucket(tree,qw))
+    return ppp_nlp_classical.buildBucket(tree,qw)
 
-print(json.dumps(get_answer().as_dict(), indent=4))
+print(get_triple())
