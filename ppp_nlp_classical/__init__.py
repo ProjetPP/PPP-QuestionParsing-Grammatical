@@ -8,7 +8,7 @@ from .dependencyAnalysis import simplify
 from .tripleProduction import buildBucket, Triple, TriplesBucket, tripleProduce1, tripleProduce2, tripleProduce3, tripleProduce4, tripleProduce5, tripleProduce6
 from .treeTranslation import buildTree
 
-#_+ from .requesthandler import RequestHandler
+from .requesthandler import RequestHandler
 
 def app(environ, start_response):
     """Function called by the WSGI server."""
