@@ -17,6 +17,7 @@
 * Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"?
 * What U.S. state is Fort Knox in?
 * What country in Latin America is the largest one?
+* He is the biggest and fattest man >> amod and 2*conj
 
 ## Todo
 
