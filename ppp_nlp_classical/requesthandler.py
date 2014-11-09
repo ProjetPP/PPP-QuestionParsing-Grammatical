@@ -28,9 +28,9 @@ class RequestHandler:
         result = stanfordnlp.parse(self.request.tree.value)
         tree = computeTree(result['sentences'][0])
         qw = simplify(tree)
-        t = buildTree(buildBucket(tree,qw))
-        m = {'accuracy': 0.5, 'relevance': 0.5}
-        response = Response('en', t, m,
-                            [TraceItem('NLP-Classical', t, m)])
+        tree = buildTree(buildBucket(tree,qw))
+        meas = {'accuracy': 0.5, 'relevance': 0.5}
+        trace = self.request.trace + [TraceItem('NLP-Classical', tree, meas)]
+        response = Response('en', tree, meas, trace)
         print(repr(response))
         return [response]
