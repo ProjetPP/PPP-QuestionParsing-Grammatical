@@ -99,6 +99,8 @@ def computeTags(r,nameToNodes):
             index+=1
             try:
                 n = nameToNodes[w]
+                assert len(n.wordList) == 1
+                n.wordList[0].pos = word[1]['PartOfSpeech']
                 if word[1]['NamedEntityTag'] != 'O':
                     n.namedEntityTag = word[1]['NamedEntityTag']
             except KeyError:        # this node does not exists (e.g. 'of' preposition)

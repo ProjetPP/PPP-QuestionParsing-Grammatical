@@ -13,7 +13,7 @@ class Word:
         self.index = index
         self.pos = pos
     def __str__(self):
-        return self.word
+        return "({0},{1},{2})".format(str(self.word),str(self.index),str(self.pos))
     def __eq__(self, other): 
         return self.__dict__ == other.__dict__
 
