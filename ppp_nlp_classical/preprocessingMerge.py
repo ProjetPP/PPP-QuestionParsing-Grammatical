@@ -63,7 +63,7 @@ def matchingQuote(wlist,quotationList):
     quote=matchingQuoteWord(wlist[0],quotationList)
     for w in wlist:
         if matchingQuoteWord(w,quotationList) != quote:
-            sys.exit('exit: node belong to several quotations (please, report your sentence on http://goo.gl/EkgO5l)\n%s\n' % self.getWords())
+            sys.exit('exit: node belong to several quotations (please, report your sentence on http://goo.gl/EkgO5l)\n')
     return quote
 
 def quotationTraversal(t,quotationList,quoteIndexToNode):
@@ -104,8 +104,8 @@ def handleLostQuotationWords(r,quoteIndexToNode):
             inQuote = False
             quoteNode.wordList.sort(key = lambda x: x.index)
             continue
-        if inQuote and Word(word[0],index) not in quoteNode.wordList:
-            quoteNode.wordList += [Word(word[0],index)]
+        if inQuote and index not in [w.index for w in quoteNode.wordList]:
+            quoteNode.wordList += [Word(word[0],index,word[1]['PartOfSpeech'])]
 
 def addQuotationTag(quoteIndexToNode):
     """

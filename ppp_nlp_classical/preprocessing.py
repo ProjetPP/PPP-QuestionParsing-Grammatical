@@ -54,7 +54,7 @@ class DependenciesTree:
           self.wordList.sort(key = lambda x: x.index)
         if other.parent:
             other.parent.child.remove(other)
-        other.wordList = [("merged",0)]
+        other.wordList = None
 
     def getWords(self):
         """
@@ -91,12 +91,12 @@ def computeTags(r,nameToNodes):
         Take in input a piece of the result produced by StanfordNLP, and the
         map from names to nodes.
     """
-    index=1
+    index=0
     # Computation of the tags of the nodes
     for word in r['words']:
+        index+=1
         if word[0].isalnum() or word[0] == '$' or  word[0] == '%':
             w=word[0]+'-'+str(index) # key in the nameToNodes map
-            index+=1
             try:
                 n = nameToNodes[w]
                 assert len(n.wordList) == 1
