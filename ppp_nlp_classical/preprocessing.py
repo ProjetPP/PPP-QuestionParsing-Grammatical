@@ -151,7 +151,8 @@ def nounifyExcept(verbWord):
         'have' : 'possession',
         'do' : 'process',
         'bear' : 'birth',
-        'live' : 'residence'
+        'live' : 'residence',
+        'direct' : 'director'
     }
     try:
         return nounifyException[verbWord]
