@@ -50,7 +50,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(len(root.child),1)
         # Wrote
         wrote=root.child[0]
-        self.assertEqual(wrote.wordList,[Word("write",2,'VBD')])
+        self.assertEqual(wrote.wordList,[Word("writer",2,'VBD')])
         self.assertEqual(wrote.namedEntityTag,'undef')
         self.assertEqual(wrote.dependency,'root')
         self.assertEqual(wrote.parent,root)
@@ -88,7 +88,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(len(root.child),1)
         # Lives
         lives=root.child[0]
-        self.assertEqual(lives.wordList,[Word("life",3,'VBZ')])
+        self.assertEqual(lives.wordList,[Word("residence",3,'VBZ')])
         self.assertEqual(lives.namedEntityTag,'undef')
         self.assertEqual(lives.dependency,'root')
         self.assertEqual(lives.parent,tree)
@@ -126,7 +126,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(len(root.child),1)
         # Is
         is_=root.child[0]
-        self.assertEqual(is_.wordList,[Word("be",2,'VBZ')])
+        self.assertEqual(is_.wordList,[Word("identity",2,'VBZ')])
         self.assertEqual(is_.namedEntityTag,'undef')
         self.assertEqual(is_.dependency,'root')
         self.assertEqual(is_.parent,tree)
