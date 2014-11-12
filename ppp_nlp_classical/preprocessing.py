@@ -1,7 +1,7 @@
 """ First step of the algorithm."""
 
 import sys
-from .preprocessingMerge import mergeQuotations, mergeNamedEntityTag
+from .preprocessingMerge import Word, mergeQuotations, mergeNamedEntityTag
 from nltk.stem.wordnet import WordNetLemmatizer
 
 class DependenciesTree:
@@ -10,7 +10,7 @@ class DependenciesTree:
         It is a group of words of the initial sentence.
     """
     def __init__(self, word, namedentitytag='undef', dependency='undef', child=None, parent=None):
-        self.wordList = [(word[:word.rindex('-')],int(word[word.rindex('-')+1:]))] # words of the node
+        self.wordList = [Word(word[:word.rindex('-')],int(word[word.rindex('-')+1:]))] # words of the node
         self.namedEntityTag = namedentitytag 
         self.dependency = dependency # dependency from self to its parent
         self.child = child or [] # children of self
@@ -25,10 +25,10 @@ class DependenciesTree:
         t=''
         if(self.namedEntityTag != 'O' and self.namedEntityTag != 'undef'):
             t+= " [{0}]".format(self.namedEntityTag)
-        s+="\t\"{0}\"[label=\"{1}{2}\",shape=box];\n".format(self.wordList[0][0]+str(self.wordList[0][1]),w,t)
+        s+="\t\"{0}\"[label=\"{1}{2}\",shape=box];\n".format(self.wordList[0].word+str(self.wordList[0].index),w,t)
         # Adding definitions of the edges
         for n in self.child:
-            s+="\t\"{0}\" -> \"{1}\"[label=\"{2}\"];\n".format(self.wordList[0][0]+str(self.wordList[0][1]),n.wordList[0][0]+str(n.wordList[0][1]),n.dependency)
+            s+="\t\"{0}\" -> \"{1}\"[label=\"{2}\"];\n".format(self.wordList[0].word+str(self.wordList[0].index),n.wordList[0].word+str(n.wordList[0].index),n.dependency)
         # Recursive calls
         for n in self.child:
             s+=n.string()
@@ -51,7 +51,7 @@ class DependenciesTree:
             c.parent = self
         if mergeWords:
           self.wordList = other.wordList + self.wordList
-          self.wordList.sort(key = lambda x: x[1])
+          self.wordList.sort(key = lambda x: x.index)
         if other.parent:
             other.parent.child.remove(other)
         other.wordList = [("merged",0)]
@@ -60,8 +60,8 @@ class DependenciesTree:
         """
             concatenate all strings of the node (in wordList)
         """
-        self.wordList.sort(key = lambda x: x[1]) 
-        return ' '.join(x[0] for x in self.wordList)
+        self.wordList.sort(key = lambda x: x.index) 
+        return ' '.join(x.word for x in self.wordList)
 
 def computeEdges(r,nameToNodes):
     """
@@ -125,7 +125,7 @@ def normalize(t,lmtzr):
     for c in t.child:
         normalize(c,lmtzr)
     if t.namedEntityTag == 'undef':
-        t.wordList = list((normalizeWord(w[0],lmtzr),w[1]) for w in t.wordList)
+        t.wordList = list(Word(normalizeWord(w.word,lmtzr),w.index,w.pos) for w in t.wordList)
 
 def computeTree(r):
     """

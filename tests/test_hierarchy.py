@@ -1,6 +1,6 @@
 import json
 
-from ppp_nlp_classical import DependenciesTree, computeTree, simplify
+from ppp_nlp_classical import Word, DependenciesTree, computeTree, simplify
 import data
 
 from unittest import TestCase
@@ -20,28 +20,28 @@ class HierarchyTests(TestCase):
         simplify(tree)
         root=tree
         # Root
-        self.assertEqual(root.wordList,[("ROOT",0)])
+        self.assertEqual(root.wordList,[Word("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
         self.assertEqual(root.dependency,'t0')
         self.assertEqual(root.parent,None)
         self.assertEqual(len(root.child),1)
         # Is
         is_=root.child[0]
-        self.assertEqual(is_.wordList,[("be",2)])
+        self.assertEqual(is_.wordList,[Word("be",2)])
         self.assertEqual(is_.namedEntityTag,'undef')
         self.assertEqual(is_.dependency,'t0')
         self.assertEqual(is_.parent,root)
         self.assertEqual(len(is_.child),1)
         # President
         president=is_.child[0]
-        self.assertEqual(president.wordList,[("president",4)])
+        self.assertEqual(president.wordList,[Word("president",4)])
         self.assertEqual(president.namedEntityTag,'undef')
         self.assertEqual(president.dependency,'t1')
         self.assertEqual(president.parent,is_)
         self.assertEqual(len(president.child),1)
         # United States
         us=president.child[0]
-        self.assertEqual(us.wordList,[("United",7),("States",8)])
+        self.assertEqual(us.wordList,[Word("United",7),Word("States",8)])
         self.assertEqual(us.namedEntityTag,'LOCATION')
         self.assertEqual(us.dependency,'prep_of')
         self.assertEqual(us.parent,president)
@@ -52,14 +52,14 @@ class HierarchyTests(TestCase):
         simplify(tree)
         root=tree
         # Root
-        self.assertEqual(root.wordList,[("ROOT",0)])
+        self.assertEqual(root.wordList,[Word("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
         self.assertEqual(root.dependency,'t0')
         self.assertEqual(root.parent,None)
         self.assertEqual(len(root.child),1)
         # Are
         are=root.child[0]
-        self.assertEqual(are.wordList,[("be",3)])
+        self.assertEqual(are.wordList,[Word("be",3)])
         self.assertEqual(are.namedEntityTag,'undef')
         self.assertEqual(are.dependency,'t0')
         self.assertEqual(are.parent,root)
@@ -70,21 +70,21 @@ class HierarchyTests(TestCase):
         simplify(tree)
         root=tree
         # Root
-        self.assertEqual(root.wordList,[("ROOT",0)])
+        self.assertEqual(root.wordList,[Word("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
         self.assertEqual(root.dependency,'t0')
         self.assertEqual(root.parent,None)
         self.assertEqual(len(root.child),1)
         # Is
         is_=root.child[0]
-        self.assertEqual(is_.wordList,[("be",2)])
+        self.assertEqual(is_.wordList,[Word("be",2)])
         self.assertEqual(is_.namedEntityTag,'undef')
         self.assertEqual(is_.dependency,'t0')
         self.assertEqual(is_.parent,root)
         self.assertEqual(len(is_.child),1)
         # President
         president=is_.child[0]
-        self.assertEqual(president.wordList,[("United",4),("States",5),("president",6)])
+        self.assertEqual(president.wordList,[Word("United",4),Word("States",5),Word("president",6)])
         self.assertEqual(president.namedEntityTag,'undef')
         self.assertEqual(president.dependency,'t1')
         self.assertEqual(president.parent,is_)
