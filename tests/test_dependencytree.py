@@ -7,7 +7,14 @@ from unittest import TestCase
 
 class DependenciesTreeTests(TestCase):
 
-    def testBasicConstructor(self):
+    def testBasicWordConstructor(self):
+        w=Word('foo',1,'bar')
+        self.assertEqual(w.word,'foo')
+        self.assertEqual(w.index,1)
+        self.assertEqual(w.pos,'bar')
+        self.assertEqual(str(w),"(foo,1,bar)")
+
+    def testBasicTreeConstructor(self):
         n = DependenciesTree('foo-1')
         self.assertEqual(n.wordList, [Word('foo',1)])
         self.assertEqual(n.namedEntityTag, 'undef')
