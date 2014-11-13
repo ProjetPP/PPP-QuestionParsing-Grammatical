@@ -4,6 +4,19 @@ import sys
 # Quotation recognition #
 #########################
 
+class Word:
+    """
+    One word of the sentence.
+    """
+    def __init__(self, word, index, pos=None):
+        self.word = word
+        self.index = index
+        self.pos = pos
+    def __str__(self):
+        return "({0},{1},{2})".format(str(self.word),str(self.index),str(self.pos))
+    def __eq__(self, other): 
+        return self.__dict__ == other.__dict__
+
 def findQuotations(r):
     """
         Return a list of elements of the form (begin,end,set of integers).
@@ -38,7 +51,7 @@ def matchingQuoteWord(w,quotationList):
         w must be of the form (word,index)
     """
     for quote in quotationList:
-        if w[1] in quote[2]:
+        if w.index in quote[2]:
             return quote
     return None
 
@@ -50,7 +63,7 @@ def matchingQuote(wlist,quotationList):
     quote=matchingQuoteWord(wlist[0],quotationList)
     for w in wlist:
         if matchingQuoteWord(w,quotationList) != quote:
-            sys.exit('exit: node belong to several quotations (please, report your sentence on http://goo.gl/EkgO5l)\n%s\n' % self.getWords())
+            sys.exit('exit: node belong to several quotations (please, report your sentence on http://goo.gl/EkgO5l)\n')
     return quote
 
 def quotationTraversal(t,quotationList,quoteIndexToNode):
@@ -89,10 +102,10 @@ def handleLostQuotationWords(r,quoteIndexToNode):
             continue
         if word[0] == "''":
             inQuote = False
-            quoteNode.wordList.sort(key = lambda x: x[1])
+            quoteNode.wordList.sort(key = lambda x: x.index)
             continue
-        if inQuote and (word[0],index) not in quoteNode.wordList:
-            quoteNode.wordList += [(word[0],index)]
+        if inQuote and index not in [w.index for w in quoteNode.wordList]:
+            quoteNode.wordList += [Word(word[0],index,word[1]['PartOfSpeech'])]
 
 def addQuotationTag(quoteIndexToNode):
     """
