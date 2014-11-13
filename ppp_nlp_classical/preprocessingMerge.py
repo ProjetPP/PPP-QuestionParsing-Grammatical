@@ -24,21 +24,17 @@ def findQuotations(r):
         Begin and end are the index of the quotations marks
     """
     index=0
-    inQuote=False
-    quotationList=[]
-    quotationSet = set()
+    (inQuote,quotationList,quotationSet)=(False,[],set())
     for word in r['words']:
         index+=1
         if word[0] == "``":
             assert not inQuote
-            inQuote = True
-            begin=index
+            (inQuote,begin) = (True,index)
             continue
         if word[0] == "''":
             assert inQuote
-            inQuote=False
             quotationList+=[(begin,index,quotationSet)]
-            quotationSet = set()
+            (inQuote,quotationSet)=(False,set())
             continue
         if inQuote:
             quotationSet.add(index)
@@ -90,15 +86,13 @@ def handleLostQuotationWords(r,quoteIndexToNode):
     """
         Add quotation words deleted by Stanford CoreNLP, such as "in" or "of".
     """
-    inQuote=False
-    quoteNode=None
+    (inQuote,quoteNode)=(False,None)
     index=0
     # Add words which are not nodes
     for word in r['words']:
         index+=1
         if word[0] == "``":
-            inQuote = True
-            quoteNode=quoteIndexToNode[index]
+            (inQuote,quoteNode) = (True,quoteIndexToNode[index])
             continue
         if word[0] == "''":
             inQuote = False
