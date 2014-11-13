@@ -125,13 +125,16 @@ def nounify(verbWord):
     if not verb_synsets:
         return []
     # Get all verb lemmas of the word
-    verb_lemmas = [l for s in verb_synsets for l in s.lemmas() if s.name().split('.')[1] == 'v']
+    verb_lemmas=[]
+    for s in verb_synsets:
+        verb_lemmas += [l for l in s.lemmas() if s.name().split('.')[1] == 'v']
     # Get related forms
     derivationally_related_forms = [(l, l.derivationally_related_forms()) \
                                     for l in    verb_lemmas]
     # Filter only the nouns
-    related_noun_lemmas = [l for drf in derivationally_related_forms \
-                           for l in drf[1] if l.synset().name().split('.')[1] == 'n']
+    related_noun_lemmas = []
+    for drf in derivationally_related_forms:
+        related_noun_lemmas += [l for l in drf[1] if l.synset().name().split('.')[1] == 'n']
     # Extract the words from the lemmas
     words = [l.name() for l in related_noun_lemmas]
     len_words = len(words)
