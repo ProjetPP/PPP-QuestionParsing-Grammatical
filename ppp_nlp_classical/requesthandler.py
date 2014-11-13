@@ -5,7 +5,7 @@ import jsonrpclib
 
 from ppp_datamodel import Sentence
 from ppp_datamodel.communication import TraceItem, Response
-from ppp_core.exceptions import ClientError
+from ppp_libmodule.exceptions import ClientError
 
 from .config import Config
 from . import computeTree, simplify, buildTree, buildBucket
