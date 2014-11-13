@@ -68,10 +68,15 @@ or not :
 dobj
 ====
 
+dobj = t2 or t4?
+
 What did John Hinckley do to impress Jodie Foster?
   ? collapse dobj to comp
   ? dobj is impossible
-  
+
+Who killed Gandhi?
+  ! dobj = t2
+   
 pobj
 ====
 

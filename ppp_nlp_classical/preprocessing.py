@@ -195,5 +195,5 @@ def computeTree(r):
     mergeQuotations(tree,r) # quotation merging
     mergeNamedEntityTag(tree) # NER merging
     lmtzr = WordNetLemmatizer()
-    normalize(tree,lmtzr)
+    normalize(tree,lmtzr) # normalize words (lemmatization + nounify nouns)
     return tree

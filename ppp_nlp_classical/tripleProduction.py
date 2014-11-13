@@ -167,7 +167,10 @@ def tripleProduce6(t,nodeToID,triplesBucket):
         a -b-> c : ?A = c
     """
     assert t.parent is not None
-    triplesBucket.renameUnknown(nodeToID[t.parent],t.getWords())
+    if not t.child and triplesBucket.isEmpty(): # avoid "What is "blabla"?"
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('c','a','?A')))        
+    else:
+        triplesBucket.renameUnknown(nodeToID[t.parent],t.getWords())
 
 
 tripleMap = {
