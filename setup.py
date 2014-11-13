@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ppp_nlp_classical',
-    version='0.2.2',
+    version='0.2.3',
     description='Natural language processing module for the PPP.',
     url='https://github.com/ProjetPP/PPP-NLP-Classical',
     author='Projet Pensées Profondes',
@@ -26,7 +26,7 @@ setup(
     ],
     install_requires=[
         'ppp_datamodel>=0.5,<0.6',
-        'ppp_core>=0.5,<0.6',
+        'ppp_libmodule>=0.6,<0.7',
         'jsonrpclib-pelix',
         'nltk'
     ],

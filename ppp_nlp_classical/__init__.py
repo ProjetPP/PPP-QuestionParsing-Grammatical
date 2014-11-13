@@ -1,6 +1,6 @@
 """Natural language processing module for the PPP."""
 
-from ppp_core import HttpRequestHandler
+from ppp_libmodule import HttpRequestHandler
 from .preprocessingMerge import mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother, mergeNamedEntityTag
 from .preprocessing import DependenciesTree, computeTree
 from .questionIdentify import identifyQuestionWord
