@@ -74,9 +74,12 @@ What did John Hinckley do to impress Jodie Foster?
   ? collapse dobj to comp
   ? dobj is impossible
 
+Who wrote "1984"?
+  ! dobj = t4
+
 Who killed Gandhi?
   ! dobj = t2
-   
+
 pobj
 ====
 
