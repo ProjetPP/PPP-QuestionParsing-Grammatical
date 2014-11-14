@@ -1,4 +1,5 @@
 import sys
+from .data.nounification import nounificationExceptions
 from nltk.corpus import wordnet
 
 
@@ -62,17 +63,8 @@ class Word:
             Transform a verb to the closest noun: die -> death
             Hard-coded exceptions (e.g. be, have, do, bear...)
         """
-        nounifyException = {
-            'be' : 'identity',
-            'have' : 'possession',
-            'do' : 'process',
-            'bear' : 'birth',
-            'live' : 'residence',
-            'direct' : 'director',
-            'impress' : 'impression'
-        }
         try:
-            self.word = nounifyException[self.word]
+            self.word = nounificationExceptions[self.word]
         except KeyError:
             self.nounify()
     def normalize(self,lmtzr):
