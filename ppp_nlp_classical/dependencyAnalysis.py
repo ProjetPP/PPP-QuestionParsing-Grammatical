@@ -82,19 +82,23 @@ def collapseDependency(t,depMap=dependenciesMap):
     """
         Apply the rules of depMap to t
     """
-    temp = list(t.child) # copy, t.child is changed while iterating
+    temp = list(t.child) # copy, because t.child is changed while iterating
     for c in temp:
         collapseDependency(c,depMap)
+    if t.dependency.startswith('prep'): # prep_x or prepc_x
+        # prep = t.dependency[t.dependency.index('_')+1:] #_+ not used for the moment
+        t.dependency = 'prep' #_+ instead of tripleProduce2(t,nodeToID,triplesBucket,prep) <--- preposition always remove now
     try:
         if isinstance(depMap[t.dependency], str):
-            t.dependency = depMap[t.dependency]
+            if t.dependency == 'amod' and t.namedEntityTag != 'ORDINAL' and t.wordList[0].pos != 'JJS': # [0] : must be improve (search in the whole list?)
+                assert t.parent is not None
+                merge(t)
+            else:
+                t.dependency = depMap[t.dependency]
         else:
             depMap[t.dependency](t)
     except KeyError: # prep_x, prepc_x,... (others?) see the manual
-        if (t.dependency[:t.dependency.index('_')] not in {'prep','prepc'}):
-            sys.exit('exit: dependency unknown (please, report your sentence on http://goo.gl/EkgO5l)\n')
-        pass
-
+        sys.exit('exit: dependency unknown (please, report your sentence on http://goo.gl/EkgO5l)\n')
 
 def simplify(t):
     """

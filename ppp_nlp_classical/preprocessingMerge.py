@@ -1,10 +1,6 @@
 import sys
 from nltk.corpus import wordnet
 
-#########################
-# Quotation recognition #
-#########################
-
 class Word:
     """
     One word of the sentence.
@@ -75,6 +71,9 @@ class Word:
             self.nounifyExcept()
             return
 
+#########################
+# Quotation recognition #
+#########################
 
 def findQuotations(r):
     """
