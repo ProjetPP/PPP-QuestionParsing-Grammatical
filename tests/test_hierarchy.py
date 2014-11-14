@@ -43,7 +43,7 @@ class HierarchyTests(TestCase):
         us=president.child[0]
         self.assertEqual(us.wordList,[Word("United",7,'NNP'),Word("States",8,'NNPS')])
         self.assertEqual(us.namedEntityTag,'LOCATION')
-        self.assertEqual(us.dependency,'prep_of')
+        self.assertEqual(us.dependency,'t4')
         self.assertEqual(us.parent,president)
         self.assertEqual(len(us.child),0)
 

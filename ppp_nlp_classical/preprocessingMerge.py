@@ -1,9 +1,10 @@
 import sys
 from nltk.corpus import wordnet
 
-#########################
-# Quotation recognition #
-#########################
+
+########################################
+# Word lemmatization and nounification #
+########################################
 
 class Word:
     """
@@ -86,6 +87,9 @@ class Word:
             self.nounifyExcept()
             return
 
+#########################
+# Quotation recognition #
+#########################
 
 def findQuotations(r):
     """

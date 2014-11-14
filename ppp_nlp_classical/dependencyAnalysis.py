@@ -1,5 +1,3 @@
-""" Second step of the algorithm."""
-
 import sys
 from .questionIdentify import identifyQuestionWord
 
@@ -8,7 +6,6 @@ def remove(t):
 
 def impossible(t):
     sys.exit('exit: %s dependency unexpected (please, report your sentence on http://goo.gl/EkgO5l)\n' % t)
-    #remove(t)
 
 def ignore(t):
     remove(t)
@@ -29,7 +26,7 @@ dependenciesMap = {
                 'acomp'     : 't2',
                 'ccomp'     : 't2',
                 'xcomp'     : 't2',
-                'pcomp'     : 't2', # -
+                'pcomp'     : 't2',
                 'obj'       : impossible,
                     'dobj'      : 't2', #_+ instead of t4
                     'iobj'      : 't2',
@@ -46,7 +43,7 @@ dependenciesMap = {
             'conj_negcc': ignore, #?
         'expl'      : ignore,
         'mod'       : 't3',
-            'amod'      : 't5', #
+            'amod'      : 't5',
             'appos'     : 't3',
             'advcl'     : 't3',
             'det'       : remove,
@@ -82,19 +79,23 @@ def collapseDependency(t,depMap=dependenciesMap):
     """
         Apply the rules of depMap to t
     """
-    temp = list(t.child) # copy, t.child is changed while iterating
+    temp = list(t.child) # copy, because t.child is changed while iterating
     for c in temp:
         collapseDependency(c,depMap)
+    if t.dependency.startswith('prep'): # prep_x or prepc_x (others?)
+        # prep = t.dependency[t.dependency.index('_')+1:] # not used for the moment
+        t.dependency = 'prep' # suffix of the prep not analyzed for the moment (just removed)
     try:
         if isinstance(depMap[t.dependency], str):
-            t.dependency = depMap[t.dependency]
+            if t.dependency == 'amod' and t.namedEntityTag != 'ORDINAL' and t.wordList[0].pos != 'JJS': # [0] : must be improve (search in the whole list?)
+                assert t.parent is not None
+                merge(t)
+            else:
+                t.dependency = depMap[t.dependency]
         else:
             depMap[t.dependency](t)
-    except KeyError: # prep_x, prepc_x,... (others?) see the manual
-        if (t.dependency[:t.dependency.index('_')] not in {'prep','prepc'}):
-            sys.exit('exit: dependency unknown (please, report your sentence on http://goo.gl/EkgO5l)\n')
-        pass
-
+    except KeyError:
+        sys.exit('exit: dependency unknown (please, report your sentence on http://goo.gl/EkgO5l)\n')
 
 def simplify(t):
     """
@@ -102,5 +103,5 @@ def simplify(t):
             collapse dependencies of tree t
     """
     s = identifyQuestionWord(t) # identify and remove question word
-    collapseDependency(t) # apply dependency rules of collapsing
+    collapseDependency(t) # collapse the tree according to collapsing rules
     return s

@@ -9,8 +9,8 @@ closeQuestionWord = [
 ]
 
 """
-    Open-ended questions 
-    + What... for, What... like, Why don't, Where from?
+    Open-ended questions
+    + What... for, What... like, Why don't, Where from
     Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
 """
 openQuestionWord = [

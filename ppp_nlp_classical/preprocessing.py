@@ -1,5 +1,3 @@
-""" First step of the algorithm."""
-
 import sys
 from .preprocessingMerge import Word, mergeQuotations, mergeNamedEntityTag
 from nltk.stem.wordnet import WordNetLemmatizer
