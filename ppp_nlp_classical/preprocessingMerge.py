@@ -1,4 +1,5 @@
 import sys
+from nltk.corpus import wordnet
 
 #########################
 # Quotation recognition #
@@ -16,6 +17,64 @@ class Word:
         return "({0},{1},{2})".format(str(self.word),str(self.index),str(self.pos))
     def __eq__(self, other): 
         return self.__dict__ == other.__dict__
+    def nounify(self):
+        """ 
+            Transform a verb to the closest noun: die -> death
+            From George-Bogdan Ivanov on StackOverflow: http://stackoverflow.com/a/16752477/4110059
+        """
+        assert self.pos[0] == 'V'
+        verb_synsets = wordnet.synsets(self.word, pos="v")
+        # Word not found
+        if not verb_synsets:
+            return
+        # Get all verb lemmas of the word
+        verb_lemmas=[]
+        for s in verb_synsets:
+            verb_lemmas += [l for l in s.lemmas() if s.name().split('.')[1] == 'v']
+        # Get related forms
+        derivationally_related_forms = [(l, l.derivationally_related_forms()) \
+                                        for l in    verb_lemmas]
+        # Filter only the nouns
+        related_noun_lemmas = []
+        for drf in derivationally_related_forms:
+            related_noun_lemmas += [l for l in drf[1] if l.synset().name().split('.')[1] == 'n']
+        # Extract the words from the lemmas
+        words = [l.name() for l in related_noun_lemmas]
+        len_words = len(words)
+        # Build the result in the form of a list containing tuples (word, probability)
+        result = [(w, float(words.count(w))/len_words) for w in set(words)]
+        result.sort(key=lambda w: -w[1])
+        # take the word with highest probability
+        self.word = result[0][0]
+    def nounifyExcept(self):
+        """
+            Transform a verb to the closest noun: die -> death
+            Hard-coded exceptions (e.g. be, have, do, bear...)
+        """
+        nounifyException = {
+            'be' : 'identity',
+            'have' : 'possession',
+            'do' : 'process',
+            'bear' : 'birth',
+            'live' : 'residence',
+            'direct' : 'director'
+        }
+        try:
+            self.word = nounifyException[self.word]
+        except KeyError:
+            self.nounify()
+    def normalize(self,lmtzr):
+        """
+            Apply lemmatization to the word, using the given lemmatizer.
+        """
+        if(self.pos and self.pos[0] == 'N'):
+            self.word=lmtzr.lemmatize(self.word,'n')
+            return
+        if(self.pos and self.pos[0] == 'V'):
+            self.word=lmtzr.lemmatize(self.word,'v')
+            self.nounifyExcept()
+            return
+
 
 def findQuotations(r):
     """
