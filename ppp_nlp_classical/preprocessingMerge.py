@@ -17,23 +17,30 @@ class Word:
         return "({0},{1},{2})".format(str(self.word),str(self.index),str(self.pos))
     def __eq__(self, other): 
         return self.__dict__ == other.__dict__
-    def nounify(self):
-        """ 
-            Transform a verb to the closest noun: die -> death
-            From George-Bogdan Ivanov on StackOverflow: http://stackoverflow.com/a/16752477/4110059
+    def verbToRelatedForms(self):
+        """
+            Return the lemmas associated to the given verb.
+            Useful for nounification.
         """
         assert self.pos[0] == 'V'
         verb_synsets = wordnet.synsets(self.word, pos="v")
         # Word not found
         if not verb_synsets:
-            return
+            return []
         # Get all verb lemmas of the word
         verb_lemmas=[]
         for s in verb_synsets:
             verb_lemmas += [l for l in s.lemmas() if s.name().split('.')[1] == 'v']
-        # Get related forms
-        derivationally_related_forms = [(l, l.derivationally_related_forms()) \
-                                        for l in    verb_lemmas]
+        # Return related forms
+        return [(l, l.derivationally_related_forms()) for l in    verb_lemmas]
+    def nounify(self):
+        """ 
+            Transform a verb to the closest noun: die -> death
+            From George-Bogdan Ivanov on StackOverflow: http://stackoverflow.com/a/16752477/4110059
+        """
+        derivationally_related_forms = self.verbToRelatedForms()
+        if not derivationally_related_forms:
+            return
         # Filter only the nouns
         related_noun_lemmas = []
         for drf in derivationally_related_forms:
