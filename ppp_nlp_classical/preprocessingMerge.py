@@ -64,7 +64,8 @@ class Word:
             'do' : 'process',
             'bear' : 'birth',
             'live' : 'residence',
-            'direct' : 'director'
+            'direct' : 'director',
+            'impress' : 'impression'
         }
         try:
             self.word = nounifyException[self.word]
