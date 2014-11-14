@@ -24,29 +24,32 @@ class Word:
         """
         assert self.pos[0] == 'V'
         verb_synsets = wordnet.synsets(self.word, pos="v")
-        # Word not found
-        if not verb_synsets:
-            return []
         # Get all verb lemmas of the word
         verb_lemmas=[]
         for s in verb_synsets:
             verb_lemmas += [l for l in s.lemmas() if s.name().split('.')[1] == 'v']
         # Return related forms
         return [(l, l.derivationally_related_forms()) for l in    verb_lemmas]
-    def nounify(self):
-        """ 
-            Transform a verb to the closest noun: die -> death
-            From George-Bogdan Ivanov on StackOverflow: http://stackoverflow.com/a/16752477/4110059
+    def verbToRelatedNouns(self):
+        """
+            Return the nouns associated to the given verb.
+            Useful for nounification.
         """
         derivationally_related_forms = self.verbToRelatedForms()
-        if not derivationally_related_forms:
-            return
         # Filter only the nouns
         related_noun_lemmas = []
         for drf in derivationally_related_forms:
             related_noun_lemmas += [l for l in drf[1] if l.synset().name().split('.')[1] == 'n']
         # Extract the words from the lemmas
-        words = [l.name() for l in related_noun_lemmas]
+        return [l.name() for l in related_noun_lemmas]
+    def nounify(self):
+        """ 
+            Transform a verb to the closest noun: die -> death
+            From George-Bogdan Ivanov on StackOverflow: http://stackoverflow.com/a/16752477/4110059
+        """
+        words = self.verbToRelatedNouns()
+        if not words:
+            return
         len_words = len(words)
         # Build the result in the form of a list containing tuples (word, probability)
         result = [(w, float(words.count(w))/len_words) for w in set(words)]
