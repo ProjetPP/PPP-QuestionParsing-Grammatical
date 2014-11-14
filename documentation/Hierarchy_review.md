@@ -1,6 +1,7 @@
 # Review of the hierarchy collapsing rules
 
 +++ : current choice is good
+
 --- : currend choice is bad
 
 Please, don't remove any example (they are used frequently to check the whole algorithm)

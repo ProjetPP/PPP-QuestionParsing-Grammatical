@@ -1,6 +1,11 @@
 import sys
 from nltk.corpus import wordnet
 
+
+########################################
+# Word lemmatization and nounification #
+########################################
+
 class Word:
     """
     One word of the sentence.
