@@ -13,6 +13,13 @@ def ignore(t):
 def merge(t):
     t.parent.merge(t,True)
 
+def amodRule(t):
+    if t.namedEntityTag != 'ORDINAL' and t.wordList[0].pos != 'JJS': # [0] : must be improve (search in the whole list?)
+        assert t.parent is not None
+        merge(t)
+    else:
+        t.dependency = 't5'
+                
 dependenciesMap = {
     'undef'     : 't0', # personnal tag, should not happen?
     'root'      : 't0',
@@ -43,7 +50,7 @@ dependenciesMap = {
             'conj_negcc': ignore, #?
         'expl'      : ignore,
         'mod'       : 't3',
-            'amod'      : 't5',
+            'amod'      : amodRule,
             'appos'     : 't3',
             'advcl'     : 't3',
             'det'       : remove,
@@ -87,11 +94,7 @@ def collapseDependency(t,depMap=dependenciesMap):
         t.dependency = 'prep' # suffix of the prep not analyzed for the moment (just removed)
     try:
         if isinstance(depMap[t.dependency], str):
-            if t.dependency == 'amod' and t.namedEntityTag != 'ORDINAL' and t.wordList[0].pos != 'JJS': # [0] : must be improve (search in the whole list?)
-                assert t.parent is not None
-                merge(t)
-            else:
-                t.dependency = depMap[t.dependency]
+            t.dependency = depMap[t.dependency]
         else:
             depMap[t.dependency](t)
     except KeyError:
