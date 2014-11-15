@@ -44,12 +44,30 @@ class Word:
             related_noun_lemmas += [l for l in drf[1] if l.synset().name().split('.')[1] == 'n']
         # Extract the words from the lemmas
         return [l.name() for l in related_noun_lemmas]
-    def nounify(self):
+    def mostRelevantStem(self,words,st):
+        """
+            Return the most occuring stem of the given list of words."
+        """
+        stems = [st.stem(w) for w in words]
+        len_stems = len(stems)
+        result = [(w, float(stems.count(w))/len_stems) for w in set(stems)]
+        result.sort(key=lambda w: -w[1])
+        return result[0][0]
+    def mostRelevantNouns(self,st):
+        """
+            Return the nouns associated to the given verb, which have the stem occuring the most.
+        """
+        words = self.verbToRelatedNouns()
+        if not words:
+            return []
+        stem = self.mostRelevantStem(words,st)
+        return [w for w in words if st.stem(w) == stem]
+    def nounify(self,st):
         """ 
             Transform a verb to the closest noun: die -> death
             From George-Bogdan Ivanov on StackOverflow: http://stackoverflow.com/a/16752477/4110059
         """
-        words = self.verbToRelatedNouns()
+        words = self.mostRelevantNouns(st)
         if not words:
             return
         len_words = len(words)
@@ -58,7 +76,7 @@ class Word:
         result.sort(key=lambda w: -w[1])
         # take the word with highest probability
         self.word = result[0][0]
-    def nounifyExcept(self):
+    def nounifyExcept(self,st):
         """
             Transform a verb to the closest noun: die -> death
             Hard-coded exceptions (e.g. be, have, do, bear...)
@@ -66,17 +84,17 @@ class Word:
         try:
             self.word = nounificationExceptions[self.word]
         except KeyError:
-            self.nounify()
-    def normalize(self,lmtzr):
+            self.nounify(st)
+    def normalize(self,lmtzr,st):
         """
-            Apply lemmatization to the word, using the given lemmatizer.
+            Apply lemmatization to the word, using the given lemmatizer and stemmer.
         """
         if(self.pos and self.pos[0] == 'N'):
             self.word=lmtzr.lemmatize(self.word,'n')
             return
         if(self.pos and self.pos[0] == 'V'):
             self.word=lmtzr.lemmatize(self.word,'v')
-            self.nounifyExcept()
+            self.nounifyExcept(st)
             return
 
 #########################

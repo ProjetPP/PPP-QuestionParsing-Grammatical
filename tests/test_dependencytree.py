@@ -1,5 +1,6 @@
 import json
 from nltk.stem.wordnet import WordNetLemmatizer
+from nltk.stem.porter import PorterStemmer
 from ppp_nlp_classical import Word, DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother
 import data
 
@@ -16,26 +17,27 @@ class DependenciesTreeTests(TestCase):
 
     def testNormalization(self):
         lmtzr = WordNetLemmatizer()
+        st = PorterStemmer()
         w=Word('presidents',1,'N')
-        w.normalize(lmtzr)
+        w.normalize(lmtzr,st)
         self.assertEqual(w,Word('president',1,'N'))
         w=Word('feet',1,'N')
-        w.normalize(lmtzr)
+        w.normalize(lmtzr,st)
         self.assertEqual(w,Word('foot',1,'N'))
         w=Word('born',1,'V')
-        w.normalize(lmtzr)
+        w.normalize(lmtzr,st)
         self.assertEqual(w,Word('birth',1,'V'))
         w=Word('died',1,'V')
-        w.normalize(lmtzr)
+        w.normalize(lmtzr,st)
         self.assertEqual(w,Word('death',1,'V'))
         w=Word('write',1,'V')
-        w.normalize(lmtzr)
+        w.normalize(lmtzr,st)
         self.assertEqual(w,Word('writer',1,'V'))
         w=Word('was',1,'V')
-        w.normalize(lmtzr)
+        w.normalize(lmtzr,st)
         self.assertEqual(w,Word('identity',1,'V'))
         w=Word('fooverb',1,'V')
-        w.normalize(lmtzr)
+        w.normalize(lmtzr,st)
         self.assertEqual(w,Word('fooverb',1,'V'))
 
     def testBasicTreeConstructor(self):

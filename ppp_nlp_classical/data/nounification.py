@@ -6,5 +6,6 @@ nounificationExceptions = {
     'bear' : 'birth',
     'live' : 'residence',
     'direct' : 'director',
-    'impress' : 'impression'
+    'impress' : 'impression',
+    'fix' : 'repair'
 }
