@@ -45,7 +45,8 @@ def firstWords(t,start):
 
 def identifyQuestionWord(t):
     """
-        Identify, remove (if open qw) and return the question word
+        Identify, remove (if open qw) and return the question word.
+        If there is no question word, return None.
     """
     start = [None,None]
     firstWords(t,start)
@@ -60,4 +61,5 @@ def identifyQuestionWord(t):
         return start[0].word.lower()
     if start[0].word.lower() in closeQuestionWord: 
         return start[0].word.lower()
-    sys.exit('exit: question word not found (please, report your sentence on http://goo.gl/EkgO5l)')
+    return None
+#    sys.exit('exit: question word not found (please, report your sentence on http://goo.gl/EkgO5l)')
