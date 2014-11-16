@@ -108,7 +108,9 @@ Current rule: dobj=t2
 ##### +++
 
 * Who killed Gandhi?
-   
+-> t4 would be better if we nounify "killed" into "killer".
+For instance, Wikidata returns a good answer for the triple `(Gandhi, killer, ?)`
+
 pobj
 ====
 
