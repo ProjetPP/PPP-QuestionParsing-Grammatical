@@ -1,7 +1,8 @@
 
-## Yes/no question
+## More research
 
-* Product dobj relation?
+* Yes/no question: product dobj relation?
+* verb+ing: do sthg special (look POS tag)? : What did Richard Feynman say upon hearing he would receive the Nobel Prize in Physics?
 
 ## Interesting examples
 
@@ -20,3 +21,8 @@
 * What country in Latin America is the largest one?
 * He is the biggest and fattest man >> problem with amod and 2*conj
 * Who held the endurance record for women pilots in 1929? >> problem with for
+* How many people that live in China speak english?
+* How many USA presidents have visited Iran?
+* Which movies does Quentin Tarantino star in?
+* Which movies did Quentin Tarantino direct, but not star in?
+* Who receives the Nobel Prize in Physics in 2000?

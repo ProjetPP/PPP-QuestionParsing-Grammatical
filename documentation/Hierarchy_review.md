@@ -73,6 +73,7 @@ cop
 ##### ---
 
 * What is the brightest star visible from Earth? >> cop not removed! change what <-> is
+* Who is the president black and blue
 
 prep
 ====
@@ -166,4 +167,9 @@ Current rule: remove
 ##### ---
 
 * When did Rococo painting and architecture flourish?
+
+rcmod
+=====
+
+* What did Richard Feynman say upon hearing he would receive the Nobel Prize in Physics? >> delete hearing et rcmod
 
