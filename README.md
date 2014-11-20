@@ -1,6 +1,6 @@
 # PPP-QuestionParsing-Grammatical
 
-Natural Language Processing for the PPP using a classical approch
+Question Parsing module for the PPP using a grammatical approch
 
 [![Build Status](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/badges/build.png?b=master)](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/build-status/master)
 [![Code Coverage](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/?branch=master)
