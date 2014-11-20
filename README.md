@@ -1,4 +1,4 @@
-# PPP-NLP-classical
+# PPP-QuestionParsing-Grammatical
 
 Natural Language Processing for the PPP using a classical approch
 
@@ -11,14 +11,14 @@ Natural Language Processing for the PPP using a classical approch
 With a recent version of pip:
 
 ```
-pip3 install git+https://github.com/ProjetPP/PPP-NLP-classical.git
+pip3 install git+https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical.git
 ```
 
 With an older one:
 
 ```
-git clone https://github.com/ProjetPP/PPP-NLP-classical.git
-cd PPP-NLP-classical
+git clone https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical.git
+cd PPP-QuestionParsing-Grammatical
 python3 setup.py install
 ```
 
