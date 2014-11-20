@@ -5,7 +5,7 @@ import fileinput
 import os
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.sys.path.insert(0,parentdir)
-os.environ['PPP_NLP_CLASSICAL_CONFIG'] = '../example_config.json'
+os.environ['PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'] = '../example_config.json'
 import ppp_questionparsing_grammatical
 
 class StanfordNLP:

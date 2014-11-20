@@ -2,7 +2,7 @@
 import os
 import unittest
 
-os.environ['PPP_NLP_CLASSICAL_CONFIG'] = 'example_config.json'
+os.environ['PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'] = 'example_config.json'
 
 def main(): # pragma: no cover
     testsuite = unittest.TestLoader().discover('tests/')
