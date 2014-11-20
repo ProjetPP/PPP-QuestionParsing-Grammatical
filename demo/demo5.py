@@ -6,7 +6,7 @@ import os
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.sys.path.insert(0,parentdir) 
 os.environ['PPP_NLP_CLASSICAL_CONFIG'] = '../example_config.json'
-import ppp_nlp_classical
+import ppp_questionparsing_grammatical
 
 class StanfordNLP:
     def __init__(self, port_number=8080):
@@ -18,8 +18,8 @@ class StanfordNLP:
 def get_tree():
     nlp = StanfordNLP()
     result = nlp.parse(input(""))
-    tree = ppp_nlp_classical.computeTree(result['sentences'][0])
-    qw = ppp_nlp_classical.simplify(tree)
+    tree = ppp_questionparsing_grammatical.computeTree(result['sentences'][0])
+    qw = ppp_questionparsing_grammatical.simplify(tree)
     return tree
 
 print(get_tree())

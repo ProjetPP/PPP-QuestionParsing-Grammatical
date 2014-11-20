@@ -1,6 +1,6 @@
 import json
 
-from ppp_nlp_classical import Triple, TriplesBucket, computeTree, simplify, buildBucket, DependenciesTree, tripleProduce1, tripleProduce2, tripleProduce3, buildTree
+from ppp_questionparsing_grammatical import Triple, TriplesBucket, computeTree, simplify, buildBucket, DependenciesTree, tripleProduce1, tripleProduce2, tripleProduce3, buildTree
 from ppp_datamodel import Triple, Resource, Missing
 import data
 
