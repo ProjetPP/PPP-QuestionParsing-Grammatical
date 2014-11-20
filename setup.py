@@ -3,8 +3,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='ppp_nlp_classical',
-    version='0.2.8',
+    name='ppp_questionparsing_grammatical',
+    version='0.3',
     description='Natural language processing module for the PPP.',
     url='https://github.com/ProjetPP/PPP-NLP-Classical',
     author='Projet Pensées Profondes',
@@ -31,8 +31,8 @@ setup(
         'nltk'
     ],
     packages=[
-        'ppp_nlp_classical',
-        'ppp_nlp_classical.data',
+        'ppp_questionparsing_grammatical',
+        'ppp_questionparsing_grammatical.data',
     ],
 )
 

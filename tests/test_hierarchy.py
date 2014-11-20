@@ -1,6 +1,6 @@
 import json
 
-from ppp_nlp_classical import Word, DependenciesTree, computeTree, simplify
+from ppp_questionparsing_grammatical import Word, DependenciesTree, computeTree, simplify
 import data
 
 from unittest import TestCase
