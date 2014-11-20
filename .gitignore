@@ -4,6 +4,6 @@
 __pycache__
 build/
 dist/
-ppp_nlp_classical.egg-info/
+ppp_questionparsing_grammatical.egg-info/
 .coverage
 htmlcov

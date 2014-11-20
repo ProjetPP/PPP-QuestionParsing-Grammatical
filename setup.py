@@ -6,7 +6,7 @@ setup(
     name='ppp_questionparsing_grammatical',
     version='0.3.1',
     description='Natural language processing module for the PPP.',
-    url='https://github.com/ProjetPP/PPP-NLP-Classical',
+    url='https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical',
     author='Projet Pensées Profondes',
     author_email='ppp2014@listes.ens-lyon.fr',
     license='MIT',

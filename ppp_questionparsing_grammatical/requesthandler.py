@@ -30,7 +30,7 @@ class RequestHandler:
         qw = simplify(tree)
         tree = buildTree(buildBucket(tree,qw))
         meas = {'accuracy': 0.5, 'relevance': 0.5}
-        trace = self.request.trace + [TraceItem('NLP-Classical', tree, meas)]
+        trace = self.request.trace + [TraceItem('QuestionParsing-Grammatical', tree, meas)]
         response = Response('en', tree, meas, trace)
         print(repr(response))
         return [response]

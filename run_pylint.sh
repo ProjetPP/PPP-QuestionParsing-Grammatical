@@ -1,2 +1,2 @@
 #!/bin/bash
-pylint --rcfile=.pylintrc ppp_nlp_classical
+pylint --rcfile=.pylintrc ppp_questionparsing_grammatical
