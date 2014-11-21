@@ -1,5 +1,8 @@
 import sys
 from .questionIdentify import identifyQuestionWord
+from .preprocessing import DependenciesTree
+from .preprocessingMerge import Word
+from copy import deepcopy
 
 def remove(t):
     t.parent.child.remove(t)
@@ -8,8 +11,8 @@ def impossible(t):
     sys.exit('exit: %s dependency unexpected (please, report your sentence on http://goo.gl/EkgO5l)\n' % t)
 
 def ignore(t):
-    remove(t)
-
+    pass
+    
 def merge(t):
     t.parent.merge(t,True)
 
@@ -18,7 +21,7 @@ def amodRule(t):
         assert t.parent is not None
         merge(t)
     else:
-        t.dependency = 't5'
+        t.dependency = 'connectorUp'
                 
 dependenciesMap = {
     'undef'     : 't0', # personnal tag, should not happen?
@@ -48,21 +51,21 @@ dependenciesMap = {
             'conj_and'  : ignore,
             'conj_or'   : ignore,
             'conj_negcc': ignore, #?
-        'expl'      : ignore,
+        'expl'      : remove,
         'mod'       : 't3',
             'amod'      : amodRule,
             'appos'     : 't3',
             'advcl'     : 't3',
             'det'       : remove,
-            'predet'    : ignore,
-            'preconj'   : ignore,
+            'predet'    : remove,
+            'preconj'   : remove,
             'vmod'      : 't2',
             'mwe'       : merge,
-                'mark'      : ignore,
+                'mark'      : remove,
             'advmod'    : merge,
-                'neg'       : 't0', # need a NOT node
-            'rcmod'     : ignore,
-                'quantmod'  : ignore,
+                'neg'       : 'connectorUp', # need a NOT node
+            'rcmod'     : 't3', # temp, need to be analyzed
+                'quantmod'  : remove,
             'nn'        : merge,
             'npadvmod'  : merge,
                 'tmod'      : 't2',
@@ -73,7 +76,7 @@ dependenciesMap = {
             'poss'      : 't4',
             'possessive': impossible,
             'prt'       : merge,
-        'parataxis' : ignore, #  ?
+        'parataxis' : remove, #  ?
         'punct'     : impossible,
         'ref'       : impossible,
         'sdep'      : impossible,
@@ -100,6 +103,75 @@ def collapseDependency(t,depMap=dependenciesMap):
     except KeyError:
         sys.exit('exit: dependency unknown (please, report your sentence on http://goo.gl/EkgO5l)\n')
 
+def connectorUp(t):
+    """
+        Move remaining amod relations (= connectors) 
+    """
+    if t.dependency == 'connectorUp':
+        assert t.parent is not None and t.child == []
+        t.dependency = t.parent.dependency
+        t.parent.dependency = 'connector'
+        t.parent.child.remove(t)
+        t.child = [t.parent]
+        t.parent.parent.child.remove(t.parent)
+        t.parent.parent.child.append(t)
+        parentTemp = t.parent.parent
+        t.parent.parent = t
+        t.parent = parentTemp
+    else:
+        temp = list(t.child) # copy, because t.child is changed while iterating
+        for c in temp:
+            connectorUp(c)
+
+def conjConnectorsUp(t):
+    """
+        Move conjonction connectors
+    """
+    if not t.dependency.startswith('conj'):
+        temp = list(t.child) # copy, because t.child is changed while iterating
+        for c in temp:
+            conjConnectorsUp(c)
+    else:
+        #  Who is the author of Sea and Sky?
+        assert t.parent is not None #and t.child == []
+
+        depSave = t.dependency[t.dependency.index('_')+1:]
+        
+        parentTemp = t.parent.parent # n0
+        
+        t.dependency = t.parent.dependency # dependency(n2)
+        t.parent.child.remove(t) # son(n1) \= n2
+        
+        dupl = deepcopy(parentTemp) # n0'
+        
+        parentTemp.child.remove(t.parent) # son(n0) \= n1
+        parentTemp.child.append(t) # son(n0)=n2
+        t.parent = parentTemp # parent(n2) = n0
+        
+        newTree = DependenciesTree(depSave, 'undef', parentTemp.dependency, [dupl,parentTemp], parentTemp.parent)
+    
+        parentTemp.parent.child.remove(parentTemp)
+        parentTemp.parent.child.append(newTree)
+                             
+        parentTemp.dependency = 'connector'
+        parentTemp.parent = newTree
+        dupl.dependency = 'connector'
+        dupl.parent = newTree
+        
+        temp = list(newTree.child) # copy, because t.child is changed while iterating
+        for c in temp:
+            conjConnectorsUp(c)
+
+def dfsNumber(t,n):
+    if t.child == []:
+        t.wordList.insert(0,Word(''+str(n),-1))
+        return n+1
+    else:
+        for r in t.child:
+            n = dfsNumber(r,n)
+        t.wordList.insert(0,Word(''+str(n),-1))
+        return n+1
+            
 def simplify(t):
     """
             identify and remove question word
@@ -107,4 +179,7 @@ def simplify(t):
     """
     s = identifyQuestionWord(t) # identify and remove question word
     collapseDependency(t) # collapse the tree according to collapsing rules
+    conjConnectorsUp(t)
+    connectorUp(t)
+    dfsNumber(t,0)
     return s

@@ -1,5 +1,5 @@
 import sys
-from .preprocessingMerge import Word, mergeQuotations, mergeNamedEntityTag
+from .preprocessingMerge import Word, mergeQuotations, mergeNamedEntityTag, buildWord
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.stem.porter import PorterStemmer
 
@@ -9,13 +9,13 @@ class DependenciesTree:
         It is a group of words of the initial sentence.
     """
     def __init__(self, word, namedentitytag='undef', dependency='undef', child=None, parent=None):
-        self.wordList = [Word(word[:word.rindex('-')],int(word[word.rindex('-')+1:]))] # words of the node
-        self.namedEntityTag = namedentitytag 
+        self.wordList = [buildWord(word)] # list of the words contained in the node 
+        self.namedEntityTag = namedentitytag # NER tag (location, ...)
         self.dependency = dependency # dependency from self to its parent
         self.child = child or [] # children of self
-        self.text = "" # each node contains whole sentence
+        self.text = "" # each node contains the initial whole sentence
         self.parent=parent # parent of self
-
+                    
     def string(self):
         # Concatenation of the words of the root
         w = self.getWords()

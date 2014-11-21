@@ -2,7 +2,6 @@ import sys
 from .data.nounification import nounificationExceptions
 from nltk.corpus import wordnet
 
-
 ########################################
 # Word lemmatization and nounification #
 ########################################
@@ -12,12 +11,12 @@ class Word:
     One word of the sentence.
     """
     def __init__(self, word, index, pos=None):
-        self.word = word
-        self.index = index
-        self.pos = pos
+        self.word = word # strings that represents the word
+        self.index = index # position in the sentence
+        self.pos = pos # Part Of Speech tag
     def __str__(self):
         return "({0},{1},{2})".format(str(self.word),str(self.index),str(self.pos))
-    def __eq__(self, other): 
+    def __eq__(self, other):
         return self.__dict__ == other.__dict__
     def verbToRelatedForms(self):
         """
@@ -97,6 +96,15 @@ class Word:
             self.nounifyExcept(st)
             return
 
+def buildWord(word):
+    """
+        build a word from a "word-number" string
+    """
+    if word.find('-') != -1:
+        return Word(word[:word.rindex('-')],int(word[word.rindex('-')+1:]))
+    else:
+        return Word(word,-1)
+            
 #########################
 # Quotation recognition #
 #########################

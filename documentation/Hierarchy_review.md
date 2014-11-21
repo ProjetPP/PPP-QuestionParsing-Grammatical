@@ -69,11 +69,14 @@ nsubjpass
 
 cop
 ===
-  
+
+cop doesn't always disappear -> needs to remove it manually
+
 ##### ---
 
 * What is the brightest star visible from Earth? >> cop not removed! change what <-> is
-* Who is the president black and blue
+* Who is the president black and blue?
+* What is black and white?
 
 prep
 ====
