@@ -2,20 +2,36 @@ import sys
 from .preprocessingMerge import Word, mergeQuotations, mergeNamedEntityTag, buildWord
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.stem.porter import PorterStemmer
+from copy import deepcopy
 
 class DependenciesTree:
     """
         One node of the parse tree.
         It is a group of words of the initial sentence.
     """
-    def __init__(self, word, namedentitytag='undef', dependency='undef', child=None, parent=None):
-        self.wordList = [buildWord(word)] # list of the words contained in the node 
-        self.namedEntityTag = namedentitytag # NER tag (location, ...)
-        self.dependency = dependency # dependency from self to its parent
-        self.child = child or [] # children of self
-        self.text = "" # each node contains the initial whole sentence
-        self.parent=parent # parent of self
-                    
+    def __init__(self, word, namedEntityTag='undef', dependency='undef', child=None, parent=None):
+        self.wordList = [buildWord(word)]     # list of the words contained in the node 
+        self.namedEntityTag = namedEntityTag  # NER tag (location, ...)
+        self.dependency = dependency          # dependency from self to its parent
+        self.child = child or []              # children of self
+        self.text = ""                        # each node contains the initial whole sentence
+        self.parent = parent                  # parent of self
+        self.dfsTag = 0                       # number attributed by a dfs
+
+    def dfsAnnotate(self,n):
+        """
+            build a dfs annotation on the tree
+            useful to distinguish nodes that are different but contain the same wordList
+        """
+        if self.child == []:
+            self.dfsTag = n
+            return n+1
+        else:
+            for t in self.child:
+                n = t.dfsAnnotate(n)
+            self.dfsTag = n+1
+            return n+1
+        
     def string(self):
         # Concatenation of the words of the root
         w = self.getWords()
@@ -24,19 +40,20 @@ class DependenciesTree:
         t=''
         if(self.namedEntityTag != 'O' and self.namedEntityTag != 'undef'):
             t+= " [{0}]".format(self.namedEntityTag)
-        s+="\t\"{0}\"[label=\"{1}{2}\",shape=box];\n".format(self.wordList[0].word+str(self.wordList[0].index),w,t)
+        s+="\t\"{0}\"[label=\"{1}{2}\",shape=box];\n".format(self.wordList[0].word+str(self.dfsTag),w,t)
         # Adding definitions of the edges
         for n in self.child:
-            s+="\t\"{0}\" -> \"{1}\"[label=\"{2}\"];\n".format(self.wordList[0].word+str(self.wordList[0].index),n.wordList[0].word+str(n.wordList[0].index),n.dependency)
+            s+="\t\"{0}\" -> \"{1}\"[label=\"{2}\"];\n".format(self.wordList[0].word+str(self.dfsTag),n.wordList[0].word+str(n.dfsTag),n.dependency)
         # Recursive calls
         for n in self.child:
             s+=n.string()
         return s
-
+        
     def __str__(self):
         """
             Print dependency graph in dot format
         """
+        self.dfsAnnotate(0)
         return "digraph relations {"+"\n{0}\tlabelloc=\"t\"\tlabel=\"{1}\";\n".format(self.string(),self.text)+"}"
 
     def merge(self,other,mergeWords):

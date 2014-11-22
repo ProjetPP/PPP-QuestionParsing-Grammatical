@@ -11,13 +11,16 @@ class Word:
     One word of the sentence.
     """
     def __init__(self, word, index, pos=None):
-        self.word = word # strings that represents the word
-        self.index = index # position in the sentence
-        self.pos = pos # Part Of Speech tag
+        self.word = word    # strings that represents the word
+        self.index = index  # position in the sentence
+        self.pos = pos      # Part Of Speech tag
+        
     def __str__(self):
         return "({0},{1},{2})".format(str(self.word),str(self.index),str(self.pos))
+    
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
+    
     def verbToRelatedForms(self):
         """
             Return the lemmas associated to the given verb.
@@ -31,6 +34,7 @@ class Word:
             verb_lemmas += [l for l in s.lemmas() if s.name().split('.')[1] == 'v']
         # Return related forms
         return [(l, l.derivationally_related_forms()) for l in    verb_lemmas]
+    
     def verbToRelatedNouns(self):
         """
             Return the nouns associated to the given verb.
@@ -43,6 +47,7 @@ class Word:
             related_noun_lemmas += [l for l in drf[1] if l.synset().name().split('.')[1] == 'n']
         # Extract the words from the lemmas
         return [l.name() for l in related_noun_lemmas]
+    
     def mostRelevantStem(self,words,st):
         """
             Return the most occuring stem of the given list of words."
@@ -52,6 +57,7 @@ class Word:
         result = [(w, float(stems.count(w))/len_stems) for w in set(stems)]
         result.sort(key=lambda w: -w[1])
         return result[0][0]
+    
     def mostRelevantNouns(self,st):
         """
             Return the nouns associated to the given verb, which have the stem occuring the most.
@@ -61,6 +67,7 @@ class Word:
             return []
         stem = self.mostRelevantStem(words,st)
         return [w for w in words if st.stem(w) == stem]
+    
     def nounify(self,st):
         """ 
             Transform a verb to the closest noun: die -> death
@@ -75,6 +82,7 @@ class Word:
         result.sort(key=lambda w: -w[1])
         # take the word with highest probability
         self.word = result[0][0]
+    
     def nounifyExcept(self,st):
         """
             Transform a verb to the closest noun: die -> death
@@ -84,6 +92,7 @@ class Word:
             self.word = nounificationExceptions[self.word]
         except KeyError:
             self.nounify(st)
+    
     def normalize(self,lmtzr,st):
         """
             Apply lemmatization to the word, using the given lemmatizer and stemmer.
@@ -98,7 +107,9 @@ class Word:
 
 def buildWord(word):
     """
-        build a word from a "word-number" string
+        if word is of type:
+          word'-number : build Word(word',number)
+          otherwise    : build Word(word,-1)
     """
     if word.find('-') != -1:
         return Word(word[:word.rindex('-')],int(word[word.rindex('-')+1:]))
@@ -226,6 +237,7 @@ def mergeNamedEntityTagChildParent(t):
         Merge all nodes n1,n2 such that:
             * n1 is parent of n2
             * n1 and n2 have a same namedEntityTag
+        Don't merge if the 2 words are linked by a conjonction
     """
     for c in t.child:
         mergeNamedEntityTagChildParent(c)
@@ -233,7 +245,7 @@ def mergeNamedEntityTagChildParent(t):
     if t.namedEntityTag == 'undef':
         return
     for c in t.child:
-        if c.namedEntityTag == t.namedEntityTag:
+        if c.namedEntityTag == t.namedEntityTag and not c.dependency.startswith('conj'):
             sameTagChild.add(c)
     for c in sameTagChild:
         t.merge(c,True)

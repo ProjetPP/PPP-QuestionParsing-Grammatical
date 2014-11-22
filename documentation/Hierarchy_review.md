@@ -176,3 +176,7 @@ rcmod
 
 * What did Richard Feynman say upon hearing he would receive the Nobel Prize in Physics? >> delete hearing et rcmod
 
+pcomp
+=====
+
+* When did Israel begin turning the Gaza Strip and Jericho over to the PLO?

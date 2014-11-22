@@ -199,56 +199,7 @@ def fillBucket(t,nodeToID,triplesBucket,tmap=tripleMap):
         tmap[t.dependency](t,nodeToID,triplesBucket)
     for c in t.child: # could become necessary to perform this step before
         fillBucket(c,nodeToID,triplesBucket)
-
-questionMap = {
-    # close question word
-    'is'            : 'yesno',
-    'are'           : 'yesno',
-    'am'            : 'yesno',
-    'was'           : 'yesno',
-    'were'          : 'yesno',
-    'will'          : 'yesno',
-    'do'            : 'yesno',
-    'does'          : 'yesno',
-    'did'           : 'yesno',
-    'have'          : 'yesno',
-    'had'           : 'yesno',
-    'has'           : 'yesno',
-    'can'           : 'yesno',
-    'could'         : 'yesno',
-    'should'        : 'yesno',
-    'shall'         : 'yesno',
-    'may'           : 'yesno',
-    'might'         : 'yesno',
-    'would'         : 'yesno',
-    # open question word
-    'what'          : 'definition',
-    'what kind'     : 'description',
-    'what type'     : 'type',
-    'what sort'     : 'type',
-    'what time'     : 'time',
-    'when'          : 'time',
-    'why'           : 'reason',
-    'where'         : 'place',
-    'who'           : 'person',
-    'how'           : 'manner',
-    'how much'      : 'amount',
-    'how many'      : 'quantity',
-    'how old'       : 'age',
-    'how far'       : 'distance',
-    'how long'      : 'length',
-    'how tall'      : 'height',
-    'how deep'      : 'depth',
-    'how wide'      : 'width',
-    'how fast'      : 'speed',
-    'how often'     : 'frequency',
-    'how come'      : 'reason',
-    'which'         : 'choice',
-    'whom'          : 'person',
-    'whose'         : 'possession'
-        # how big
-}
-
+        
 def buildBucket(t,qw):
     """
         return a TriplesBucket associated to tree t and question word qw
@@ -256,7 +207,6 @@ def buildBucket(t,qw):
     nodeToID = {}
     triplesBucket = TriplesBucket()
     initUnknowns(t,nodeToID)
-    #_+ triplesBucket.addTriple(Triple(nodeToID[t.child[0]],questionMap[qw],nodeToID[t])) # process the question word
     tripleProduce1(t.child[0],nodeToID,triplesBucket) #_+ instead of question word
     fillBucket(t,nodeToID,triplesBucket)
     return triplesBucket
