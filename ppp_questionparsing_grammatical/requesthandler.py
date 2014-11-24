@@ -8,7 +8,7 @@ from ppp_datamodel.communication import TraceItem, Response
 from ppp_libmodule.exceptions import ClientError
 
 from .config import Config
-from . import computeTree, simplify, buildTree, buildBucket
+from . import computeTree, simplify, buildBucket, buildTree
 
 class StanfordNLP:
     def __init__(self, url):

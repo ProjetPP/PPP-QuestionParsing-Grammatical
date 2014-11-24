@@ -25,6 +25,8 @@ class HierarchyTests(TestCase):
         self.assertEqual(root.dependency,'t0')
         self.assertEqual(root.parent,None)
         self.assertEqual(len(root.child),1)
+        self.assertEqual(root.subtreeType,'PERSON')
+        self.assertEqual(root.dfsTag,0)
         # Is
         is_=root.child[0]
         self.assertEqual(is_.wordList,[Word("identity",2,'VBZ')])
@@ -32,6 +34,8 @@ class HierarchyTests(TestCase):
         self.assertEqual(is_.dependency,'t0')
         self.assertEqual(is_.parent,root)
         self.assertEqual(len(is_.child),1)
+        self.assertEqual(is_.subtreeType,'PERSON')
+        self.assertEqual(is_.dfsTag,0)
         # President
         president=is_.child[0]
         self.assertEqual(president.wordList,[Word("president",4,'NN')])
@@ -39,6 +43,8 @@ class HierarchyTests(TestCase):
         self.assertEqual(president.dependency,'t1')
         self.assertEqual(president.parent,is_)
         self.assertEqual(len(president.child),1)
+        self.assertEqual(president.subtreeType,'PERSON')
+        self.assertEqual(president.dfsTag,0)
         # United States
         us=president.child[0]
         self.assertEqual(us.wordList,[Word("United",7,'NNP'),Word("States",8,'NNPS')])
@@ -46,7 +52,9 @@ class HierarchyTests(TestCase):
         self.assertEqual(us.dependency,'t4')
         self.assertEqual(us.parent,president)
         self.assertEqual(len(us.child),0)
-
+        self.assertEqual(us.subtreeType,'undef')
+        self.assertEqual(us.dfsTag,0)
+        
     def testIgnore(self):
         tree=computeTree(data.give_how_hold()['sentences'][0])
         simplify(tree)
@@ -57,14 +65,18 @@ class HierarchyTests(TestCase):
         self.assertEqual(root.dependency,'t0')
         self.assertEqual(root.parent,None)
         self.assertEqual(len(root.child),1)
+        self.assertEqual(root.subtreeType,'NUMBER')
+        self.assertEqual(root.dfsTag,0)
         # Are
         are=root.child[0]
-        self.assertEqual(are.wordList,[Word("identity",3,'VBP')])
+        self.assertEqual(are.wordList,[Word("identity",3,'VBP'),Word('age',1001,None)])
         self.assertEqual(are.namedEntityTag,'undef')
         self.assertEqual(are.dependency,'t0')
         self.assertEqual(are.parent,root)
         self.assertEqual(len(are.child),0)
-
+        self.assertEqual(are.subtreeType,'NUMBER')
+        self.assertEqual(are.dfsTag,0)
+        
     def testHierarchySimplification2(self):
         tree=computeTree(data.give_USA_president()['sentences'][0])
         simplify(tree)
@@ -75,6 +87,8 @@ class HierarchyTests(TestCase):
         self.assertEqual(root.dependency,'t0')
         self.assertEqual(root.parent,None)
         self.assertEqual(len(root.child),1)
+        self.assertEqual(root.subtreeType,'PERSON')
+        self.assertEqual(root.dfsTag,0)
         # Is
         is_=root.child[0]
         self.assertEqual(is_.wordList,[Word("identity",2,'VBZ')])
@@ -82,6 +96,8 @@ class HierarchyTests(TestCase):
         self.assertEqual(is_.dependency,'t0')
         self.assertEqual(is_.parent,root)
         self.assertEqual(len(is_.child),1)
+        self.assertEqual(is_.subtreeType,'PERSON')
+        self.assertEqual(is_.dfsTag,0)
         # President
         president=is_.child[0]
         self.assertEqual(president.wordList,[Word("United",4,'NNP'),Word("States",5,'NNPS'),Word("president",6,'NN')])
@@ -89,3 +105,5 @@ class HierarchyTests(TestCase):
         self.assertEqual(president.dependency,'t1')
         self.assertEqual(president.parent,is_)
         self.assertEqual(len(president.child),0)
+        self.assertEqual(is_.subtreeType,'PERSON')
+        self.assertEqual(is_.dfsTag,0)
