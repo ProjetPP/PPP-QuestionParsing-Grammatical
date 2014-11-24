@@ -29,7 +29,11 @@ def propType(t):
             t.parent.namedEntityTag = t.namedEntityTag
         assert t.namedEntityTag == 'undef' or t.namedEntityTag == t.parent.namedEntityTag
         t.namedEntityTag = t.parent.namedEntityTag
-                    
+
+def propTypeT1(t):
+    if t.child != []:
+        propType(t)
+                     
 dependenciesMap1 = {
     'undef'     : 't0', # personnal tag, should not happen?
     'root'      : 't0',
@@ -107,13 +111,13 @@ dependenciesMap2 = {
 
 dependenciesMap3 = {
     't0'        : propType,
-    't1'        : propType,
+    't1'        : propTypeT1,
     't2'        : ignore,
     't3'        : ignore,
     't4'        : ignore,
     't5'        : ignore,
     't6'        : propType, 
-    'connector' : ignore
+    'connector' : propType
 }
 
 def collapsePrep(t):

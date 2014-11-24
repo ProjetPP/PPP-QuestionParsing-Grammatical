@@ -65,17 +65,14 @@ def identifyQuestionWord(t):
         return start[0].word.lower()
     return None
 
-questionMap = {
-    # open question word
-    'what'          : 'definition',
-    'what kind'     : 'description',
+questionInfo = {
+    # how to add info into the son of ROOT
     'what type'     : 'type',
     'what sort'     : 'type',
     'what time'     : 'time',
     'when'          : 'date',
     'why'           : 'reason',
     'where'         : 'place',
-    'who'           : 'person',
     'how'           : 'manner',
     'how much'      : 'amount',
     'how many'      : 'quantity',
@@ -89,13 +86,41 @@ questionMap = {
     'how often'     : 'frequency',
     'how come'      : 'reason',
     'which'         : 'choice',
-    'whom'          : 'person',
+    'whose'         : 'owner',
+    'how big'       : 'size'
+}
+
+questionWIs = {
+    # how to replace the son of ROOT when it's "is" (nounify into identity)
+    'what'          : 'definition',
+    'what kind'     : 'description',
+    'what type'     : 'type',
+    'what sort'     : 'type',
+    'what time'     : 'time',
+    'when'          : 'date',
+    'why'           : 'reason',
+    'where'         : 'place',
+    'who'           : 'identity',
+    'how'           : 'manner',
+    'how much'      : 'amount',
+    'how many'      : 'quantity',
+    'how old'       : 'age',
+    'how far'       : 'distance',
+    'how long'      : 'length',
+    'how tall'      : 'height',
+    'how deep'      : 'depth',
+    'how wide'      : 'width',
+    'how fast'      : 'speed',
+    'how often'     : 'frequency',
+    'how come'      : 'reason',
+    'which'         : 'choice',
+    'whom'          : 'identity',
     'whose'         : 'owner',
     'how big'       : 'size'
 }
 
 questionType = {
-    # open question word
+    # how to type ROOT
     'what time'     : 'DATE',
     'when'          : 'DATE',
     'where'         : 'LOCATION',
@@ -117,26 +142,46 @@ questionType = {
 
 def processQuestionType(t,w,typeMap=questionType):
     """
-        Add a type to the root of the tree (= type of the answer)
-          depending on the question word
+        Add a type to the root of the tree (= type of the answer) depending on the question word
     """
     try:
         t.namedEntityTag = typeMap[w]
     except KeyError:
         pass
-        
-def processQuestionWord(t,w,qMap=questionMap,typeMap=questionType):
+
+def processIdentity(t,w,wisMap=questionWIs):
+    """
+        If the question is "Wh.. is/are/..." replace the node 'identity' (noun associated to 'is') by a word dependendind on Wh..
+    """
+    try:
+        if t.wordList[0].index >= 1000:
+            for n in t.child:
+                processIdentity(t,w)
+        elif t.getWords() == 'identity':
+            t.wordList[0].word = wisMap[w] # if the son of ROOT is 'identity', replace it according to the question word
+    except KeyError:
+        pass
+
+def processQuestionInfo(t,w,infoMap=questionInfo):
+    """
+        Add to the first sons of ROOT that are not connectors (ie index < 1000) a word depending on the qw
+    """
+    try:
+        if t.wordList[0].index >= 1000:
+            for n in t.child:
+                processQuestionInfo(n,w)
+        elif t.getWords().find(w) == -1:
+            t.wordList.append(Word(infoMap[w],1001))            
+    except KeyError:
+        pass
+          
+    
+def processQuestionWord(t,w):
     """
         Type the root
         Try to include the info contained in the question word
-          into the son of ROOT (ex: When -> add "date")
+          into the sons of ROOT (ex: When -> add "date")
     """
-    processQuestionType(t,w,typeMap)
-    n = t.child[0]
-    try:
-        if n.getWords() == 'identity':
-            n.wordList[0].word = qMap[w]
-        elif n.getWords().find(w) == -1:
-            n.wordList.append(Word(qMap[w],n.wordList[-1].index+1))
-    except KeyError:
-        pass
+    processQuestionType(t,w)  # type the ROOT according to the question word
+    processIdentity(t,w)
+    processQuestionInfo(t.child[0],w)

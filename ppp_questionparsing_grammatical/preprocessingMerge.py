@@ -114,7 +114,7 @@ def buildWord(word):
     if word.find('-') != -1:
         return Word(word[:word.rindex('-')],int(word[word.rindex('-')+1:]))
     else:
-        return Word(word,-1)
+        return Word(word,1000)
             
 #########################
 # Quotation recognition #
