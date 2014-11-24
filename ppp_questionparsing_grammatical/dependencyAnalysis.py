@@ -25,10 +25,10 @@ def amodRule(t):
 
 def propType(t):
     if t.parent != None:
-        if t.parent.namedEntityTag == 'undef':
-            t.parent.namedEntityTag = t.namedEntityTag
-        assert t.namedEntityTag == 'undef' or t.namedEntityTag == t.parent.namedEntityTag
-        t.namedEntityTag = t.parent.namedEntityTag
+        if t.parent.subtreeType == 'undef':
+            t.parent.subtreeType = t.subtreeType
+        assert t.subtreeType == 'undef' or t.subtreeType == t.parent.subtreeType
+        t.subtreeType = t.parent.subtreeType
 
 def propTypeT1(t):
     if t.child != []:
@@ -77,7 +77,7 @@ dependenciesMap1 = {
                 'neg'       : 'connectorUp', # need a NOT node
             'rcmod'     : 't3', # temp, need to be analyzed
                 'quantmod'  : remove,
-            'nn'        : ignore, # <-------
+            'nn'        : merge, # <-------
             'npadvmod'  : merge,
                 'tmod'      : 't2',
             'num'       : merge,
@@ -97,19 +97,6 @@ dependenciesMap1 = {
 }
 
 dependenciesMap2 = {
-    't0'        : ignore,
-    't1'        : ignore,
-    't2'        : ignore,
-    't3'        : ignore,
-    't4'        : ignore,
-    't5'        : ignore,
-    't6'        : ignore,
-    'connectorUp' : ignore,
-    'connector' : ignore, 
-    'nn'        : merge   
-}
-
-dependenciesMap3 = {
     't0'        : propType,
     't1'        : propTypeT1,
     't2'        : ignore,
@@ -195,7 +182,7 @@ def conjConnectorsUp(t):
         parentTemp.child.append(t) # son(n0)=n2
         t.parent = parentTemp # parent(n2) = n0
 
-        newTree = DependenciesTree(depSave, 'undef', parentTemp.dependency, [dupl,parentTemp], parentTemp.parent)
+        newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,parentTemp], parentTemp.parent)
 
         parentTemp.parent.child.remove(parentTemp)
         parentTemp.parent.child.append(newTree)
@@ -222,7 +209,7 @@ def conjConnectorsUp(t):
         for n in t.child:
             n.parent = t
 
-        newTree = DependenciesTree(depSave, 'undef', parentTemp.dependency, [dupl,t], parentTemp.parent)
+        newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,t], parentTemp.parent)
         
         newTree.parent.child.remove(parentTemp)
         newTree.parent.child.append(newTree)
@@ -244,9 +231,8 @@ def simplify(t):
     collapsePrep(t)                       # replace prep(c)_x by prep(c)
     collapseMap(t,dependenciesMap1)       # collapse the tree according to dependenciesMap1
     conjConnectorsUp(t)                   # remove conjonction connectors
-    collapseMap(t,dependenciesMap2)       # collapse the tree according to dependenciesMap2
     connectorUp(t)                        # remove amod connectors
     processQuestionWord(t,s)              # add info contained into the qw (type ...)
-    collapseMap(t,dependenciesMap3)       # propagate types
-    collapseMap(t,dependenciesMap3,False) # propagate types
+    collapseMap(t,dependenciesMap2)       # propagate types
+    collapseMap(t,dependenciesMap2,False) # propagate types
     return s

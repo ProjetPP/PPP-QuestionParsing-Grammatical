@@ -9,9 +9,10 @@ class DependenciesTree:
         One node of the parse tree.
         It is a group of words of the initial sentence.
     """
-    def __init__(self, word, namedEntityTag='undef', dependency='undef', child=None, parent=None):
+    def __init__(self, word, namedEntityTag='undef', subtreeType='undef', dependency='undef', child=None, parent=None):
         self.wordList = [buildWord(word)]     # list of the words contained in the node 
         self.namedEntityTag = namedEntityTag  # NER tag (location, ...)
+        self.subtreeType = subtreeType        # type of the info represented by the subtree
         self.dependency = dependency          # dependency from self to its parent
         self.child = child or []              # children of self
         self.text = ""                        # each node contains the initial whole sentence
@@ -40,6 +41,8 @@ class DependenciesTree:
         t=''
         if(self.namedEntityTag != 'O' and self.namedEntityTag != 'undef'):
             t+= " [{0}]".format(self.namedEntityTag)
+        if self.subtreeType != 'undef':
+            t+= " [$ {0}]".format(self.subtreeType)            
         s+="\t\"{0}\"[label=\"{1}{2}\",shape=box];\n".format(self.wordList[0].word+str(self.dfsTag),w,t)
         # Adding definitions of the edges
         for n in self.child:

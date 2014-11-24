@@ -145,7 +145,7 @@ def processQuestionType(t,w,typeMap=questionType):
         Add a type to the root of the tree (= type of the answer) depending on the question word
     """
     try:
-        t.namedEntityTag = typeMap[w]
+        t.subtreeType = typeMap[w]
     except KeyError:
         pass
 
