@@ -54,7 +54,7 @@ dependenciesMap1 = {
                     'pobj'      : 't2', # -
             'subj'      : impossible,
                 'nsubj'     : 't1',
-                    'nsubjpass'    : 't4', #_+ ? instead of  t3
+                    'nsubjpass'    : 't4', #_+ ? instead of t3
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
         'cc'        : impossible,

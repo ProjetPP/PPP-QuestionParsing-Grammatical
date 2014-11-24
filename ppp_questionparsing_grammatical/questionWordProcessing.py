@@ -171,11 +171,10 @@ def processQuestionInfo(t,w,infoMap=questionInfo):
             for n in t.child:
                 processQuestionInfo(n,w)
         elif t.getWords().find(w) == -1:
-            t.wordList.append(Word(infoMap[w],1001))            
+            t.wordList.append(Word(infoMap[w],1001))
     except KeyError:
         pass
-          
-    
+
 def processQuestionWord(t,w):
     """
         Type the root

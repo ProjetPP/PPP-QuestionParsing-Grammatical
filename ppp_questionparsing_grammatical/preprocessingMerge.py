@@ -17,10 +17,10 @@ class Word:
         
     def __str__(self):
         return "({0},{1},{2})".format(str(self.word),str(self.index),str(self.pos))
-    
+
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
-    
+
     def verbToRelatedForms(self):
         """
             Return the lemmas associated to the given verb.
@@ -33,8 +33,8 @@ class Word:
         for s in verb_synsets:
             verb_lemmas += [l for l in s.lemmas() if s.name().split('.')[1] == 'v']
         # Return related forms
-        return [(l, l.derivationally_related_forms()) for l in    verb_lemmas]
-    
+        return [(l, l.derivationally_related_forms()) for l in verb_lemmas]
+
     def verbToRelatedNouns(self):
         """
             Return the nouns associated to the given verb.

@@ -166,7 +166,7 @@ def tripleProduce6(t,nodeToID,triplesBucket):
     """
     assert t.parent is not None
     if not t.child and triplesBucket.isEmpty(): # avoid "What is "blabla"?"
-        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('c','a','?A')))        
+        triplesBucket.addTriple(genericTripleProduce(t,nodeToID,('c','a','?A'))) 
     else:
         triplesBucket.renameUnknown(nodeToID[t.parent],t.getWords())
 
