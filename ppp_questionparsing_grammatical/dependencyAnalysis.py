@@ -166,58 +166,37 @@ def conjConnectorsUp(t):
         temp = list(t.child) # copy, because t.child is changed while iterating
         for c in temp:
             conjConnectorsUp(c)
-    if t.dependency.startswith('conj') and len(t.parent.child) == 1:
-        assert t.parent is not None #and t.child == []
-
+    else:
+        assert t.parent is not None
         depSave = t.dependency[t.dependency.index('_')+1:]
-        
-        parentTemp = t.parent.parent # n0
-        
-        t.dependency = t.parent.dependency # dependency(n2)
-        t.parent.child.remove(t) # son(n1) \= n2
-        
-        dupl = deepcopy(parentTemp) # n0'
-        
-        parentTemp.child.remove(t.parent) # son(n0) \= n1
-        parentTemp.child.append(t) # son(n0)=n2
-        t.parent = parentTemp # parent(n2) = n0
-
-        newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,parentTemp], parentTemp.parent)
-
-        parentTemp.parent.child.remove(parentTemp)
-        parentTemp.parent.child.append(newTree)
-
-        parentTemp.dependency = 'connector'
-        parentTemp.parent = newTree
-        dupl.dependency = 'connector'
-        dupl.parent = newTree
-        
-        temp = list(newTree.child) # copy, because t.child is changed while iterating
-        for c in temp:
-            conjConnectorsUp(c)
-    if t.dependency.startswith('conj') and len(t.parent.child) > 1:
-        assert t.parent is not None #and t.child == []
-
-        depSave = t.dependency[t.dependency.index('_')+1:]
-        parentTemp = t.parent # n0
-        
-        parentTemp.child.remove(t) # son(n1) \= n2
-        
-        dupl = deepcopy(parentTemp) # n0'
-        
-        t.child += t.parent.child # son(n2) = son(n1)
-        for n in t.child:
-            n.parent = t
-
-        newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,t], parentTemp.parent)
-        
+        parentTemp = None
+        dupl = None
+        newTree = None
+        if len(t.parent.child) == 1:
+            parentTemp = t.parent.parent # n0
+            t.dependency = t.parent.dependency # dependency(n2)
+            t.parent.child.remove(t) # son(n1) \= n2
+            dupl = deepcopy(parentTemp) # n0'
+            parentTemp.child.remove(t.parent) # son(n0) \= n1
+            parentTemp.child.append(t) # son(n0)=n2
+            t.parent = parentTemp # parent(n2) = n0
+            newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,parentTemp], parentTemp.parent)
+            parentTemp.dependency = 'connector'
+            parentTemp.parent = newTree
+        else:
+            parentTemp = t.parent # n0
+            parentTemp.child.remove(t) # son(n1) \= n2
+            dupl = deepcopy(parentTemp) # n0'
+            t.child += t.parent.child # son(n2) = son(n1)
+            for n in t.child:
+                n.parent = t
+            newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,t], parentTemp.parent)
+            t.dependency = 'connector'
+            t.parent = newTree
         newTree.parent.child.remove(parentTemp)
         newTree.parent.child.append(newTree)
-        t.dependency = 'connector'
-        t.parent = newTree
         dupl.dependency = 'connector'
         dupl.parent = newTree
-        
         temp = list(newTree.child) # copy, because t.child is changed while iterating
         for c in temp:
             conjConnectorsUp(c)
@@ -233,6 +212,6 @@ def simplify(t):
     conjConnectorsUp(t)                   # remove conjonction connectors
     connectorUp(t)                        # remove amod connectors
     processQuestionWord(t,s)              # add info contained into the qw (type ...)
-    collapseMap(t,dependenciesMap2)       # propagate types
-    collapseMap(t,dependenciesMap2,False) # propagate types
+    collapseMap(t,dependenciesMap2)       # propagate types from bottom to top
+    collapseMap(t,dependenciesMap2,False) # propagate types from top to bottom
     return s

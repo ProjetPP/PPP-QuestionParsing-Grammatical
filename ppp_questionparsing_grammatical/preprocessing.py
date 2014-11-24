@@ -147,14 +147,14 @@ def computeTree(r):
         Apply quotation and NER merging
         Return the root of the tree (word 'ROOT-0').
     """
-    nameToNodes = {} # map from the original string to the node
+    nameToNodes = {}                             # map from the original string to the node
     computeEdges(r,nameToNodes)
     computeTags(r,nameToNodes)
-    tree = nameToNodes['ROOT-0']
+    tree = nameToNodes['ROOT-0']                 # the tree is built
     initText(tree,r['text'].replace('"','\\\"'))
-    mergeQuotations(tree,r) # quotation merging
-    mergeNamedEntityTag(tree) # NER merging
+    mergeQuotations(tree,r)                      # quotation merging
+    mergeNamedEntityTag(tree)                    # NER merging
     lmtzr = WordNetLemmatizer()
     st = PorterStemmer()
-    normalize(tree,lmtzr,st) # normalize words (lemmatization + nounify nouns)
+    normalize(tree,lmtzr,st)                     # normalize words (lemmatization + nounify nouns)
     return tree
