@@ -22,7 +22,14 @@ def amodRule(t):
         merge(t)
     else:
         t.dependency = 'connectorUp'
-                
+
+def propType(t):
+    if t.parent != None:
+        if t.parent.namedEntityTag == 'undef':
+            t.parent.namedEntityTag = t.namedEntityTag
+        assert t.namedEntityTag == 'undef' or t.namedEntityTag == t.parent.namedEntityTag
+        t.namedEntityTag = t.parent.namedEntityTag
+                    
 dependenciesMap1 = {
     'undef'     : 't0', # personnal tag, should not happen?
     'root'      : 't0',
@@ -98,6 +105,17 @@ dependenciesMap2 = {
     'nn'        : merge   
 }
 
+dependenciesMap3 = {
+    't0'        : propType,
+    't1'        : propType,
+    't2'        : ignore,
+    't3'        : ignore,
+    't4'        : ignore,
+    't5'        : ignore,
+    't6'        : propType, 
+    'connector' : ignore
+}
+
 def collapsePrep(t):
     """
         Replace prep(c)_x by prep
@@ -109,13 +127,15 @@ def collapsePrep(t):
         # prep = t.dependency[t.dependency.index('_')+1:] # not used for the moment
         t.dependency = 'prep' # suffix of the prep not analyzed for the moment (just removed)
 
-def collapseMap(t,depMap):
+def collapseMap(t,depMap,down=True):
     """
         Apply the rules of depMap to t
+        If down = false, collapse from top to down
     """
     temp = list(t.child) # copy, because t.child is changed while iterating
-    for c in temp:
-        collapseMap(c,depMap)
+    if down:
+        for c in temp:
+            collapseMap(c,depMap)
     try:
         if isinstance(depMap[t.dependency], str):
             t.dependency = depMap[t.dependency]
@@ -123,7 +143,10 @@ def collapseMap(t,depMap):
             depMap[t.dependency](t)
     except KeyError:
         sys.exit('exit: dependency %s unknown (please, report your sentence on http://goo.gl/EkgO5l)\n' % t.dependency)
-
+    if not down:
+        for c in temp:
+            collapseMap(c,depMap)
+            
 def connectorUp(t):
     """
         Move amod connectors (first, biggest...)
@@ -213,11 +236,13 @@ def simplify(t):
         identify and remove question word
         collapse dependencies of tree t
     """
-    s = identifyQuestionWord(t)     # identify and remove question word
-    collapsePrep(t)                 # replace prep(c)_x by prep(c)
-    collapseMap(t,dependenciesMap1) # collapse the tree according to dependenciesMap1
-    conjConnectorsUp(t)             # remove conjonction connectors
-    collapseMap(t,dependenciesMap2) # collapse the tree according to dependenciesMap2
-    connectorUp(t)                  # remove amod connectors
-    processQuestionWord(t,s)        # add info contained into the qw (type ...)
+    s = identifyQuestionWord(t)           # identify and remove question word
+    collapsePrep(t)                       # replace prep(c)_x by prep(c)
+    collapseMap(t,dependenciesMap1)       # collapse the tree according to dependenciesMap1
+    conjConnectorsUp(t)                   # remove conjonction connectors
+    collapseMap(t,dependenciesMap2)       # collapse the tree according to dependenciesMap2
+    connectorUp(t)                        # remove amod connectors
+    processQuestionWord(t,s)              # add info contained into the qw (type ...)
+    collapseMap(t,dependenciesMap3)       # propagate types
+    collapseMap(t,dependenciesMap3,False) # propagate types
     return s
