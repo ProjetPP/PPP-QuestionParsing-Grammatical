@@ -219,5 +219,5 @@ def simplify(t):
     conjConnectorsUp(t)             # remove conjonction connectors
     collapseMap(t,dependenciesMap2) # collapse the tree according to dependenciesMap2
     connectorUp(t)                  # remove amod connectors
-    processQuestionWord(t,s)
+    processQuestionWord(t,s)        # add info contained into the qw (type ...)
     return s

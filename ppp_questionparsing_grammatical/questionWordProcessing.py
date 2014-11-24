@@ -116,12 +116,21 @@ questionType = {
 }
 
 def processQuestionType(t,w,typeMap=questionType):
+    """
+        Add a type to the root of the tree (= type of the answer)
+          depending on the question word
+    """
     try:
         t.namedEntityTag = typeMap[w]
     except KeyError:
         pass
         
 def processQuestionWord(t,w,qMap=questionMap,typeMap=questionType):
+    """
+        Type the root
+        Try to include the info contained in the question word
+          into the son of ROOT (ex: When -> add "date")
+    """
     processQuestionType(t,w,typeMap)
     n = t.child[0]
     try:
@@ -131,54 +140,3 @@ def processQuestionWord(t,w,qMap=questionMap,typeMap=questionType):
             n.wordList.append(Word(qMap[w],n.wordList[-1].index+1))
     except KeyError:
         pass
-        
-"""    
-questionMap = {
-    # close question word
-    'is'            : 'yesno',
-    'are'           : 'yesno',
-    'am'            : 'yesno',
-    'was'           : 'yesno',
-    'were'          : 'yesno',
-    'will'          : 'yesno',
-    'do'            : 'yesno',
-    'does'          : 'yesno',
-    'did'           : 'yesno',
-    'have'          : 'yesno',
-    'had'           : 'yesno',
-    'has'           : 'yesno',
-    'can'           : 'yesno',
-    'could'         : 'yesno',
-    'should'        : 'yesno',
-    'shall'         : 'yesno',
-    'may'           : 'yesno',
-    'might'         : 'yesno',
-    'would'         : 'yesno',
-    # open question word
-    'what'          : 'definition',
-    'what kind'     : 'description',
-    'what type'     : 'type',
-    'what sort'     : 'type',
-    'what time'     : 'time',
-    'when'          : 'time',
-    'why'           : 'reason',
-    'where'         : 'place',
-    'who'           : 'person',
-    'how'           : 'manner',
-    'how much'      : 'amount',
-    'how many'      : 'quantity',
-    'how old'       : 'age',
-    'how far'       : 'distance',
-    'how long'      : 'length',
-    'how tall'      : 'height',
-    'how deep'      : 'depth',
-    'how wide'      : 'width',
-    'how fast'      : 'speed',
-    'how often'     : 'frequency',
-    'how come'      : 'reason',
-    'which'         : 'choice',
-    'whom'          : 'person',
-    'whose'         : 'possession',
-    'how big'       : 'size'
-}
-"""
