@@ -432,6 +432,75 @@ def give_president_of_USA():
   'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['dep', 'is-2', 'Who-1'], ['det', 'president-4', 'the-3'], ['nsubj', 'is-2', 'president-4'], ['det', 'States-8', 'the-6'], ['nn', 'States-8', 'United-7'], ['prep_of', 'president-4', 'States-8']], 
   'parsetree': '(ROOT (SBARQ (WHNP (WP Who)) (SQ (VBZ is) (NP (NP (DT the) (NN president)) (PP (IN of) (NP (DT the) (NNP United) (NNPS States))))) (. ?)))'}]}
 
+# Parsing result of "What was the first Gilbert and Sullivan opera?"
+def give_opera():
+    return  {'sentences': [{
+  'words': [
+    ['What', 
+        {'PartOfSpeech': 'WP', 
+         'NamedEntityTag': 'O', 
+         'CharacterOffsetBegin': '0', 
+         'Lemma': 'what', 
+         'CharacterOffsetEnd': '4'}], 
+    ['was', 
+        {'PartOfSpeech': 'VBD', 
+         'NamedEntityTag': 'O', 
+         'CharacterOffsetBegin': '5', 
+         'Lemma': 'be', 
+         'CharacterOffsetEnd': '8'}], 
+    ['the', 
+        {'PartOfSpeech': 'DT', 
+         'NamedEntityTag': 'O', 
+         'CharacterOffsetBegin': '9', 
+         'Lemma': 'the', 
+         'CharacterOffsetEnd': '12'}], 
+    ['first', 
+        {'NamedEntityTag': 'ORDINAL', 
+         'NormalizedNamedEntityTag': '1.0', 
+         'CharacterOffsetEnd': '18', 
+         'Lemma': 'first', 
+         'CharacterOffsetBegin': '13', 
+         'PartOfSpeech': 'JJ'}], 
+    ['Gilbert', 
+        {'PartOfSpeech': 'NNP', 
+         'NamedEntityTag': 'PERSON', 
+         'CharacterOffsetBegin': '19', 
+         'Lemma': 'Gilbert', 
+         'CharacterOffsetEnd': '26'}], 
+    ['and', 
+        {'PartOfSpeech': 'CC', 
+         'NamedEntityTag': 'O', 
+         'CharacterOffsetBegin': '27', 
+         'Lemma': 'and', 
+         'CharacterOffsetEnd': '30'}], 
+    ['Sullivan', 
+        {'PartOfSpeech': 'NNP', 
+         'NamedEntityTag': 'PERSON', 
+         'CharacterOffsetBegin': '31', 
+         'Lemma': 'Sullivan', 
+         'CharacterOffsetEnd': '39'}], 
+    ['opera', 
+        {'PartOfSpeech': 'NN', 
+         'NamedEntityTag': 'O', 
+         'CharacterOffsetBegin': '40', 
+         'Lemma': 'opera', 
+         'CharacterOffsetEnd': '45'}], 
+    ['?', 
+        {'PartOfSpeech': '.', 
+         'NamedEntityTag': 'O', 
+         'CharacterOffsetBegin': '45', 
+         'Lemma': '?', 
+         'CharacterOffsetEnd': '46'}]], 
+  'text': 'What was the first Gilbert and Sullivan opera?', 
+  'dependencies': [['root', 'ROOT', 'was'], ['dep', 'was', 'What'], ['det', 'Gilbert', 'the'], ['amod', 'Gilbert', 'first'], ['nsubj', 'was', 'Gilbert'], ['nn', 'opera', 'Sullivan'], ['conj_and', 'Gilbert', 'opera']],   
+  'indexeddependencies': [['root', 'ROOT-0', 'was-2'], ['dep', 'was-2', 'What-1'], ['det', 'Gilbert-5', 'the-3'], ['amod', 'Gilbert-5', 'first-4'], ['nsubj', 'was-2', 'Gilbert-5'], ['nn', 'opera-8', 'Sullivan-7'], ['conj_and', 'Gilbert-5', 'opera-8']], 
+  'parsetree': '(ROOT (SBARQ (WHNP (WP What)) (SQ (VBD was) (NP (DT the) (JJ first) (NNP Gilbert) (CC and) (NNP Sullivan) (NN opera))) (. ?)))'}]}
+
+# Parsing result of "Who is the chief and prime minister?"
+def give_chief():
+    return  {'sentences': [{'parsetree': '(ROOT (SBARQ (WHNP (WP Who)) (SQ (VBZ is) (NP (NP (DT the) (NN chief)) (CC and) (NP (JJ prime) (NN minister)))) (. ?)))', 'dependencies': [['root', 'ROOT', 'is'], ['dep', 'is', 'Who'], ['det', 'chief', 'the'], ['nsubj', 'is', 'chief'], ['amod', 'minister', 'prime'], ['conj_and', 'chief', 'minister']], 'words': [['Who', {'PartOfSpeech': 'WP', 'CharacterOffsetBegin': '0', 'CharacterOffsetEnd': '3', 'NamedEntityTag': 'O', 'Lemma': 'who'}], ['is', {'PartOfSpeech': 'VBZ', 'CharacterOffsetBegin': '4', 'CharacterOffsetEnd': '6', 'NamedEntityTag': 'O', 'Lemma': 'be'}], ['the', {'PartOfSpeech': 'DT', 'CharacterOffsetBegin': '7', 'CharacterOffsetEnd': '10', 'NamedEntityTag': 'O', 'Lemma': 'the'}], ['chief', {'PartOfSpeech': 'NN', 'CharacterOffsetBegin': '11', 'CharacterOffsetEnd': '16', 'NamedEntityTag': 'O', 'Lemma': 'chief'}], ['and', {'PartOfSpeech': 'CC', 'CharacterOffsetBegin': '17', 'CharacterOffsetEnd': '20', 'NamedEntityTag': 'O', 'Lemma': 'and'}], ['prime', {'PartOfSpeech': 'JJ', 'CharacterOffsetBegin': '21', 'CharacterOffsetEnd': '26', 'NamedEntityTag': 'O', 'Lemma': 'prime'}], ['minister', {'PartOfSpeech': 'NN', 'CharacterOffsetBegin': '27', 'CharacterOffsetEnd': '35', 'NamedEntityTag': 'O', 'Lemma': 'minister'}], ['?', {'PartOfSpeech': '.', 'CharacterOffsetBegin': '35', 'CharacterOffsetEnd': '36', 'NamedEntityTag': 'O', 'Lemma': '?'}]], 'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['dep', 'is-2', 'Who-1'], ['det', 'chief-4', 'the-3'], ['nsubj', 'is-2', 'chief-4'], ['amod', 'minister-7', 'prime-6'], ['conj_and', 'chief-4', 'minister-7']], 'text': 'Who is the chief and prime minister?'}]}
+
+
 def tripleProductionData():
     '''
         Return data corresponding to a tree (root-0)--dep-->(child-1)
