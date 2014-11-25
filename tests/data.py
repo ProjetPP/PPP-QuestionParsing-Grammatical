@@ -269,7 +269,7 @@ def give_obama_president_usa():
                   'PartOfSpeech': '.'}]]}]}
 
 # Parsing result of "How old are there?"
-def give_how_hold():
+def give_how_old():
     return  {'sentences': [{'dependencies': [['root', 'ROOT', 'are'],
                 ['advmod', 'old', 'How'],
                 ['dep', 'are', 'old'],

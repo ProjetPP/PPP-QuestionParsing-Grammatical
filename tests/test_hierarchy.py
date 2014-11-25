@@ -12,7 +12,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(simplify(tree),'who')
 
     def testQuestion2(self):
-        tree=computeTree(data.give_how_hold()['sentences'][0])
+        tree=computeTree(data.give_how_old()['sentences'][0])
         self.assertEqual(simplify(tree),'how old')
 
     def testHierarchySimplification(self):
@@ -56,7 +56,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(us.dfsTag,0)
         
     def testIgnore(self):
-        tree=computeTree(data.give_how_hold()['sentences'][0])
+        tree=computeTree(data.give_how_old()['sentences'][0])
         simplify(tree)
         root=tree
         # Root
