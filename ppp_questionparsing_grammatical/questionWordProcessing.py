@@ -151,12 +151,12 @@ def processQuestionType(t,w,typeMap=questionType):
 
 def processIdentity(t,w,wisMap=questionWIs):
     """
-        If the question is "Wh.. is/are/..." replace the node 'identity' (noun associated to 'is') by a word dependendind on Wh..
+        If the question is "Wh.. is/are/..." replace the node 'identity' (noun associated to 'is') by a word depending on Wh..
     """
     try:
         if t.wordList[0].index >= 1000:
             for n in t.child:
-                processIdentity(t,w)
+                processIdentity(n,w)
         elif t.getWords() == 'identity':
             t.wordList[0].word = wisMap[w] # if the son of ROOT is 'identity', replace it according to the question word
     except KeyError:
@@ -182,5 +182,5 @@ def processQuestionWord(t,w):
           into the sons of ROOT (ex: When -> add "date")
     """
     processQuestionType(t,w)  # type the ROOT according to the question word
-    processIdentity(t,w)
+    processIdentity(t.child[0],w)
     processQuestionInfo(t.child[0],w)
