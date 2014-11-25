@@ -498,7 +498,61 @@ def give_opera():
 
 # Parsing result of "Who is the chief and prime minister?"
 def give_chief():
-    return  {'sentences': [{'parsetree': '(ROOT (SBARQ (WHNP (WP Who)) (SQ (VBZ is) (NP (NP (DT the) (NN chief)) (CC and) (NP (JJ prime) (NN minister)))) (. ?)))', 'dependencies': [['root', 'ROOT', 'is'], ['dep', 'is', 'Who'], ['det', 'chief', 'the'], ['nsubj', 'is', 'chief'], ['amod', 'minister', 'prime'], ['conj_and', 'chief', 'minister']], 'words': [['Who', {'PartOfSpeech': 'WP', 'CharacterOffsetBegin': '0', 'CharacterOffsetEnd': '3', 'NamedEntityTag': 'O', 'Lemma': 'who'}], ['is', {'PartOfSpeech': 'VBZ', 'CharacterOffsetBegin': '4', 'CharacterOffsetEnd': '6', 'NamedEntityTag': 'O', 'Lemma': 'be'}], ['the', {'PartOfSpeech': 'DT', 'CharacterOffsetBegin': '7', 'CharacterOffsetEnd': '10', 'NamedEntityTag': 'O', 'Lemma': 'the'}], ['chief', {'PartOfSpeech': 'NN', 'CharacterOffsetBegin': '11', 'CharacterOffsetEnd': '16', 'NamedEntityTag': 'O', 'Lemma': 'chief'}], ['and', {'PartOfSpeech': 'CC', 'CharacterOffsetBegin': '17', 'CharacterOffsetEnd': '20', 'NamedEntityTag': 'O', 'Lemma': 'and'}], ['prime', {'PartOfSpeech': 'JJ', 'CharacterOffsetBegin': '21', 'CharacterOffsetEnd': '26', 'NamedEntityTag': 'O', 'Lemma': 'prime'}], ['minister', {'PartOfSpeech': 'NN', 'CharacterOffsetBegin': '27', 'CharacterOffsetEnd': '35', 'NamedEntityTag': 'O', 'Lemma': 'minister'}], ['?', {'PartOfSpeech': '.', 'CharacterOffsetBegin': '35', 'CharacterOffsetEnd': '36', 'NamedEntityTag': 'O', 'Lemma': '?'}]], 'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['dep', 'is-2', 'Who-1'], ['det', 'chief-4', 'the-3'], ['nsubj', 'is-2', 'chief-4'], ['amod', 'minister-7', 'prime-6'], ['conj_and', 'chief-4', 'minister-7']], 'text': 'Who is the chief and prime minister?'}]}
+    return  {'sentences': [{
+
+  'words': [
+    ['Who', 
+        {'PartOfSpeech': 'WP', 
+         'CharacterOffsetBegin': '0', 
+         'CharacterOffsetEnd': '3', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'who'}], 
+    ['is', 
+        {'PartOfSpeech': 'VBZ', 
+         'CharacterOffsetBegin': '4', 
+         'CharacterOffsetEnd': '6', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'be'}], 
+    ['the', 
+        {'PartOfSpeech': 'DT', 
+         'CharacterOffsetBegin': '7', 
+         'CharacterOffsetEnd': '10', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'the'}], 
+    ['chief', 
+        {'PartOfSpeech': 'NN', 
+         'CharacterOffsetBegin': '11', 
+         'CharacterOffsetEnd': '16', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'chief'}], 
+    ['and', 
+        {'PartOfSpeech': 'CC', 
+         'CharacterOffsetBegin': '17', 
+         'CharacterOffsetEnd': '20', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'and'}], 
+    ['prime', 
+        {'PartOfSpeech': 'JJ', 
+         'CharacterOffsetBegin': '21', 
+         'CharacterOffsetEnd': '26', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'prime'}], 
+    ['minister', 
+        {'PartOfSpeech': 'NN', 
+         'CharacterOffsetBegin': '27', 
+         'CharacterOffsetEnd': '35', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'minister'}], 
+    ['?', 
+        {'PartOfSpeech': '.', 
+         'CharacterOffsetBegin': '35', 
+         'CharacterOffsetEnd': '36', 
+         'NamedEntityTag': 'O', 
+         'Lemma': '?'}]], 
+   'parsetree': '(ROOT (SBARQ (WHNP (WP Who)) (SQ (VBZ is) (NP (NP (DT the) (NN chief)) (CC and) (NP (JJ prime) (NN minister)))) (. ?)))', 
+  'dependencies': [['root', 'ROOT', 'is'], ['dep', 'is', 'Who'], ['det', 'chief', 'the'], ['nsubj', 'is', 'chief'], ['amod', 'minister', 'prime'], ['conj_and', 'chief', 'minister']], 
+  'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['dep', 'is-2', 'Who-1'], ['det', 'chief-4', 'the-3'], ['nsubj', 'is-2', 'chief-4'], ['amod', 'minister-7', 'prime-6'], ['conj_and', 'chief-4', 'minister-7']], 
+  'text': 'Who is the chief and prime minister?'}]}
 
 
 def tripleProductionData():
