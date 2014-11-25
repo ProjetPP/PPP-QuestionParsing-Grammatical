@@ -105,7 +105,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(president.dependency,'t1')
         self.assertEqual(president.parent,is_)
         self.assertEqual(len(president.child),0)
-        self.assertEqual(president.subtreeType,'undef')
+        self.assertEqual(president.subtreeType,'PERSON')
         self.assertEqual(president.dfsTag,0)
         
     def testHierarchyConnectors1(self):
@@ -221,7 +221,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(chief.dependency,'t1')
         self.assertEqual(chief.parent,identity1)
         self.assertEqual(len(chief.child),0)
-        self.assertEqual(chief.subtreeType,'undef')
+        self.assertEqual(chief.subtreeType,'PERSON')
         self.assertEqual(chief.dfsTag,0)
         # prime minister
         prime=identity2.child[0]
@@ -230,5 +230,5 @@ class HierarchyTests(TestCase):
         self.assertEqual(prime.dependency,'t1')
         self.assertEqual(prime.parent,identity2)
         self.assertEqual(len(prime.child),0)
-        self.assertEqual(prime.subtreeType,'undef')
+        self.assertEqual(prime.subtreeType,'PERSON')
         self.assertEqual(prime.dfsTag,0)        

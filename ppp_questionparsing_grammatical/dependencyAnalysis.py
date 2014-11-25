@@ -32,13 +32,6 @@ def propType(t):
             t.parent.subtreeType = t.subtreeType
         assert t.subtreeType == 'undef' or t.subtreeType == t.parent.subtreeType
         t.subtreeType = t.parent.subtreeType
-
-def propTypeT1(t):
-    """
-        propType for t1 rule
-    """
-    if t.child != []:
-        propType(t)
                      
 dependenciesMap1 = {
     'undef'     : 't0', # personnal tag, should not happen?
@@ -104,7 +97,7 @@ dependenciesMap1 = {
 
 dependenciesMap2 = {
     't0'        : propType,
-    't1'        : propTypeT1,
+    't1'        : propType,
     't2'        : ignore,
     't3'        : ignore,
     't4'        : ignore,
@@ -142,7 +135,7 @@ def collapseMap(t,depMap,down=True):
         sys.exit('exit: dependency %s unknown (please, report your sentence on http://goo.gl/EkgO5l)\n' % t.dependency)
     if not down:
         for c in temp:
-            collapseMap(c,depMap)
+            collapseMap(c,depMap,down)
             
 def connectorUp(t):
     """
