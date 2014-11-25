@@ -170,7 +170,7 @@ def processQuestionInfo(t,w,infoMap=questionInfo):
         if t.wordList[0].index >= 1000:
             for n in t.child:
                 processQuestionInfo(n,w)
-        elif t.getWords().find(w) == -1:
+        elif t.getWords().find(infoMap[w]) == -1:
             t.wordList.append(Word(infoMap[w],1001))
     except KeyError:
         pass
