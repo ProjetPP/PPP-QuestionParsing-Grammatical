@@ -24,6 +24,9 @@ def amodRule(t):
         t.dependency = 'connectorUp'
 
 def propType(t):
+    """
+        Propagate locally the type of the subtree
+    """
     if t.parent != None:
         if t.parent.subtreeType == 'undef':
             t.parent.subtreeType = t.subtreeType
@@ -31,6 +34,9 @@ def propType(t):
         t.subtreeType = t.parent.subtreeType
 
 def propTypeT1(t):
+    """
+        propType for t1 rule
+    """
     if t.child != []:
         propType(t)
                      
