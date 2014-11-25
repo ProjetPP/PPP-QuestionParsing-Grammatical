@@ -165,7 +165,7 @@ def processIdentity(t,w,wisMap=questionWIs):
 
 def processQuestionInfo(t,w,infoMap=questionInfo):
     """
-        Add to the first sons of ROOT that are not connectors (ie index < 1000) a word depending on the qw
+        Add info to the first sons of ROOT that are not connectors (ie index < 1000) a word depending on the qw
     """
     try:
         if t.wordList[0].index >= 1000:

@@ -562,6 +562,10 @@ def give_born():
 def birth_date():
     return {'sentences': [{'parsetree': '(ROOT (NP (NP (NNP President)) (PP (IN of) (NP (NNP France)))))', 'words': [['President', {'NamedEntityTag': 'O', 'CharacterOffsetBegin': '0', 'Lemma': 'President', 'CharacterOffsetEnd': '9', 'PartOfSpeech': 'NNP'}], ['of', {'NamedEntityTag': 'O', 'CharacterOffsetBegin': '10', 'Lemma': 'of', 'CharacterOffsetEnd': '12', 'PartOfSpeech': 'IN'}], ['France', {'NamedEntityTag': 'LOCATION', 'CharacterOffsetBegin': '13', 'Lemma': 'France', 'CharacterOffsetEnd': '19', 'PartOfSpeech': 'NNP'}]], 'dependencies': [['root', 'ROOT', 'President'], ['prep_of', 'President', 'France']], 'text': 'President of France', 'indexeddependencies': [['root', 'ROOT-0', 'President-1'], ['prep_of', 'President-1', 'France-3']]}]}
 
+# Parsing result of "When is born Obama?"
+def birth_place():
+    return {'sentences': [{'dependencies': [['root', 'ROOT', 'born'], ['advmod', 'born', 'When'], ['auxpass', 'born', 'is'], ['dobj', 'born', 'Obama']], 'words': [['When', {'Lemma': 'when', 'CharacterOffsetEnd': '4', 'NamedEntityTag': 'O', 'PartOfSpeech': 'WRB', 'CharacterOffsetBegin': '0'}], ['is', {'Lemma': 'be', 'CharacterOffsetEnd': '7', 'NamedEntityTag': 'O', 'PartOfSpeech': 'VBZ', 'CharacterOffsetBegin': '5'}], ['born', {'Lemma': 'bear', 'CharacterOffsetEnd': '12', 'NamedEntityTag': 'O', 'PartOfSpeech': 'VBN', 'CharacterOffsetBegin': '8'}], ['Obama', {'Lemma': 'Obama', 'CharacterOffsetEnd': '18', 'NamedEntityTag': 'PERSON', 'PartOfSpeech': 'NNP', 'CharacterOffsetBegin': '13'}], ['?', {'Lemma': '?', 'CharacterOffsetEnd': '19', 'NamedEntityTag': 'O', 'PartOfSpeech': '.', 'CharacterOffsetBegin': '18'}]], 'text': 'When is born Obama?', 'indexeddependencies': [['root', 'ROOT-0', 'born-3'], ['advmod', 'born-3', 'When-1'], ['auxpass', 'born-3', 'is-2'], ['dobj', 'born-3', 'Obama-4']], 'parsetree': '(ROOT (SBARQ (WHADVP (WRB When)) (SQ (VBZ is) (VP (VBN born) (NP (NNP Obama)))) (. ?)))'}]}
+    
 def tripleProductionData():
     '''
         Return data corresponding to a tree (root-0)--dep-->(child-1)

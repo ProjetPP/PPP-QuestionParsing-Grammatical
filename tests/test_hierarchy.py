@@ -294,3 +294,34 @@ class HierarchyTests(TestCase):
         self.assertEqual(len(france.child),0)
         self.assertEqual(france.subtreeType,'undef')
         self.assertEqual(france.dfsTag,0)
+        
+    def testQuestionInfo(self):
+        tree=computeTree(data.birth_place()['sentences'][0])
+        simplify(tree)
+        root=tree
+        # Root
+        self.assertEqual(root.wordList,[Word("ROOT",0)])
+        self.assertEqual(root.namedEntityTag,'undef')
+        self.assertEqual(root.dependency,'t0')
+        self.assertEqual(root.parent,None)
+        self.assertEqual(len(root.child),1)
+        self.assertEqual(root.subtreeType,'DATE')
+        self.assertEqual(root.dfsTag,0)
+        # birth date
+        birth=root.child[0]
+        self.assertEqual(birth.wordList,[Word("birth",3,'VBN'),Word("date",1001,None)])
+        self.assertEqual(birth.namedEntityTag,'undef')
+        self.assertEqual(birth.dependency,'t0')
+        self.assertEqual(birth.parent,root)
+        self.assertEqual(len(birth.child),1)
+        self.assertEqual(birth.subtreeType,'DATE')
+        self.assertEqual(birth.dfsTag,0)
+        # obama
+        obama=birth.child[0]
+        self.assertEqual(obama.wordList,[Word("Obama",4,'NNP')])
+        self.assertEqual(obama.namedEntityTag,'PERSON')
+        self.assertEqual(obama.dependency,'t2')
+        self.assertEqual(obama.parent,birth)
+        self.assertEqual(len(obama.child),0)
+        self.assertEqual(obama.subtreeType,'undef')
+        self.assertEqual(obama.dfsTag,0)
