@@ -69,7 +69,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(root.dfsTag,0)
         # Are
         are=root.child[0]
-        self.assertEqual(are.wordList,[Word("identity",3,'VBP'),Word('age',1001,None)])
+        self.assertEqual(are.wordList,[Word("age",3,'VBP'),Word('age',1001,None)])
         self.assertEqual(are.namedEntityTag,'undef')
         self.assertEqual(are.dependency,'t0')
         self.assertEqual(are.parent,root)
@@ -122,7 +122,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(root.dfsTag,0)
         # identity
         identity=root.child[0]
-        self.assertEqual(identity.wordList,[Word("identity",2,'VBD')])
+        self.assertEqual(identity.wordList,[Word("definition",2,'VBD')])
         self.assertEqual(identity.namedEntityTag,'undef')
         self.assertEqual(identity.dependency,'t0')
         self.assertEqual(identity.parent,root)
