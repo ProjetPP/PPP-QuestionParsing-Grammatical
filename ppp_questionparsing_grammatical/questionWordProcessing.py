@@ -61,6 +61,7 @@ def identifyQuestionWord(t):
     if start[0].word.lower() in openQuestionWord: 
         removeWord(t,start[0])
         return start[0].word.lower()
+    #print(start[0].word.lower())
     if start[0].word.lower() in closeQuestionWord: 
         return start[0].word.lower()
     return None

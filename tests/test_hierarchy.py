@@ -232,3 +232,65 @@ class HierarchyTests(TestCase):
         self.assertEqual(len(prime.child),0)
         self.assertEqual(prime.subtreeType,'PERSON')
         self.assertEqual(prime.dfsTag,0)        
+
+    def testYesNoQuestion(self):
+        tree=computeTree(data.give_born()['sentences'][0])
+        simplify(tree)
+        root=tree
+        # Root
+        self.assertEqual(root.wordList,[Word("ROOT",0)])
+        self.assertEqual(root.namedEntityTag,'undef')
+        self.assertEqual(root.dependency,'t0')
+        self.assertEqual(root.parent,None)
+        self.assertEqual(len(root.child),1)
+        self.assertEqual(root.subtreeType,'undef')
+        self.assertEqual(root.dfsTag,0)
+        # birth
+        birth=root.child[0]
+        self.assertEqual(birth.wordList,[Word("birth",2,'VBN')])
+        self.assertEqual(birth.namedEntityTag,'undef')
+        self.assertEqual(birth.dependency,'t0')
+        self.assertEqual(birth.parent,root)
+        self.assertEqual(len(birth.child),1)
+        self.assertEqual(birth.subtreeType,'undef')
+        self.assertEqual(birth.dfsTag,0)
+        # date
+        date=birth.child[0]
+        self.assertEqual(date.wordList,[Word("1900",4,'CD')])
+        self.assertEqual(date.namedEntityTag,'DATE')
+        self.assertEqual(date.dependency,'t4')
+        self.assertEqual(date.parent,birth)
+        self.assertEqual(len(date.child),0)
+        self.assertEqual(date.subtreeType,'undef')
+        self.assertEqual(date.dfsTag,0)
+        
+    def testNoQW(self):
+        tree=computeTree(data.birth_date()['sentences'][0])
+        simplify(tree)
+        root=tree
+        # Root
+        self.assertEqual(root.wordList,[Word("ROOT",0)])
+        self.assertEqual(root.namedEntityTag,'undef')
+        self.assertEqual(root.dependency,'t0')
+        self.assertEqual(root.parent,None)
+        self.assertEqual(len(root.child),1)
+        self.assertEqual(root.subtreeType,'undef')
+        self.assertEqual(root.dfsTag,0)
+        # president
+        president=root.child[0]
+        self.assertEqual(president.wordList,[Word("President",1,'NNP')])
+        self.assertEqual(president.namedEntityTag,'undef')
+        self.assertEqual(president.dependency,'t0')
+        self.assertEqual(president.parent,root)
+        self.assertEqual(len(president.child),1)
+        self.assertEqual(president.subtreeType,'undef')
+        self.assertEqual(president.dfsTag,0)
+        # france
+        france=president.child[0]
+        self.assertEqual(france.wordList,[Word("France",3,'NNP')])
+        self.assertEqual(france.namedEntityTag,'LOCATION')
+        self.assertEqual(france.dependency,'t4')
+        self.assertEqual(france.parent,president)
+        self.assertEqual(len(france.child),0)
+        self.assertEqual(france.subtreeType,'undef')
+        self.assertEqual(france.dfsTag,0)

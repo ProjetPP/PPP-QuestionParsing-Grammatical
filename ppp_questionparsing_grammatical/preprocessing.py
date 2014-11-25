@@ -1,7 +1,5 @@
 import sys
 from .preprocessingMerge import Word, mergeQuotations, mergeNamedEntityTag, buildWord
-from nltk.stem.wordnet import WordNetLemmatizer
-from nltk.stem.porter import PorterStemmer
 from copy import deepcopy
 
 class DependenciesTree:
@@ -133,13 +131,6 @@ def initText(t,s):
     for c in t.child:
         initText(c,s)
 
-def normalize(t,lmtzr,st):
-    for c in t.child:
-        normalize(c,lmtzr,st)
-    if t.namedEntityTag == 'undef':
-        for w in t.wordList:
-            w.normalize(lmtzr,st)
-
 def computeTree(r):
     """
         Compute the dependence tree.
@@ -154,7 +145,4 @@ def computeTree(r):
     initText(tree,r['text'].replace('"','\\\"'))
     mergeQuotations(tree,r)                      # quotation merging
     mergeNamedEntityTag(tree)                    # NER merging
-    lmtzr = WordNetLemmatizer()
-    st = PorterStemmer()
-    normalize(tree,lmtzr,st)                     # normalize words (lemmatization + nounify nouns)
     return tree

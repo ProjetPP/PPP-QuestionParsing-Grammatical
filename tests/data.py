@@ -69,10 +69,10 @@ def give_john_smith():
 def give_john_smith_string():
     s="digraph relations {\n"
     s+="\t\"ROOT5\"[label=\"ROOT\",shape=box];\n"
-    s+="\t\"ROOT5\" -> \"residence4\"[label=\"root\"];\n"
-    s+="\t\"residence4\"[label=\"residence\",shape=box];\n"
-    s+="\t\"residence4\" -> \"John0\"[label=\"nsubj\"];\n"
-    s+="\t\"residence4\" -> \"United3\"[label=\"prep_in\"];\n"
+    s+="\t\"ROOT5\" -> \"lives4\"[label=\"root\"];\n"
+    s+="\t\"lives4\"[label=\"lives\",shape=box];\n"
+    s+="\t\"lives4\" -> \"John0\"[label=\"nsubj\"];\n"
+    s+="\t\"lives4\" -> \"United3\"[label=\"prep_in\"];\n"
     s+="\t\"John0\"[label=\"John Smith [PERSON]\",shape=box];\n"
     s+="\t\"United3\"[label=\"United Kingdom [LOCATION]\",shape=box];\n"
     s+="\t\"United3\" -> \"the1\"[label=\"det\"];\n"
@@ -554,6 +554,13 @@ def give_chief():
   'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['dep', 'is-2', 'Who-1'], ['det', 'chief-4', 'the-3'], ['nsubj', 'is-2', 'chief-4'], ['amod', 'minister-7', 'prime-6'], ['conj_and', 'chief-4', 'minister-7']], 
   'text': 'Who is the chief and prime minister?'}]}
 
+# Parsing result of "Is born in 1900"
+def give_born():
+    return {'sentences': [{'indexeddependencies': [['root', 'ROOT-0', 'born-2'], ['auxpass', 'born-2', 'Is-1'], ['prep_in', 'born-2', '1900-4']], 'parsetree': '(ROOT (FRAG (VP (VBZ Is) (VP (VBN born) (PP (IN in) (NP (CD 1900)))))))', 'words': [['Is', {'PartOfSpeech': 'VBZ', 'Lemma': 'be', 'CharacterOffsetBegin': '0', 'CharacterOffsetEnd': '2', 'NamedEntityTag': 'O'}], ['born', {'PartOfSpeech': 'VBN', 'Lemma': 'bear', 'CharacterOffsetBegin': '3', 'CharacterOffsetEnd': '7', 'NamedEntityTag': 'O'}], ['in', {'PartOfSpeech': 'IN', 'Lemma': 'in', 'CharacterOffsetBegin': '8', 'CharacterOffsetEnd': '10', 'NamedEntityTag': 'O'}], ['1900', {'Timex': '<TIMEX3 tid="t1" type="DATE" value="1900">1900</TIMEX3>', 'PartOfSpeech': 'CD', 'Lemma': '1900', 'NamedEntityTag': 'DATE', 'CharacterOffsetBegin': '11', 'CharacterOffsetEnd': '15', 'NormalizedNamedEntityTag': '1900'}]], 'dependencies': [['root', 'ROOT', 'born'], ['auxpass', 'born', 'Is'], ['prep_in', 'born', '1900']], 'text': 'Is born in 1900'}]}
+
+# Parsing result of "President of France"
+def birth_date():
+    return {'sentences': [{'parsetree': '(ROOT (NP (NP (NNP President)) (PP (IN of) (NP (NNP France)))))', 'words': [['President', {'NamedEntityTag': 'O', 'CharacterOffsetBegin': '0', 'Lemma': 'President', 'CharacterOffsetEnd': '9', 'PartOfSpeech': 'NNP'}], ['of', {'NamedEntityTag': 'O', 'CharacterOffsetBegin': '10', 'Lemma': 'of', 'CharacterOffsetEnd': '12', 'PartOfSpeech': 'IN'}], ['France', {'NamedEntityTag': 'LOCATION', 'CharacterOffsetBegin': '13', 'Lemma': 'France', 'CharacterOffsetEnd': '19', 'PartOfSpeech': 'NNP'}]], 'dependencies': [['root', 'ROOT', 'President'], ['prep_of', 'President', 'France']], 'text': 'President of France', 'indexeddependencies': [['root', 'ROOT-0', 'President-1'], ['prep_of', 'President-1', 'France-3']]}]}
 
 def tripleProductionData():
     '''

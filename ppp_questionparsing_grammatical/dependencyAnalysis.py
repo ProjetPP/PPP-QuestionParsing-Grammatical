@@ -3,6 +3,8 @@ from .questionWordProcessing import identifyQuestionWord, processQuestionWord
 from .preprocessing import DependenciesTree
 from .preprocessingMerge import Word
 from copy import deepcopy
+from nltk.stem.wordnet import WordNetLemmatizer
+from nltk.stem.porter import PorterStemmer
 
 def remove(t):
     t.parent.child.remove(t)
@@ -200,12 +202,25 @@ def conjConnectorsUp(t):
         for c in temp:
             conjConnectorsUp(c)
 
+def subNormalize(t,lmtzr,st):
+    for c in t.child:
+        subNormalize(c,lmtzr,st)
+    if t.namedEntityTag == 'undef':
+        for w in t.wordList:
+            w.normalize(lmtzr,st)
+
+def normalize(t):         
+    lmtzr = WordNetLemmatizer()
+    st = PorterStemmer()
+    subNormalize(t,lmtzr,st)                     # normalize words (lemmatization + nounify nouns)
+                
 def simplify(t):
     """
         identify and remove question word
         collapse dependencies of tree t
     """
     s = identifyQuestionWord(t)           # identify and remove question word
+    normalize(t)                          # lemmatize, nounify
     collapsePrep(t)                       # replace prep(c)_x by prep(c)
     collapseMap(t,dependenciesMap1)       # collapse the tree according to dependenciesMap1
     conjConnectorsUp(t)                   # remove conjonction connectors
