@@ -107,7 +107,8 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(who.dfsTag,0)
         # Lucy in the Sky with Diamondss
         lucy=wrote.child[1]
-        self.assertEqual(lucy.wordList,[Word("Lucy",4,'NNP'),Word("in",5,'IN'),Word("the",6,'DT'),Word("Sky",7,'NN'),Word("with",8,'IN'),Word("Diamonds",9,'NNP')])
+        print("WordList=",lucy.wordList[0])
+        self.assertEqual(lucy.wordList,[Word("Lucy in the Sky with Diamonds",4,'QUOTE')])
         self.assertEqual(lucy.namedEntityTag,'QUOTATION')
         self.assertEqual(lucy.dependency,'dobj')
         self.assertEqual(lucy.parent,wrote)
@@ -116,7 +117,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(lucy.dfsTag,0)
         # Let it be
         let=wrote.child[2]
-        self.assertEqual(let.wordList,[Word("Let",13,'VB'),Word("It",14,'PRP'),Word("Be",15,'VB')])
+        self.assertEqual(let.wordList,[Word("Let It Be",13,'QUOTE')])
         self.assertEqual(let.namedEntityTag,'QUOTATION')
         self.assertEqual(let.dependency,'conj_and')
         self.assertEqual(let.parent,wrote)
