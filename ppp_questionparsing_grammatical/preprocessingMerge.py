@@ -202,13 +202,13 @@ def handleLostQuotationWords(r,quoteIndexToNode):
         if word[0] == "``":
             inQuote = True
             quoteNode=quoteIndexToNode[index]
-            indexBegin = index
             continue
         if word[0] == "''":
             inQuote = False
-            characterOffsetEnd = int(word[1]['CharacterOffsetBegin'])
-            quoteNode.wordList = [Word(r['text'][int(r['words'][indexBegin-1][1]['CharacterOffsetEnd']):int(r['words'][index-1][1]['CharacterOffsetEnd'])-1],indexBegin+1,'QUOTE')]
+            quoteNode.wordList.sort(key = lambda x: x.index)
             continue
+        if inQuote and index not in [w.index for w in quoteNode.wordList]:
+            quoteNode.wordList += [Word(word[0],index,word[1]['PartOfSpeech'])]
 
 def addQuotationTag(quoteIndexToNode):
     """

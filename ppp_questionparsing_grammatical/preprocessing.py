@@ -77,13 +77,8 @@ class DependenciesTree:
         """
             concatenate all strings of the node (in wordList)
         """
-        self.wordList.sort(key = lambda x: x.index)
-        result = self.wordList[0].word
-        for i in range(1,len(self.wordList)):
-            if self.wordList[i].pos != 'POS':
-                result += " "
-            result += self.wordList[i].word
-        return result
+        self.wordList.sort(key = lambda x: x.index) 
+        return ' '.join(x.word for x in self.wordList)
 
 def computeEdges(r,nameToNodes):
     """
