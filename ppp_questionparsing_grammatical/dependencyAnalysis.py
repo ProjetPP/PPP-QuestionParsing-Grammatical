@@ -46,11 +46,11 @@ dependenciesMap1 = {
             'agent'     : 't4',
             'comp'      : 't2',
                 'acomp'     : 't2',
-                'ccomp'     : 't2',
+                'ccomp'     : 't4',
                 'xcomp'     : 't2',
                 'pcomp'     : 't2',
                 'obj'       : impossible,
-                    'dobj'      : 't2', #_+ instead of t4
+                    'dobj'      : 't4', #_+ instead of t4
                     'iobj'      : 't2',
                     'pobj'      : 't2', # -
             'subj'      : impossible,

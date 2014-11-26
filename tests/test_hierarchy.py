@@ -320,7 +320,7 @@ class HierarchyTests(TestCase):
         obama=birth.child[0]
         self.assertEqual(obama.wordList,[Word("Obama",4,'NNP')])
         self.assertEqual(obama.namedEntityTag,'PERSON')
-        self.assertEqual(obama.dependency,'t2')
+        self.assertEqual(obama.dependency,'t4')
         self.assertEqual(obama.parent,birth)
         self.assertEqual(len(obama.child),0)
         self.assertEqual(obama.subtreeType,'undef')

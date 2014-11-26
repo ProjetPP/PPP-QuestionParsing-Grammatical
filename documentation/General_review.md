@@ -1,4 +1,8 @@
 
+## Bug
+
+* Who has written "The Hitchhiker's Guide to the Galaxy"? with demo2
+
 ## More research
 
 * Yes/no question: product dobj relation?
