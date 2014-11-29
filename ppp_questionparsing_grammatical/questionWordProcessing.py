@@ -92,7 +92,7 @@ questionInfo = {
 }
 
 questionWIs = {
-    # how to replace the son of ROOT when it's "is" (nounify into identity)
+    # how to replace the son of ROOT when it's "is" (nounified into identity)
     'what'          : 'definition',
     'what kind'     : 'description',
     'what type'     : 'type',
@@ -100,7 +100,7 @@ questionWIs = {
     'what time'     : 'time',
     'when'          : 'date',
     'why'           : 'reason',
-    'where'         : 'place',
+    'where'         : 'location', # != place
     'who'           : 'identity',
     'how'           : 'manner',
     'how much'      : 'amount',
