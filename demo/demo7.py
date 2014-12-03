@@ -15,9 +15,11 @@ class StanfordNLP:
     def parse(self, text):
         return json.loads(self.server.parse(text))
 
-def get_answer():
+def get_answer(sentence=""):
+    if sentence == "":
+        sentence = input("")
     nlp = StanfordNLP()
-    result = nlp.parse(input(""))
+    result = nlp.parse(sentence)
     tree = ppp_questionparsing_grammatical.computeTree(result['sentences'][0])
     qw = ppp_questionparsing_grammatical.simplify(tree)
     return ppp_questionparsing_grammatical.buildTree(ppp_questionparsing_grammatical.buildBucket(tree,qw))
