@@ -9,7 +9,7 @@ class TripleError(Exception):
         self.expression = expression
         self.message = message
 
-def string_of_triple(t,missing='?',separator=','):
+def string_of_triple(t,missing,separator):
     if t.type == 'missing':
         return missing
     if t.type == 'resource':
@@ -21,5 +21,6 @@ def string_of_triple(t,missing='?',separator=','):
         return "({1}{0}{2}{0}{3})".format(separator,_subject,_predicate,_object)
     raise TripleError(t,"Wrong triple (new datamodel connectors?).")
 
-def process_string(s,missing,separator):
+
+def process_string(s,missing='?',separator=','):
     return string_of_triple(get_answer(s),missing,separator)
