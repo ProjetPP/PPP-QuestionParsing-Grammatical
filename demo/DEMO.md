@@ -63,6 +63,17 @@ More conveniently, use the script `displaygraph`:
 ./displaygraph.sh Who wrote \"Lucy in the Sky with Diamonds\" and \"Let It Be\"?
 ```
 
+Dataset generation
+==================
+
+Useful for ML modules.
+
+We assume that a server is launched, and that the input questions are in a file `dataset.in`.
+
+```
+python3 datasetGeneration.py < dataset.in > dataset.out 2> dataset.error
+```
+
 
 Description of demo files
 =========================
