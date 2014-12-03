@@ -1,5 +1,8 @@
 from demo7 import get_answer
 import json
+import sys
+import os
+from ppp_questionparsing_grammatical.data.exceptions import GrammaticalError
 
 class TripleError(Exception):
     """
@@ -31,5 +34,10 @@ if __name__ == "__main__":
             s = input("")
         except EOFError:
             break
+        try:
+            result = process_string(s)
+        except GrammaticalError:
+            sys.stderr.write("{0}".format(s))
+            continue
         print(s)
-        print(process_string(s))
+        print(result)
