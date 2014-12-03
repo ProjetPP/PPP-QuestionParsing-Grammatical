@@ -24,3 +24,12 @@ def string_of_triple(t,missing,separator):
 
 def process_string(s,missing='?',separator=','):
     return string_of_triple(get_answer(s),missing,separator)
+
+if __name__ == "__main__":
+    while True:
+        try:
+            s = input("")
+        except EOFError:
+            break
+        print(s)
+        print(process_string(s))
