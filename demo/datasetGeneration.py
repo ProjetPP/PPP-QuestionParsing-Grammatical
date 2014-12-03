@@ -37,7 +37,7 @@ if __name__ == "__main__":
         try:
             result = process_string(s)
         except GrammaticalError:
-            sys.stderr.write("{0}".format(s))
+            sys.stderr.write("{0}\n".format(s))
             continue
         print(s)
         print(result)

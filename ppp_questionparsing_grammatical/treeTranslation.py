@@ -29,7 +29,8 @@ def buildTree(triplesBucket):
         build a tree from a triplesBucket
     """
     t = triplesBucket.extractTriple(0) # 0 = main unknown
-    assert t # != None
+    if not t:
+        raise GrammaticalError(triplesBucket,"no main unknown")
     tree = newNode(triplesBucket,t)
     if not triplesBucket.isEmpty():
         raise GrammaticalError(triplesBucket,"tree translation not completed")
