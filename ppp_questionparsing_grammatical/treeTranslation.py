@@ -1,7 +1,7 @@
-
 import sys
 import ppp_datamodel
 from .tripleProduction import TriplesBucket
+from .data.exceptions import GrammaticalError
 
 def newSubNode(triplesBucket,t):
     """
@@ -32,5 +32,5 @@ def buildTree(triplesBucket):
     assert t # != None
     tree = newNode(triplesBucket,t)
     if not triplesBucket.isEmpty():
-        sys.exit('exit: tree translation not completed (please, report your sentence on http://goo.gl/EkgO5l)\n')
+        raise(GrammaticalError,tripleBucket,"tree translation not completed")
     return tree

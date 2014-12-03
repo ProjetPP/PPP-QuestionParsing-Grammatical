@@ -1,6 +1,7 @@
 import sys
 from .data.nounification import nounificationExceptions
 from nltk.corpus import wordnet
+from .data.exceptions import GrammaticalError
 
 
 ########################################
@@ -147,7 +148,7 @@ def matchingQuote(wlist,quotationList):
     quote=matchingQuoteWord(wlist[0],quotationList)
     for w in wlist:
         if matchingQuoteWord(w,quotationList) != quote:
-            sys.exit('exit: node belong to several quotations (please, report your sentence on http://goo.gl/EkgO5l)\n')
+            raise(GrammaticalError,w,"node belong to several quotations")
     return quote
 
 def quotationTraversal(t,quotationList,quoteIndexToNode):
