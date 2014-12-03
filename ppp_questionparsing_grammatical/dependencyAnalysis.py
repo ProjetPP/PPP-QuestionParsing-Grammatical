@@ -1,5 +1,6 @@
 import sys
 from .questionIdentify import identifyQuestionWord
+from .data.exceptions import GrammaticalError
 
 def remove(t):
     t.parent.child.remove(t)
