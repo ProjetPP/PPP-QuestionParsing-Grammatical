@@ -5,7 +5,7 @@ def remove(t):
     t.parent.child.remove(t)
 
 def impossible(t):
-    raise(GrammaticalError,t.dependency,"unexpected dependency")
+    raise GrammaticalError(t.dependency,"unexpected dependency")
 
 def ignore(t):
     remove(t)
@@ -98,7 +98,7 @@ def collapseDependency(t,depMap=dependenciesMap):
         else:
             depMap[t.dependency](t)
     except KeyError:
-        raise(GrammaticalError,t.dependency,"unknown dependency")
+        raise GrammaticalError(t.dependency,"unknown dependency")
 
 def simplify(t):
     """

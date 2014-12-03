@@ -27,7 +27,7 @@ def removeWord(t,word):
         if not t.child:
             t.parent.child.remove(t) 
         else:
-            raise(GrammaticalError,word,"question word has child")
+            raise GrammaticalError(t,"question word has child")
     else:
         for c in t.child:
             removeWord(c,word)
@@ -52,7 +52,7 @@ def identifyQuestionWord(t):
     start = [None,None]
     firstWords(t,start)
     if not start[0]:
-        raise(GrammaticalError,t,"don\'t understand")
+        raise GrammaticalError(t,"don\'t understand")
     if start[1] and start[0].word.lower() + ' ' + start[1].word.lower() in openQuestionWord:
         removeWord(t,start[0])
         removeWord(t,start[1])

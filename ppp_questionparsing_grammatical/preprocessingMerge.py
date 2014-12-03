@@ -148,7 +148,7 @@ def matchingQuote(wlist,quotationList):
     quote=matchingQuoteWord(wlist[0],quotationList)
     for w in wlist:
         if matchingQuoteWord(w,quotationList) != quote:
-            raise(GrammaticalError,w,"node belong to several quotations")
+            raise GrammaticalError(w,"node belong to several quotations")
     return quote
 
 def quotationTraversal(t,quotationList,quoteIndexToNode):

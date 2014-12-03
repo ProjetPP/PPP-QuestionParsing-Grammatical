@@ -32,5 +32,5 @@ def buildTree(triplesBucket):
     assert t # != None
     tree = newNode(triplesBucket,t)
     if not triplesBucket.isEmpty():
-        raise(GrammaticalError,tripleBucket,"tree translation not completed")
+        raise GrammaticalError(tripleBucket,"tree translation not completed")
     return tree
