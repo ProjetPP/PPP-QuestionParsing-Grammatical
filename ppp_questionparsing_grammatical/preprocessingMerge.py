@@ -115,19 +115,22 @@ def findQuotations(r):
     for word in r['words']:
         index+=1
         if word[0] == "``":
-            assert not inQuote
+            if inQuote:
+                raise RuntimeError(r,"quotation")
             inQuote = True
             begin=index
             continue
         if word[0] == "''":
-            assert inQuote
+            if not inQuote:
+                raise RuntimeError(r,"quotation")
             inQuote=False
             quotationList+=[(begin,index,quotationSet)]
             quotationSet = set()
             continue
         if inQuote:
             quotationSet.add(index)
-    assert not inQuote
+    if inQuote:
+        raise RuntimeError(r,"quotation")
     return quotationList
 
 def matchingQuoteWord(w,quotationList):

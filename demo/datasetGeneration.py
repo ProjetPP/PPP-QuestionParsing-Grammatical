@@ -24,7 +24,6 @@ def string_of_triple(t,missing,separator):
         return "({1}{0}{2}{0}{3})".format(separator,_subject,_predicate,_object)
     raise TripleError(t,"Wrong triple (new datamodel connectors?).")
 
-
 def process_string(s,missing='?',separator=','):
     return string_of_triple(get_answer(s),missing,separator)
 
@@ -38,6 +37,12 @@ if __name__ == "__main__":
             result = process_string(s)
         except GrammaticalError:
             sys.stderr.write("{0}\n".format(s))
+            continue
+        except RuntimeError:
+            sys.stderr.write("######################### {0}\n".format(s))
+            continue
+        except IndexError:
+            sys.stderr.write("%%%%%%%%%%%%%%%%%%%%%%%%% {0}\n".format(s))
             continue
         print(s)
         print(result)
