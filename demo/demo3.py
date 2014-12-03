@@ -13,21 +13,22 @@ class StanfordNLP:
 nlp = StanfordNLP()
 
 def print_dot(relations,line):
-  obj_set = set([])
-  print("digraph relations {")
-  for r in relations:
-    #if r[0] != "det":
-      obj_set.add(r[1])
-      obj_set.add(r[2])
-  for i in obj_set:
-    print("\t\"{0}\"[label=\"{0}\",shape=box];".format(i))
-  for r in relations:
-    #if r[0] != "det":
-      print("\t\"{0}\" -> \"{1}\"[label=\"{2}\"];".format(r[1],r[2],r[0]))
-  print("\tlabelloc=\"t\"");
-  print("\tlabel=\"%s\";" % line)
-  print("}")
+    obj_set = set([])
+    print("digraph relations {")
+    for r in relations:
+        #if r[0] != "det":
+        obj_set.add(r[1])
+        obj_set.add(r[2])
+    for i in obj_set:
+        print("\t\"{0}\"[label=\"{0}\",shape=box];".format(i))
+    for r in relations:
+        #if r[0] != "det":
+        print("\t\"{0}\" -> \"{1}\"[label=\"{2}\"];".format(r[1],r[2],r[0]))
+    print("\tlabelloc=\"t\"");
+    print("\tlabel=\"%s\";" % line)
+    print("}")
 
-line=input("")
-result = nlp.parse(line)
-print_dot(result['sentences'][0]['indexeddependencies'],line)
+if __name__ == "__main__":
+    line=input("")
+    result = nlp.parse(line)
+    print_dot(result['sentences'][0]['indexeddependencies'],line)

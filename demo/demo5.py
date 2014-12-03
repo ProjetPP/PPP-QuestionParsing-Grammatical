@@ -22,4 +22,5 @@ def get_tree():
     qw = ppp_questionparsing_grammatical.simplify(tree)
     return tree
 
-print(get_tree())
+if __name__ == "__main__":
+    print(get_tree())

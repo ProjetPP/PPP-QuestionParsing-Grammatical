@@ -22,4 +22,5 @@ def get_answer():
     qw = ppp_questionparsing_grammatical.simplify(tree)
     return ppp_questionparsing_grammatical.buildTree(ppp_questionparsing_grammatical.buildBucket(tree,qw))
 
-print(json.dumps(get_answer().as_dict(), indent=4))
+if __name__ == "__main__":
+    print(json.dumps(get_answer().as_dict(), indent=4))

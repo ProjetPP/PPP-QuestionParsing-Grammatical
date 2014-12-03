@@ -22,4 +22,5 @@ def get_triple():
     qw = ppp_questionparsing_grammatical.simplify(tree)
     return ppp_questionparsing_grammatical.buildBucket(tree,qw)
 
-print(get_triple())
+if __name__ == "__main__":
+    print(get_triple())

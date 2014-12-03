@@ -11,7 +11,8 @@ class StanfordNLP:
 
 nlp = StanfordNLP()
 
-while(True):
-  line=input("")
-  result = nlp.parse(line)
-  print(result['sentences'][0]['indexeddependencies'])
+if __name__ == "__main__":
+    while(True):
+        line=input("")
+        result = nlp.parse(line)
+        print(result['sentences'][0]['indexeddependencies'])
