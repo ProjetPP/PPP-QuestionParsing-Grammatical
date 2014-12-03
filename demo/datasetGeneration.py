@@ -31,4 +31,5 @@ if __name__ == "__main__":
             s = input("")
         except EOFError:
             break
+        print(s)
         print(process_string(s))
