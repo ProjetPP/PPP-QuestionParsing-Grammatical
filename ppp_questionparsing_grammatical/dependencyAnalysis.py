@@ -15,7 +15,7 @@ def impossible(t):
 
 def ignore(t):
     pass
-    
+
 def merge(t):
     t.parent.merge(t,True)
 
@@ -35,7 +35,7 @@ def propType(t):
             t.parent.subtreeType = t.subtreeType
         assert t.subtreeType == 'undef' or t.subtreeType == t.parent.subtreeType
         t.subtreeType = t.parent.subtreeType
-                     
+
 dependenciesMap1 = {
     'undef'     : 'R0', # personnal tag, should not happen?
     'root'      : 'R0',
@@ -140,7 +140,7 @@ def collapseMap(t,depMap,down=True):
     if not down:
         for c in temp:
             collapseMap(c,depMap,down)
-            
+
 def connectorUp(t):
     """
         Move amod connectors (first, biggest...)
@@ -215,7 +215,7 @@ def normalize(t):
     lmtzr = WordNetLemmatizer()
     st = PorterStemmer()
     subNormalize(t,lmtzr,st)                     # normalize words (lemmatization + nounify nouns)
-                
+
 def simplify(t):
     """
         identify and remove question word

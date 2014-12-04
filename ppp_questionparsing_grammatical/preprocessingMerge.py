@@ -48,7 +48,7 @@ class Word:
             related_noun_lemmas += [l for l in drf[1] if l.synset().name().split('.')[1] == 'n']
         # Extract the words from the lemmas
         return [l.name() for l in related_noun_lemmas]
-    
+
     def mostRelevantStem(self,words,st):
         """
             Return the most occuring stem of the given list of words."
@@ -58,7 +58,7 @@ class Word:
         result = [(w, float(stems.count(w))/len_stems) for w in set(stems)]
         result.sort(key=lambda w: -w[1])
         return result[0][0]
-    
+
     def mostRelevantNouns(self,st):
         """
             Return the nouns associated to the given verb, which have the stem occuring the most.
@@ -68,7 +68,7 @@ class Word:
             return []
         stem = self.mostRelevantStem(words,st)
         return [w for w in words if st.stem(w) == stem]
-    
+
     def nounify(self,st):
         """ 
             Transform a verb to the closest noun: die -> death
@@ -83,7 +83,7 @@ class Word:
         result.sort(key=lambda w: -w[1])
         # take the word with highest probability
         self.word = result[0][0]
-    
+
     def nounifyExcept(self,st):
         """
             Transform a verb to the closest noun: die -> death
@@ -93,7 +93,7 @@ class Word:
             self.word = nounificationExceptions[self.word]
         except KeyError:
             self.nounify(st)
-    
+
     def normalize(self,lmtzr,st):
         """
             Apply lemmatization to the word, using the given lemmatizer and stemmer.
@@ -116,7 +116,7 @@ def buildWord(word):
         return Word(word[:word.rindex('-')],int(word[word.rindex('-')+1:]))
     else:
         return Word(word,1000)
-            
+
 #########################
 # Quotation recognition #
 #########################

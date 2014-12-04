@@ -15,11 +15,14 @@ class StanfordNLP:
     def parse(self, text):
         return json.loads(self.server.parse(text))
 
-def get_answer():
+def get_answer(s=""):
     nlp = StanfordNLP()
-    result = nlp.parse(input(""))
+    if s == "":
+        s = input("")
+    result = nlp.parse(s)
     tree = ppp_questionparsing_grammatical.computeTree(result['sentences'][0])
     qw = ppp_questionparsing_grammatical.simplify(tree)
     return ppp_questionparsing_grammatical.normalize(tree)
 
-print(json.dumps(get_answer().as_dict(), indent=4))
+if __name__ == "__main__":
+    print(json.dumps(get_answer().as_dict(), indent=4))

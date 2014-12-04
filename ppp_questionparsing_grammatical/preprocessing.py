@@ -30,7 +30,7 @@ class DependenciesTree:
                 n = t.dfsAnnotate(n)
             self.dfsTag = n+1
             return n+1
-        
+
     def string(self):
         # Concatenation of the words of the root
         w = self.getWords()
@@ -49,7 +49,7 @@ class DependenciesTree:
         for n in self.child:
             s+=n.string()
         return s
-        
+
     def __str__(self):
         """
             Print dependency graph in dot format
