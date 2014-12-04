@@ -20,6 +20,6 @@ def get_answer():
     result = nlp.parse(input(""))
     tree = ppp_questionparsing_grammatical.computeTree(result['sentences'][0])
     qw = ppp_questionparsing_grammatical.simplify(tree)
-    return ppp_questionparsing_grammatical.buildTree(ppp_questionparsing_grammatical.buildBucket(tree,qw))
+    return ppp_questionparsing_grammatical.normalize(tree)
 
 print(json.dumps(get_answer().as_dict(), indent=4))
