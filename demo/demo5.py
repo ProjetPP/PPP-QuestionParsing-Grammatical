@@ -20,7 +20,7 @@ def get_tree():
     result = nlp.parse(input(""))
     tree = ppp_questionparsing_grammatical.computeTree(result['sentences'][0])
     qw = ppp_questionparsing_grammatical.simplify(tree)
-    normalize(tree) # delete after
+    ppp_questionparsing_grammatical.normalize(tree) # delete after
     return tree
 
 print(get_tree())
