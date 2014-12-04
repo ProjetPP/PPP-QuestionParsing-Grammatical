@@ -8,7 +8,7 @@ from ppp_datamodel.communication import TraceItem, Response
 from ppp_libmodule.exceptions import ClientError
 
 from .config import Config
-from . import computeTree, simplify, buildBucket, buildTree
+from . import computeTree, simplify, normalize
 
 class StanfordNLP:
     def __init__(self, url):
@@ -28,7 +28,7 @@ class RequestHandler:
         result = stanfordnlp.parse(self.request.tree.value)
         tree = computeTree(result['sentences'][0])
         qw = simplify(tree)
-        tree = buildTree(buildBucket(tree,qw))
+        tree = normalize(tree)
         meas = {'accuracy': 0.5, 'relevance': 0.5}
         trace = self.request.trace + [TraceItem('QuestionParsing-Grammatical', tree, meas)]
         response = Response('en', tree, meas, trace)

@@ -36,76 +36,77 @@ def propType(t):
         t.subtreeType = t.parent.subtreeType
                      
 dependenciesMap1 = {
-    'undef'     : 't0', # personnal tag, should not happen?
-    'root'      : 't0',
-    'dep'       : 't6', # ? instead of t1
+    'undef'     : 'R0', # personnal tag, should not happen?
+    'root'      : 'R0',
+    'dep'       : 'R8', # ? instead of R1
         'aux'       : remove,
             'auxpass'   : remove,
             'cop'       : impossible,
         'arg'       : impossible,
-            'agent'     : 't4',
-            'comp'      : 't2',
-                'acomp'     : 't2',
-                'ccomp'     : 't4',
-                'xcomp'     : 't2',
-                'pcomp'     : 't2',
+            'agent'     : 'R4',
+            'comp'      : 'R2',
+                'acomp'     : 'R2',
+                'ccomp'     : 'R4',
+                'xcomp'     : 'R2',
+                'pcomp'     : 'R2',
                 'obj'       : impossible,
-                    'dobj'      : 't4', #_+ instead of t4
-                    'iobj'      : 't2',
-                    'pobj'      : 't2', # -
+                    'dobj'      : 'R4', #_+ instead of R4
+                    'iobj'      : 'R2',
+                    'pobj'      : 'R2', # -
             'subj'      : impossible,
-                'nsubj'     : 't1',
-                    'nsubjpass'    : 't4', #_+ ? instead of t3
+                'nsubj'     : 'R1',
+                    'nsubjpass'    : 'R4', #_+ ? instead of R3
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
         'cc'        : impossible,
-        'conj'      : 't0',
+        'conj'      : 'R0',
             'conj_and'  : ignore,
             'conj_or'   : ignore,
             'conj_negcc': ignore, #?
         'expl'      : remove,
-        'mod'       : 't3',
+        'mod'       : 'R3',
             'amod'      : amodRule,
-            'appos'     : 't3',
-            'advcl'     : 't3',
+            'appos'     : 'R3',
+            'advcl'     : 'R3',
             'det'       : remove,
             'predet'    : remove,
             'preconj'   : remove,
-            'vmod'      : 't2',
+            'vmod'      : 'R2',
             'mwe'       : merge,
                 'mark'      : remove,
             'advmod'    : merge,
                 'neg'       : 'connectorUp', # need a NOT node
-            'rcmod'     : 't3', # temp, need to be analyzed
+            'rcmod'     : 'R3', # temp, need to be analyzed
                 'quantmod'  : remove,
             'nn'        : merge, # <-------
             'npadvmod'  : merge,
-                'tmod'      : 't2',
+                'tmod'      : 'R2',
             'num'       : merge,
             'number'    : merge,
-            'prep'      : 't4', # ?
-            'prepc'     : 't4', # ?
-            'poss'      : 't4',
+            'prep'      : 'R4', # ?
+            'prepc'     : 'R4', # ?
+            'poss'      : 'R4',
             'possessive': impossible,
             'prt'       : merge,
         'parataxis' : remove, #  ?
         'punct'     : impossible,
         'ref'       : impossible,
         'sdep'      : impossible,
-            'xsubj'     : 't2',
+            'xsubj'     : 'R2',
         'goeswith'  : merge,
         'discourse' : remove
 }
 
 dependenciesMap2 = {
-    't0'        : propType,
-    't1'        : propType,
-    't2'        : ignore,
-    't3'        : ignore,
-    't4'        : ignore,
-    't5'        : ignore,
-    't6'        : propType, 
-    'connector' : propType
+    'R0'        : propType,
+    'R1'        : propType,
+    'R2'        : ignore,
+    'R3'        : ignore,
+    'R4'        : ignore,
+    'R5'        : ignore,
+    'R6'        : propType, # superlative
+    'R7'        : propType, # conjunction
+    'R8'        : propType
 }
 
 def collapsePrep(t):
@@ -146,7 +147,7 @@ def connectorUp(t):
     if t.dependency == 'connectorUp':
         assert t.parent is not None and t.child == []
         t.dependency = t.parent.dependency
-        t.parent.dependency = 'connector'
+        t.parent.dependency = 'R6'
         t.parent.child.remove(t)
         t.child = [t.parent]
         t.parent.parent.child.remove(t.parent)
@@ -182,7 +183,7 @@ def conjConnectorsUp(t):
             parentTemp.child.append(t) # son(n0)=n2
             t.parent = parentTemp # parent(n2) = n0
             newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,parentTemp], parentTemp.parent)
-            parentTemp.dependency = 'connector'
+            parentTemp.dependency = 'R7'
             parentTemp.parent = newTree
         else:
             parentTemp = t.parent # n0
@@ -192,11 +193,11 @@ def conjConnectorsUp(t):
             for n in t.child:
                 n.parent = t
             newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,t], parentTemp.parent)
-            t.dependency = 'connector'
+            t.dependency = 'R7'
             t.parent = newTree
         newTree.parent.child.remove(parentTemp)
         newTree.parent.child.append(newTree)
-        dupl.dependency = 'connector'
+        dupl.dependency = 'R7'
         dupl.parent = newTree
         temp = list(newTree.child) # copy, because t.child is changed while iterating
         for c in temp:
