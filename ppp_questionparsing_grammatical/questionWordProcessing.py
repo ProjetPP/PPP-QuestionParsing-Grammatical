@@ -154,7 +154,7 @@ def processQuestionInfo(t,w,addMap=questionAdd,wisMap=questionWIs):
     """
         Add info to the first sons of ROOT that are not connectors (ie index < 1000) depending on:
             - the question word
-            - wether nodes contain 'identity' (comes from verb be) or not
+            - whether nodes contain 'identity' (comes from verb be) or not
     """
     try:
         if t.wordList[0].index >= 1000:
