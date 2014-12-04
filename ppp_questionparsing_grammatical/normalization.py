@@ -4,7 +4,8 @@ from .preprocessing import DependenciesTree
 
 sortTab = {
     # how to sort dependending on the superlative
-    'biggest'   : 'size'
+    'biggest'   : 'size',
+    'largest'   : 'width'
 }
 
 def normalize(tree):
@@ -13,7 +14,7 @@ def normalize(tree):
     if tree.child[0].dependency == 'R6': # R6 = superlative, ordinal
         assert len(tree.child) ==1
         try: # <------------------------
-            return ppp_datamodel.First(list=[ppp_datamodel.Sort(list=[normalize(tree.child[0])],predicate=sortTab[tree.getWords()])])
+            return ppp_datamodel.Last(list=[ppp_datamodel.Sort(list=[normalize(tree.child[0])],predicate=sortTab[tree.getWords()])]) # last / first
         except KeyError:
             return ppp_datamodel.First(list=[ppp_datamodel.Sort(list=[normalize(tree.child[0])],predicate='default')])
     if tree.child[0].dependency == 'R7': # R7 = conjunction
@@ -36,13 +37,13 @@ def normalize(tree):
             else:
                 result.append(normalize(t))
         if t.dependency == 'R2':
-            result.append(ppp_datamodel.Triple(subject=ppp_datamodel.Missing(), predicate=ppp_datamodel.Resource(value=tree.getWords()), object=ppp_datamodel.Resource(value=t.getWords())))
+            result.append(ppp_datamodel.Triple(subject=ppp_datamodel.Missing(), predicate=ppp_datamodel.Resource(value=tree.getWords()), object=normalize(t)))
         if t.dependency == 'R3':
-            result.append(ppp_datamodel.Triple(subject=ppp_datamodel.Missing(), predicate=ppp_datamodel.Resource(value=t.getWords()), object=ppp_datamodel.Resource(value=tree.getWords())))
+            result.append(ppp_datamodel.Triple(subject=ppp_datamodel.Missing(), predicate=normalize(t), object=ppp_datamodel.Resource(value=tree.getWords())))
         if t.dependency == 'R4':
-            result.append(ppp_datamodel.Triple(subject=ppp_datamodel.Resource(value=t.getWords()), predicate=ppp_datamodel.Resource(value=tree.getWords()), object=ppp_datamodel.Missing()))
+            result.append(ppp_datamodel.Triple(subject=normalize(t), predicate=ppp_datamodel.Resource(value=tree.getWords()), object=ppp_datamodel.Missing()))
         if t.dependency == 'R5':
-           result.append(ppp_datamodel.Triple(subject=ppp_datamodel.Resource(value=tree.getWords()), predicate=ppp_datamodel.Resource(value=t.getWords()), object=ppp_datamodel.Missing()))
+           result.append(ppp_datamodel.Triple(subject=ppp_datamodel.Resource(value=tree.getWords()), predicate=normalize(t), object=ppp_datamodel.Missing()))
         if t.dependency == 'R8':
             result.append(ppp_datamodel.Resource(value=t.getWords()))
     if len(result) == 1:

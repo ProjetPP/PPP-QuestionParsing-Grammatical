@@ -4,7 +4,7 @@ import jsonrpclib
 import fileinput
 import os
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.sys.path.insert(0,parentdir)
+os.sys.path.insert(0,parentdir) 
 os.environ['PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'] = '../example_config.json'
 import ppp_questionparsing_grammatical
 
@@ -15,11 +15,11 @@ class StanfordNLP:
     def parse(self, text):
         return json.loads(self.server.parse(text))
 
-def get_triple():
+def get_answer():
     nlp = StanfordNLP()
     result = nlp.parse(input(""))
     tree = ppp_questionparsing_grammatical.computeTree(result['sentences'][0])
     qw = ppp_questionparsing_grammatical.simplify(tree)
-    return ppp_questionparsing_grammatical.buildBucket(tree,qw)
+    return ppp_questionparsing_grammatical.normalize(tree)
 
-print(get_triple())
+print(json.dumps(get_answer().as_dict(), indent=4))

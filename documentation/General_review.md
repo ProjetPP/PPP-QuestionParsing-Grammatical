@@ -25,6 +25,7 @@
 * Which movies does Quentin Tarantino star in?
 * Which movies did Quentin Tarantino direct, but not star in?
 * Who receives the Nobel Prize in Physics in 2000?
+* When did Diana and Charles get married?
 
 What country is the biggest producer of tungsten?
 Who was the first Taiwanese President?
