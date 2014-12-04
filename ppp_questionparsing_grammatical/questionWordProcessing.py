@@ -66,7 +66,7 @@ def identifyQuestionWord(t):
         return start[0].word.lower()
     return None
 
-questionInfo = {
+questionAdd = {
     # how to add info into the son of ROOT
     'what type'     : 'type',
     'what sort'     : 'type',
@@ -150,29 +150,20 @@ def processQuestionType(t,w,typeMap=questionType):
     except KeyError:
         pass
 
-def processIdentity(t,w,wisMap=questionWIs):
+def processQuestionInfo(t,w,addMap=questionAdd,wisMap=questionWIs):
     """
-        If the question is "Wh.. is/are/..." replace the node 'identity' (noun associated to 'is') by a word depending on Wh..
-    """
-    try:
-        if t.wordList[0].index >= 1000:
-            for n in t.child:
-                processIdentity(n,w)
-        elif t.getWords() == 'identity':
-            t.wordList[0].word = wisMap[w] # if the son of ROOT is 'identity', replace it according to the question word
-    except KeyError:
-        pass
-
-def processQuestionInfo(t,w,infoMap=questionInfo):
-    """
-        Add info to the first sons of ROOT that are not connectors (ie index < 1000) a word depending on the qw
+        Add info to the first sons of ROOT that are not connectors (ie index < 1000) depending on:
+            - the question word
+            - wether nodes contain 'identity' (comes from verb be) or not
     """
     try:
         if t.wordList[0].index >= 1000:
             for n in t.child:
                 processQuestionInfo(n,w)
-        elif t.getWords().find(infoMap[w]) == -1:
-            t.wordList.append(Word(infoMap[w],1001))
+        elif t.getWords() == 'identity':
+            t.wordList[0].word = wisMap[w] # contains 'identity', replace it according to the question word
+        elif t.getWords().find(addMap[w]) == -1: # doesn't contain 'identity' and doesn't contain the word associated to w in addMap
+            t.wordList.append(Word(addMap[w],1001))
     except KeyError:
         pass
 
@@ -183,5 +174,4 @@ def processQuestionWord(t,w):
           into the sons of ROOT (ex: When -> add "date")
     """
     processQuestionType(t,w)  # type the ROOT according to the question word
-    processIdentity(t.child[0],w)
     processQuestionInfo(t.child[0],w)
