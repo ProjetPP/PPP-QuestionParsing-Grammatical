@@ -86,7 +86,7 @@ questionInfo = {
     'how fast'      : 'speed',
     'how often'     : 'frequency',
     'how come'      : 'reason',
-    'which'         : 'choice',
+    #'which'         : 'choice',
     'whose'         : 'owner',
     'how big'       : 'size'
 }
@@ -114,7 +114,7 @@ questionWIs = {
     'how fast'      : 'speed',
     'how often'     : 'frequency',
     'how come'      : 'reason',
-    'which'         : 'choice',
+    'which'         : 'choice', # ?
     'whom'          : 'identity',
     'whose'         : 'owner',
     'how big'       : 'size'
