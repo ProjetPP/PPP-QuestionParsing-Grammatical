@@ -1,4 +1,4 @@
-from ppp_questionparsing_grammatical import Triple, TriplesBucket, computeTree, simplify, buildBucket, DependenciesTree, tripleProduce1, tripleProduce2, tripleProduce3, tripleProduce4
+from ppp_questionparsing_grammatical import computeTree, simplify, DependenciesTree, normalize
 
 # Parsing result of "John Smith lives in the United Kingdom."
 def give_john_smith():
@@ -81,7 +81,7 @@ def give_john_smith_string():
     s+="}"
     return s
 
-# Parse result of "Who wrote \"Lucy in the Sky with Diamonds\" and \"Let It Be\"?"
+# Parse result of "Who wrote "Lucy in the Sky with Diamonds" and "Let It Be"?"
 def give_LSD_LIB():
     return  {'coref': [[[['It', 0, 13, 13, 14], ['the Sky with Diamonds', 0, 6, 5, 9]]]],
              'sentences': [{'dependencies': [['root', 'ROOT', 'wrote'],
