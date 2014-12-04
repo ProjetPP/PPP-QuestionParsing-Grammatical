@@ -9,24 +9,36 @@ sortTab = {
     'largest'   : 'width'
 }
 
+def normalizeSuperlative(tree):
+    """
+        Handle R6 dependency (superlative, ordinal)
+    """
+    assert len(tree.child) ==1
+    try: 
+        return Last(list=[Sort(list=[normalize(tree.child[0])],predicate=sortTab[tree.getWords()])]) # last / first
+    except KeyError:
+        return First(list=[Sort(list=[normalize(tree.child[0])],predicate='default')])
+
+def normalizeConjunction(tree):
+    """
+        Handle R7 dependency (conjunction)
+    """
+    result = []
+    for t in tree.child:
+        assert t.dependency == 'R7'
+        result.append(normalize(t))
+    if tree.getWords() == 'and':
+        return Intersection(list=result)
+    if tree.getWords() == 'or':
+        return Union(list=result)
+
 def normalize(tree):
     if tree.child == []: # leaf
         return Resource(value=tree.getWords())
     if tree.child[0].dependency == 'R6': # R6 = superlative, ordinal
-        assert len(tree.child) ==1
-        try: # <------------------------
-            return Last(list=[Sort(list=[normalize(tree.child[0])],predicate=sortTab[tree.getWords()])]) # last / first
-        except KeyError:
-            return First(list=[Sort(list=[normalize(tree.child[0])],predicate='default')])
+        return normalizeSuperlative(tree)
     if tree.child[0].dependency == 'R7': # R7 = conjunction
-        result = []
-        for t in tree.child:
-            assert t.dependency == 'R7'
-            result.append(normalize(t))
-        if tree.getWords() == 'and':
-            return Intersection(list=result)
-        if tree.getWords() == 'or':
-            return Union(list=result)
+        return normalizeConjunction(tree)
     result = []
     for t in tree.child: # R1 ... R5, R8
         assert t.dependency != 'R6' and t.dependency != 'R7'
