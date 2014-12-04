@@ -23,4 +23,5 @@ def get_tree():
   tree = ppp_questionparsing_grammatical.computeTree(result['sentences'][0])
   return tree
 
-print(get_tree())
+if __name__ == "__main__":
+    print(get_tree())

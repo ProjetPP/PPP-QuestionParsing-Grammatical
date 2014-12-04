@@ -1,6 +1,7 @@
 import sys
 from .data.nounification import nounificationExceptions
 from nltk.corpus import wordnet
+from .data.exceptions import GrammaticalError, QuotationError
 
 ########################################
 # Word lemmatization and nounification #
@@ -133,19 +134,22 @@ def findQuotations(r):
     for word in r['words']:
         index+=1
         if word[0] == "``":
-            assert not inQuote
+            if inQuote:
+                raise QuotationError(r,"begin a quotatin inside a quotation")
             inQuote = True
             begin=index
             continue
         if word[0] == "''":
-            assert inQuote
+            if not inQuote:
+                raise QuotationError(r,"end a quotation not inside a quotation")
             inQuote=False
             quotationList+=[(begin,index,quotationSet)]
             quotationSet = set()
             continue
         if inQuote:
             quotationSet.add(index)
-    assert not inQuote
+    if inQuote:
+        raise QuotationError(r,"quotation not terminated")
     return quotationList
 
 def matchingQuoteWord(w,quotationList):
@@ -166,7 +170,7 @@ def matchingQuote(wlist,quotationList):
     quote=matchingQuoteWord(wlist[0],quotationList)
     for w in wlist:
         if matchingQuoteWord(w,quotationList) != quote:
-            sys.exit('exit: node belong to several quotations (please, report your sentence on http://goo.gl/EkgO5l)\n')
+            raise GrammaticalError(w,"node belong to several quotations")
     return quote
 
 def quotationTraversal(t,quotationList,quoteIndexToNode):

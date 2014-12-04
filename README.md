@@ -1,6 +1,6 @@
 # PPP-QuestionParsing-Grammatical
 
-Question Parsing module for the PPP using a grammatical approch
+Question Parsing module for the PPP using a grammatical approach.
 
 [![Build Status](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/badges/build.png?b=master)](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/build-status/master)
 [![Code Coverage](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ProjetPP/PPP-NLP-classical/?branch=master)
@@ -27,5 +27,5 @@ Use the `--user` option if you want to install it only for the current user.
 
 ## Overview
 
-* To have a brief overview of the latest functionnalities of this module, check the `demo` folder.
+* To have a brief overview of the latest functionalities of this module, check the `demo` folder.
 * To have a better understanding of the theory behind the code, check the `documentation` folder.

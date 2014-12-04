@@ -1,0 +1,51 @@
+from demo7 import get_answer
+import json
+import sys
+import os
+from ppp_questionparsing_grammatical.data.exceptions import GrammaticalError, QuotationError
+
+class TripleError(Exception):
+    """
+        Raised when a triple contains connectors (e.g. AND, FIRST).
+    """
+    def __init__(self, expression, message):
+        self.expression = expression
+        self.message = message
+
+def string_of_triple(t,missing,separator):
+    if t.type == 'missing':
+        return missing
+    if t.type == 'resource':
+        return str(t.value)
+    if t.type == 'triple':
+        _subject = string_of_triple(t.subject,missing,separator)
+        _predicate = string_of_triple(t.predicate,missing,separator)
+        _object = string_of_triple(t.object,missing,separator)
+        return "({1}{0}{2}{0}{3})".format(separator,_subject,_predicate,_object)
+    raise TripleError(t,"Wrong triple (new datamodel connectors?).")
+
+def process_string(s,missing='?',separator=','):
+    return string_of_triple(get_answer(s),missing,separator)
+
+if __name__ == "__main__":
+    while True:
+        try:
+            s = input("")
+        except EOFError:
+            break
+        try:
+            result = process_string(s)
+        except GrammaticalError:
+            sys.stderr.write("#GrammaticalError:\t{0}\n".format(s))
+            continue
+        except QuotationError:
+            sys.stderr.write("#QuotationError:\t{0}\n".format(s))
+            continue
+        except RuntimeError:
+            sys.stderr.write("#RuntimeError:\t{0}\n".format(s))
+            continue
+        except IndexError:
+            sys.stderr.write("#IndexError:\t{0}\n".format(s))
+            continue
+        print(s)
+        print(result)

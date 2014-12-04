@@ -5,12 +5,13 @@ from .preprocessingMerge import Word
 from copy import deepcopy
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.stem.porter import PorterStemmer
+from .data.exceptions import GrammaticalError
 
 def remove(t):
     t.parent.child.remove(t)
 
 def impossible(t):
-    sys.exit('exit: %s dependency unexpected (please, report your sentence on http://goo.gl/EkgO5l)\n' % t)
+    raise GrammaticalError(t.dependency,"unexpected dependency")
 
 def ignore(t):
     pass
@@ -83,8 +84,8 @@ dependenciesMap1 = {
                 'tmod'      : 'R2',
             'num'       : merge,
             'number'    : merge,
-            'prep'      : 'R4', # ?
-            'prepc'     : 'R4', # ?
+            'prep'      : 'R4', # ?
+            'prepc'     : 'R4', # ?
             'poss'      : 'R4',
             'possessive': impossible,
             'prt'       : merge,
@@ -105,7 +106,7 @@ dependenciesMap2 = {
     'R4'        : ignore,
     'R5'        : ignore,
     'R6'        : propType, # superlative
-    'R7'        : propType, # conjunction
+    'R7'        : propType, # conjunction
     'R8'        : propType
 }
 
@@ -135,7 +136,7 @@ def collapseMap(t,depMap,down=True):
         else:
             depMap[t.dependency](t)
     except KeyError:
-        sys.exit('exit: dependency %s unknown (please, report your sentence on http://goo.gl/EkgO5l)\n' % t.dependency)
+        raise GrammaticalError(t.dependency,"unknown dependency")
     if not down:
         for c in temp:
             collapseMap(c,depMap,down)
@@ -181,7 +182,7 @@ def conjConnectorsUp(t):
             dupl = deepcopy(parentTemp) # n0'
             parentTemp.child.remove(t.parent) # son(n0) \= n1
             parentTemp.child.append(t) # son(n0)=n2
-            t.parent = parentTemp # parent(n2) = n0
+            t.parent = parentTemp # parent(n2) = n0
             newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,parentTemp], parentTemp.parent)
             parentTemp.dependency = 'R7'
             parentTemp.parent = newTree
