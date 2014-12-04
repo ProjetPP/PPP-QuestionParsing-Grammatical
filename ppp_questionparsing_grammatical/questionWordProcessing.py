@@ -1,6 +1,7 @@
 import sys
 from .preprocessingMerge import Word
 from .preprocessing import DependenciesTree
+from .data.exceptions import QuestionWordError
 
 """
     Taken from: http://www.interopia.com/education/all-question-words-in-english/
@@ -28,7 +29,7 @@ def removeWord(t,word):
         if not t.child:
             t.parent.child.remove(t) 
         else:
-            sys.exit('exit: question word has child (please, report your sentence on http://goo.gl/EkgO5l)\n')
+            raise QuestionWordError(word,"question word has child")
     else:
         for c in t.child:
             removeWord(c,word)
@@ -53,7 +54,7 @@ def identifyQuestionWord(t):
     start = [None,None]
     firstWords(t,start)
     if not start[0]:
-        sys.exit('exit: i don\'t understand (please, report your sentence on http://goo.gl/EkgO5l)')
+        raise QuestionWordError(t,"do not understand")
     if start[1] and start[0].word.lower() + ' ' + start[1].word.lower() in openQuestionWord:
         removeWord(t,start[0])
         removeWord(t,start[1])
