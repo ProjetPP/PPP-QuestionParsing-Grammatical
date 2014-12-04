@@ -1,7 +1,7 @@
 import sys
 from .data.nounification import nounificationExceptions
 from nltk.corpus import wordnet
-from .data.exceptions import GrammaticalError
+from .data.exceptions import GrammaticalError, QuotationError
 
 
 ########################################
@@ -116,13 +116,13 @@ def findQuotations(r):
         index+=1
         if word[0] == "``":
             if inQuote:
-                raise RuntimeError(r,"quotation")
+                raise QuotationError(r,"begin a quotatin inside a quotation")
             inQuote = True
             begin=index
             continue
         if word[0] == "''":
             if not inQuote:
-                raise RuntimeError(r,"quotation")
+                raise QuotationError(r,"end a quotation not inside a quotation")
             inQuote=False
             quotationList+=[(begin,index,quotationSet)]
             quotationSet = set()
@@ -130,7 +130,7 @@ def findQuotations(r):
         if inQuote:
             quotationSet.add(index)
     if inQuote:
-        raise RuntimeError(r,"quotation")
+        raise QuotationError(r,"quotation not terminated")
     return quotationList
 
 def matchingQuoteWord(w,quotationList):

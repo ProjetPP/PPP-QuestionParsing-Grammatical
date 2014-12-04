@@ -2,7 +2,7 @@ from demo7 import get_answer
 import json
 import sys
 import os
-from ppp_questionparsing_grammatical.data.exceptions import GrammaticalError
+from ppp_questionparsing_grammatical.data.exceptions import GrammaticalError, QuotationError
 
 class TripleError(Exception):
     """
@@ -36,13 +36,16 @@ if __name__ == "__main__":
         try:
             result = process_string(s)
         except GrammaticalError:
-            sys.stderr.write("{0}\n".format(s))
+            sys.stderr.write("#GrammaticalError:\t{0}\n".format(s))
+            continue
+        except QuotationError:
+            sys.stderr.write("#QuotationError:\t{0}\n".format(s))
             continue
         except RuntimeError:
-            sys.stderr.write("######################### {0}\n".format(s))
+            sys.stderr.write("#RuntimeError:\t{0}\n".format(s))
             continue
         except IndexError:
-            sys.stderr.write("%%%%%%%%%%%%%%%%%%%%%%%%% {0}\n".format(s))
+            sys.stderr.write("#IndexError:\t{0}\n".format(s))
             continue
         print(s)
         print(result)
