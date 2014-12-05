@@ -1,7 +1,7 @@
 import sys
 import ppp_datamodel
 from .preprocessing import DependenciesTree
-from ppp_datamodel import Resource, Missing, Triple, Last, First, Sort, Intersection, Union
+from ppp_datamodel import Resource, Missing, Triple, Last, First, List, Sort, Intersection, Union
 
 sortTab = {
     # how to sort dependending on the superlative
@@ -15,9 +15,9 @@ def normalizeSuperlative(tree):
     """
     assert len(tree.child) ==1
     try: 
-        return Last(list=[Sort(list=[normalize(tree.child[0])],predicate=sortTab[tree.getWords()])]) # last / first
+        return Last(list=Sort(list=List([normalize(tree.child[0])]),predicate=sortTab[tree.getWords()])) # last / first
     except KeyError:
-        return First(list=[Sort(list=[normalize(tree.child[0])],predicate='default')])
+        return First(list=Sort(list=List([normalize(tree.child[0])]),predicate='default'))
 
 def normalizeConjunction(tree):
     """
