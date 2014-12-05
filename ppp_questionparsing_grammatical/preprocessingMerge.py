@@ -94,7 +94,7 @@ class Word:
         except KeyError:
             self.nounify(st)
 
-    def normalize(self,lmtzr,st):
+    def standardize(self,lmtzr,st):
         """
             Apply lemmatization to the word, using the given lemmatizer and stemmer.
         """

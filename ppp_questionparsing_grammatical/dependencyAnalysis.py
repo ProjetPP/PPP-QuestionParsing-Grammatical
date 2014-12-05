@@ -209,7 +209,7 @@ def subStandardize(t,lmtzr,st):
         subStandardize(c,lmtzr,st)
     if t.namedEntityTag == 'undef':
         for w in t.wordList:
-            w.normalize(lmtzr,st)
+            w.standardize(lmtzr,st)
 
 def standardize(t):         
     lmtzr = WordNetLemmatizer()
