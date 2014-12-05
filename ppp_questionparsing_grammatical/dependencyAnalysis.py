@@ -204,17 +204,17 @@ def conjConnectorsUp(t):
         for c in temp:
             conjConnectorsUp(c)
 
-def subNormalize(t,lmtzr,st):
+def subStandardize(t,lmtzr,st):
     for c in t.child:
-        subNormalize(c,lmtzr,st)
+        subStandardize(c,lmtzr,st)
     if t.namedEntityTag == 'undef':
         for w in t.wordList:
             w.normalize(lmtzr,st)
 
-def normalize(t):         
+def standardize(t):         
     lmtzr = WordNetLemmatizer()
     st = PorterStemmer()
-    subNormalize(t,lmtzr,st)                     # normalize words (lemmatization + nounify nouns)
+    subStandardize(t,lmtzr,st)                     # standardize words (lemmatization + nounify nouns)
 
 def simplify(t):
     """
@@ -222,7 +222,7 @@ def simplify(t):
         collapse dependencies of tree t
     """
     s = identifyQuestionWord(t)           # identify and remove question word
-    normalize(t)                          # lemmatize, nounify
+    standardize(t)                        # lemmatize, nounify
     collapsePrep(t)                       # replace prep(c)_x by prep(c)
     collapseMap(t,dependenciesMap1)       # collapse the tree according to dependenciesMap1
     conjConnectorsUp(t)                   # remove conjonction connectors
