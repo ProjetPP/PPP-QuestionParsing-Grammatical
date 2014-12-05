@@ -49,7 +49,7 @@ def normalize(tree):
             result.append(normalize(t))
         if t.dependency == 'R1': # ou enlever la condition, ça devient R4
             if len(t.child) == 0:
-                result.append(Triple(subject=normalize(t), predicate=Resource(value=tree.getWords()), object=Missing()))
+                result.append(Triple(subject=Resource(value=t.getWords()), predicate=Resource(value=tree.getWords()), object=Missing()))
             else:
                 result.append(normalize(t))
         if t.dependency == 'R2':
