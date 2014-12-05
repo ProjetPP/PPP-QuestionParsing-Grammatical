@@ -19,8 +19,8 @@ class DependenciesTree:
 
     def dfsAnnotate(self,n):
         """
-            build a dfs annotation on the tree
-            useful to distinguish nodes that are different but contain the same wordList
+            Build a dfs annotation on the tree
+            Useful to distinguish (in printing) nodes that are different but contain the same wordList
         """
         if self.child == []:
             self.dfsTag = n
@@ -40,7 +40,7 @@ class DependenciesTree:
         if(self.namedEntityTag != 'O' and self.namedEntityTag != 'undef'):
             t+= " [{0}]".format(self.namedEntityTag)
         if self.subtreeType != 'undef':
-            t+= " [$ {0}]".format(self.subtreeType)            
+            t+= " [$ {0}]".format(self.subtreeType)
         s+="\t\"{0}\"[label=\"{1}{2}\",shape=box];\n".format(self.wordList[0].word+str(self.dfsTag),w,t)
         # Adding definitions of the edges
         for n in self.child:

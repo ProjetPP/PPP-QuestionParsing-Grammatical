@@ -98,16 +98,16 @@ dependenciesMap1 = {
         'discourse' : remove
 }
 
-dependenciesMap2 = {
-    'R0'        : propType,
-    'R1'        : propType,
-    'R2'        : ignore,
-    'R3'        : ignore,
-    'R4'        : ignore,
-    'R5'        : ignore,
-    'R6'        : propType, # superlative
-    'R7'        : propType, # conjunction
-    'R8'        : propType
+dependenciesMap2 = {         # how to handle a -b-> c
+    'R0'        : propType,  # normalize(c)
+    'R1'        : propType,  # if c is a leaf: (normalize(c),!a,?), otherwise: normalize(c)
+    'R2'        : ignore,    # (?,!a,normalize(c))
+    'R3'        : ignore,    # (?,normalize(c),!a)
+    'R4'        : ignore,    # (normalize(c),!a,?)
+    'R5'        : ignore,    # (!a,normalize(c),?)
+    'R6'        : propType,  # superlative
+    'R7'        : propType,  # conjunction
+    'R8'        : propType   # !c
 }
 
 def collapsePrep(t):
@@ -124,7 +124,7 @@ def collapsePrep(t):
 def collapseMap(t,depMap,down=True):
     """
         Apply the rules of depMap to t
-        If down = false, collapse from top to down
+        If down = false, collapse from top to down, otherwise collapse from down to top
     """
     temp = list(t.child) # copy, because t.child is changed while iterating
     if down:
@@ -211,7 +211,10 @@ def subStandardize(t,lmtzr,st):
         for w in t.wordList:
             w.standardize(lmtzr,st)
 
-def standardize(t):         
+def standardize(t):
+    """
+        Apply lemmatization + nounification
+    """
     lmtzr = WordNetLemmatizer()
     st = PorterStemmer()
     subStandardize(t,lmtzr,st)                     # standardize words (lemmatization + nounify nouns)
