@@ -174,3 +174,50 @@ class StandardTripleTests(TestCase):
         }
     ]
 })
+
+    def testNormalizeR8(self):
+        tree = computeTree(data.mistake()['sentences'][0])
+        qw = simplify(tree)
+        result = normalize(tree)
+        self.assertEqual(result,{
+    "type": "resource",
+    "value": "mistake"
+})
+
+    def testNormalizeR3(self):
+        tree = computeTree(data.king()['sentences'][0])
+        qw = simplify(tree)
+        result = normalize(tree)
+        self.assertEqual(result,{
+    "type": "intersection",
+    "list": [
+        {
+            "predicate": {
+                "value": "king",
+                "type": "resource"
+            },
+            "subject": {
+                "type": "missing"
+            },
+            "type": "triple",
+            "object": {
+                "value": "Louis XIV",
+                "type": "resource"
+            }
+        },
+        {
+            "predicate": {
+                "value": "Louis XIV",
+                "type": "resource"
+            },
+            "subject": {
+                "value": "France",
+                "type": "resource"
+            },
+            "type": "triple",
+            "object": {
+                "type": "missing"
+            }
+        }
+    ]
+})

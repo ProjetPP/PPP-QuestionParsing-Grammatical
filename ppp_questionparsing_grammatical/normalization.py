@@ -35,8 +35,8 @@ def normalizeConjunction(tree):
     try:
         return conjunctionTab[tree.getWords()](list=result)
     except KeyError:
-        sys.exit('unknown conjunction')
-    
+        sys.exit('conjunction unknown')
+
 def normalize(tree):
     """
         Map the tree to a normal form (= final result)
@@ -63,8 +63,8 @@ def normalize(tree):
             result.append(Triple(subject=Missing(), predicate=normalize(t), object=Resource(value=tree.getWords())))
         if t.dependency == 'R4':
             result.append(Triple(subject=normalize(t), predicate=Resource(value=tree.getWords()), object=Missing()))
-        if t.dependency == 'R5':
-           result.append(Triple(subject=Resource(value=tree.getWords()), predicate=normalize(t), object=Missing()))
+        #if t.dependency == 'R5': # not use for the moment
+        #   result.append(Triple(subject=Resource(value=tree.getWords()), predicate=normalize(t), object=Missing()))
         if t.dependency == 'R8':
             result.append(Resource(value=t.getWords()))
     if len(result) == 1:

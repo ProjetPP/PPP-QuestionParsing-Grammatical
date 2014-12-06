@@ -104,7 +104,7 @@ dependenciesMap2 = {         # how to handle a -b-> c
     'R2'        : ignore,    # (?,!a,normalize(c))
     'R3'        : ignore,    # (?,normalize(c),!a)
     'R4'        : ignore,    # (normalize(c),!a,?)
-    'R5'        : ignore,    # (!a,normalize(c),?)
+     #'R5'        : ignore,    # (!a,normalize(c),?) # not use for the moment
     'R6'        : propType,  # superlative
     'R7'        : propType,  # conjunction
     'R8'        : propType   # !c
