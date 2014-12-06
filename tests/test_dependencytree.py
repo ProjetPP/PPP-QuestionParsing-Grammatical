@@ -107,7 +107,6 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(who.dfsTag,0)
         # Lucy in the Sky with Diamondss
         lucy=wrote.child[1]
-        print("WordList=",lucy.wordList[0])
         self.assertEqual(lucy.wordList,[Word("Lucy in the Sky with Diamonds",4,'QUOTE')])
         self.assertEqual(lucy.namedEntityTag,'QUOTATION')
         self.assertEqual(lucy.dependency,'dobj')
