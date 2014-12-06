@@ -55,49 +55,30 @@ class StandardTripleTests(TestCase):
     "list": [
         {
             "list": {
-                "list": [
-                    {
-                        "list": {
-                            "list": [
-                                {
-                                    "type": "resource",
-                                    "value": "Gilbert"
-                                }
-                            ],
-                            "type": "list"
-                        },
-                        "type": "sort",
-                        "predicate": "default"
-                    }
-                ],
-                "type": "list"
+                "list": {
+                    "value": "Gilbert",
+                    "type": "resource"
+                },
+                "predicate": "default",
+                "type": "sort"
             },
             "type": "first"
         },
         {
             "list": {
-                "list": [
-                    {
-                        "list": {
-                            "list": [
-                                {
-                                    "type": "resource",
-                                    "value": "Sullivan opera"
-                                }
-                            ],
-                            "type": "list"
-                        },
-                        "type": "sort",
-                        "predicate": "default"
-                    }
-                ],
-                "type": "list"
+                "list": {
+                    "value": "Sullivan opera",
+                    "type": "resource"
+                },
+                "predicate": "default",
+                "type": "sort"
             },
             "type": "first"
         }
     ],
     "type": "intersection"
-})
+}
+)
 
     def testNormalize1(self):
         tree = computeTree(data.give_president_of_USA()['sentences'][0])
