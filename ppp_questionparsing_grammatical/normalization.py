@@ -3,10 +3,15 @@ import ppp_datamodel
 from .preprocessing import DependenciesTree
 from ppp_datamodel import Resource, Missing, Triple, Last, First, List, Sort, Intersection, Union
 
-sortTab = {
+superlativeTab = {
     # how to sort dependending on the superlative
     'biggest'   : 'size',
     'largest'   : 'width'
+}
+
+conjunctionTab = {
+    'and'       : Intersection,
+    'or'        : Union
 }
 
 def normalizeSuperlative(tree):
@@ -15,7 +20,7 @@ def normalizeSuperlative(tree):
     """
     assert len(tree.child) ==1
     try: 
-        return Last(list=Sort(list=normalize(tree.child[0]),predicate=sortTab[tree.getWords()])) # last / first
+        return Last(list=Sort(list=normalize(tree.child[0]),predicate=superlativeTab[tree.getWords()])) # last / first
     except KeyError:
         return First(list=Sort(list=normalize(tree.child[0]),predicate='default'))
 
@@ -27,11 +32,11 @@ def normalizeConjunction(tree):
     for t in tree.child:
         assert t.dependency == 'R7'
         result.append(normalize(t))
-    if tree.getWords() == 'and':
-        return Intersection(list=result)
-    if tree.getWords() == 'or':
-        return Union(list=result)
-
+    try:
+        return conjunctionTab[tree.getWords()](list=result)
+    except KeyError:
+        sys.exit('unknown conjunction')
+    
 def normalize(tree):
     """
         Map the tree to a normal form (= final result)
