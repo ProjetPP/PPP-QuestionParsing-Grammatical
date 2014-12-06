@@ -52,39 +52,51 @@ class StandardTripleTests(TestCase):
         qw = simplify(tree)
         result = normalize(tree)
         self.assertEqual(result,{
-    "type": "intersection",
     "list": [
         {
-            "type": "first",
-            "list": [
-                {
-                    "type": "sort",
-                    "list": [
-                        {
-                            "value": "Gilbert",
-                            "type": "resource"
-                        }
-                    ],
-                    "predicate": "default"
-                }
-            ]
+            "list": {
+                "list": [
+                    {
+                        "list": {
+                            "list": [
+                                {
+                                    "type": "resource",
+                                    "value": "Gilbert"
+                                }
+                            ],
+                            "type": "list"
+                        },
+                        "type": "sort",
+                        "predicate": "default"
+                    }
+                ],
+                "type": "list"
+            },
+            "type": "first"
         },
         {
-            "type": "first",
-            "list": [
-                {
-                    "type": "sort",
-                    "list": [
-                        {
-                            "value": "Sullivan opera",
-                            "type": "resource"
-                        }
-                    ],
-                    "predicate": "default"
-                }
-            ]
+            "list": {
+                "list": [
+                    {
+                        "list": {
+                            "list": [
+                                {
+                                    "type": "resource",
+                                    "value": "Sullivan opera"
+                                }
+                            ],
+                            "type": "list"
+                        },
+                        "type": "sort",
+                        "predicate": "default"
+                    }
+                ],
+                "type": "list"
+            },
+            "type": "first"
         }
-    ]
+    ],
+    "type": "intersection"
 })
 
     def testNormalize1(self):
