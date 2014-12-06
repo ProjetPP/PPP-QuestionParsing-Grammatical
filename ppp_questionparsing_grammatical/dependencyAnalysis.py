@@ -217,7 +217,7 @@ def standardize(t):
     """
     lmtzr = WordNetLemmatizer()
     st = PorterStemmer()
-    subStandardize(t,lmtzr,st)                     # standardize words (lemmatization + nounify nouns)
+    subStandardize(t,lmtzr,st) # standardize words (lemmatization + nounify nouns)
 
 def simplify(t):
     """
