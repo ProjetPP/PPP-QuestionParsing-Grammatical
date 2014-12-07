@@ -79,9 +79,8 @@ Description of demo files
 =========================
 
 * `demo1.py`: parsing without a server. Output the direct answer of CoreNLP (copula relations not removed)
-* `demo2.py`: Start server before. Output the dependency relations from CoreNLP
-* `demo3.py`: Start server before. Print the dependency graph from CoreNLP
-* `demo4.py`: Start server before. Print the dependency graph after preprocessing simplifications (merging of some nodes)
-* `demo5.py`: Start server before. Print the dependency graph after dependency analysis
-* `demo6.py`: Start server before. Full algorithm, output triples from question
-* `demo7.py`: Start server before. Full algorithm, output standardized triples tree from question
+* `demo2.py`: Start server before. Output the dependency relations graph from CoreNLP
+* `demo3.py`: Start server before. Output the dependency relations graph from CoreNLP in dot format graph
+* `demo4.py`: Start server before. Output the dependency graph in dot format after preprocessing simplifications (merging of some nodes)
+* `demo5.py`: Start server before. Output the dependency graph in dot format after dependency analysis
+* `demo6.py`: Start server before. Full algorithm, output normal form (tree of triples+connectors) from question

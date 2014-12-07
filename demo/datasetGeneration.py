@@ -1,4 +1,4 @@
-from demo7 import get_answer
+from demo6 import get_answer
 import json
 import sys
 import os

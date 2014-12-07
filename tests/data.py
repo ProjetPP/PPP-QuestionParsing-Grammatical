@@ -1,4 +1,4 @@
-from ppp_questionparsing_grammatical import Triple, TriplesBucket, computeTree, simplify, buildBucket, DependenciesTree, tripleProduce1, tripleProduce2, tripleProduce3, tripleProduce4
+from ppp_questionparsing_grammatical import computeTree, simplify, DependenciesTree, normalize
 
 # Parsing result of "John Smith lives in the United Kingdom."
 def give_john_smith():
@@ -68,20 +68,20 @@ def give_john_smith():
 # Dot representation of the tree for "John Smith lives in the United Kingdom."
 def give_john_smith_string():
     s="digraph relations {\n"
-    s+="\t\"ROOT0\"[label=\"ROOT\",shape=box];\n"
-    s+="\t\"ROOT0\" -> \"residence3\"[label=\"root\"];\n"
-    s+="\t\"residence3\"[label=\"residence\",shape=box];\n"
-    s+="\t\"residence3\" -> \"John1\"[label=\"nsubj\"];\n"
-    s+="\t\"residence3\" -> \"United6\"[label=\"prep_in\"];\n"
-    s+="\t\"John1\"[label=\"John Smith [PERSON]\",shape=box];\n"
-    s+="\t\"United6\"[label=\"United Kingdom [LOCATION]\",shape=box];\n"
-    s+="\t\"United6\" -> \"the5\"[label=\"det\"];\n"
-    s+="\t\"the5\"[label=\"the\",shape=box];\n"
+    s+="\t\"ROOT5\"[label=\"ROOT\",shape=box];\n"
+    s+="\t\"ROOT5\" -> \"lives4\"[label=\"root\"];\n"
+    s+="\t\"lives4\"[label=\"lives\",shape=box];\n"
+    s+="\t\"lives4\" -> \"John0\"[label=\"nsubj\"];\n"
+    s+="\t\"lives4\" -> \"United3\"[label=\"prep_in\"];\n"
+    s+="\t\"John0\"[label=\"John Smith [PERSON]\",shape=box];\n"
+    s+="\t\"United3\"[label=\"United Kingdom [LOCATION]\",shape=box];\n"
+    s+="\t\"United3\" -> \"the1\"[label=\"det\"];\n"
+    s+="\t\"the1\"[label=\"the\",shape=box];\n"
     s+="\tlabelloc=\"t\"\tlabel=\"John Smith lives in the United Kingdom.\";\n"
     s+="}"
     return s
 
-# Parse result of "Who wrote \"Lucy in the Sky with Diamonds\" and \"Let It Be\"?"
+# Parse result of "Who wrote "Lucy in the Sky with Diamonds" and "Let It Be"?"
 def give_LSD_LIB():
     return  {'coref': [[[['It', 0, 13, 13, 14], ['the Sky with Diamonds', 0, 6, 5, 9]]]],
              'sentences': [{'dependencies': [['root', 'ROOT', 'wrote'],
@@ -269,7 +269,7 @@ def give_obama_president_usa():
                   'PartOfSpeech': '.'}]]}]}
 
 # Parsing result of "How old are there?"
-def give_how_hold():
+def give_how_old():
     return  {'sentences': [{'dependencies': [['root', 'ROOT', 'are'],
                 ['advmod', 'old', 'How'],
                 ['dep', 'are', 'old'],
@@ -431,6 +431,149 @@ def give_president_of_USA():
   'dependencies': [['root', 'ROOT', 'is'], ['dep', 'is', 'Who'], ['det', 'president', 'the'], ['nsubj', 'is', 'president'], ['det', 'States', 'the'], ['nn', 'States', 'United'], ['prep_of', 'president', 'States']], 
   'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['dep', 'is-2', 'Who-1'], ['det', 'president-4', 'the-3'], ['nsubj', 'is-2', 'president-4'], ['det', 'States-8', 'the-6'], ['nn', 'States-8', 'United-7'], ['prep_of', 'president-4', 'States-8']], 
   'parsetree': '(ROOT (SBARQ (WHNP (WP Who)) (SQ (VBZ is) (NP (NP (DT the) (NN president)) (PP (IN of) (NP (DT the) (NNP United) (NNPS States))))) (. ?)))'}]}
+
+# Parsing result of "What was the first Gilbert and Sullivan opera?"
+def give_opera():
+    return  {'sentences': [{
+  'words': [
+    ['What', 
+        {'PartOfSpeech': 'WP', 
+         'NamedEntityTag': 'O', 
+         'CharacterOffsetBegin': '0', 
+         'Lemma': 'what', 
+         'CharacterOffsetEnd': '4'}], 
+    ['was', 
+        {'PartOfSpeech': 'VBD', 
+         'NamedEntityTag': 'O', 
+         'CharacterOffsetBegin': '5', 
+         'Lemma': 'be', 
+         'CharacterOffsetEnd': '8'}], 
+    ['the', 
+        {'PartOfSpeech': 'DT', 
+         'NamedEntityTag': 'O', 
+         'CharacterOffsetBegin': '9', 
+         'Lemma': 'the', 
+         'CharacterOffsetEnd': '12'}], 
+    ['first', 
+        {'NamedEntityTag': 'ORDINAL', 
+         'NormalizedNamedEntityTag': '1.0', 
+         'CharacterOffsetEnd': '18', 
+         'Lemma': 'first', 
+         'CharacterOffsetBegin': '13', 
+         'PartOfSpeech': 'JJ'}], 
+    ['Gilbert', 
+        {'PartOfSpeech': 'NNP', 
+         'NamedEntityTag': 'PERSON', 
+         'CharacterOffsetBegin': '19', 
+         'Lemma': 'Gilbert', 
+         'CharacterOffsetEnd': '26'}], 
+    ['and', 
+        {'PartOfSpeech': 'CC', 
+         'NamedEntityTag': 'O', 
+         'CharacterOffsetBegin': '27', 
+         'Lemma': 'and', 
+         'CharacterOffsetEnd': '30'}], 
+    ['Sullivan', 
+        {'PartOfSpeech': 'NNP', 
+         'NamedEntityTag': 'PERSON', 
+         'CharacterOffsetBegin': '31', 
+         'Lemma': 'Sullivan', 
+         'CharacterOffsetEnd': '39'}], 
+    ['opera', 
+        {'PartOfSpeech': 'NN', 
+         'NamedEntityTag': 'O', 
+         'CharacterOffsetBegin': '40', 
+         'Lemma': 'opera', 
+         'CharacterOffsetEnd': '45'}], 
+    ['?', 
+        {'PartOfSpeech': '.', 
+         'NamedEntityTag': 'O', 
+         'CharacterOffsetBegin': '45', 
+         'Lemma': '?', 
+         'CharacterOffsetEnd': '46'}]], 
+  'text': 'What was the first Gilbert and Sullivan opera?', 
+  'dependencies': [['root', 'ROOT', 'was'], ['dep', 'was', 'What'], ['det', 'Gilbert', 'the'], ['amod', 'Gilbert', 'first'], ['nsubj', 'was', 'Gilbert'], ['nn', 'opera', 'Sullivan'], ['conj_and', 'Gilbert', 'opera']],   
+  'indexeddependencies': [['root', 'ROOT-0', 'was-2'], ['dep', 'was-2', 'What-1'], ['det', 'Gilbert-5', 'the-3'], ['amod', 'Gilbert-5', 'first-4'], ['nsubj', 'was-2', 'Gilbert-5'], ['nn', 'opera-8', 'Sullivan-7'], ['conj_and', 'Gilbert-5', 'opera-8']], 
+  'parsetree': '(ROOT (SBARQ (WHNP (WP What)) (SQ (VBD was) (NP (DT the) (JJ first) (NNP Gilbert) (CC and) (NNP Sullivan) (NN opera))) (. ?)))'}]}
+
+# Parsing result of "Who is the chief and prime minister?"
+def give_chief():
+    return  {'sentences': [{
+
+  'words': [
+    ['Who', 
+        {'PartOfSpeech': 'WP', 
+         'CharacterOffsetBegin': '0', 
+         'CharacterOffsetEnd': '3', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'who'}], 
+    ['is', 
+        {'PartOfSpeech': 'VBZ', 
+         'CharacterOffsetBegin': '4', 
+         'CharacterOffsetEnd': '6', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'be'}], 
+    ['the', 
+        {'PartOfSpeech': 'DT', 
+         'CharacterOffsetBegin': '7', 
+         'CharacterOffsetEnd': '10', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'the'}], 
+    ['chief', 
+        {'PartOfSpeech': 'NN', 
+         'CharacterOffsetBegin': '11', 
+         'CharacterOffsetEnd': '16', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'chief'}], 
+    ['and', 
+        {'PartOfSpeech': 'CC', 
+         'CharacterOffsetBegin': '17', 
+         'CharacterOffsetEnd': '20', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'and'}], 
+    ['prime', 
+        {'PartOfSpeech': 'JJ', 
+         'CharacterOffsetBegin': '21', 
+         'CharacterOffsetEnd': '26', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'prime'}], 
+    ['minister', 
+        {'PartOfSpeech': 'NN', 
+         'CharacterOffsetBegin': '27', 
+         'CharacterOffsetEnd': '35', 
+         'NamedEntityTag': 'O', 
+         'Lemma': 'minister'}], 
+    ['?', 
+        {'PartOfSpeech': '.', 
+         'CharacterOffsetBegin': '35', 
+         'CharacterOffsetEnd': '36', 
+         'NamedEntityTag': 'O', 
+         'Lemma': '?'}]], 
+   'parsetree': '(ROOT (SBARQ (WHNP (WP Who)) (SQ (VBZ is) (NP (NP (DT the) (NN chief)) (CC and) (NP (JJ prime) (NN minister)))) (. ?)))', 
+  'dependencies': [['root', 'ROOT', 'is'], ['dep', 'is', 'Who'], ['det', 'chief', 'the'], ['nsubj', 'is', 'chief'], ['amod', 'minister', 'prime'], ['conj_and', 'chief', 'minister']], 
+  'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['dep', 'is-2', 'Who-1'], ['det', 'chief-4', 'the-3'], ['nsubj', 'is-2', 'chief-4'], ['amod', 'minister-7', 'prime-6'], ['conj_and', 'chief-4', 'minister-7']], 
+  'text': 'Who is the chief and prime minister?'}]}
+
+# Parsing result of "Is born in 1900"
+def give_born():
+    return {'sentences': [{'indexeddependencies': [['root', 'ROOT-0', 'born-2'], ['auxpass', 'born-2', 'Is-1'], ['prep_in', 'born-2', '1900-4']], 'parsetree': '(ROOT (FRAG (VP (VBZ Is) (VP (VBN born) (PP (IN in) (NP (CD 1900)))))))', 'words': [['Is', {'PartOfSpeech': 'VBZ', 'Lemma': 'be', 'CharacterOffsetBegin': '0', 'CharacterOffsetEnd': '2', 'NamedEntityTag': 'O'}], ['born', {'PartOfSpeech': 'VBN', 'Lemma': 'bear', 'CharacterOffsetBegin': '3', 'CharacterOffsetEnd': '7', 'NamedEntityTag': 'O'}], ['in', {'PartOfSpeech': 'IN', 'Lemma': 'in', 'CharacterOffsetBegin': '8', 'CharacterOffsetEnd': '10', 'NamedEntityTag': 'O'}], ['1900', {'Timex': '<TIMEX3 tid="t1" type="DATE" value="1900">1900</TIMEX3>', 'PartOfSpeech': 'CD', 'Lemma': '1900', 'NamedEntityTag': 'DATE', 'CharacterOffsetBegin': '11', 'CharacterOffsetEnd': '15', 'NormalizedNamedEntityTag': '1900'}]], 'dependencies': [['root', 'ROOT', 'born'], ['auxpass', 'born', 'Is'], ['prep_in', 'born', '1900']], 'text': 'Is born in 1900'}]}
+
+# Parsing result of "President of France"
+def birth_date():
+    return {'sentences': [{'parsetree': '(ROOT (NP (NP (NNP President)) (PP (IN of) (NP (NNP France)))))', 'words': [['President', {'NamedEntityTag': 'O', 'CharacterOffsetBegin': '0', 'Lemma': 'President', 'CharacterOffsetEnd': '9', 'PartOfSpeech': 'NNP'}], ['of', {'NamedEntityTag': 'O', 'CharacterOffsetBegin': '10', 'Lemma': 'of', 'CharacterOffsetEnd': '12', 'PartOfSpeech': 'IN'}], ['France', {'NamedEntityTag': 'LOCATION', 'CharacterOffsetBegin': '13', 'Lemma': 'France', 'CharacterOffsetEnd': '19', 'PartOfSpeech': 'NNP'}]], 'dependencies': [['root', 'ROOT', 'President'], ['prep_of', 'President', 'France']], 'text': 'President of France', 'indexeddependencies': [['root', 'ROOT-0', 'President-1'], ['prep_of', 'President-1', 'France-3']]}]}
+
+# Parsing result of "When is born Obama?"
+def birth_place():
+    return {'sentences': [{'dependencies': [['root', 'ROOT', 'born'], ['advmod', 'born', 'When'], ['auxpass', 'born', 'is'], ['dobj', 'born', 'Obama']], 'words': [['When', {'Lemma': 'when', 'CharacterOffsetEnd': '4', 'NamedEntityTag': 'O', 'PartOfSpeech': 'WRB', 'CharacterOffsetBegin': '0'}], ['is', {'Lemma': 'be', 'CharacterOffsetEnd': '7', 'NamedEntityTag': 'O', 'PartOfSpeech': 'VBZ', 'CharacterOffsetBegin': '5'}], ['born', {'Lemma': 'bear', 'CharacterOffsetEnd': '12', 'NamedEntityTag': 'O', 'PartOfSpeech': 'VBN', 'CharacterOffsetBegin': '8'}], ['Obama', {'Lemma': 'Obama', 'CharacterOffsetEnd': '18', 'NamedEntityTag': 'PERSON', 'PartOfSpeech': 'NNP', 'CharacterOffsetBegin': '13'}], ['?', {'Lemma': '?', 'CharacterOffsetEnd': '19', 'NamedEntityTag': 'O', 'PartOfSpeech': '.', 'CharacterOffsetBegin': '18'}]], 'text': 'When is born Obama?', 'indexeddependencies': [['root', 'ROOT-0', 'born-3'], ['advmod', 'born-3', 'When-1'], ['auxpass', 'born-3', 'is-2'], ['dobj', 'born-3', 'Obama-4']], 'parsetree': '(ROOT (SBARQ (WHADVP (WRB When)) (SQ (VBZ is) (VP (VBN born) (NP (NNP Obama)))) (. ?)))'}]}
+    
+# Parsing result of "Where is the mistake the mistake?"
+
+def mistake():
+    return {'sentences': [{'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['advmod', 'is-2', 'Where-1'], ['det', 'mistake-4', 'the-3'], ['nsubj', 'is-2', 'mistake-4'], ['det', 'mistake-6', 'the-5'], ['dep', 'mistake-4', 'mistake-6']], 'dependencies': [['root', 'ROOT', 'is'], ['advmod', 'is', 'Where'], ['det', 'mistake', 'the'], ['nsubj', 'is', 'mistake'], ['det', 'mistake', 'the'], ['dep', 'mistake', 'mistake']], 'parsetree': '(ROOT (SBARQ (WHADVP (WRB Where)) (SQ (VBZ is) (NP (DT the) (NN mistake) (NP (DT the) (NN mistake)))) (. ?)))', 'text': 'Where is the mistake the mistake?', 'words': [['Where', {'PartOfSpeech': 'WRB', 'CharacterOffsetEnd': '5', 'CharacterOffsetBegin': '0', 'NamedEntityTag': 'O', 'Lemma': 'where'}], ['is', {'PartOfSpeech': 'VBZ', 'CharacterOffsetEnd': '8', 'CharacterOffsetBegin': '6', 'NamedEntityTag': 'O', 'Lemma': 'be'}], ['the', {'PartOfSpeech': 'DT', 'CharacterOffsetEnd': '12', 'CharacterOffsetBegin': '9', 'NamedEntityTag': 'O', 'Lemma': 'the'}], ['mistake', {'PartOfSpeech': 'NN', 'CharacterOffsetEnd': '20', 'CharacterOffsetBegin': '13', 'NamedEntityTag': 'O', 'Lemma': 'mistake'}], ['the', {'PartOfSpeech': 'DT', 'CharacterOffsetEnd': '24', 'CharacterOffsetBegin': '21', 'NamedEntityTag': 'O', 'Lemma': 'the'}], ['mistake', {'PartOfSpeech': 'NN', 'CharacterOffsetEnd': '32', 'CharacterOffsetBegin': '25', 'NamedEntityTag': 'O', 'Lemma': 'mistake'}], ['?', {'PartOfSpeech': '.', 'CharacterOffsetEnd': '33', 'CharacterOffsetBegin': '32', 'NamedEntityTag': 'O', 'Lemma': '?'}]]}]}
+
+# Parsing result of "Who is Louis XIV, king of France?"
+def king():
+    return {'sentences': [{'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['dep', 'is-2', 'Who-1'], ['nn', 'XIV-4', 'Louis-3'], ['nsubj', 'is-2', 'XIV-4'], ['appos', 'XIV-4', 'king-6'], ['prep_of', 'XIV-4', 'France-8']], 'text': 'Who is Louis XIV, king of France?', 'parsetree': '(ROOT (SBARQ (WHNP (WP Who)) (SQ (VBZ is) (NP (NP (NP (NNP Louis) (NNP XIV)) (, ,) (NP (NN king))) (PP (IN of) (NP (NNP France))))) (. ?)))', 'dependencies': [['root', 'ROOT', 'is'], ['dep', 'is', 'Who'], ['nn', 'XIV', 'Louis'], ['nsubj', 'is', 'XIV'], ['appos', 'XIV', 'king'], ['prep_of', 'XIV', 'France']], 'words': [['Who', {'CharacterOffsetEnd': '3', 'CharacterOffsetBegin': '0', 'Lemma': 'who', 'NamedEntityTag': 'O', 'PartOfSpeech': 'WP'}], ['is', {'CharacterOffsetEnd': '6', 'CharacterOffsetBegin': '4', 'Lemma': 'be', 'NamedEntityTag': 'O', 'PartOfSpeech': 'VBZ'}], ['Louis', {'CharacterOffsetEnd': '12', 'CharacterOffsetBegin': '7', 'Lemma': 'Louis', 'NamedEntityTag': 'PERSON', 'PartOfSpeech': 'NNP'}], ['XIV', {'CharacterOffsetEnd': '16', 'CharacterOffsetBegin': '13', 'Lemma': 'XIV', 'NamedEntityTag': 'PERSON', 'PartOfSpeech': 'NNP'}], [',', {'CharacterOffsetEnd': '17', 'CharacterOffsetBegin': '16', 'Lemma': ',', 'NamedEntityTag': 'O', 'PartOfSpeech': ','}], ['king', {'CharacterOffsetEnd': '22', 'CharacterOffsetBegin': '18', 'Lemma': 'king', 'NamedEntityTag': 'O', 'PartOfSpeech': 'NN'}], ['of', {'CharacterOffsetEnd': '25', 'CharacterOffsetBegin': '23', 'Lemma': 'of', 'NamedEntityTag': 'O', 'PartOfSpeech': 'IN'}], ['France', {'CharacterOffsetEnd': '32', 'CharacterOffsetBegin': '26', 'Lemma': 'France', 'NamedEntityTag': 'LOCATION', 'PartOfSpeech': 'NNP'}], ['?', {'CharacterOffsetEnd': '33', 'CharacterOffsetBegin': '32', 'Lemma': '?', 'NamedEntityTag': 'O', 'PartOfSpeech': '.'}]]}]}
 
 def tripleProductionData():
     '''

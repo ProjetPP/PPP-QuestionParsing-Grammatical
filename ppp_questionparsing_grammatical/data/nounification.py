@@ -8,5 +8,6 @@ nounificationExceptions = {
     'direct' : 'director',
     'impress' : 'impression',
     'fix' : 'repair',
-    'know' : 'knowledge'
+    'know' : 'knowledge',
+    'invent' : 'inventor'
 }

@@ -15,6 +15,11 @@ Current rule: don't merge/remove appos
 
 * Who came up with the name, El Nino?
 
+xcomp
+=====
+
+* What did John Hinckley do to impress Jodie Foster?
+
 amod
 ====
 
@@ -69,11 +74,14 @@ nsubjpass
 
 cop
 ===
-  
+
+cop doesn't always disappear -> needs to remove it manually
+
 ##### ---
 
 * What is the brightest star visible from Earth? >> cop not removed! change what <-> is
-* Who is the president black and blue
+* Who is the president black and blue?
+* What is black and white?
 
 prep
 ====
@@ -99,18 +107,29 @@ Current rule: dobj=t2
 - collapse dobj to comp ?
 - different if a nsubj is present?
 
-##### ---
+##### +++
 
 * What did John Hinckley do to impress Jodie Foster?
 * When did they won the lottery? >> dobj = t4
 * What two US biochemists won the Nobel Prize in medicine in 1992?
 * How many films did Ingmar Bergman make? >> with nsubj
+* Who has written "The Hitchhiker's Guide to the Galaxy"? >> question is transformed as "(?,writer,The Hitchhiker 's Guide to the Galaxy)". The triple should be "(The Hitchhiker 's Guide to the Galaxy, author, ?)" or "(The Hitchhiker 's Guide to the Galaxy, writer, ?)"
+* Who wrote "The Hitchhiker's Guide to the Galaxy"?
 
-##### +++
+look at the verb ? (passive, acted ...)
+
+##### ???
 
 * Who killed Gandhi?
 -> t4 would be better if we nounify "killed" into "killer".
 For instance, Wikidata returns a good answer for the triple `(Gandhi, killer, ?)`
+
+ccomp
+=====
+
+##### +++
+
+* Who said "I am a Berliner"?
 
 pobj
 ====
@@ -173,3 +192,7 @@ rcmod
 
 * What did Richard Feynman say upon hearing he would receive the Nobel Prize in Physics? >> delete hearing et rcmod
 
+pcomp
+=====
+
+* When did Israel begin turning the Gaza Strip and Jericho over to the PLO?
