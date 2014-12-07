@@ -16,7 +16,7 @@ conjunctionTab = {
 
 def normalizeSuperlative(tree):
     """
-        Handle R6 dependency (superlative, ordinal)
+        Handle Rspl dependency (superlative, ordinal)
     """
     assert len(tree.child) ==1
     try: 
@@ -26,12 +26,14 @@ def normalizeSuperlative(tree):
 
 def normalizeConjunction(tree):
     """
-        Handle R7 dependency (conjunction)
+        Handle Rconj dependency (conjunction)
     """
     result = []
-    for t in tree.child:
-        assert t.dependency == 'R7'
-        result.append(normalize(t))
+    assert len(tree.child) == 2 and tree.child[0].dependency.startswith('Rconj') and tree.child[1].dependency.startswith('Rconj')
+    if tree.child[0].dependency == 'RconjT':
+        result = [normalize(tree.child[0]),normalize(tree.child[1])]
+    else:
+        result = [normalize(tree.child[1]),normalize(tree.child[0])]    
     try:
         return conjunctionTab[tree.getWords()](list=result)
     except KeyError:
@@ -43,13 +45,13 @@ def normalize(tree):
     """
     if tree.child == []: # leaf
         return Resource(value=tree.getWords())
-    if tree.child[0].dependency == 'R6': # R6 = superlative, ordinal
+    if tree.child[0].dependency == 'Rspl': # Rspl = superlative, ordinal
         return normalizeSuperlative(tree)
-    if tree.child[0].dependency == 'R7': # R7 = conjunction
+    if tree.child[0].dependency.startswith('Rconj'): # Rconj = conjunction
         return normalizeConjunction(tree)
     result = []
     for t in tree.child: # R1 ... R5, R8
-        assert t.dependency != 'R6' and t.dependency != 'R7'
+        assert t.dependency != 'Rspl' and not t.dependency.startswith('Rconj')
         if t.dependency == 'R0':
             result.append(normalize(t))
         if t.dependency == 'R1': # ou enlever la condition, ça devient R4

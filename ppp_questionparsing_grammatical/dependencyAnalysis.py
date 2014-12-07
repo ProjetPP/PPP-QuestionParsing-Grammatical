@@ -105,8 +105,9 @@ dependenciesMap2 = {         # how to handle a -b-> c
     'R3'        : ignore,    # (?,normalize(c),!a)
     'R4'        : ignore,    # (normalize(c),!a,?)
      #'R5'        : ignore,    # (!a,normalize(c),?) # not use for the moment
-    'R6'        : propType,  # superlative
-    'R7'        : propType,  # conjunction
+    'Rspl'      : propType,  # superlative
+    'RconjT'    : propType,  # top of a conjunction relation
+    'RconjB'    : propType,  # bottom of a conjunction relation
     'R8'        : propType   # !c
 }
 
@@ -143,12 +144,12 @@ def collapseMap(t,depMap,down=True):
 
 def connectorUp(t):
     """
-        Move amod connectors (first, biggest...)
+        Move amod connectors (superlative: first, biggest...)
     """
     if t.dependency == 'connectorUp':
         assert t.parent is not None and t.child == []
         t.dependency = t.parent.dependency
-        t.parent.dependency = 'R6'
+        t.parent.dependency = 'Rspl'
         t.parent.child.remove(t)
         t.child = [t.parent]
         t.parent.parent.child.remove(t.parent)
@@ -184,7 +185,7 @@ def conjConnectorsUp(t):
             parentTemp.child.append(t) # son(n0)=n2
             t.parent = parentTemp # parent(n2) = n0
             newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,parentTemp], parentTemp.parent)
-            parentTemp.dependency = 'R7'
+            parentTemp.dependency = 'RconjB'
             parentTemp.parent = newTree
         else:
             parentTemp = t.parent # n0
@@ -194,11 +195,11 @@ def conjConnectorsUp(t):
             for n in t.child:
                 n.parent = t
             newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,t], parentTemp.parent)
-            t.dependency = 'R7'
+            t.dependency = 'RconjB'
             t.parent = newTree
         newTree.parent.child.remove(parentTemp)
         newTree.parent.child.append(newTree)
-        dupl.dependency = 'R7'
+        dupl.dependency = 'RconjT'
         dupl.parent = newTree
         temp = list(newTree.child) # copy, because t.child is changed while iterating
         for c in temp:

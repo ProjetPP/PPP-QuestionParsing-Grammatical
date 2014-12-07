@@ -142,7 +142,7 @@ class HierarchyTests(TestCase):
         first1=andw.child[0]
         self.assertEqual(first1.wordList,[Word("first",4,'JJ')])
         self.assertEqual(first1.namedEntityTag,'ORDINAL')
-        self.assertEqual(first1.dependency,'R7')
+        self.assertEqual(first1.dependency,'RconjT')
         self.assertEqual(first1.parent,andw)
         self.assertEqual(len(first1.child),1)
         self.assertEqual(first1.subtreeType,'undef')
@@ -151,7 +151,7 @@ class HierarchyTests(TestCase):
         first2=andw.child[1]
         self.assertEqual(first2.wordList,[Word("first",4,'JJ')])
         self.assertEqual(first2.namedEntityTag,'ORDINAL')
-        self.assertEqual(first2.dependency,'R7')
+        self.assertEqual(first2.dependency,'RconjB')
         self.assertEqual(first2.parent,andw)
         self.assertEqual(len(first2.child),1)
         self.assertEqual(first2.subtreeType,'undef')
@@ -160,7 +160,7 @@ class HierarchyTests(TestCase):
         gilbert=first1.child[0]
         self.assertEqual(gilbert.wordList,[Word("Gilbert",5,'NNP')])
         self.assertEqual(gilbert.namedEntityTag,'PERSON')
-        self.assertEqual(gilbert.dependency,'R6')
+        self.assertEqual(gilbert.dependency,'Rspl')
         self.assertEqual(gilbert.parent,first1)
         self.assertEqual(len(gilbert.child),0)
         self.assertEqual(gilbert.subtreeType,'undef')
@@ -169,7 +169,7 @@ class HierarchyTests(TestCase):
         sullivan=first2.child[0]
         self.assertEqual(sullivan.wordList,[Word("Sullivan",7,'NNP'),Word("opera",8,'NN')])
         self.assertEqual(sullivan.namedEntityTag,'undef')
-        self.assertEqual(sullivan.dependency,'R6')
+        self.assertEqual(sullivan.dependency,'Rspl')
         self.assertEqual(sullivan.parent,first2)
         self.assertEqual(len(sullivan.child),0)
         self.assertEqual(sullivan.subtreeType,'undef')
@@ -200,7 +200,7 @@ class HierarchyTests(TestCase):
         identity1=andw.child[0]
         self.assertEqual(identity1.wordList,[Word("identity",2,'VBZ')])
         self.assertEqual(identity1.namedEntityTag,'undef')
-        self.assertEqual(identity1.dependency,'R7')
+        self.assertEqual(identity1.dependency,'RconjT')
         self.assertEqual(identity1.parent,andw)
         self.assertEqual(len(identity1.child),1)
         self.assertEqual(identity1.subtreeType,'PERSON')
@@ -209,7 +209,7 @@ class HierarchyTests(TestCase):
         identity2=andw.child[1]
         self.assertEqual(identity2.wordList,[Word("identity",2,'VBZ')])
         self.assertEqual(identity2.namedEntityTag,'undef')
-        self.assertEqual(identity2.dependency,'R7')
+        self.assertEqual(identity2.dependency,'RconjB')
         self.assertEqual(identity2.parent,andw)
         self.assertEqual(len(identity2.child),1)
         self.assertEqual(identity2.subtreeType,'PERSON')
