@@ -50,25 +50,25 @@ def normalize(tree):
     if tree.child[0].dependency.startswith('Rconj'): # Rconj = conjunction
         return normalizeConjunction(tree)
     result = []
-    for t in tree.child: # R1 ... R5, R8
+    for t in tree.child: # R0 ... R5
         assert t.dependency != 'Rspl' and not t.dependency.startswith('Rconj')
         if t.dependency == 'R0':
             result.append(normalize(t))
-        if t.dependency == 'R1': # ou enlever la condition, ça devient R4
+        if t.dependency == 'R1':
+            result.append(Resource(value=t.getWords()))
+        if t.dependency == 'R2': # ou enlever la condition, ça devient R5
             if len(t.child) == 0:
                 result.append(Triple(subject=Resource(value=t.getWords()), predicate=Resource(value=tree.getWords()), object=Missing()))
             else:
                 result.append(normalize(t))
-        if t.dependency == 'R2':
-            result.append(Triple(subject=Missing(), predicate=Resource(value=tree.getWords()), object=normalize(t)))
         if t.dependency == 'R3':
-            result.append(Triple(subject=Missing(), predicate=normalize(t), object=Resource(value=tree.getWords())))
+            result.append(Triple(subject=Missing(), predicate=Resource(value=tree.getWords()), object=normalize(t)))
         if t.dependency == 'R4':
+            result.append(Triple(subject=Missing(), predicate=normalize(t), object=Resource(value=tree.getWords())))
+        if t.dependency == 'R5':
             result.append(Triple(subject=normalize(t), predicate=Resource(value=tree.getWords()), object=Missing()))
-        #if t.dependency == 'R5': # not use for the moment
+        #if t.dependency == 'R6': # not use for the moment
         #   result.append(Triple(subject=Resource(value=tree.getWords()), predicate=normalize(t), object=Missing()))
-        if t.dependency == 'R8':
-            result.append(Resource(value=t.getWords()))
     if len(result) == 1:
         return result[0]
     else:

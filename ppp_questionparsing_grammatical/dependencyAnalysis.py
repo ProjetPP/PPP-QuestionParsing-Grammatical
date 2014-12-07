@@ -39,24 +39,24 @@ def propType(t):
 dependenciesMap1 = {
     'undef'     : 'R0', # personnal tag, should not happen?
     'root'      : 'R0',
-    'dep'       : 'R8', # ? instead of R1
+    'dep'       : 'R1', # ? instead of R2
         'aux'       : remove,
             'auxpass'   : remove,
             'cop'       : impossible,
         'arg'       : impossible,
-            'agent'     : 'R4',
-            'comp'      : 'R2',
-                'acomp'     : 'R2',
-                'ccomp'     : 'R4',
-                'xcomp'     : 'R2',
-                'pcomp'     : 'R2',
+            'agent'     : 'R5',
+            'comp'      : 'R3',
+                'acomp'     : 'R3',
+                'ccomp'     : 'R5',
+                'xcomp'     : 'R3',
+                'pcomp'     : 'R3',
                 'obj'       : impossible,
-                    'dobj'      : 'R4', #_+ instead of R4
-                    'iobj'      : 'R2',
-                    'pobj'      : 'R2', # -
+                    'dobj'      : 'R5', #_+ instead of R5
+                    'iobj'      : 'R3',
+                    'pobj'      : 'R3', # -
             'subj'      : impossible,
-                'nsubj'     : 'R1',
-                    'nsubjpass'    : 'R4', #_+ ? instead of R3
+                'nsubj'     : 'R2',
+                    'nsubjpass'    : 'R5', #_+ ? instead of R4
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
         'cc'        : impossible,
@@ -65,50 +65,51 @@ dependenciesMap1 = {
             'conj_or'   : ignore,
             'conj_negcc': ignore, #?
         'expl'      : remove,
-        'mod'       : 'R3',
+        'mod'       : 'R4',
             'amod'      : amodRule,
-            'appos'     : 'R3',
-            'advcl'     : 'R3',
+            'appos'     : 'R4',
+            'advcl'     : 'R4',
             'det'       : remove,
             'predet'    : remove,
             'preconj'   : remove,
-            'vmod'      : 'R2',
+            'vmod'      : 'R3',
             'mwe'       : merge,
                 'mark'      : remove,
             'advmod'    : merge,
                 'neg'       : 'connectorUp', # need a NOT node
-            'rcmod'     : 'R3', # temp, need to be analyzed
+            'rcmod'     : 'R4', # temp, need to be analyzed
                 'quantmod'  : remove,
             'nn'        : merge, # <-------
             'npadvmod'  : merge,
-                'tmod'      : 'R2',
+                'tmod'      : 'R3',
             'num'       : merge,
             'number'    : merge,
-            'prep'      : 'R4', # ?
-            'prepc'     : 'R4', # ?
-            'poss'      : 'R4',
+            'prep'      : 'R5', # ?
+            'prepc'     : 'R5', # ?
+            'poss'      : 'R5',
             'possessive': impossible,
             'prt'       : merge,
         'parataxis' : remove, #  ?
         'punct'     : impossible,
         'ref'       : impossible,
         'sdep'      : impossible,
-            'xsubj'     : 'R2',
+            'xsubj'     : 'R3',
         'goeswith'  : merge,
         'discourse' : remove
 }
 
 dependenciesMap2 = {         # how to handle a -b-> c
     'R0'        : propType,  # normalize(c)
-    'R1'        : propType,  # if c is a leaf: (normalize(c),!a,?), otherwise: normalize(c)
-    'R2'        : ignore,    # (?,!a,normalize(c))
-    'R3'        : ignore,    # (?,normalize(c),!a)
-    'R4'        : ignore,    # (normalize(c),!a,?)
-     #'R5'        : ignore,    # (!a,normalize(c),?) # not use for the moment
+    'R1'        : propType,  # !c
+    'R2'        : propType,  # if c is a leaf: (normalize(c),!a,?), otherwise: normalize(c)
+    'R3'        : ignore,    # (?,!a,normalize(c))
+    'R4'        : ignore,    # (?,normalize(c),!a)
+    'R5'        : ignore,    # (normalize(c),!a,?)
+     #'R6'        : ignore,    # (!a,normalize(c),?) # not use for the moment
     'Rspl'      : propType,  # superlative
     'RconjT'    : propType,  # top of a conjunction relation
-    'RconjB'    : propType,  # bottom of a conjunction relation
-    'R8'        : propType   # !c
+    'RconjB'    : propType   # bottom of a conjunction relation
+
 }
 
 def collapsePrep(t):
