@@ -8,7 +8,7 @@ from ppp_datamodel.communication import TraceItem, Response
 from ppp_libmodule.exceptions import ClientError
 
 from .config import Config
-from . import computeTree, simplify, normalize
+from . import computeTree, simplify, normalize, QuotationHandler
 
 class StanfordNLP:
     def __init__(self, url):
@@ -25,8 +25,12 @@ class RequestHandler:
     def answer(self):
         if not isinstance(self.request.tree, Sentence):
             return []
-        result = stanfordnlp.parse(self.request.tree.value)
+        handler = QuotationHandler()
+        sentence = self.request.tree.value
+        nonAmbiguousSentence = handler.pull(sentence)
+        result = stanfordnlp.parse(nonAmbiguousSentence)
         tree = computeTree(result['sentences'][0])
+        handler.push(tree)
         qw = simplify(tree)
         tree = normalize(tree)
         meas = {'accuracy': 0.5, 'relevance': 0.5}
