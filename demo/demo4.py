@@ -18,10 +18,14 @@ class StanfordNLP:
 
 
 def get_tree():
-  nlp = StanfordNLP()
-  result = nlp.parse(input(""))
-  tree = ppp_questionparsing_grammatical.computeTree(result['sentences'][0])
-  return tree
+    nlp = StanfordNLP()
+    sentence = input("")
+    handler = ppp_questionparsing_grammatical.QuotationHandler()
+    simplifiedSentence = handler.pull(sentence)
+    result = nlp.parse(simplifiedSentence)
+    tree = ppp_questionparsing_grammatical.computeTree(result['sentences'][0])
+    handler.push(tree)
+    return tree
 
 if __name__ == "__main__":
     print(get_tree())
