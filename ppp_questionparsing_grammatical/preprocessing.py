@@ -1,5 +1,5 @@
 import sys
-from .preprocessingMerge import Word, mergeQuotations, mergeNamedEntityTag, buildWord
+from .preprocessingMerge import Word, mergeNamedEntityTag, buildWord
 from copy import deepcopy
 import random
 import string
@@ -204,6 +204,5 @@ def computeTree(r):
     computeTags(r,nameToNodes)
     tree = nameToNodes['ROOT-0']                 # the tree is built
     initText(tree,r['text'].replace('"','\\\"'))
-    mergeQuotations(tree,r)                      # quotation merging
     mergeNamedEntityTag(tree)                    # NER merging
     return tree
