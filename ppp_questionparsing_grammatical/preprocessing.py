@@ -1,5 +1,6 @@
 import sys
 from .preprocessingMerge import Word, mergeNamedEntityTag, buildWord
+from .data.exceptions import QuotationError
 from copy import deepcopy
 import random
 import string
@@ -97,6 +98,14 @@ class QuotationHandler:
         self.quotations = {}
         random.seed()
 
+    def checkQuotation(self,sentence):
+        """
+            Check that there is an even number of quotation marks.
+            Raise QuotationError otherwise.
+        """
+        if len([c for c in sentence if c=='"']) % 2 == 1:
+            raise QuotationError(sentence,"Odd number of quotation marks.")
+
     def getReplacement(self,sentence):
         """
             Return a random string which does not appear in the sentence.
@@ -112,6 +121,8 @@ class QuotationHandler:
         """
         if not self.replacement:
             self.replacement = self.getReplacement(sentence)
+        if self.replacementIndex == 0:
+            self.checkQuotation(sentence)
         try:
             indexBegin = sentence.index('"')
             indexEnd = indexBegin+sentence[indexBegin+1:].index('"')+1

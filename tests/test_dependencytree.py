@@ -1,7 +1,7 @@
 import json
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.stem.porter import PorterStemmer
-from ppp_questionparsing_grammatical import Word, QuotationHandler, DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother
+from ppp_questionparsing_grammatical import Word, QuotationHandler, DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother, QuotationError
 import data
 
 from unittest import TestCase
@@ -32,6 +32,14 @@ class DependenciesTreeTests(TestCase):
         for key in handler.quotations.keys():
             real = real.replace(key,'"'+handler.quotations[key]+'"')
         self.assertEqual(real,sentence)
+
+    def testWrongQuotation(self):
+        handler = QuotationHandler()
+        sentence1 = "What is \"bla?"
+        sentence2 = "What is \"bla of \"blu\"?"
+        self.assertRaises(QuotationError, handler.pull, sentence1)
+        self.assertRaises(QuotationError, handler.pull, sentence2)
+
 
     def testStandardization(self):
         lmtzr = WordNetLemmatizer()
