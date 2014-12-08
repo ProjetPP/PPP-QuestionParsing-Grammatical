@@ -1,6 +1,7 @@
 import sys
 from .preprocessingMerge import Word, mergeQuotations, mergeNamedEntityTag, buildWord
 from copy import deepcopy
+import random
 
 class DependenciesTree:
     """
@@ -84,6 +85,53 @@ class DependenciesTree:
                 result += " "
             result += self.wordList[i].word
         return result
+
+class QuotationHandler:
+    """
+        An object to handle quotations in the sentences.
+    """
+    def __init__(self,replacement=None):
+        self.replacement = replacement
+        self.replacementIndex = 0
+        self.quotations = {}
+        random.seed()
+
+    def getReplacement(self,sentence):
+        """
+            Return a random string which does not appear in the sentence.
+        """
+        sep = "".join(random.sample("?,.;:/!*-",3))
+        while sep in sentence:
+            sep = "".join(random.sample("?,.;:/!*-",3))
+        return sep
+
+    def pull(self,sentence):
+        """
+            Remove/pull the quotations from the sentence, and replace them.
+        """
+        if not self.replacement:
+            self.replacement = self.getReplacement(sentence)
+        try:
+            indexBegin = sentence.index('"')
+            indexEnd = indexBegin+sentence[indexBegin+1:].index('"')+1
+        except ValueError:
+            return sentence
+        replacement = self.replacement+str(self.replacementIndex)
+        self.replacementIndex += 1
+        self.quotations[replacement] = sentence[indexBegin+1:indexEnd]
+        return self.pull(sentence[0:indexBegin]+replacement+sentence[indexEnd+1:])
+
+    def push(self,tree):
+        """
+            Replace/push the spaces in the nodes of the tree.
+        """
+        for c in tree.child:
+            self.push(c)
+        for i in range(0,len(tree.wordList)):
+            try:
+                tree.wordList[i] = self.quotations[tree.wordList[i]]
+            except KeyError:
+                continue
 
 def computeEdges(r,nameToNodes):
     """

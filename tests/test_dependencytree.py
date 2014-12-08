@@ -1,7 +1,7 @@
 import json
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.stem.porter import PorterStemmer
-from ppp_questionparsing_grammatical import Word, DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother
+from ppp_questionparsing_grammatical import Word, QuotationHandler, DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother
 import data
 
 from unittest import TestCase
@@ -14,6 +14,16 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(w.index,1)
         self.assertEqual(w.pos,'bar')
         self.assertEqual(str(w),"(foo,1,bar)")
+
+    def testBasicQuotationHandler(self):
+        handler = QuotationHandler("foo")
+        sentence = "The person who sing \"Let It Be\" and \"Lucy in the Sky with Diamonds\" also sing \"Yellow Submarine\"."
+        expected = "The person who sing foo0 and foo1 also sing foo2."
+        real = handler.pull(sentence)
+        self.assertEqual(real,expected)
+        self.assertEqual(handler.quotations["foo0"],"Let It Be")
+        self.assertEqual(handler.quotations["foo1"],"Lucy in the Sky with Diamonds")
+        self.assertEqual(handler.quotations["foo2"],"Yellow Submarine")
 
     def testStandardization(self):
         lmtzr = WordNetLemmatizer()
