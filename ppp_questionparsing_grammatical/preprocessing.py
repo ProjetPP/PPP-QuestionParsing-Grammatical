@@ -2,6 +2,7 @@ import sys
 from .preprocessingMerge import Word, mergeQuotations, mergeNamedEntityTag, buildWord
 from copy import deepcopy
 import random
+import string
 
 class DependenciesTree:
     """
@@ -100,9 +101,9 @@ class QuotationHandler:
         """
             Return a random string which does not appear in the sentence.
         """
-        sep = "".join(random.sample("?,.;:/!*-",3))
+        sep = "".join(random.sample(string.ascii_uppercase,3))
         while sep in sentence:
-            sep = "".join(random.sample("?,.;:/!*-",3))
+            sep = "".join(random.sample(string.ascii_uppercase,3))
         return sep
 
     def pull(self,sentence):
@@ -127,11 +128,18 @@ class QuotationHandler:
         """
         for c in tree.child:
             self.push(c)
+        replaced = False
         for i in range(0,len(tree.wordList)):
             try:
-                tree.wordList[i] = self.quotations[tree.wordList[i]]
+                tree.wordList[i].word = self.quotations[tree.wordList[i].word]
+                tree.wordList[i].pos = 'QUOTE'
+                replaced = True
             except KeyError:
                 continue
+        if replaced:
+            tree.namedEntityTag = 'QUOTATION'
+        for key in self.quotations.keys():
+            tree.text = tree.text.replace(key,"``"+self.quotations[key]+"''")
 
 def computeEdges(r,nameToNodes):
     """
