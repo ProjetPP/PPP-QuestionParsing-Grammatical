@@ -109,7 +109,6 @@ dependenciesMap2 = {         # how to handle a -b-> c
     'Rspl'      : propType,  # superlative
     'RconjT'    : propType,  # top of a conjunction relation
     'RconjB'    : propType   # bottom of a conjunction relation
-
 }
 
 def collapsePrep(t):

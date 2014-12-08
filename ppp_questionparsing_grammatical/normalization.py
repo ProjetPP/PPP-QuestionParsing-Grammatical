@@ -2,27 +2,24 @@ import sys
 import ppp_datamodel
 from .preprocessing import DependenciesTree
 from ppp_datamodel import Resource, Missing, Triple, Last, First, List, Sort, Intersection, Union
-
-superlativeTab = {
-    # how to sort dependending on the superlative
-    'biggest'   : 'size',
-    'largest'   : 'width'
-}
-
-conjunctionTab = {
-    'and'       : Intersection,
-    'or'        : Union
-}
+from .data.conjunction import conjunctionTab
+from .data.superlative import superlativeNoun, superlativeOrder
 
 def normalizeSuperlative(tree):
     """
         Handle Rspl dependency (superlative, ordinal)
     """
-    assert len(tree.child) ==1
-    try: 
-        return Last(list=Sort(list=normalize(tree.child[0]),predicate=superlativeTab[tree.getWords()])) # last / first
-    except KeyError:
-        return First(list=Sort(list=normalize(tree.child[0]),predicate='default'))
+    assert len(tree.child) == 1
+    if tree.getWords() in superlativeNoun:
+        if tree.getWords() in superlativeOrder:
+            return superlativeOrder[tree.getWords()](list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[tree.getWords()]))
+        else:
+            return First(list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[tree.getWords()])) # First by default
+    else:
+        if tree.getWords() in superlativeOrder: 
+            return superlativeOrder[tree.getWords()](list=Sort(list=normalize(tree.child[0]),predicate='default')) # default predicate
+        else:
+            return First(list=Sort(list=normalize(tree.child[0]),predicate='default'))
 
 def normalizeConjunction(tree):
     """
