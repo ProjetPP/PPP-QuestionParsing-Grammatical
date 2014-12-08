@@ -17,23 +17,17 @@ class StanfordNLP:
     def parse(self, text):
         return json.loads(self.server.parse(text))
 
-def get_answer(s=""):
-    time_start = time.perf_counter()
+def get_answer(sentence=""):
     nlp = StanfordNLP()
-    if s == "":
-        s = input("")
-    result = nlp.parse(s)
-    time_stanford = time.perf_counter()
+    if sentence == "":
+        sentence = input("")
+    handler = ppp_questionparsing_grammatical.QuotationHandler()
+    simplifiedSentence = handler.pull(sentence)
+    result = nlp.parse(simplifiedSentence)
     tree = ppp_questionparsing_grammatical.computeTree(result['sentences'][0])
-    time_computeTree = time.perf_counter()
+    handler.push(tree)
     qw = ppp_questionparsing_grammatical.simplify(tree)
-    time_simplify = time.perf_counter()
     t = ppp_questionparsing_grammatical.normalize(tree)
-    time_normalize = time.perf_counter()
-    print("Stanford:\t"+str(time_stanford - time_start))
-    print("ComputeTree:\t"+str(time_computeTree - time_stanford))
-    print("Simplify:\t"+str(time_simplify - time_computeTree))
-    print("Normalize:\t"+str(time_normalize - time_simplify))
     return t
 
 if __name__ == "__main__":

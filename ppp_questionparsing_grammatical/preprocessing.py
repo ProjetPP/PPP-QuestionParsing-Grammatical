@@ -1,6 +1,9 @@
 import sys
-from .preprocessingMerge import Word, mergeQuotations, mergeNamedEntityTag, buildWord
+from .preprocessingMerge import Word, mergeNamedEntityTag, buildWord
+from .data.exceptions import QuotationError
 from copy import deepcopy
+import random
+import string
 
 class DependenciesTree:
     """
@@ -85,6 +88,70 @@ class DependenciesTree:
             result += self.wordList[i].word
         return result
 
+class QuotationHandler:
+    """
+        An object to handle quotations in the sentences.
+    """
+    def __init__(self,replacement=None):
+        self.replacement = replacement
+        self.replacementIndex = 0
+        self.quotations = {}
+        random.seed()
+
+    def checkQuotation(self,sentence):
+        """
+            Check that there is an even number of quotation marks.
+            Raise QuotationError otherwise.
+        """
+        if len([c for c in sentence if c=='"']) % 2 == 1:
+            raise QuotationError(sentence,"Odd number of quotation marks.")
+
+    def getReplacement(self,sentence):
+        """
+            Return a random string which does not appear in the sentence.
+        """
+        sep = "".join(random.sample(string.ascii_uppercase,3))
+        while sep in sentence:
+            sep = "".join(random.sample(string.ascii_uppercase,3))
+        return sep
+
+    def pull(self,sentence):
+        """
+            Remove/pull the quotations from the sentence, and replace them.
+        """
+        if not self.replacement:
+            self.replacement = self.getReplacement(sentence)
+        if self.replacementIndex == 0:
+            self.checkQuotation(sentence)
+        try:
+            indexBegin = sentence.index('"')
+            indexEnd = indexBegin+sentence[indexBegin+1:].index('"')+1
+        except ValueError:
+            return sentence
+        replacement = self.replacement+str(self.replacementIndex)
+        self.replacementIndex += 1
+        self.quotations[replacement] = sentence[indexBegin+1:indexEnd]
+        return self.pull(sentence[0:indexBegin]+replacement+sentence[indexEnd+1:])
+
+    def push(self,tree):
+        """
+            Replace/push the spaces in the nodes of the tree.
+        """
+        for c in tree.child:
+            self.push(c)
+        replaced = False
+        for i in range(0,len(tree.wordList)):
+            try:
+                tree.wordList[i].word = self.quotations[tree.wordList[i].word]
+                tree.wordList[i].pos = 'QUOTE'
+                replaced = True
+            except KeyError:
+                continue
+        if replaced:
+            tree.namedEntityTag = 'QUOTATION'
+        for key in self.quotations.keys():
+            tree.text = tree.text.replace(key,"``"+self.quotations[key]+"''")
+
 def computeEdges(r,nameToNodes):
     """
         Compute the edges of the dependence tree.
@@ -148,6 +215,5 @@ def computeTree(r):
     computeTags(r,nameToNodes)
     tree = nameToNodes['ROOT-0']                 # the tree is built
     initText(tree,r['text'].replace('"','\\\"'))
-    mergeQuotations(tree,r)                      # quotation merging
     mergeNamedEntityTag(tree)                    # NER merging
     return tree

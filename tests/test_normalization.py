@@ -1,6 +1,6 @@
 import json
 
-from ppp_questionparsing_grammatical import computeTree, simplify, DependenciesTree, normalize
+from ppp_questionparsing_grammatical import computeTree, simplify, DependenciesTree, QuotationHandler, normalize
 #from ppp_datamodel import Resource, Missing
 import data
 
@@ -100,41 +100,46 @@ class StandardTripleTests(TestCase):
 })
 
     def testNormalize2(self):
-        tree = computeTree(data.give_LSD_LIB()['sentences'][0])
+        handler = QuotationHandler('foo')
+        sentence = 'Who wrote "Lucy in the Sky with Diamonds" and "Let It Be"?'
+        nonAmbiguousSentence = handler.pull(sentence)
+        result=data.give_LSD_LIB()
+        tree=computeTree(result['sentences'][0])
+        handler.push(tree)
         qw = simplify(tree)
         result = normalize(tree)
         self.assertEqual(result,{
-    "type": "intersection",
     "list": [
         {
             "object": {
                 "type": "missing"
             },
-            "predicate": {
-                "value": "writer",
-                "type": "resource"
-            },
             "subject": {
                 "value": "Lucy in the Sky with Diamonds",
                 "type": "resource"
             },
-            "type": "triple"
+            "type": "triple",
+            "predicate": {
+                "value": "writer",
+                "type": "resource"
+            }
         },
         {
             "object": {
                 "type": "missing"
             },
-            "predicate": {
+            "subject": {
                 "value": "Let It Be",
                 "type": "resource"
             },
-            "subject": {
-                "value": "Lucy in the Sky with Diamonds",
+            "type": "triple",
+            "predicate": {
+                "value": "writer",
                 "type": "resource"
-            },
-            "type": "triple"
+            }
         }
-    ]
+    ],
+    "type": "intersection"
 })
 
     def testNormalize3(self):
