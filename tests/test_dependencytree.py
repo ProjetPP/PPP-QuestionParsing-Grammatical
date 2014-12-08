@@ -25,6 +25,14 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(handler.quotations["foo1"],"Lucy in the Sky with Diamonds")
         self.assertEqual(handler.quotations["foo2"],"Yellow Submarine")
 
+    def testRandomQuotationHandler(self):
+        handler = QuotationHandler()
+        sentence = "The person who sing \"Let It Be\" and \"Lucy in the Sky with Diamonds\" also sing \"Yellow Submarine\"."
+        real = handler.pull(sentence)
+        for key in handler.quotations.keys():
+            real = real.replace(key,'"'+handler.quotations[key]+'"')
+        self.assertEqual(real,sentence)
+
     def testStandardization(self):
         lmtzr = WordNetLemmatizer()
         st = PorterStemmer()
