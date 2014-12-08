@@ -1,7 +1,7 @@
 import sys
-from .data.nounification import nounificationExceptions
 from nltk.corpus import wordnet
 from .data.exceptions import GrammaticalError, QuotationError
+from .data.nounification import nounificationExceptions
 
 ########################################
 # Word lemmatization and nounification #

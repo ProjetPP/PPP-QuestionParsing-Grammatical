@@ -67,4 +67,3 @@ superlativeOrder = {
     'widest'    : Last,
     'youngest'  : First
 }
-

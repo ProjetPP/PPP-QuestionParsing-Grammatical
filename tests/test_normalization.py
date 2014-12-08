@@ -226,3 +226,29 @@ class StandardTripleTests(TestCase):
         }
     ]
 })
+
+    def testNormalizeSuperl(self):
+        tree = computeTree(data.tanzania()['sentences'][0])
+        qw = simplify(tree)
+        result = normalize(tree)
+        self.assertEqual(result,{
+    "list": {
+        "list": {
+            "object": {
+                "type": "missing"
+            },
+            "predicate": {
+                "value": "mountain",
+                "type": "resource"
+            },
+            "subject": {
+                "value": "Tanzania",
+                "type": "resource"
+            },
+            "type": "triple"
+        },
+        "predicate": "height",
+        "type": "sort"
+    },
+    "type": "last"
+})

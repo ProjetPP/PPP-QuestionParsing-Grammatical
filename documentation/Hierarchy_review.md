@@ -196,3 +196,11 @@ pcomp
 =====
 
 * When did Israel begin turning the Gaza Strip and Jericho over to the PLO?
+
+advmod
+======
+
+* What is the most beautiful country in Europe?
+
+>> not superlative tag but should produce connector
+
