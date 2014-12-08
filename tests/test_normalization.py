@@ -113,32 +113,32 @@ class StandardTripleTests(TestCase):
         {
             "object": {
                 "type": "missing"
-            }, 
+            },
             "subject": {
-                "value": "Lucy in the Sky with Diamonds", 
+                "value": "Lucy in the Sky with Diamonds",
                 "type": "resource"
-            }, 
-            "type": "triple", 
+            },
+            "type": "triple",
             "predicate": {
-                "value": "writer", 
+                "value": "writer",
                 "type": "resource"
             }
-        }, 
+        },
         {
             "object": {
                 "type": "missing"
-            }, 
+            },
             "subject": {
-                "value": "Let It Be", 
+                "value": "Let It Be",
                 "type": "resource"
-            }, 
-            "type": "triple", 
+            },
+            "type": "triple",
             "predicate": {
-                "value": "writer", 
+                "value": "writer",
                 "type": "resource"
             }
         }
-    ], 
+    ],
     "type": "intersection"
 })
 
