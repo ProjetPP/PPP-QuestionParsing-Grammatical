@@ -21,6 +21,7 @@ class StanfordNLP:
 stanfordnlp = StanfordNLP(Config().corenlp_server)
 
 def parse(sentence):
+    handler = QuotationHandler()
     nonAmbiguousSentence = handler.pull(sentence)
     result = stanfordnlp.parse(nonAmbiguousSentence)
     tree = computeTree(result['sentences'][0])
@@ -38,7 +39,6 @@ class RequestHandler:
     def answer(self):
         if not isinstance(self.request.tree, Sentence):
             return []
-        handler = QuotationHandler()
         sentence = self.request.tree.value
         try:
             tree = parse(sentence)
