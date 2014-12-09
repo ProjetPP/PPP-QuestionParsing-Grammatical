@@ -88,10 +88,21 @@ class DependenciesTree:
             result += self.wordList[i].word
         return result
 
+def index(l,pred):
+    """
+        Return the index of the first element of l which is in pred.
+        Raise ValueError if there is not such an element.
+    """
+    for i in range(0,len(l)):
+        if l[i] in pred:
+            return i
+    raise ValueError
+
 class QuotationHandler:
     """
         An object to handle quotations in the sentences.
     """
+    quotationList = ['‘','’','“','”','"']
     def __init__(self,replacement=None):
         self.replacement = replacement
         self.replacementIndex = 0
@@ -103,7 +114,7 @@ class QuotationHandler:
             Check that there is an even number of quotation marks.
             Raise QuotationError otherwise.
         """
-        if len([c for c in sentence if c=='"']) % 2 == 1:
+        if len([c for c in sentence if c in self.quotationList]) % 2 == 1:
             raise QuotationError(sentence,"Odd number of quotation marks.")
 
     def getReplacement(self,sentence):
@@ -124,8 +135,8 @@ class QuotationHandler:
         if self.replacementIndex == 0:
             self.checkQuotation(sentence)
         try:
-            indexBegin = sentence.index('"')
-            indexEnd = indexBegin+sentence[indexBegin+1:].index('"')+1
+            indexBegin = index(sentence,self.quotationList)
+            indexEnd = indexBegin+index(sentence[indexBegin+1:],self.quotationList)+1
         except ValueError:
             return sentence
         replacement = self.replacement+str(self.replacementIndex)

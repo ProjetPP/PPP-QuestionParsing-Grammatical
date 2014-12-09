@@ -25,6 +25,16 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(handler.quotations["foo1"],"Lucy in the Sky with Diamonds")
         self.assertEqual(handler.quotations["foo2"],"Yellow Submarine")
 
+    def testOtherQuotationMakrs(self):
+        handler = QuotationHandler("foo")
+        sentence = "The person who sing ‘Let It Be’ and “Lucy in the Sky with Diamonds” also sing \"Yellow Submarine\"."
+        expected = "The person who sing foo0 and foo1 also sing foo2."
+        real = handler.pull(sentence)
+        self.assertEqual(real,expected)
+        self.assertEqual(handler.quotations["foo0"],"Let It Be")
+        self.assertEqual(handler.quotations["foo1"],"Lucy in the Sky with Diamonds")
+        self.assertEqual(handler.quotations["foo2"],"Yellow Submarine")
+
     def testRandomQuotationHandler(self):
         handler = QuotationHandler()
         sentence = "The person who sing \"Let It Be\" and \"Lucy in the Sky with Diamonds\" also sing \"Yellow Submarine\"."
@@ -39,7 +49,6 @@ class DependenciesTreeTests(TestCase):
         sentence2 = "What is \"bla of \"blu\"?"
         self.assertRaises(QuotationError, handler.pull, sentence1)
         self.assertRaises(QuotationError, handler.pull, sentence2)
-
 
     def testStandardization(self):
         lmtzr = WordNetLemmatizer()
