@@ -28,13 +28,13 @@ def amodRule(t,qw):
         t.dependency = 'connectorUp'
 
 def nsubjRule(t,qw):
-    if qw in strongQuestionWord or len(t.child) == 0: # Warning: length can decrease during analysis > non car parcours de bas en haut
-        t.dependency = 'R5s'
+    if qw in strongQuestionWord or len(t.child) == 0: # Warning: length can decrease during analysis > needs also the R2 tag
+        t.dependency = 'R5s' # same as R5 except that types are propagated
     else:
         t.dependency = 'R2'
         
 dependenciesMap1 = {
-    'undef'     : 'R0', # personnal tag, should not happen?
+    'undef'     : 'R0',
     'root'      : 'R0',
     'dep'       : 'R1', # ? instead of R2
         'aux'       : remove,
@@ -76,7 +76,7 @@ dependenciesMap1 = {
                 'neg'       : 'connectorUp', # need a NOT node
             'rcmod'     : 'R4', # temp, need to be analyzed
                 'quantmod'  : remove,
-            'nn'        : merge, # <-------
+            'nn'        : merge,
             'npadvmod'  : merge,
                 'tmod'      : 'R3',
             'num'       : merge,

@@ -17,7 +17,7 @@ openQuestionWord = [
 
 # question word that implies to add an extra triple (ex: where is the capital of france : (france,capital,?) --> ((france,capital,?),location,?)
 strongQuestionWord = [
-    'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'which', 'whom', 'whose', 'how big'
+    'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'whose', 'how big'
 ]
 
 questionAdd = {
