@@ -6,38 +6,35 @@ from copy import deepcopy
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.stem.porter import PorterStemmer
 from .data.exceptions import GrammaticalError
+from .data.questionWord import strongQuestionWord
 
-def remove(t):
+def remove(t,qw):
     t.parent.child.remove(t)
 
-def impossible(t):
+def impossible(t,qw):
     raise GrammaticalError(t.dependency,"unexpected dependency")
 
-def ignore(t):
+def ignore(t,qw):
     pass
 
-def merge(t):
+def merge(t,qw):
     t.parent.merge(t,True)
 
-def amodRule(t):
+def amodRule(t,qw):
     if t.namedEntityTag != 'ORDINAL' and t.wordList[0].pos != 'JJS': # [0] : must be improve (search in the whole list?)
         assert t.parent is not None
-        merge(t)
+        merge(t,qw)
     else:
         t.dependency = 'connectorUp'
 
-def propType(t):
-    """
-        Propagate locally the type of the subtree
-    """
-    if t.parent != None:
-        if t.parent.subtreeType == 'undef':
-            t.parent.subtreeType = t.subtreeType
-        assert t.subtreeType == 'undef' or t.subtreeType == t.parent.subtreeType
-        t.subtreeType = t.parent.subtreeType
-
+def nsubjRule(t,qw):
+    if qw in strongQuestionWord or len(t.child) == 0: # Warning: length can decrease during analysis > needs also the R2 tag
+        t.dependency = 'R5s' # same as R5 except that types are propagated
+    else:
+        t.dependency = 'R2'
+        
 dependenciesMap1 = {
-    'undef'     : 'R0', # personnal tag, should not happen?
+    'undef'     : 'R0',
     'root'      : 'R0',
     'dep'       : 'R1', # ? instead of R2
         'aux'       : remove,
@@ -55,7 +52,7 @@ dependenciesMap1 = {
                     'iobj'      : 'R3',
                     'pobj'      : 'R3', # -
             'subj'      : impossible,
-                'nsubj'     : 'R2',
+                'nsubj'     : nsubjRule,
                     'nsubjpass'    : 'R5', #_+ ? instead of R4
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
@@ -79,7 +76,7 @@ dependenciesMap1 = {
                 'neg'       : 'connectorUp', # need a NOT node
             'rcmod'     : 'R4', # temp, need to be analyzed
                 'quantmod'  : remove,
-            'nn'        : merge, # <-------
+            'nn'        : merge,
             'npadvmod'  : merge,
                 'tmod'      : 'R3',
             'num'       : merge,
@@ -98,18 +95,49 @@ dependenciesMap1 = {
         'discourse' : remove
 }
 
+def propagateType(t,qw):
+    """
+        Propagate locally the type of the subtree
+    """
+    if t.parent != None:
+        if t.parent.subtreeType == 'undef':
+            t.parent.subtreeType = t.subtreeType
+        assert t.subtreeType == 'undef' or t.subtreeType == t.parent.subtreeType
+        t.subtreeType = t.parent.subtreeType
+
 dependenciesMap2 = {         # how to handle a -b-> c
-    'R0'        : propType,  # normalize(c)
-    'R1'        : propType,  # !c
-    'R2'        : propType,  # if c is a leaf: (normalize(c),!a,?), otherwise: normalize(c)
-    'R3'        : ignore,    # (?,!a,normalize(c))
-    'R4'        : ignore,    # (?,normalize(c),!a)
-    'R5'        : ignore,    # (normalize(c),!a,?)
-     #'R6'        : ignore,    # (!a,normalize(c),?) # not use for the moment
-    'Rspl'      : propType,  # superlative
-    'RconjT'    : propType,  # top of a conjunction relation
-    'RconjB'    : propType   # bottom of a conjunction relation
+    'R0'        : propagateType,  # normalize(c)
+    'R1'        : propagateType,  # !c
+    'R2'        : propagateType,  # if c is a leaf: (normalize(c),!a,?), otherwise: normalize(c)
+    'R3'        : ignore,         # (?,!a,normalize(c))
+    'R4'        : ignore,         # (?,normalize(c),!a)
+    'R5'        : ignore,         # (normalize(c),!a,?)
+    'R5s'       : propagateType,  # (normalize(c),!a,?)
+     #'R6'        : ignore,        # (!a,normalize(c),?) # not use for the moment
+    'Rspl'      : propagateType,  # superlative
+    'RconjT'    : propagateType,  # top of a conjunction relation
+    'RconjB'    : propagateType   # bottom of a conjunction relation
 }
+
+def collapseMap(t,depMap,qw,down=True):
+    """
+        Apply the rules of depMap to t
+        If down = false, collapse from top to down, otherwise collapse from down to top
+    """
+    temp = list(t.child) # copy, because t.child is changed while iterating
+    if down:
+        for c in temp:
+            collapseMap(c,depMap,qw,down)
+    try:
+        if isinstance(depMap[t.dependency], str):
+            t.dependency = depMap[t.dependency]
+        else:
+            depMap[t.dependency](t,qw)
+    except KeyError:
+        raise GrammaticalError(t.dependency,"unknown dependency")
+    if not down:
+        for c in temp:
+            collapseMap(c,depMap,qw,down)
 
 def collapsePrep(t):
     """
@@ -121,26 +149,6 @@ def collapsePrep(t):
     if t.dependency.startswith('prep'): # prep_x or prepc_x (others?)
         # prep = t.dependency[t.dependency.index('_')+1:] # not used for the moment
         t.dependency = 'prep' # suffix of the prep not analyzed for the moment (just removed)
-
-def collapseMap(t,depMap,down=True):
-    """
-        Apply the rules of depMap to t
-        If down = false, collapse from top to down, otherwise collapse from down to top
-    """
-    temp = list(t.child) # copy, because t.child is changed while iterating
-    if down:
-        for c in temp:
-            collapseMap(c,depMap)
-    try:
-        if isinstance(depMap[t.dependency], str):
-            t.dependency = depMap[t.dependency]
-        else:
-            depMap[t.dependency](t)
-    except KeyError:
-        raise GrammaticalError(t.dependency,"unknown dependency")
-    if not down:
-        for c in temp:
-            collapseMap(c,depMap,down)
 
 def connectorUp(t):
     """
@@ -225,13 +233,13 @@ def simplify(t):
         identify and remove question word
         collapse dependencies of tree t
     """
-    s = identifyQuestionWord(t)           # identify and remove question word
-    standardize(t)                        # lemmatize, nounify
-    collapsePrep(t)                       # replace prep(c)_x by prep(c)
-    collapseMap(t,dependenciesMap1)       # collapse the tree according to dependenciesMap1
-    conjConnectorsUp(t)                   # remove conjonction connectors
-    connectorUp(t)                        # remove amod connectors
-    processQuestionWord(t,s)              # add info contained into the qw (type ...)
-    collapseMap(t,dependenciesMap2)       # propagate types from bottom to top
-    collapseMap(t,dependenciesMap2,False) # propagate types from top to bottom
-    return s
+    qw = identifyQuestionWord(t)             # identify and remove question word
+    standardize(t)                           # lemmatize, nounify
+    collapsePrep(t)                          # replace prep(c)_x by prep(c)
+    collapseMap(t,dependenciesMap1,qw)       # collapse the tree according to dependenciesMap1
+    conjConnectorsUp(t)                      # remove conjonction connectors
+    connectorUp(t)                           # remove amod connectors
+    processQuestionWord(t,qw)                # add info contained into the qw (type ...)
+    collapseMap(t,dependenciesMap2,qw)       # propagate types from bottom to top
+    collapseMap(t,dependenciesMap2,qw,False) # propagate types from top to bottom
+    return qw

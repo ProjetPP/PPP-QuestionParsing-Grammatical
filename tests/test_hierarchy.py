@@ -102,7 +102,7 @@ class HierarchyTests(TestCase):
         president=is_.child[0]
         self.assertEqual(president.wordList,[Word("United",4,'NNP'),Word("States",5,'NNPS'),Word("president",6,'NN')])
         self.assertEqual(president.namedEntityTag,'undef')
-        self.assertEqual(president.dependency,'R2')
+        self.assertEqual(president.dependency,'R5s')
         self.assertEqual(president.parent,is_)
         self.assertEqual(len(president.child),0)
         self.assertEqual(president.subtreeType,'PERSON')

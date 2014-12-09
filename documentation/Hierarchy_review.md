@@ -160,14 +160,17 @@ nsubj
 =====
 
 - only if a = is/was/... ?
+- when is/... is replaced, it's more relevant to produce a R5 rule
 
 ##### ---
 
 * Who Clinton defeated?
+* Where is the ENS of Lyon?
 
 ##### +++
 
 * Who elected the president of France?
+* What was the first Gilbert and Sullivan opera?
 
 num
 ===

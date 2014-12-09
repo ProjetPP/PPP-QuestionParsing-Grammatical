@@ -15,8 +15,13 @@ openQuestionWord = [
     'what', 'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'who', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'which', 'whom', 'whose', 'how big'
 ]
 
+# question word that implies to add an extra triple (ex: where is the capital of france : (france,capital,?) --> ((france,capital,?),location,?)
+strongQuestionWord = [
+    'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'whose', 'how big'
+]
+
 questionAdd = {
-    # how to add info into the son of ROOT (ex: where + birth = birth date)
+    # how to add info into the son of ROOT (ex: when + birth = birth date)
     'what type'     : 'type',
     'what sort'     : 'type',
     'what time'     : 'time',
