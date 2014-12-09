@@ -21,7 +21,7 @@ openQuestionWord = [
 ] + strongQuestionWord
 
 questionAdd = {
-    # how to add info into the son of ROOT (ex: where + birth = birth date)
+    # how to add info into the son of ROOT (ex: when + birth = birth date)
     'what type'     : 'type',
     'what sort'     : 'type',
     'what time'     : 'time',
