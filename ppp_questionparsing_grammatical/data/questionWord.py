@@ -6,19 +6,19 @@ closeQuestionWord = [
     'is', 'are', 'am', 'was', 'were', 'will', 'do', 'does', 'did', 'have', 'had', 'has', 'can', 'could', 'should', 'shall', 'may', 'might', 'would'
 ]
 
-# question word that implies to add an extra triple (ex: where is the capital of france : (france,capital,?) --> ((france,capital,?),location,?)
-strongQuestionWord = [
-    'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'whose', 'how big'
-]
-
 """
     Open-ended questions
     + What... for, What... like, Why don't, Where from
     Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
 """
 openQuestionWord = [
-    'what', 'who', 'which', 'whom', 'whose', 'how big'
-] + strongQuestionWord
+    'what', 'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'who', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'which', 'whom', 'whose', 'how big'
+]
+
+# question word that implies to add an extra triple (ex: where is the capital of france : (france,capital,?) --> ((france,capital,?),location,?)
+strongQuestionWord = [
+    'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'whose', 'how big'
+]
 
 questionAdd = {
     # how to add info into the son of ROOT (ex: when + birth = birth date)
