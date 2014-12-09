@@ -185,8 +185,18 @@ class StandardTripleTests(TestCase):
         qw = simplify(tree)
         result = normalize(tree)
         self.assertEqual(result,{
-    "type": "resource",
-    "value": "mistake"
+    "predicate": {
+        "value": "location",
+        "type": "resource"
+    },
+    "object": {
+        "type": "missing"
+    },
+    "subject": {
+        "value": "mistake",
+        "type": "resource"
+    },
+    "type": "triple"
 })
 
     def testNormalizeR3(self):

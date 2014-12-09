@@ -63,7 +63,7 @@ def normalize(tree):
             result.append(Triple(subject=Missing(), predicate=Resource(value=tree.getWords()), object=normalize(t)))
         if t.dependency == 'R4':
             result.append(Triple(subject=Missing(), predicate=normalize(t), object=Resource(value=tree.getWords())))
-        if t.dependency == 'R5':
+        if t.dependency == 'R5' or t.dependency == 'R5s':
             result.append(Triple(subject=normalize(t), predicate=Resource(value=tree.getWords()), object=Missing()))
         #if t.dependency == 'R6': # not use for the moment
         #   result.append(Triple(subject=Resource(value=tree.getWords()), predicate=normalize(t), object=Missing()))
