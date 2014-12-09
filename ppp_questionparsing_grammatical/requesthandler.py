@@ -45,5 +45,4 @@ class RequestHandler:
         meas = {'accuracy': 0.5, 'relevance': 0.5}
         trace = self.request.trace + [TraceItem('QuestionParsing-Grammatical', tree, meas)]
         response = Response('en', tree, meas, trace)
-        print(repr(response))
         return [response]
