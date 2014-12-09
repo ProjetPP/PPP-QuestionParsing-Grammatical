@@ -3,7 +3,7 @@
 import json
 import jsonrpclib
 
-from ppp_datamodel import Sentence
+from ppp_datamodel import Sentence, Resource
 from ppp_datamodel.communication import TraceItem, Response
 from ppp_libmodule.exceptions import ClientError
 
@@ -33,6 +33,8 @@ class RequestHandler:
         handler.push(tree)
         qw = simplify(tree)
         tree = normalize(tree)
+        if isinstance(tree,Resource):
+            return []
         meas = {'accuracy': 0.5, 'relevance': 0.5}
         trace = self.request.trace + [TraceItem('QuestionParsing-Grammatical', tree, meas)]
         response = Response('en', tree, meas, trace)
