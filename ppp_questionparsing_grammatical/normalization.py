@@ -4,6 +4,7 @@ from .preprocessing import DependenciesTree
 from ppp_datamodel import Resource, Missing, Triple, Last, First, List, Sort, Intersection, Union
 from .data.conjunction import conjunctionTab
 from .data.superlative import superlativeNoun, superlativeOrder
+from .data.exceptions import GrammaticalError
 
 def normalizeSuperlative(tree):
     """
@@ -34,7 +35,7 @@ def normalizeConjunction(tree):
     try:
         return conjunctionTab[tree.getWords()](list=result)
     except KeyError:
-        sys.exit('conjunction unknown')
+        raise GrammaticalError(tree.getWords(),"conjunction unknown")
 
 def normalize(tree):
     """
