@@ -2,6 +2,7 @@
 
 import json
 import jsonrpclib
+import logging
 
 from ppp_datamodel import Sentence, Resource
 from ppp_datamodel.communication import TraceItem, Response
@@ -27,12 +28,16 @@ class RequestHandler:
             return []
         handler = QuotationHandler()
         sentence = self.request.tree.value
-        nonAmbiguousSentence = handler.pull(sentence)
-        result = stanfordnlp.parse(nonAmbiguousSentence)
-        tree = computeTree(result['sentences'][0])
-        handler.push(tree)
-        qw = simplify(tree)
-        tree = normalize(tree)
+        try:
+            nonAmbiguousSentence = handler.pull(sentence)
+            result = stanfordnlp.parse(nonAmbiguousSentence)
+            tree = computeTree(result['sentences'][0])
+            handler.push(tree)
+            qw = simplify(tree)
+            tree = normalize(tree)
+        except Exception as e:
+            logging.warning(e)
+            return []
         if isinstance(tree,Resource):
             return []
         meas = {'accuracy': 0.5, 'relevance': 0.5}
