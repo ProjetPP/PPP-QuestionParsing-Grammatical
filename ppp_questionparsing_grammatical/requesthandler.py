@@ -37,6 +37,8 @@ class RequestHandler:
             tree = normalize(tree)
         except QuotationError: # no logging, the error is between the chair and the keyboard
             return []
+        except KeyboardInterrupt:
+            raise
         except Exception as e:
             logging.warning(e)
             return []
