@@ -9,7 +9,7 @@ from ppp_datamodel.communication import TraceItem, Response
 from ppp_libmodule.exceptions import ClientError
 
 from .config import Config
-from . import computeTree, simplify, normalize, QuotationHandler
+from . import computeTree, simplify, normalize, QuotationHandler, QuotationError
 
 class StanfordNLP:
     def __init__(self, url):
@@ -35,6 +35,8 @@ class RequestHandler:
             handler.push(tree)
             qw = simplify(tree)
             tree = normalize(tree)
+        except QuotationError: # no logging, the error is between the chair and the keyboard
+            return []
         except Exception as e:
             logging.warning(e)
             return []
