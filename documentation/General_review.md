@@ -2,6 +2,8 @@
 
 * Yes/no question: product dobj relation?
 * verb+ing: do sthg special (look POS tag)? : What did Richard Feynman say upon hearing he would receive the Nobel Prize in Physics?
+* If nounification becomes powerful enough: use it to analyse superlative (biggest > size...)
+* Multiple words : Where is Inoco based? > base + place = base place :(
 
 ## Interesting examples
 

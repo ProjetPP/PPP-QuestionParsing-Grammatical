@@ -6,6 +6,12 @@
 
 Please, don't remove any example (they are used frequently to check the whole algorithm)
 
+### Most problematic dependencies
+
+* appos
+* dep
+* dobj
+
 appos
 =====
 
@@ -14,6 +20,7 @@ Current rule: don't merge/remove appos
 ##### ---
 
 * Who came up with the name, El Nino?
+* Who wrote the song, "Stardust"? > (sometimes dep instead of appos) replace the father by the son || or R5 (or R2) rule?
 
 xcomp
 =====
@@ -23,25 +30,28 @@ xcomp
 amod
 ====
 
-Current rule: ~~don't merge~~ merge if not JJS POS tag or ORDINAL NER tag
- 
+Current rule: merge if not JJS POS tag or ORDINAL NER tag
+
 ##### ---
 
-* What was the monetary value of the Nobel Peace Prize in 1989? 
-* What is the name of the managing director of Apricot Computer?
-* Who held the endurance record for women pilots in 1929?
-* Who is the prime minister of Japan?
-* Who is the Greek God of the Sea?
-* Who invented the hula hoop? 
+* What is the most beautiful country in Europe?
 
-##### +++
+##### +++ (superlative)
   
-* What country is the biggest producer of tungsten? <<
+* What country is the biggest producer of tungsten?
 * Who was the first Taiwanese President?
 * Who was the first American in space?
 * What is the largest city in Germany?
 * Who was the 23rd president of the United States?
 * Who is the tallest man in the world?
+
+##### +++ (merging)
+
+* What was the monetary value of the Nobel Peace Prize in 1989? 
+* What is the name of the managing director of Apricot Computer?
+* Who is the prime minister of Japan?
+* Who is the Greek God of the Sea?
+* Who invented the hula hoop? 
 
 nn
 ==
@@ -52,6 +62,7 @@ Current rule: merge
   
 * How long did the Charles Manson murder trial last?
 * What two US biochemists won the Nobel Prize in medicine in 1992?
+* Who is the US president?
 
 ##### +++
   
@@ -64,13 +75,13 @@ nsubjpass
   
 ##### ---
 
-* Where is Inoco based?
-* Where was George Washington born?
-* Which president has been killed by Oswald?
+* Which president has been killed by Oswald? > remove nsubjpass
 
 ##### +++
 
 * Who was killed by Oswald?
+* Where is Inoco based?
+* Where was George Washington born?
 
 cop
 ===
@@ -86,16 +97,11 @@ cop doesn't always disappear -> needs to remove it manually
 prep
 ====
 
-merge prep (when it's not prep_x) 
-
-Level up prep_x in order not to have a -prep-> b -prep-> c
-  - Who was President of Afghanistan in 1994? (juste pour of -> in)
-  - Who won two gold medals in skiing in the Olympic Games in Calgary?
-or not : 
-  - Who followed Willy Brandt as chancellor of the Federal Republic of Germany?
-  
 ##### ---
 
+* Who was President of Afghanistan in 1994? ( of -> in)
+* Who won two gold medals in skiing in the Olympic Games in Calgary?
+* Who followed Willy Brandt as chancellor of the Federal Republic of Germany?
 * Where does most of the marijuana entering the United States come from?
   
 dobj
@@ -124,6 +130,10 @@ look at the verb ? (passive, acted ...)
 -> t4 would be better if we nounify "killed" into "killer".
 For instance, Wikidata returns a good answer for the triple `(Gandhi, killer, ?)`
 
+##### ---
+
+* Who held the endurance record for women pilots in 1929?
+
 ccomp
 =====
 
@@ -137,9 +147,12 @@ pobj
 - map to comp temporarily
 - pobj impossible ?
 
-##### ---
+##### +++
 
 * Who is the author of "Twenty Thousand Leagues Under the Sea"?
+
+##### ---
+
 * Who is Bob according to you?
 
 dep
@@ -148,6 +161,8 @@ dep
 ##### ---
 
 * Who wrote the song, "Stardust"?
+* When did Diana and Charles get married? > replace/merge the father by/with the son if dep (get -dep-> married = get married)
+* What country is the biggest producer of tungsten? > idem
 
 vmod
 ====
@@ -162,15 +177,12 @@ nsubj
 - only if a = is/was/... ?
 - when is/... is replaced, it's more relevant to produce a R5 rule
 
-##### ---
-
-* Who Clinton defeated?
-* Where is the ENS of Lyon?
-
 ##### +++
 
 * Who elected the president of France?
 * What was the first Gilbert and Sullivan opera?
+* Who Clinton defeated?
+* Where is the ENS of Lyon?
 
 num
 ===
@@ -181,29 +193,20 @@ Current rule: merge
 
 * What two US biochemists won the Nobel Prize in medicine in 1992?
 
-and, or
-=======
-
-Current rule: remove
-
-##### ---
-
-* When did Rococo painting and architecture flourish?
-
 rcmod
 =====
 
 * What did Richard Feynman say upon hearing he would receive the Nobel Prize in Physics? >> delete hearing et rcmod
 
+conj
+====
+
+##### +++
+
+* When did Rococo painting and architecture flourish?
+
 pcomp
 =====
 
 * When did Israel begin turning the Gaza Strip and Jericho over to the PLO?
-
-advmod
-======
-
-* What is the most beautiful country in Europe?
-
->> not superlative tag but should produce connector
 
