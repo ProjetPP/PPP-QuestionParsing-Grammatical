@@ -38,7 +38,12 @@ def identifyQuestionWord(t):
     start = [None,None]
     firstWords(t,start)
     if not start[0]:
-        raise QuestionWordError(t,"sentence without any word")
+        start[0] = Word(t.text.split(' ', 1)[0],1)
+    if not start[1]:
+        try:
+            start[1] = Word(t.text.split(' ', 1)[1],2)
+        except IndexError:
+            pass
     if start[1] and start[0].word.lower() + ' ' + start[1].word.lower() in openQuestionWord:
         removeWord(t,start[0])
         removeWord(t,start[1])
