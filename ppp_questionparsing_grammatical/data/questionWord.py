@@ -20,8 +20,32 @@ strongQuestionWord = [
     'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'whose', 'how big'
 ]
 
+questionExcept = {
+    # words that already contain the info of the question word
+    'what type'     : ['type','sort'],
+    'what sort'     : ['type','sort'],
+    'what time'     : ['time','date','day','month','year'],
+    'when'          : ['time','date','day','month','year'],
+    'why'           : ['reason','cause','origin'],
+    'where'         : ['place','location','residence'],
+    'how'           : ['manner','way'],
+    'how much'      : ['amount','quantity','number'],
+    'how many'      : ['amount','quantity','number'],
+    'how old'       : ['age'],
+    'how far'       : ['distance'],
+    'how long'      : ['length'],
+    'how tall'      : ['height'],
+    'how deep'      : ['depth'],
+    'how wide'      : ['width'],
+    'how fast'      : ['speed','velocity'],
+    'how often'     : ['frequency'],
+    'how come'      : ['reason'],
+    'whose'         : ['owner'],
+    'how big'       : ['size']
+}
+
 questionAdd = {
-    # how to add info into the son of ROOT (ex: when + birth = birth date)
+    # how to add info into the son of ROOT (ex: when + birth = birth date) if it doesn't contain a word of questionExcept
     'what type'     : 'type',
     'what sort'     : 'type',
     'what time'     : 'time',

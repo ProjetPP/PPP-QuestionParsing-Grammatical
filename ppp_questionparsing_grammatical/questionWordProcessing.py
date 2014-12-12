@@ -2,7 +2,7 @@ import sys
 from .preprocessingMerge import Word
 from .preprocessing import DependenciesTree
 from .data.exceptions import QuestionWordError
-from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd, questionWIs, questionType
+from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd, questionWIs, questionType, questionExcept
 
 def removeWord(t,word):
     """
@@ -65,7 +65,13 @@ def processQuestionType(t,w,typeMap=questionType):
     except KeyError:
         pass
 
-def processQuestionInfo(t,w,addMap=questionAdd,wisMap=questionWIs):
+def checkList(s,l):
+    for n in l:
+        if s.find(n) != -1:
+            return False
+    return True
+
+def processQuestionInfo(t,w,excMap=questionExcept,addMap=questionAdd,wisMap=questionWIs):
     """
         Add info to the first sons of ROOT that are not connectors (ie index < 1000) depending on:
             - the question word
@@ -77,7 +83,7 @@ def processQuestionInfo(t,w,addMap=questionAdd,wisMap=questionWIs):
                 processQuestionInfo(n,w)
         elif t.getWords() == 'identity':
             t.wordList[0].word = wisMap[w] # contains 'identity', replace it according to the question word
-        elif t.getWords().find(addMap[w]) == -1: # doesn't contain 'identity' and doesn't contain the word associated to w in addMap
+        elif checkList(t.getWords(),excMap[w]): # doesn't contain 'identity' and doesn't contain the word associated to w in excMap
             t.wordList.append(Word(addMap[w],1001))
     except KeyError:
         pass

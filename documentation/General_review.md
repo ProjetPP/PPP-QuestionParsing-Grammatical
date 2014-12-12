@@ -28,6 +28,13 @@
 * Which movies did Quentin Tarantino direct, but not star in?
 * Who receives the Nobel Prize in Physics in 2000?
 * When did Diana and Charles get married?
+* How many continents are there? > quantity / number
+* Where is Mozambique located? > location/place
+* Who built the first pyramid? > consider "pyramide" as (single) triple / predicate
+* Who wrote the book, "Huckleberry Finn"?
+* When is Mexico's independence? > independance date
+* What kind of animal is Babar?
+* Where does the prime minister of United kingdom lived? (intersection node on the ui)
 
 What country is the biggest producer of tungsten?
 Who was the first Taiwanese President?
