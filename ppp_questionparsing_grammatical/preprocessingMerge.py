@@ -110,7 +110,7 @@ def buildWord(word):
     """
         if word is of type:
           word'-number : build Word(word',number)
-          otherwise    : build Word(word,-1)
+          otherwise    : build Word(word,1000)
     """
     if word.find('-') != -1:
         return Word(word[:word.rindex('-')],int(word[word.rindex('-')+1:]))
