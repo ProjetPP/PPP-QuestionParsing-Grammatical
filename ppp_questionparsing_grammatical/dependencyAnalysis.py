@@ -238,7 +238,7 @@ def simplify(t):
     collapsePrep(t)                          # replace prep(c)_x by prep(c)
     collapseMap(t,dependenciesMap1,qw)       # collapse the tree according to dependenciesMap1
     conjConnectorsUp(t)                      # remove conjonction connectors
-    connectorUp(t)                           # remove amod connectors
+    connectorUp(t)                           # remove remaining amod connectors
     processQuestionWord(t,qw)                # add info contained into the qw (type ...)
     collapseMap(t,dependenciesMap2,qw)       # propagate types from bottom to top
     collapseMap(t,dependenciesMap2,qw,False) # propagate types from top to bottom

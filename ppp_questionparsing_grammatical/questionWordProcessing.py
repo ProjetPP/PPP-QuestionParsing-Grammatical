@@ -6,21 +6,20 @@ from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd,
 
 def removeWord(t,word):
     """
-        Remove word (of type str*int = word*position_in_sentence) in t
+        Remove word (of type str*int = s*position_of_s_in_sentence) in t
         Assume word has no child
     """
     if word in t.wordList:
-        if not t.child:
-            t.parent.child.remove(t) 
-        else:
+        if t.child != []:
             raise QuestionWordError(word,"question word has child")
+        t.parent.child.remove(t)
     else:
         for c in t.child:
             removeWord(c,word)
 
 def firstWords(t,start):
     """
-        Put the 2 first words of the sentence in start (list of size 2)
+        Put the 2 first words of the sentence (if they are in the tree) in start (list of size 2)
     """
     for n in t.wordList:
         if n.index == 1:
@@ -37,7 +36,7 @@ def identifyQuestionWord(t):
     """
     start = [None,None]
     firstWords(t,start)
-    if not start[0]:
+    if not start[0]: # the first word is not in the tree, we extract it directly from the sentence
         start[0] = Word(t.text.split(' ', 1)[0],1)
     if not start[1]:
         try:
@@ -51,7 +50,6 @@ def identifyQuestionWord(t):
     if start[0].word.lower() in openQuestionWord: 
         removeWord(t,start[0])
         return start[0].word.lower()
-    #print(start[0].word.lower())
     if start[0].word.lower() in closeQuestionWord: 
         return start[0].word.lower()
     return None
