@@ -31,7 +31,7 @@ class DependenciesTree:
         else:
             for t in self.child:
                 n = t.dfsAnnotate(n)
-            self.dfsTag = n+1
+            self.dfsTag = n
             return n+1
 
     def string(self):
