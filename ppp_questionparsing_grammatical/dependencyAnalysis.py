@@ -216,8 +216,7 @@ def subStandardize(t,lmtzr):
     for c in t.child:
         subStandardize(c,lmtzr)
     if t.namedEntityTag == 'undef':
-        assert len(t.wordList) == 1 # only [0] ?
-        assert len(t.wordList[0]) == 1 # only [0] ?
+        assert len(t.wordList) == 1 and len(t.wordList[0]) == 1 # only [0][0] ?
         w = t.wordList[0][0]
         l = w.standardize(lmtzr)
         if l !=[]:

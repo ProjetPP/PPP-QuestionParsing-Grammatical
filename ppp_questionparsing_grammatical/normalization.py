@@ -10,8 +10,8 @@ def normalizeSuperlative(tree):
     """
         Handle Rspl dependency (superlative, ordinal)
     """
+    assert len(tree.getWords()) == 1 # only one possible superlative
     assert len(tree.child) == 1
-    assert len(tree.getWords()) == 1
     if tree.getWords()[0] in superlativeNoun:
         if tree.getWords()[0] in superlativeOrder:
             return superlativeOrder[tree.getWords()[0]](list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[tree.getWords()[0]]))
