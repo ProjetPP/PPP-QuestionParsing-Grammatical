@@ -1,5 +1,5 @@
 import sys
-from nltk.corpus import wordnet
+from nltk.corpus import wordnet as wn
 from .data.exceptions import GrammaticalError, QuotationError
 from .data.nounification import nounificationExceptions
 
@@ -12,99 +12,65 @@ class Word:
     One word of the sentence.
     """
     def __init__(self, word, index, pos=None):
-        self.word = word    # strings that represents the word
+        self.word = word    # string that represents the word
         self.index = index  # position in the sentence
         self.pos = pos      # Part Of Speech tag
-        
+
     def __str__(self):
         return "({0},{1},{2})".format(str(self.word),str(self.index),str(self.pos))
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
-    def verbToRelatedForms(self):
-        """
-            Return the lemmas associated to the given verb.
-            Useful for nounification.
-        """
-        assert self.pos[0] == 'V'
-        verb_synsets = wordnet.synsets(self.word, pos="v")
-        # Get all verb lemmas of the word
-        verb_lemmas=[]
-        for s in verb_synsets:
-            verb_lemmas += [l for l in s.lemmas() if s.name().split('.')[1] == 'v']
-        # Return related forms
-        return [(l, l.derivationally_related_forms()) for l in verb_lemmas]
-
-    def verbToRelatedNouns(self):
-        """
-            Return the nouns associated to the given verb.
-            Useful for nounification.
-        """
-        derivationally_related_forms = self.verbToRelatedForms()
-        # Filter only the nouns
-        related_noun_lemmas = []
-        for drf in derivationally_related_forms:
-            related_noun_lemmas += [l for l in drf[1] if l.synset().name().split('.')[1] == 'n']
-        # Extract the words from the lemmas
-        return [l.name() for l in related_noun_lemmas]
-
-    def mostRelevantStem(self,words,st):
-        """
-            Return the most occuring stem of the given list of words."
-        """
-        stems = [st.stem(w) for w in words]
-        len_stems = len(stems)
-        result = [(w, float(stems.count(w))/len_stems) for w in set(stems)]
-        result.sort(key=lambda w: -w[1])
-        return result[0][0]
-
-    def mostRelevantNouns(self,st):
-        """
-            Return the nouns associated to the given verb, which have the stem occuring the most.
-        """
-        words = self.verbToRelatedNouns()
-        if not words:
-            return []
-        stem = self.mostRelevantStem(words,st)
-        return [w for w in words if st.stem(w) == stem]
-
-    def nounify(self,st):
+    def nounify(self):
         """ 
-            Transform a verb to the closest noun: die -> death
+            Return the string list of the closest nouns to self (die -> death)
+            Assume that the POS tag of self is verb
             From George-Bogdan Ivanov on StackOverflow: http://stackoverflow.com/a/16752477/4110059
         """
-        words = self.mostRelevantNouns(st)
-        if not words:
-            return
+        synsets = wn.synsets(self.word, pos="v")
+        if not synsets: # Word not found
+            return []
+        # Get all lemmas of the word (consider 'a'and 's' equivalent)
+        for s in synsets:
+            lemmas = [l for l in s.lemmas() if s.name().split('.')[1] == "v"]
+        # Get related forms
+        derivationally_related_forms = [(l, l.derivationally_related_forms()) for l in lemmas]
+        # filter only the desired pos (consider 'a' and 's' equivalent)
+        related_noun_lemmas = [l for drf in derivationally_related_forms
+                                 for l in drf[1] 
+                                 if l.synset().name().split('.')[1] == "n"]
+        # Extract the words from the lemmas
+        words = [l.name() for l in related_noun_lemmas]
         len_words = len(words)
         # Build the result in the form of a list containing tuples (word, probability)
         result = [(w, float(words.count(w))/len_words) for w in set(words)]
-        result.sort(key=lambda w: -w[1])
-        # take the word with highest probability
-        self.word = result[0][0]
+        result.sort(key=lambda w: -w[1]) # sorted by probability
+        # return the x most relevant nouns
+        len_min = min(20,len(result))
+        return [result[i][0] for i in range(0,len_min)]
+       
+    def nounifyExcept(self):
+        """
+            Return the string list of the closest nouns to self (die -> death)
+            Add hard-coded exceptions (e.g. be, have, do, bear...)
+        """
+        if self.word in nounificationExceptions:
+            return nounificationExceptions[self.word]
+        else:
+            return self.nounify()
 
-    def nounifyExcept(self,st):
+    def standardize(self,lmtzr):
         """
-            Transform a verb to the closest noun: die -> death
-            Hard-coded exceptions (e.g. be, have, do, bear...)
+            Apply lemmatization to the word, using the given lemmatizer
+            Return the list of strings that must replaced self.word if nounification is necessary, [] otherwise
         """
-        try:
-            self.word = nounificationExceptions[self.word]
-        except KeyError:
-            self.nounify(st)
-
-    def standardize(self,lmtzr,st):
-        """
-            Apply lemmatization to the word, using the given lemmatizer and stemmer.
-        """
-        if(self.pos and self.pos[0] == 'N'):
+        if self.pos and self.pos[0] == 'N':
             self.word=lmtzr.lemmatize(self.word,'n')
-            return
-        if(self.pos and self.pos[0] == 'V'):
-            self.word=lmtzr.lemmatize(self.word,'v')
-            self.nounifyExcept(st)
-            return
+        elif self.pos and self.pos[0] == 'V':
+            self.word=lmtzr.lemmatize(self.word,'v') # is it necessary?
+            return self.nounifyExcept()
+        return []
 
 def buildWord(word):
     """
@@ -123,7 +89,7 @@ def buildWord(word):
 
 def mergeNamedEntityTagChildParent(t):
     """
-        Merge all nodes n1,n2 such that:
+        Merge all nodes n1, n2 such that:
             * n1 is parent of n2
             * n1 and n2 have a same namedEntityTag
         Don't merge if the 2 words are linked by a conjonction
@@ -141,7 +107,7 @@ def mergeNamedEntityTagChildParent(t):
 
 def mergeNamedEntityTagSisterBrother(t):
     """
-        Merge all nodes n1,n2 such that:
+        Merge all nodes n1, n2 such that:
             * n1 and n2 have a same parent
             * n1 and n2 have a same namedEntityTag
             * n1 and n2 have a same dependency

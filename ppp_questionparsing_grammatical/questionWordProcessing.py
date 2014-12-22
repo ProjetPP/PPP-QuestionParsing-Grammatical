@@ -4,12 +4,17 @@ from .preprocessing import DependenciesTree
 from .data.exceptions import QuestionWordError
 from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd, questionWIs, questionType, questionExcept
 
+#####################################
+# Identify and remove question word #
+#####################################
+
 def removeWord(t,word):
     """
         Remove word (of type str*int = s*position_of_s_in_sentence) in t
         Assume word has no child
     """
-    if word in t.wordList:
+    assert len(t.wordList) == 1
+    if word in t.wordList[0]:
         if t.child != []:
             raise QuestionWordError(word,"question word has child")
         t.parent.child.remove(t)
@@ -21,7 +26,8 @@ def firstWords(t,start):
     """
         Put the 2 first words of the sentence (if they are in the tree) in start (list of size 2)
     """
-    for n in t.wordList:
+    assert len(t.wordList) == 1
+    for n in t.wordList[0]:
         if n.index == 1:
             start[0] = n
         elif n.index == 2:
@@ -54,6 +60,10 @@ def identifyQuestionWord(t):
         return start[0].word.lower()
     return None
 
+#############################################
+# Process question word to improve the tree #
+#############################################
+
 def processQuestionType(t,w,typeMap=questionType):
     """
         Add a type to the root of the tree (= type of the answer) depending on the question word
@@ -63,26 +73,34 @@ def processQuestionType(t,w,typeMap=questionType):
     except KeyError:
         pass
 
-def checkList(s,l):
-    for n in l:
-        if s.find(n) != -1:
-            return False
-    return True
-
-def processQuestionInfo(t,w,excMap=questionExcept,addMap=questionAdd,wisMap=questionWIs):
+def checkLists(l1,l2):
     """
-        Add info to the first sons of ROOT that are not connectors (ie index < 1000) depending on:
+        l1 is a list of lists of Words
+        l2 is a list of strings
+        Determine wether a string of l2 appears in at least one word of l1, or not
+    """
+    for s in l2:
+        for l in l1:
+            for w in l:
+                if w.word == s:
+                    return True
+    return False
+
+def processQuestionInfo(t,w,excMap=questionExcept,addMap=questionAdd,wisMap=questionWIs): # TO IMPROVE
+    """
+        Add info to the first sons of ROOT that are not connectors (ie index != 1000) depending on:
             - the question word
-            - whether nodes contain 'identity' (comes from verb be) or not
+            - whether the nodes contain 'identity' (comes from verb be) or not
     """
     try:
-        if t.wordList[0].index >= 1000:
+        if t.wordList[0][0].index == 1000: # connector so [0][0] is enough
+            assert len(t.wordList) == 1 and len(t.wordList[0]) == 1
             for n in t.child:
                 processQuestionInfo(n,w)
-        elif t.getWords() == 'identity':
-            t.wordList[0].word = wisMap[w] # contains 'identity', replace it according to the question word
-        elif checkList(t.getWords(),excMap[w]): # doesn't contain 'identity' and doesn't contain the word associated to w in excMap
-            t.wordList.append(Word(addMap[w],1001))
+        elif t.getWords() == ['identity']: # nounification of verb be
+            t.wordList = [[Word(s,1001)] for s in wisMap[w]] # replace wordList according to the question word
+        elif not checkLists(t.wordList,excMap[w]):   # doesn't contain 'identity' but also doesn't contain the words associated to w in excMap
+            t.wordList = [l + [Word(s,1001)] for l in t.wordList for s in addMap[w]]
     except KeyError:
         pass
 

@@ -11,14 +11,15 @@ def normalizeSuperlative(tree):
         Handle Rspl dependency (superlative, ordinal)
     """
     assert len(tree.child) == 1
-    if tree.getWords() in superlativeNoun:
-        if tree.getWords() in superlativeOrder:
-            return superlativeOrder[tree.getWords()](list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[tree.getWords()]))
+    assert len(tree.getWords()) == 1
+    if tree.getWords()[0] in superlativeNoun:
+        if tree.getWords()[0] in superlativeOrder:
+            return superlativeOrder[tree.getWords()[0]](list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[tree.getWords()[0]]))
         else:
-            return First(list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[tree.getWords()])) # First by default
+            return First(list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[tree.getWords()[0]])) # First by default
     else:
-        if tree.getWords() in superlativeOrder: 
-            return superlativeOrder[tree.getWords()](list=Sort(list=normalize(tree.child[0]),predicate='default')) # default predicate
+        if tree.getWords()[0] in superlativeOrder:
+            return superlativeOrder[tree.getWords()[0]](list=Sort(list=normalize(tree.child[0]),predicate='default')) # default predicate
         else:
             return First(list=Sort(list=normalize(tree.child[0]),predicate='default'))
 
@@ -27,15 +28,16 @@ def normalizeConjunction(tree):
         Handle Rconj dependency (conjunction)
     """
     result = []
+    assert len(tree.getWords()) == 1
     assert len(tree.child) == 2 and tree.child[0].dependency.startswith('Rconj') and tree.child[1].dependency.startswith('Rconj')
     if tree.child[0].dependency == 'RconjT':
         result = [normalize(tree.child[0]),normalize(tree.child[1])]
     else:
         result = [normalize(tree.child[1]),normalize(tree.child[0])]    
     try:
-        return conjunctionTab[tree.getWords()](list=result)
+        return conjunctionTab[tree.getWords()[0]](list=result)
     except KeyError:
-        raise GrammaticalError(tree.getWords(),"conjunction unknown")
+        raise GrammaticalError(tree.getWords()[0],"conjunction unknown")
 
 def normalize(tree):
     """

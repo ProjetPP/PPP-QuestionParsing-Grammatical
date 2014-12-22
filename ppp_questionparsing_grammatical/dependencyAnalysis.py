@@ -4,7 +4,6 @@ from .preprocessing import DependenciesTree
 from .preprocessingMerge import Word
 from copy import deepcopy
 from nltk.stem.wordnet import WordNetLemmatizer
-from nltk.stem.porter import PorterStemmer
 from .data.exceptions import GrammaticalError
 from .data.questionWord import strongQuestionWord
 
@@ -21,7 +20,7 @@ def merge(t,qw):
     t.parent.merge(t,True)
 
 def amodRule(t,qw):
-    if t.namedEntityTag != 'ORDINAL' and t.wordList[0].pos != 'JJS': # [0] : must be improve (search in the whole list?)
+    if t.namedEntityTag != 'ORDINAL' and t.wordList[0][0].pos != 'JJS': # [0] : must be improve (search in the whole list?)
         assert t.parent is not None
         merge(t,qw)
     else:
@@ -213,20 +212,23 @@ def conjConnectorsUp(t):
         for c in temp:
             conjConnectorsUp(c)
 
-def subStandardize(t,lmtzr,st):
+def subStandardize(t,lmtzr):
     for c in t.child:
-        subStandardize(c,lmtzr,st)
+        subStandardize(c,lmtzr)
     if t.namedEntityTag == 'undef':
-        for w in t.wordList:
-            w.standardize(lmtzr,st)
+        assert len(t.wordList) == 1 # only [0] ?
+        assert len(t.wordList[0]) == 1 # only [0] ?
+        w = t.wordList[0][0]
+        l = w.standardize(lmtzr)
+        if l !=[]:
+            t.wordList = [[Word(x,w.index,w.pos)] for x in l]
 
 def standardize(t):
     """
         Apply lemmatization + nounification
     """
     lmtzr = WordNetLemmatizer()
-    st = PorterStemmer()
-    subStandardize(t,lmtzr,st) # standardize words (lemmatization + nounify nouns)
+    subStandardize(t,lmtzr) # standardize words (lemmatization + nounify nouns)
 
 def simplify(t):
     """
@@ -238,8 +240,8 @@ def simplify(t):
     collapsePrep(t)                          # replace prep(c)_x by prep(c)
     collapseMap(t,dependenciesMap1,qw)       # collapse the tree according to dependenciesMap1
     conjConnectorsUp(t)                      # remove conjonction connectors
-    connectorUp(t)                           # remove remaining amod connectors
-    processQuestionWord(t,qw)                # add info contained into the qw (type ...)
-    collapseMap(t,dependenciesMap2,qw)       # propagate types from bottom to top
-    collapseMap(t,dependenciesMap2,qw,False) # propagate types from top to bottom
+    #connectorUp(t)                           # remove remaining amod connectors
+    #processQuestionWord(t,qw)                # add info contained into the qw (type ...)
+    #collapseMap(t,dependenciesMap2,qw)       # propagate types from bottom to top
+    #collapseMap(t,dependenciesMap2,qw,False) # propagate types from top to bottom
     return qw
