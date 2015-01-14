@@ -23,3 +23,41 @@ class RequestHandlerTest(PPPTestCase(app)):
         self.assertEquals(predicate.value, 'birth date')
         object = answer[0].tree.object
         self.assertTrue(isinstance(object, Missing))
+
+    def testNested(self):
+        answer = self.getAnswer("When was born the daughters of the wife of the president of the United States?")
+        self.assertEquals(len(answer), 1)
+        tree = answer[0].tree
+        self.assertTrue(isinstance(tree, Triple))
+        predicate = tree.predicate
+        self.assertTrue(isinstance(predicate, Resource))
+        self.assertEquals(predicate.value, 'birth date')
+        object = tree.object
+        self.assertTrue(isinstance(object, Missing))
+        subject = tree.subject
+        self.assertTrue(isinstance(subject, Triple))
+        tree = tree.subject
+        predicate = tree.predicate
+        self.assertTrue(isinstance(predicate, Resource))
+        self.assertEquals(predicate.value, 'daughter')
+        object = tree.object
+        self.assertTrue(isinstance(object, Missing))
+        subject = tree.subject
+        self.assertTrue(isinstance(subject, Triple))
+        tree = tree.subject
+        predicate = tree.predicate
+        self.assertTrue(isinstance(predicate, Resource))
+        self.assertEquals(predicate.value, 'wife')
+        object = tree.object
+        self.assertTrue(isinstance(object, Missing))
+        subject = tree.subject
+        self.assertTrue(isinstance(subject, Triple))
+        tree = tree.subject
+        predicate = tree.predicate
+        self.assertTrue(isinstance(predicate, Resource))
+        self.assertEquals(predicate.value, 'president')
+        object = tree.object
+        self.assertTrue(isinstance(object, Missing))
+        subject = tree.subject
+        self.assertTrue(isinstance(subject, Resource))
+        self.assertEquals(subject.value, 'United States')

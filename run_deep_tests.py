@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+
+# The following unit tests require Stanford CoreNLP library.
+# Please launch the server before running these tests.
+
 import os
 import unittest
 
