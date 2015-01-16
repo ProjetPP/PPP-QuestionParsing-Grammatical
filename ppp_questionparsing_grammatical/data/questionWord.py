@@ -46,28 +46,29 @@ questionExcept = {
 
 questionAdd = {
     # how to add info into the son of ROOT (ex: when + birth = birth date) if it doesn't already contain a word of questionExcept
-    'what type'     : ['type'],
-    'what sort'     : ['type'],
-    'what time'     : ['time'],
-    'when'          : ['date'],
-    'why'           : ['reason'],
+    'what type'     : ['type','sort'],
+    'what sort'     : ['type','sort'],
+    'what time'     : ['time','date'],
+    'when'          : ['time','date'],
+    'why'           : ['reason','cause','origin'],
     'where'         : ['place','location','residence'],
     'how'           : ['manner'],
-    'how much'      : ['amount'],
-    'how many'      : ['quantity'],
+    'how much'      : ['amount','quantity','number'],
+    'how many'      : ['amount','quantity','number'],
     'how old'       : ['age'],
     'how far'       : ['distance'],
     'how long'      : ['length'],
     'how tall'      : ['height'],
     'how deep'      : ['depth'],
     'how wide'      : ['width'],
-    'how fast'      : ['speed'],
+    'how fast'      : ['speed','velocity'],
     'how often'     : ['frequency'],
     'how come'      : ['reason'],
     #'which'         : ['choice'],
     'whose'         : ['owner'],
     'how big'       : ['size']
 }
+
 
 questionWIs = {
     # how to replace the son of ROOT when it's "is" (nounified into identity) (ex : where + is = location)

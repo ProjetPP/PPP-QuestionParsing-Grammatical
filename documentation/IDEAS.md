@@ -1,3 +1,5 @@
+**Nota** (january 2015): this document has been written at the very beginning of the project. It does not reflect exactly the current algorithms (see http://projetpp.github.io/ for up-to-date documents)
+
 # Ideas
 
 Some common draft of the ideas that we may have. The aim is to begin a discussion about them.
@@ -169,7 +171,7 @@ OUTPUT: conjunction of triples, with at least one hole by triple
 6. Add the triples involved by other parts of the tree
 7. Output the conjunction of all the triples
 
-I think we cannot avoid "hardcoding" the step 5, ie determine (in advance) __all the types__ of possible questions (chat, where, how...) and what triples must be directly produced by each question. In fact, the most difficult thing is to place the "holes" in triples. Analyzing the dependency tree without pre-learned patterns will never allow us to find "from scratch" where holes must be.
+I think we cannot avoid "hardcoding" the step 5, ie determine (in advance) __all the types__ of possible questions (what, where, how...) and what triples must be directly produced by each question. In fact, the most difficult thing is to place the "holes" in triples. Analyzing the dependency tree without pre-learned patterns will never allow us to find "from scratch" where holes must be.
 
 _Example:_ Where is born Barack Obama's wife?
 
