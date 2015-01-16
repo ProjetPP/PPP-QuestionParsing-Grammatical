@@ -25,8 +25,8 @@ setup(
         'Topic :: Software Development :: Libraries',
     ],
     install_requires=[
-        'ppp_datamodel>=0.5,<0.6',
-        'ppp_libmodule>=0.6,<0.7',
+        'ppp_datamodel>=0.5,<0.7',
+        'ppp_libmodule>=0.6,<0.8',
         'jsonrpclib-pelix',
         'nltk'
     ],
