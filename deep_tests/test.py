@@ -13,80 +13,48 @@ class RequestHandlerTest(PPPTestCase(app)):
 
     def testBasic(self):
         answer = self.getAnswer("What is the birth date of George Washington?")
-        self.assertEquals(len(answer), 1)
+        self.assertEqual(len(answer), 1)
         self.assertIsInstance(answer[0].tree, Triple)
-        subject = answer[0].tree.subject
-        self.assertIsInstance(subject, Resource)
-        self.assertEquals(subject.value, 'George Washington')
-        predicate = answer[0].tree.predicate
-        self.assertIsInstance(predicate, Resource)
-        self.assertEquals(predicate.value, 'birth date')
-        object = answer[0].tree.object
-        self.assertIsInstance(object, Missing)
+        t = answer[0].tree
+        self.assertEqual(t.subject, Resource('George Washington'))
+        self.assertEqual(t.predicate, Resource('birth date'))
+        self.assertIsInstance(t.object, Missing)
 
     def testNested(self):
         answer = self.getAnswer("When was born the daughters of the wife of the president of the United States?")
-        self.assertEquals(len(answer), 1)
+        self.assertEqual(len(answer), 1)
         tree = answer[0].tree
         self.assertIsInstance(tree, Triple)
         predicate = tree.predicate
-        self.assertIsInstance(predicate, Resource)
-        self.assertEquals(predicate.value, 'birth date')
-        object = tree.object
-        self.assertIsInstance(object, Missing)
-        subject = tree.subject
-        self.assertIsInstance(subject, Triple)
+        self.assertEqual(predicate, Resource('birth date'))
+        self.assertIsInstance(tree.object, Missing)
+        self.assertIsInstance(tree.subject, Triple)
         tree = tree.subject
-        predicate = tree.predicate
-        self.assertIsInstance(predicate, Resource)
-        self.assertEquals(predicate.value, 'daughter')
-        object = tree.object
-        self.assertIsInstance(object, Missing)
-        subject = tree.subject
-        self.assertIsInstance(subject, Triple)
+        self.assertEqual(tree.predicate, Resource('daughter'))
+        self.assertIsInstance(tree.object, Missing)
+        self.assertIsInstance(tree.subject, Triple)
         tree = tree.subject
-        predicate = tree.predicate
-        self.assertIsInstance(predicate, Resource)
-        self.assertEquals(predicate.value, 'wife')
-        object = tree.object
-        self.assertIsInstance(object, Missing)
-        subject = tree.subject
-        self.assertIsInstance(subject, Triple)
+        self.assertEqual(tree.predicate, Resource('wife'))
+        self.assertIsInstance(tree.object, Missing)
+        self.assertIsInstance(tree.subject, Triple)
         tree = tree.subject
-        predicate = tree.predicate
-        self.assertIsInstance(predicate, Resource)
-        self.assertEquals(predicate.value, 'president')
-        object = tree.object
-        self.assertIsInstance(object, Missing)
-        subject = tree.subject
-        self.assertIsInstance(subject, Resource)
-        self.assertEquals(subject.value, 'United States')
+        self.assertEqual(tree.predicate, Resource('president'))
+        self.assertIsInstance(tree.object, Missing)
+        self.assertEqual(tree.subject, Resource('United States'))
 
 
     def testQuotationsIntersection(self):
         answer = self.getAnswer("Who wrote \"Le Petit Prince\" and \"Vol de Nuit\"?")
-        self.assertEquals(len(answer), 1)
+        self.assertEqual(len(answer), 1)
         tree = answer[0].tree
         self.assertIsInstance(tree, Intersection)
         l = tree.list
-        self.assertEquals(len(l),2)
-        tree = l[0].list[0]
-        self.assertIsInstance(tree, Triple)
-        subject = tree.subject
-        self.assertIsInstance(subject, Resource)
-        self.assertEquals(subject.value,"Le Petit Prince")
-        predicate = tree.predicate
-        self.assertIsInstance(predicate, Resource)
-        self.assertEquals(predicate.value, 'writer')
-        object = tree.object
-        self.assertIsInstance(object, Missing)
-        tree = l[1].list[0]
-        self.assertIsInstance(tree, Triple)
-        subject = tree.subject
-        self.assertIsInstance(subject, Resource)
-        self.assertEquals(subject.value,"Vol de Nuit")
-        predicate = tree.predicate
-        self.assertIsInstance(predicate, Resource)
-        self.assertEquals(predicate.value, 'writer')
-        object = tree.object
-        self.assertIsInstance(object, Missing)
+        self.assertEqual(len(l), 2, l)
+        self.assertEqual(l[0].list[0], Triple(
+                Resource('Le Petit Prince'),
+                Resource('writer'),
+                Missing()))
+        self.assertEqual(l[1].list[0], Triple(
+                Resource('Vol de Nuit'),
+                Resource('writer'),
+                Missing()))
