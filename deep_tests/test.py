@@ -13,20 +13,20 @@ class RequestHandlerTest(PPPTestCase(app)):
 
     def testBasic(self):
         answer = self.getAnswer("What is the birth date of George Washington?")
-        self.assertEquals(len(answer), 1)
+        self.assertEqual(len(answer), 1)
         self.assertIsInstance(answer[0].tree, Triple)
         t = answer[0].tree
         self.assertEqual(t.subject, Resource('George Washington'))
-        self.assertIsInstance(t.predicate, Resource('birth date'))
+        self.assertEqual(t.predicate, Resource('birth date'))
         self.assertIsInstance(t.object, Missing)
 
     def testNested(self):
         answer = self.getAnswer("When was born the daughters of the wife of the president of the United States?")
-        self.assertEquals(len(answer), 1)
+        self.assertEqual(len(answer), 1)
         tree = answer[0].tree
         self.assertIsInstance(tree, Triple)
         predicate = tree.predicate
-        self.assertEqual(predicate, Resource('birth date')
+        self.assertEqual(predicate, Resource('birth date'))
         self.assertIsInstance(tree.object, Missing)
         self.assertIsInstance(tree.subject, Triple)
         tree = tree.subject
@@ -45,16 +45,16 @@ class RequestHandlerTest(PPPTestCase(app)):
 
     def testQuotationsIntersection(self):
         answer = self.getAnswer("Who wrote \"Le Petit Prince\" and \"Vol de Nuit\"?")
-        self.assertEquals(len(answer), 1)
+        self.assertEqual(len(answer), 1)
         tree = answer[0].tree
         self.assertIsInstance(tree, Intersection)
         l = tree.list
-        self.assertEquals(len(l), 2, l)
-        self.assertIsEqual(l[0].list[0], Triple(
+        self.assertEqual(len(l), 2, l)
+        self.assertEqual(l[0].list[0], Triple(
                 Resource('Le Petit Prince'),
                 Resource('writer'),
                 Missing()))
-        self.assertIsInstance(l[1].list[0], Triple(
+        self.assertEqual(l[1].list[0], Triple(
                 Resource('Vol de Nuit'),
                 Resource('writer'),
                 Missing()))
