@@ -120,7 +120,7 @@ def buildCandidate(pattern,edge):
 
 def associatedWords(pattern,relations):
     uri = "/c/{0}/{1}".format(default_language,pattern)
-    r = list(lookup(uri,limit=250))
+    r = list(lookup(uri,limit=350))
     #for e in r:
     #    print(e['start'] + ' ' + e['rel'] + ' ' + e['end'])
     res = []
