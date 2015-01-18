@@ -29,8 +29,15 @@ def associatedWordsRelation(word,relation):
     """
         Return words related to the given word by the given relations.
     """
-    r = requests.get(api,params={'text':word,'limit':5,'rel':relation}).json()
-    return [otherWord(word,w) for w in r['edges']] # if w['score']/r['maxScore']>=0.5]
+    r = requests.get(api,params={'surfaceText':word,'limit':20,'rel':relation}).json()
+    res = r['edges']
+    #r = requests.get(api,params={'uri':'/c/en/'+word,'limit':20,'rel':relation}).json()
+    #res = r['edges']
+    #r = requests.get(api,params={'end':'/c/en/'+word,'limit':20,'rel':relation}).json()
+    #res += r['edges']
+    for w in res:
+        print(w['startLemmas'] + ' ' + w['endLemmas'] + ' ' + str(w['score']))
+    return [otherWord(word,w) for w in res] # if w['score']/r['maxScore']>=0.5]
 
 def associatedWords(word,relations):
     """
