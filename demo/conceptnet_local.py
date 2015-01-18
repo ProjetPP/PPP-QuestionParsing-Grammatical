@@ -56,23 +56,44 @@ def similarity(word1,word2):
         Return a similarity score between the 2 words
         The lower is the result the most similars are the 2 words
     """
-    return 1-difflib.SequenceMatcher(a=word1.lower(), b=word2.lower()).ratio()
+    return 1 - difflib.SequenceMatcher(a=word1.lower(), b=word2.lower()).ratio()
 
+def extractBaseURI(uri):
+    if uri.count('/') == 3:
+        return uri
+    else:
+        pos = -1
+        for i in range(0,4):
+            pos = uri.index('/',pos+1)
+        return uri[:pos]
+
+def extractURI(uri):
+    if uri.count('/') == 3: # no additionnal info
+        return [uri,0]
+    elif uri.endswith('/n') or '/n/' in uri: # pos tag NN
+        return [extractBaseURI(uri),1]
+    elif uri.count('/') == 4 and uri[-2] != '/': # no pos tag
+        return [uri,0]
+    else: # pos tag != NN
+        return [extractBaseURI(uri),2]
+    
 def associatedWords(uri,word,relations):
     """
         Return words related to the given word by the given relations.
     """
     r = list(lookup(uri,limit=100))
-    node = [w['start'] for w in r 
-                       if w['end'] == uri
-                          and w['rel'] in relations 
-                          and w['start'].startswith('/c/'+default_language)]
-    #for w in r:
-    #    if w['end'] == uri and w['rel'] in relations and w['start'].startswith('/c/'+default_language):
-    #        print(w['start'] + ' ' + w['rel'] + ' ' + w['end'] + ' ' + str(w['weight']))
-    node = [' '.join(uri_to_lemmas(w)) for w in node if '_' not in w]
-    #for s in node:
-    #    print(s + ' ' + posTag(s))
+    node1 = {extractURI(w['start'])[0] for w in r 
+                                         if w['end'].startswith(uri)
+                                            and w['rel'] in relations 
+                                            and w['start'].startswith('/c/'+default_language)
+                                            and extractURI(w['start'])[1] != 2}
+    node2 = {extractURI(w['end'])[0] for w in r 
+                                       if w['start'].startswith(uri)
+                                         and w['rel'] in relations 
+                                         and w['end'].startswith('/c/'+default_language)
+                                         and extractURI(w['end'])[1] != 2}
+    node = node1.union(node2)
+    node = {' '.join(uri_to_lemmas(w)) for w in node if '_' not in w}
     nodeNN = [w for w in node if posTag(w) == 'NN'] # keep only the nouns
     return sorted(nodeNN,key = functools.partial(similarity,word))
 
@@ -80,6 +101,6 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         sys.exit("Syntax: ./%s <word to search>" % sys.argv[0])
     word=normalize(default_language,sys.argv[1])
-    uri = "/c/{0}/{1}".format(default_language,word)
-    print(associatedWords(uri,word,{'/r/RelatedTo'}))
+    uri = "/c/{0}/{1}/".format(default_language,word)
+    print(associatedWords(uri,word,{'/r/DerivedFrom'}))
     #print(associatedWords(uri,{'/r/CapableOf'},{'/r/RelatedTo', '/r/Synonym', '/r/Causes', '/r/DerivedFrom'}))
