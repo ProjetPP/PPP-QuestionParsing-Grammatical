@@ -22,7 +22,7 @@ To remove copula relations (other flags can be passed in the same way):
   CORENLP="stanford-corenlp-full-2014-08-27" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp
 ```
 
-Current algorithm is designed to work with copula relations removed.
+__Our current algorithm is designed to work with copula relations removed.__
 
 
 Parsing using a server
