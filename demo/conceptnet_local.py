@@ -21,20 +21,22 @@ default_language = 'en'
 def normalize(language,word):
     return normalized_concept_name(language, word)
 
-def associatedWords(uri,leftRelations,rightRelations):
+def associatedWords(uri,relations):
     """
         Return words related to the given word by the given relations.
     """
     r = list(lookup(uri,limit=100))
-    left    = [w['start'] for w in r if w['rel'] in leftRelations]
-    right   = [w['end']   for w in r if w['rel'] in rightRelations]
-    left.extend(right)
-    left = [' '.join(uri_to_lemmas(w)) for w in left if '_' not in w]
-    return set(left)
+    node = [w['start'] for w in r 
+                       if w['end'] == uri
+                          and w['rel'] in relations 
+                          and w['start'].startswith('/c/'+default_language)]
+    node = [' '.join(uri_to_lemmas(w)) for w in node if '_' not in w]
+    return set(node)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         sys.exit("Syntax: ./%s <word to search>" % sys.argv[0])
     word=normalize(default_language,sys.argv[1])
-    uri = "/c/{0}/{1}/".format(default_language,word)
-    print(associatedWords(uri,{'/r/CapableOf'},{'/r/RelatedTo', '/r/Synonym', '/r/Causes', '/r/DerivedFrom'}))
+    uri = "/c/{0}/{1}".format(default_language,word)
+    print(associatedWords(uri,{'/r/RelatedTo'}))
+    #print(associatedWords(uri,{'/r/CapableOf'},{'/r/RelatedTo', '/r/Synonym', '/r/Causes', '/r/DerivedFrom'}))
