@@ -113,6 +113,6 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         sys.exit("Syntax: ./%s <word to search>" % sys.argv[0])
     word=normalize(default_language,sys.argv[1])
-    uri = "/c/{0}/{1}/".format(default_language,word)
-    print(associatedWords(uri,word,{'/r/DerivedFrom'}))
+    uri = "/c/{0}/{1}".format(default_language,word)
+    print(associatedWords(uri,word,{'/r/RelatedTo'}))#,'/r/DerivedFrom'}))
     #print(associatedWords(uri,{'/r/CapableOf'},{'/r/RelatedTo', '/r/Synonym', '/r/Causes', '/r/DerivedFrom'}))
