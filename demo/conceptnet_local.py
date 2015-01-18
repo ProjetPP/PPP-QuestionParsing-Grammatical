@@ -2,6 +2,8 @@
 
 import requests
 import sys
+import difflib # string similarity
+import functools # partial function application
 
 from conceptnet5.nodes import normalized_concept_name, uri_to_lemmas
 from conceptnet5.query import lookup
@@ -21,7 +23,10 @@ default_language = 'en'
 def normalize(language,word):
     return normalized_concept_name(language, word)
 
-def associatedWords(uri,relations):
+def similarity(word1,word2):
+    return 1-difflib.SequenceMatcher(a=word1.lower(), b=word2.lower()).ratio() # the lower is the result the most similars are the 2 words
+
+def associatedWords(uri,word,relations):
     """
         Return words related to the given word by the given relations.
     """
@@ -30,13 +35,16 @@ def associatedWords(uri,relations):
                        if w['end'] == uri
                           and w['rel'] in relations 
                           and w['start'].startswith('/c/'+default_language)]
+    '''for w in r:
+        if w['end'] == uri and w['rel'] in relations and w['start'].startswith('/c/'+default_language):
+            print(w['start'] + ' ' + w['rel'] + ' ' + w['end'] + ' ' + str(w['weight']))   '''
     node = [' '.join(uri_to_lemmas(w)) for w in node if '_' not in w]
-    return set(node)
+    return sorted(node,key = functools.partial(similarity,word)) #set(node)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         sys.exit("Syntax: ./%s <word to search>" % sys.argv[0])
     word=normalize(default_language,sys.argv[1])
     uri = "/c/{0}/{1}".format(default_language,word)
-    print(associatedWords(uri,{'/r/RelatedTo'}))
+    print(associatedWords(uri,word,{'/r/RelatedTo'}))
     #print(associatedWords(uri,{'/r/CapableOf'},{'/r/RelatedTo', '/r/Synonym', '/r/Causes', '/r/DerivedFrom'}))
