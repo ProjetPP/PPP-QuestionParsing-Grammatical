@@ -59,6 +59,9 @@ def similarity(word1,word2):
     return 1 - difflib.SequenceMatcher(a=word1.lower(), b=word2.lower()).ratio()
 
 def extractBaseURI(uri):
+    """
+        Remove the optionnal info to the URI (pos tag + phrase distinguishing, see https://github.com/commonsense/conceptnet5/wiki/URI-hierarchy#concept-uris)
+    """
     if uri.count('/') == 3:
         return uri
     else:
@@ -68,6 +71,12 @@ def extractBaseURI(uri):
         return uri[:pos]
 
 def extractURI(uri):
+    """
+        remove optional info + gives a code : 
+            0 = pos tag unknown
+            1 = NN pos tag (according to conceptnet)
+            2 = pos tag different from NN (according to conceptnet)
+    """
     if uri.count('/') == 3: # no additionnal info
         return [uri,0]
     elif uri.endswith('/n') or '/n/' in uri: # pos tag NN
@@ -79,7 +88,10 @@ def extractURI(uri):
     
 def associatedWords(uri,word,relations):
     """
-        Return words related to the given word by the given relations.
+        Return words related to the given word such that:
+            - pos tag == NN (according to conceptnet or stanford parser)
+            - language == english
+            - single word (not an expression)
     """
     r = list(lookup(uri,limit=100))
     node1 = {extractURI(w['start'])[0] for w in r 
