@@ -25,7 +25,7 @@ from conceptnet5.query import lookup
 #   associatedWords('elected','/r/RelatedTo')
 #   normalize('elected')
 
-# Run `./conceptnet.py banana` to search words related to banana.
+# Run `./conceptnet_local.py banana` to search words related to banana.
 
 default_language = 'en'
 
@@ -36,83 +36,103 @@ class StanfordNLP:
     def parse(self, text):
         return json.loads(self.server.parse(text))
 
-def posTag(word):
-    """
-        Return the POS tag of word using the stanford parser
-    """
-    nlp = StanfordNLP()
-    result = nlp.parse(word)
-    tag = result['sentences'][0]['words'][0][1]['PartOfSpeech']
-    return tag
+class candidate:
+    def __init__(self, fullUri, relation, pattern, weight):
+        self.fullUri = fullUri    # full uri of the word
+        self.shortUri = ''        # short uri, we remove the optionnal info of the URI (pos tag + phrase distinguishing, see https://github.com/commonsense/conceptnet5/wiki/URI-hierarchy#concept-uris)
+        self.word = ''            # candidate word to nounified pattern
+        self.relation = relation  # relation of the involved edge
+        self.tag = 0              # 0 : unknown, -1 : word is not a candidate, 1 : strong candidate
+        self.pattern = pattern    # word to be nounified
+        self.similarity = 0       # similarity between word and pattern
+        self.weight = weight      # weight of the edge
+        self.score = 0            # global score of the candidate, 0<..<1, the greater the better
+
+    def extractShortUri(self):
+        """
+            compute shortUri
+        """
+        if self.fullUri.count('/') == 3:
+            self.shortUri = self.fullUri
+        else:
+            pos = -1
+            for i in range(0,4):
+                pos = self.fullUri.index('/',pos+1)
+            self.shortUri = self.fullUri[:pos]    
+    
+    def processURI(self):
+        """
+            compute shortUri, word, tag
+        """
+        self.extractShortUri()
+        if '_' in self.shortUri:
+            self.tag = -1
+            return
+        else:
+            self.word = ' '.join(uri_to_lemmas(self.shortUri))
+        if self.fullUri.endswith('/n') or '/n/' in self.fullUri:  
+            self.tag = 1       
+        if self.fullUri.count('/') == 4 and self.fullUri[-2] != '/': # no pos tag
+            self.tag = -1
+
+    def posTag(self):
+        """
+            compute tag with stanford parser
+        """
+        if self.tag == 0:
+            nlp = StanfordNLP()
+            result = nlp.parse(self.word)
+            tag = result['sentences'][0]['words'][0][1]['PartOfSpeech']
+            if tag == 'NN':
+                self.tag = 1
+            else:
+                self.tag = -1
+    
+    def computeScore(self):
+        """
+            compute similarity, score
+        """
+        self.similarity = difflib.SequenceMatcher(a=self.word.lower(), b=self.pattern.lower()).ratio()
+        self.score = self.similarity + self.weight
+
+def buildCandidate(word,edge):
+    uri = "/c/{0}/{1}".format(default_language,word)
+    if edge['start'].startswith(uri) and edge['end'].startswith('/c/'+default_language):
+        cand = candidate(edge['end'],edge['rel'],word,edge['weight'])
+        cand.processURI()
+        cand.posTag()
+        return cand
+    elif edge['end'].startswith(uri) and edge['start'].startswith('/c/'+default_language):
+        cand = candidate(edge['start'],edge['rel'],word,edge['weight'])
+        cand.processURI()
+        cand.posTag()
+        return cand
+    else:
+        return None
 
 def normalize(language,word):
     """
         Lemmatization+stemming
     """
-    return normalized_concept_name(language, word)
+    return normalized_concept_name(language, word)                                            
 
-def similarity(word1,word2):
-    """
-        Return a similarity score between the 2 words
-        The lower is the result the most similars are the 2 words
-    """
-    return 1 - difflib.SequenceMatcher(a=word1.lower(), b=word2.lower()).ratio()
-
-def extractBaseURI(uri):
-    """
-        Remove the optionnal info to the URI (pos tag + phrase distinguishing, see https://github.com/commonsense/conceptnet5/wiki/URI-hierarchy#concept-uris)
-    """
-    if uri.count('/') == 3:
-        return uri
-    else:
-        pos = -1
-        for i in range(0,4):
-            pos = uri.index('/',pos+1)
-        return uri[:pos]
-
-def extractURI(uri):
-    """
-        remove optional info + gives a code : 
-            0 = pos tag unknown
-            1 = NN pos tag (according to conceptnet)
-            2 = pos tag different from NN (according to conceptnet)
-    """
-    if uri.count('/') == 3: # no additionnal info
-        return [uri,0]
-    elif uri.endswith('/n') or '/n/' in uri: # pos tag NN
-        return [extractBaseURI(uri),1]
-    elif uri.count('/') == 4 and uri[-2] != '/': # no pos tag
-        return [uri,0]
-    else: # pos tag != NN
-        return [extractBaseURI(uri),2]
-    
-def associatedWords(uri,word,relations):
-    """
-        Return words related to the given word such that:
-            - pos tag == NN (according to conceptnet or stanford parser)
-            - language == english
-            - single word (not an expression)
-    """
+def associatedWords(word,relations):
+    uri = "/c/{0}/{1}".format(default_language,word)
     r = list(lookup(uri,limit=100))
-    node1 = {extractURI(w['start'])[0] for w in r 
-                                         if w['end'].startswith(uri)
-                                            and w['rel'] in relations 
-                                            and w['start'].startswith('/c/'+default_language)
-                                            and extractURI(w['start'])[1] != 2}
-    node2 = {extractURI(w['end'])[0] for w in r 
-                                       if w['start'].startswith(uri)
-                                         and w['rel'] in relations 
-                                         and w['end'].startswith('/c/'+default_language)
-                                         and extractURI(w['end'])[1] != 2}
-    node = node1.union(node2)
-    node = {' '.join(uri_to_lemmas(w)) for w in node if '_' not in w}
-    nodeNN = [w for w in node if posTag(w) == 'NN'] # keep only the nouns
-    return sorted(nodeNN,key = functools.partial(similarity,word))
+    #for w in r:
+    #    print(w['start'] + ' ' + w['rel'] + ' ' + w['end'] + ' ' + str(w['weight']))
+    res = []
+    for e in r:
+        cand = buildCandidate(word,e)
+        if cand != None and cand.tag != -1:
+            res.append(cand)
+    for cand in res:
+        cand.computeScore()
+    return {cand.word for cand in res} # duplicate, set instead
+    #return sorted(nodeNN,key = functools.partial(similarity,word))
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         sys.exit("Syntax: ./%s <word to search>" % sys.argv[0])
     word=normalize(default_language,sys.argv[1])
-    uri = "/c/{0}/{1}".format(default_language,word)
-    print(associatedWords(uri,word,{'/r/RelatedTo','/r/DerivedFrom'}))
-    #print(associatedWords(uri,{'/r/CapableOf'},{'/r/RelatedTo', '/r/Synonym', '/r/Causes', '/r/DerivedFrom'}))
+    print(associatedWords(word,{'/r/RelatedTo','/r/DerivedFrom','/r/CapableOf','/r/Synonym'}))
