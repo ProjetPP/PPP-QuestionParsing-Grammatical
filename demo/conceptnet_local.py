@@ -3,8 +3,6 @@
 import requests
 import sys
 import difflib # string similarity
-import functools # partial function application
-
 import json
 import jsonrpclib
 import fileinput
@@ -13,7 +11,7 @@ parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.sys.path.insert(0,parentdir) 
 os.environ['PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'] = '../example_config.json'
 import ppp_questionparsing_grammatical
-      
+
 from conceptnet5.nodes import normalized_concept_name, uri_to_lemmas
 from conceptnet5.query import lookup
 # https://github.com/commonsense/conceptnet5/blob/master/conceptnet5/nodes.py
@@ -21,11 +19,10 @@ from conceptnet5.query import lookup
 
 # How to test in a terminal : 
 #   python3
-#   from conceptnet2 import *
-#   associatedWords('elected','/r/RelatedTo')
-#   normalize('elected')
+#   from conceptnet_local import *
+#   normalize('en','elected')
 
-# Run `./conceptnet_local.py banana` to search words related to banana.
+# Run `./conceptnet_local.py elected` to obtain words nounified from elected
 
 default_language = 'en'
 
@@ -37,6 +34,9 @@ class StanfordNLP:
         return json.loads(self.server.parse(text))
 
 class candidate:
+    """
+        A candidate is an entity that is candidate to nounified the input verb
+    """
     def __init__(self, fullUri, relation, pattern, weight):
         self.fullUri = fullUri    # full uri of the word
         self.shortUri = ''        # short uri, we remove the optionnal info of the URI (pos tag + phrase distinguishing, see https://github.com/commonsense/conceptnet5/wiki/URI-hierarchy#concept-uris)
@@ -52,7 +52,7 @@ class candidate:
         """
             compute shortUri
         """
-        if self.fullUri.count('/') == 3:
+        if self.fullUri.count('/') == 3: # no optional info in the uri
             self.shortUri = self.fullUri
         else:
             pos = -1
@@ -65,12 +65,12 @@ class candidate:
             compute shortUri, word, tag
         """
         self.extractShortUri()
-        if '_' in self.shortUri:
+        if '_' in self.shortUri: # we do not consider multi words expressions as candidates
             self.tag = -1
             return
         else:
             self.word = ' '.join(uri_to_lemmas(self.shortUri))
-        if self.fullUri.endswith('/n') or '/n/' in self.fullUri:  
+        if self.fullUri.endswith('/n') or '/n/' in self.fullUri: ## NN pos tag
             self.tag = 1       
         if self.fullUri.count('/') == 4 and self.fullUri[-2] != '/': # no pos tag
             self.tag = -1
@@ -93,46 +93,55 @@ class candidate:
             compute similarity, score
         """
         self.similarity = difflib.SequenceMatcher(a=self.word.lower(), b=self.pattern.lower()).ratio()
-        self.score = self.similarity + self.weight
+        self.score = self.similarity + self.weight # need to be improved
 
-def buildCandidate(word,edge):
-    uri = "/c/{0}/{1}".format(default_language,word)
-    if edge['start'].startswith(uri) and edge['end'].startswith('/c/'+default_language):
-        cand = candidate(edge['end'],edge['rel'],word,edge['weight'])
+def computeWeight(r):
+    maxw = 0
+    for w in r:
+        maxw = max(maxw,w.weight)
+    for w in r:
+        w.weight = w.weight / maxw
+        w.computeScore()
+
+def buildCandidate(pattern,edge):
+    uri = "/c/{0}/{1}".format(default_language,pattern)
+    if (edge['start'] == uri or edge['start'].startswith(uri+'/')) and edge['end'].startswith('/c/'+default_language):
+        cand = candidate(edge['end'],edge['rel'],pattern,edge['weight'])
         cand.processURI()
         cand.posTag()
         return cand
-    elif edge['end'].startswith(uri) and edge['start'].startswith('/c/'+default_language):
-        cand = candidate(edge['start'],edge['rel'],word,edge['weight'])
+    elif (edge['end'] == uri or edge['end'].startswith(uri+'/')) and edge['start'].startswith('/c/'+default_language):
+        cand = candidate(edge['start'],edge['rel'],pattern,edge['weight'])
         cand.processURI()
         cand.posTag()
         return cand
     else:
         return None
 
-def normalize(language,word):
-    """
-        Lemmatization+stemming
-    """
-    return normalized_concept_name(language, word)                                            
-
-def associatedWords(word,relations):
-    uri = "/c/{0}/{1}".format(default_language,word)
-    r = list(lookup(uri,limit=100))
-    #for w in r:
-    #    print(w['start'] + ' ' + w['rel'] + ' ' + w['end'] + ' ' + str(w['weight']))
+def associatedWords(pattern,relations):
+    uri = "/c/{0}/{1}".format(default_language,pattern)
+    r = list(lookup(uri,limit=250))
+    #for e in r:
+    #    print(e['start'] + ' ' + e['rel'] + ' ' + e['end'])
     res = []
     for e in r:
-        cand = buildCandidate(word,e)
-        if cand != None and cand.tag != -1:
-            res.append(cand)
+        if e['rel'] in relations:
+            cand = buildCandidate(pattern,e)
+            if cand != None and cand.tag != -1:
+                res.append(cand)
+    #for cand in res:
+    #    print(cand.word + ' ' + str(cand.weight))
     for cand in res:
         cand.computeScore()
-    return {cand.word for cand in res} # duplicate, set instead
+    computeWeight(res)
+    res.sort(key = lambda x: x.score)
+    return {a.word for a in res}
+    #return { res[i].word for i in range(-15,0)}#size(res)-15,size(res))}
+    #return {cand.word for cand in res} # duplicate, set instead
     #return sorted(nodeNN,key = functools.partial(similarity,word))
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         sys.exit("Syntax: ./%s <word to search>" % sys.argv[0])
-    word=normalize(default_language,sys.argv[1])
+    word=normalized_concept_name(default_language,sys.argv[1]) # Lemmatization+stemming
     print(associatedWords(word,{'/r/RelatedTo','/r/DerivedFrom','/r/CapableOf','/r/Synonym'}))
