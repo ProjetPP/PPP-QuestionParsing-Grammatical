@@ -8,7 +8,7 @@ from ppp_libmodule.exceptions import InvalidConfig
 
 
 class Config(BaseConfig):
-    __slots__ = ('corenlp_server',
+    __slots__ = ('corenlp_servers',
             'memcached_servers', 'memcached_timeout', 'memcached_salt')
     config_path_variable = 'PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'
     def parse_config(self, data):
