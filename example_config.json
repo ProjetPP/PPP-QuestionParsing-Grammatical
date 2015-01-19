@@ -7,6 +7,6 @@
         "salt": "foo"
     },
     "corenlp_servers": [
-        "http://localhost:8080"
+        "http://localhost:8999"
     ]
 }

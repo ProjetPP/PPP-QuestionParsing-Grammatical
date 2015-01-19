@@ -1,6 +1,7 @@
 """Request handler of the module."""
 
 import json
+import pickle
 import hashlib
 import random
 import logging
@@ -32,11 +33,34 @@ class StanfordNLP:
     def __init__(self, urls):
         self.servers = list(map(jsonrpclib.Server, urls))
 
-    def parse(self, text):
+    def _parse(self, text):
         return json.loads(random.choice(self.servers).parse(text))
+
+    def parse(self, text):
+        """Perform a query to all configured APIs and concatenates all
+        results into a single list.
+        Also handles caching."""
+        mc = connect_memcached()
+
+        # Construct a key suitable for memcached (ie. a string of less than
+        # 250 bytes) with a salt (to prevent attacks by hash collision)
+        salt = Config().memcached_salt
+        key = hashlib.md5((salt + text).encode()).hexdigest()
+        key = 'ppp-qp-grammatical-%s' + key
+
+        # Get the cached value, if any
+        r = mc.get(key)
+        if not r:
+            # If there is no cached value, query HAL and add the result to
+            # the cache.
+            r = self._parse(text)
+            mc.set(key, pickle.dumps(r), time=Config().memcached_timeout)
+        else:
+            r = pickle.loads(r)
+        return r
 stanfordnlp = StanfordNLP(Config().corenlp_servers)
 
-def _parse(sentence):
+def parse(sentence):
     handler = QuotationHandler()
     nonAmbiguousSentence = handler.pull(sentence)
     result = stanfordnlp.parse(nonAmbiguousSentence)
@@ -44,27 +68,6 @@ def _parse(sentence):
     handler.push(tree)
     qw = simplify(tree)
     return normalize(tree)
-
-def parse(sentence):
-    """Perform a query to all configured APIs and concatenates all
-    results into a single list.
-    Also handles caching."""
-    mc = connect_memcached()
-
-    # Construct a key suitable for memcached (ie. a string of less than
-    # 250 bytes) with a salt (to prevent attacks by hash collision)
-    salt = Config().memcached_salt
-    key = hashlib.md5((salt + sentence).encode()).hexdigest()
-    key = 'ppp-qp-grammatical-%s' + key
-
-    # Get the cached value, if any
-    r = mc.get(key)
-    if not r:
-        # If there is no cached value, query HAL and add the result to
-        # the cache.
-        r = _parse(sentence)
-        mc.set(key, r, time=Config().memcached_timeout)
-    return r
 
 class RequestHandler:
     __slots__ = ('request',)
