@@ -6,5 +6,7 @@
         "timeout": 86400,
         "salt": "foo"
     },
-    "corenlp_server": "http://localhost:8080"
+    "corenlp_servers": [
+        "http://localhost:8080"
+    ]
 }

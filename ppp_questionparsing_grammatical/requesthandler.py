@@ -2,8 +2,8 @@
 
 import json
 import hashlib
+import random
 import logging
-import functools
 import jsonrpclib
 
 # Import pylibmc if possible; import memcache otherwise.
@@ -29,12 +29,12 @@ def connect_memcached():
     return mc
 
 class StanfordNLP:
-    def __init__(self, url):
-        self.server = jsonrpclib.Server(url)
+    def __init__(self, urls):
+        self.servers = list(map(jsonrpclib.Server, urls))
 
     def parse(self, text):
-        return json.loads(self.server.parse(text))
-stanfordnlp = StanfordNLP(Config().corenlp_server)
+        return json.loads(random.choice(self.servers).parse(text))
+stanfordnlp = StanfordNLP(Config().corenlp_servers)
 
 def _parse(sentence):
     handler = QuotationHandler()
