@@ -78,7 +78,7 @@ def processQuestionInfo(t,w,excMap=questionExcept,addMap=questionAdd,wisMap=ques
             - whether nodes contain 'identity' (comes from verb be) or not
     """
     try:
-        if t.wordList[0].index >= 1000:
+        if t.wordList[0].index >= 1000: # connector
             for n in t.child:
                 processQuestionInfo(n,w)
         elif t.getWords() == 'identity':

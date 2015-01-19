@@ -133,6 +133,9 @@ For instance, Wikidata returns a good answer for the triple `(Gandhi, killer, ?)
 ##### ---
 
 * Who held the endurance record for women pilots in 1929?
+* How many children does Barack Obama have? > https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/issues/75,  not do an intersection each time a node have several child.
+* What did Eddy Caron write? > https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/issues/79, Should be (?, writer, Eddy Caron), not (Eddy Caron, writer, ?)
+
 
 ccomp
 =====
