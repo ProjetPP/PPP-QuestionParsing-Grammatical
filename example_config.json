@@ -1,4 +1,10 @@
 {
-    "cache_size": 256,
+    "memcached": {
+        "servers": [
+            "127.0.0.1"
+        ],
+        "timeout": 86400,
+        "salt": "foo"
+    },
     "corenlp_server": "http://localhost:8080"
 }
