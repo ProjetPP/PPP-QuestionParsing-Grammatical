@@ -9,7 +9,7 @@ Please, don't remove any example (they are used frequently to check the whole al
 ### Most problematic dependencies
 
 * appos
-* dep
+* dep (no hope... the stanford parser needs to be improved/trained)
 * dobj
 
 appos
