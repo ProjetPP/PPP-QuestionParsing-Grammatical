@@ -77,14 +77,34 @@ def checkLists(l1,l2):
     """
         l1 is a list of lists of Words
         l2 is a list of strings
-        Determine wether a string of l2 appears in at least one word of l1, or not
+        Determine wether a string of l2 appears into at least one word of l1, or not (ex: day appears in birthday)
     """
     for s in l2:
         for l in l1:
             for w in l:
-                if w.word == s:
+                if w.word.find(s) != -1:
                     return True
     return False
+
+def checkSub(t,w,excMap=questionExcept):
+    if t.wordList[0][0].index == 1000: # connector so [0][0] is enough
+        assert len(t.wordList) == 1 and len(t.wordList[0]) == 1
+        res = True
+        for n in t.child:
+            res = res and checkSubInfo(n,w)
+        return res
+    else:
+        return not checkLists(t.wordList,excMap[w])
+
+def checkSubInfo(t,w,excMap=questionExcept):
+    """
+        return false if one of the __sons__ of t contains the information related to w in excMap, otherwise true
+        pass the connectors
+    """
+    res = True
+    for n in t.child:
+        res = res and checkSub(n,w)
+    return res
 
 def processQuestionInfo(t,w,excMap=questionExcept,addMap=questionAdd,wisMap=questionWIs): # TO IMPROVE
     """
@@ -97,9 +117,9 @@ def processQuestionInfo(t,w,excMap=questionExcept,addMap=questionAdd,wisMap=ques
             assert len(t.wordList) == 1 and len(t.wordList[0]) == 1
             for n in t.child:
                 processQuestionInfo(n,w)
-        elif t.getWords() == ['identity']: # nounification of verb be
+        elif t.getWords() == ['identity'] and checkSubInfo(t,w): # identity (be) + no info about w in the sons of the root
             t.wordList = [[Word(s,1001)] for s in wisMap[w]] # replace wordList according to the question word
-        elif not checkLists(t.wordList,excMap[w]):   # doesn't contain 'identity' but also doesn't contain the words associated to w in excMap
+        elif not t.getWords() == ['identity']  and not checkLists(t.wordList,excMap[w]):   # doesn't contain 'identity' + no info about w
             t.wordList = [l + [Word(s,1001)] for l in t.wordList for s in addMap[w]]
     except KeyError:
         pass
