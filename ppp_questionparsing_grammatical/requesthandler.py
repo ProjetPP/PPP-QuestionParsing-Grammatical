@@ -51,8 +51,7 @@ class StanfordNLP:
         # Get the cached value, if any
         r = mc.get(key)
         if not r:
-            # If there is no cached value, query HAL and add the result to
-            # the cache.
+            # If there is no cached value, compute it.
             r = self._parse(text)
             mc.set(key, pickle.dumps(r), time=Config().memcached_timeout)
         else:
