@@ -1,4 +1,6 @@
 {
     "cache_size": 256,
-    "corenlp_server": "http://localhost:8080"
+    "corenlp_servers": [
+        "http://localhost:8080"
+    ]
 }

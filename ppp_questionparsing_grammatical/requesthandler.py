@@ -1,6 +1,7 @@
 """Request handler of the module."""
 
 import json
+import random
 import logging
 import functools
 import jsonrpclib
@@ -13,12 +14,12 @@ from .config import Config
 from . import computeTree, simplify, normalize, QuotationHandler, QuotationError
 
 class StanfordNLP:
-    def __init__(self, url):
-        self.server = jsonrpclib.Server(url)
+    def __init__(self, urls):
+        self.servers = list(map(jsonrpclib.Server, urls))
 
     def parse(self, text):
-        return json.loads(self.server.parse(text))
-stanfordnlp = StanfordNLP(Config().corenlp_server)
+        return json.loads(random.choice(self.servers).parse(text))
+stanfordnlp = StanfordNLP(Config().corenlp_servers)
 
 def parse(sentence):
     handler = QuotationHandler()
