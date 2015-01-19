@@ -29,7 +29,7 @@ def associatedWordsRelation(word,relation):
     """
         Return words related to the given word by the given relations.
     """
-    r = requests.get(api,params={'surfaceText':word,'limit':20,'rel':relation}).json()
+    r = requests.get(api,params={'surfaceText':word,'limit':350,'rel':relation}).json()
     res = r['edges']
     #r = requests.get(api,params={'uri':'/c/en/'+word,'limit':20,'rel':relation}).json()
     #res = r['edges']
