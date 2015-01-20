@@ -18,7 +18,7 @@ Please, don't remove any example (they are used frequently to check the whole al
 * How much did Mercury spend on advertising in 1993?
 * How far is Yaroslavl from Moscow?
 * What effect does a prism have on light?
-* Where was the movie "Somewhere in Time" filmed?
+* Where was the movie "Somewhere in Time" filmed? (not always the same result?)
 * What city is Purdue University in?
 * Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"? >> problem of redundancy (book + title of the book)
 * What U.S. state is Fort Knox in?
@@ -31,15 +31,10 @@ Please, don't remove any example (they are used frequently to check the whole al
 * Which movies did Quentin Tarantino direct, but not star in?
 * Who receives the Nobel Prize in Physics in 2000?
 * When did Diana and Charles get married?
-* How many continents are there? > quantity / number
 * Where is Mozambique located? > location/place
 * Who built the first pyramid? > consider "pyramide" as (single) triple / predicate
 * Who wrote the book, "Huckleberry Finn"?
-* When is Mexico's independence? > independance date
 * What kind of animal is Babar?
-* Where does the prime minister of United kingdom lived? (intersection node on the ui)
-
-* What country is the biggest producer of tungsten?
 * Who was the first Taiwanese President?
 * What is the brightest star visible from Earth?
 
@@ -89,11 +84,6 @@ nn
 
 Current rule: merge
 
-Merge nn with the 2 nodes if nn above them:
- - When did Princess Diana and Charles get married?
- - When did Princess Diana and Prince Charles get married?
- - Who is section manager for guidance and control systems at JPL?
- 
 ##### ---
   
 * How long did the Charles Manson murder trial last?
@@ -143,11 +133,9 @@ prep
 dobj
 ====
 
-Current rule: dobj=t2
-
-- dobj = t2 or t4?
 - collapse dobj to comp ?
 - different if a nsubj is present?
+- dobj rules should/can produce tripls with missing subject
 
 ##### +++
 
@@ -170,8 +158,8 @@ For instance, Wikidata returns a good answer for the triple `(Gandhi, killer, ?)
 ##### ---
 
 * Who held the endurance record for women pilots in 1929?
-* How many children does Barack Obama have? > https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/issues/75,  not do an intersection each time a node have several child.
-* What did Eddy Caron write? > https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/issues/79, Should be (?, writer, Eddy Caron), not (Eddy Caron, writer, ?)
+* How many children does Barack Obama have? > not do an intersection each time a node have several children.
+* What did Eddy Caron write? > Should be (?, writer, Eddy Caron), not (Eddy Caron, writer, ?)
 
 ccomp
 =====
@@ -268,9 +256,21 @@ Comment construire les sous arbres
 * ++ How many people did the United Nations commit to help restore order and distribute humanitarian relief in Somalia in September 1992?
     >> peut être propager les prep après ?
     >> même problème que pour les nn
-    
+
+Merge nn with the 2 nodes if nn above them:
+ - When did Princess Diana and Charles get married?
+ - When did Princess Diana and Prince Charles get married?
+ - Who is section manager for guidance and control systems at JPL?
+
 pcomp
 =====
 
 * When did Israel begin turning the Gaza Strip and Jericho over to the PLO?
 
+Stanford Parser fails
+=====================
+
+* What country is the biggest producer of tungsten?
+* Who are the The Rolling Stones members?
+* Is 42 an integer?
+* Whose gender is genderqueer?
