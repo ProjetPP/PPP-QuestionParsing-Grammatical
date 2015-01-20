@@ -57,7 +57,7 @@ class candidate:
         self.pattern = pattern    # word to be nounified
         self.similarity = 0       # similarity between word and pattern
         self.weight = weight      # weight of the edge
-        self.score = 0            # global score of the candidate, 0<..<1, the greater the better
+        self.score = 0       longer     # global score of the candidate, 0<..<1, the greater the better
 
     def extractShortUri(self):
         """
@@ -136,16 +136,12 @@ def associatedWords(pattern,relations):
     uri = "/c/{0}/{1}".format(default_language,pattern)
     r = requests.get('http://127.0.0.1:8084/data/5.3' + uri,params={'limit':100}).json()
     CLOCK.time_step("lookup")
-    #for e in r:
-    #    print(e['start'] + ' ' + e['rel'] + ' ' + e['end'])
     res = []
     for e in r['edges']:
         if e['rel'] in relations:
             cand = buildCandidate(pattern,e)
             if cand != None and cand.tag != -1:
                 res.append(cand)
-    #for cand in res:
-    #    print(cand.word + ' ' + str(cand.weight))
     CLOCK.time_step("buildCandidate")
     for cand in res:
         cand.computeScore()
@@ -159,8 +155,6 @@ def associatedWords(pattern,relations):
 
 if __name__ == "__main__":
     nlp = StanfordNLP()
-    result = nlp.parse('run')
-    print(result['sentences'][0]['words'][0][1]['PartOfSpeech'])
     if len(sys.argv) != 2:
         sys.exit("Syntax: ./%s <word to search>" % sys.argv[0])
     CLOCK = clock()
