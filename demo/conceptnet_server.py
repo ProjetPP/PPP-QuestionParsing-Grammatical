@@ -72,14 +72,11 @@ class candidate:
         """
             compute tag with the set of nouns extracted from nltk
         """
-        tic = time.time()
         if self.tag == 0:
             if self.word in nouns_set:
                 self.tag = 1
             else:
                 self.tag = -1
-        toc = time.time()
-        print("\tposTag: %ss" % str(toc-tic))
 
     def computeScore(self):
         """
@@ -137,3 +134,4 @@ if __name__ == "__main__":
     word=normalized_concept_name(default_language,sys.argv[1]) # Lemmatization+stemming
     CLOCK.time_step("lemmatization")
     print(associatedWords(word,{'/r/RelatedTo','/r/DerivedFrom','/r/CapableOf','/r/Synonym'}))
+    CLOCK.time_step("total")
