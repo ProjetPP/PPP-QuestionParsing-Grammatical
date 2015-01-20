@@ -133,8 +133,8 @@ def associatedWords(pattern,relations):
 if __name__ == "__main__":
     end_lk = 0
     if sys.argv.count('-n') == 1: # fix lookup limit at 100 : ./conceptnet_server.py detect -n 100
-        end_lk = sys.argv.index('-n')
-        default_lookup_limit = sys.argv[end_lk+1]
+        default_lookup_limit = sys.argv[sys.argv.index('-n')+1]
+        end_lk = 2
     if len(sys.argv) < 2:
         sys.exit("Syntax: ./%s <words to search>" % sys.argv[0])
     for i in range(1,len(sys.argv)-end_lk):
