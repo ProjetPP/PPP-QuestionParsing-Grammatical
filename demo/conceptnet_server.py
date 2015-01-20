@@ -3,15 +3,7 @@
 import requests
 import sys
 import difflib # string similarity
-import json
-import jsonrpclib
-import fileinput
-import os
 import time
-parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.sys.path.insert(0,parentdir) 
-os.environ['PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'] = '../example_config.json'
-import ppp_questionparsing_grammatical
 from nltk.corpus import wordnet as wn
 from conceptnet5.nodes import normalized_concept_name, uri_to_lemmas
 from conceptnet5.query import lookup
@@ -40,13 +32,6 @@ class clock:
         self.tic=toc
 
 CLOCK = None
-
-class StanfordNLP:
-    def __init__(self, port_number=8080):
-        self.server = jsonrpclib.Server("http://localhost:%d" % port_number)
-
-    def parse(self, text):
-        return json.loads(self.server.parse(text))
 
 class candidate:
     """
@@ -155,7 +140,6 @@ def associatedWords(pattern,relations):
     #return sorted(nodeNN,key = functools.partial(similarity,word))
 
 if __name__ == "__main__":
-    nlp = StanfordNLP()
     if len(sys.argv) != 2:
         sys.exit("Syntax: ./%s <word to search>" % sys.argv[0])
     CLOCK = clock()
