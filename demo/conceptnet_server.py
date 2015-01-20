@@ -12,7 +12,7 @@ parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.sys.path.insert(0,parentdir) 
 os.environ['PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'] = '../example_config.json'
 import ppp_questionparsing_grammatical
-
+from nltk.corpus import wordnet as wn
 from conceptnet5.nodes import normalized_concept_name, uri_to_lemmas
 from conceptnet5.query import lookup
 # https://github.com/commonsense/conceptnet5/blob/master/conceptnet5/nodes.py
@@ -26,6 +26,10 @@ from conceptnet5.query import lookup
 # Run `./conceptnet_local.py elected` to obtain words nounified from elected
 
 default_language = 'en'
+default_lookup_limit = 350
+default_number_results = 50
+
+nouns_set = {x.name().split(".", 1)[0] for x in wn.all_synsets("n")}
 
 class clock:
     def __init__(self):
@@ -92,10 +96,7 @@ class candidate:
         """
         tic = time.time()
         if self.tag == 0:
-            nlp = StanfordNLP()
-            result = nlp.parse(self.word)
-            tag = result['sentences'][0]['words'][0][1]['PartOfSpeech']
-            if tag == 'NN':
+            if self.word in nouns_set:
                 self.tag = 1
             else:
                 self.tag = -1
@@ -134,7 +135,7 @@ def buildCandidate(pattern,edge):
 
 def associatedWords(pattern,relations):
     uri = "/c/{0}/{1}".format(default_language,pattern)
-    r = requests.get('http://127.0.0.1:8084/data/5.3' + uri,params={'limit':100}).json()
+    r = requests.get('http://127.0.0.1:8084/data/5.3' + uri,params={'limit':default_lookup_limit}).json()
     CLOCK.time_step("lookup")
     res = []
     for e in r['edges']:
