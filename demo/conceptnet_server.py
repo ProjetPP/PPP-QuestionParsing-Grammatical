@@ -53,11 +53,11 @@ class candidate:
         self.shortUri = ''        # short uri, we remove the optionnal info of the URI (pos tag + phrase distinguishing, see https://github.com/commonsense/conceptnet5/wiki/URI-hierarchy#concept-uris)
         self.word = ''            # candidate word to nounified pattern
         self.relation = relation  # relation of the involved edge
-        self.tag = 0              # 0 : unknown, -1 : word is not a candidate, 1 : strong candidate
+        self.tag = 0              # 0 : unknown, -1 : word is no longer a candidate, 1 : strong candidate
         self.pattern = pattern    # word to be nounified
         self.similarity = 0       # similarity between word and pattern
         self.weight = weight      # weight of the edge
-        self.score = 0       longer     # global score of the candidate, 0<..<1, the greater the better
+        self.score = 0            # global score of the candidate, 0<..<1, the greater the better
 
     def extractShortUri(self):
         """
