@@ -131,9 +131,13 @@ def associatedWords(pattern,relations):
     return {a.word for a in res[-nb_results:]}
 
 if __name__ == "__main__":
+    end_lk = 0
+    if sys.argv.count('-n') == 1: # fix lookup limit at 100 : ./conceptnet_server.py detect -n 100
+        end_lk = sys.argv.index('-n')
+        default_lookup_limit = sys.argv[end_lk+1]
     if len(sys.argv) < 2:
         sys.exit("Syntax: ./%s <words to search>" % sys.argv[0])
-    for i in range(1,len(sys.argv)):
+    for i in range(1,len(sys.argv)-end_lk):
         CLOCK = clock()
         tic = CLOCK.tic
         word=normalized_concept_name(default_language,sys.argv[i]) # Lemmatization+stemming

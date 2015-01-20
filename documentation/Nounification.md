@@ -51,3 +51,4 @@ Traiter à part :
   be 
   do
   have
+  go (to) How to get to the ENS Lyon?
