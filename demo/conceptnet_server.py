@@ -72,14 +72,11 @@ class candidate:
         """
             compute tag with stanford parser
         """
-        tic = time.time()
         if self.tag == 0:
             if self.word in nouns_set:
                 self.tag = 1
             else:
                 self.tag = -1
-        toc = time.time()
-        print("\tposTag: %ss" % str(toc-tic))
 
     def computeScore(self):
         """
@@ -133,9 +130,12 @@ def associatedWords(pattern,relations):
     #return sorted(nodeNN,key = functools.partial(similarity,word))
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        sys.exit("Syntax: ./%s <word to search>" % sys.argv[0])
-    CLOCK = clock()
-    word=normalized_concept_name(default_language,sys.argv[1]) # Lemmatization+stemming
-    CLOCK.time_step("lemmatization")
-    print(associatedWords(word,{'/r/RelatedTo','/r/DerivedFrom','/r/CapableOf','/r/Synonym'}))
+    if len(sys.argv) < 2:
+        sys.exit("Syntax: ./%s <words to search>" % sys.argv[0])
+    for i in range(1,len(sys.argv)):
+        CLOCK = clock()
+        tic = CLOCK.tic
+        word=normalized_concept_name(default_language,sys.argv[i]) # Lemmatization+stemming
+        CLOCK.time_step("lemmatization")
+        print(associatedWords(word,{'/r/RelatedTo','/r/DerivedFrom','/r/CapableOf','/r/Synonym'}))
+        print("Total: %s\n" % str(CLOCK.tic - tic))
