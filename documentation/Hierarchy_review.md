@@ -12,6 +12,37 @@ Please, don't remove any example (they are used frequently to check the whole al
 * dep (no hope... the stanford parser needs to be improved/trained)
 * dobj
 
+### Problematic questions
+
+* Who won the first general election for President held in Malawi in May 1994? 
+* How much did Mercury spend on advertising in 1993?
+* How far is Yaroslavl from Moscow?
+* What effect does a prism have on light?
+* Where was the movie "Somewhere in Time" filmed?
+* What city is Purdue University in?
+* Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"? >> problem of redundancy (book + title of the book)
+* What U.S. state is Fort Knox in?
+* What country in Latin America is the largest one?
+* He is the biggest and fattest man >> problem with amod and 2*conj
+* Who held the endurance record for women pilots in 1929? >> problem with for
+* How many people that live in China speak english?
+* How many USA presidents have visited Iran?
+* Which movies does Quentin Tarantino star in?
+* Which movies did Quentin Tarantino direct, but not star in?
+* Who receives the Nobel Prize in Physics in 2000?
+* When did Diana and Charles get married?
+* How many continents are there? > quantity / number
+* Where is Mozambique located? > location/place
+* Who built the first pyramid? > consider "pyramide" as (single) triple / predicate
+* Who wrote the book, "Huckleberry Finn"?
+* When is Mexico's independence? > independance date
+* What kind of animal is Babar?
+* Where does the prime minister of United kingdom lived? (intersection node on the ui)
+
+* What country is the biggest producer of tungsten?
+* Who was the first Taiwanese President?
+* What is the brightest star visible from Earth?
+
 appos
 =====
 
@@ -58,6 +89,11 @@ nn
 
 Current rule: merge
 
+Merge nn with the 2 nodes if nn above them:
+ - When did Princess Diana and Charles get married?
+ - When did Princess Diana and Prince Charles get married?
+ - Who is section manager for guidance and control systems at JPL?
+ 
 ##### ---
   
 * How long did the Charles Manson murder trial last?
@@ -103,7 +139,7 @@ prep
 * Who won two gold medals in skiing in the Olympic Games in Calgary?
 * Who followed Willy Brandt as chancellor of the Federal Republic of Germany?
 * Where does most of the marijuana entering the United States come from?
-  
+
 dobj
 ====
 
@@ -119,8 +155,9 @@ Current rule: dobj=t2
 * When did they won the lottery? >> dobj = t4
 * What two US biochemists won the Nobel Prize in medicine in 1992?
 * How many films did Ingmar Bergman make? >> with nsubj
-* Who has written "The Hitchhiker's Guide to the Galaxy"? >> question is transformed as "(?,writer,The Hitchhiker 's Guide to the Galaxy)". The triple should be "(The Hitchhiker 's Guide to the Galaxy, author, ?)" or "(The Hitchhiker 's Guide to the Galaxy, writer, ?)"
+* Who has written "The Hitchhiker's Guide to the Galaxy"?
 * Who wrote "The Hitchhiker's Guide to the Galaxy"?
+* Who invented the hula hoop?
 
 look at the verb ? (passive, acted ...)
 
@@ -135,7 +172,6 @@ For instance, Wikidata returns a good answer for the triple `(Gandhi, killer, ?)
 * Who held the endurance record for women pilots in 1929?
 * How many children does Barack Obama have? > https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/issues/75,  not do an intersection each time a node have several child.
 * What did Eddy Caron write? > https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/issues/79, Should be (?, writer, Eddy Caron), not (Eddy Caron, writer, ?)
-
 
 ccomp
 =====
@@ -208,6 +244,31 @@ conj
 
 * When did Rococo painting and architecture flourish?
 
+conj_and
+========
+
+Exemples :
+----------
+* Who makes and distributes bells?
+* Who is the author of Sea and Sky?
+* What percentage of the world's plant and animal species can be found in the Amazon forests?
+* Good: Who is section manager for guidance and control systems at JPL?
+* Bad: How many people did the United Nations commit to help restore order and distribute humanitarian relief in Somalia in September 1992?
+
+Problem with merging:
+---------------------
+* What is the length of border between the Ukraine and Russia?
+
+Comment construire les sous arbres
+----------------------------------
+* What was the first Gilbert and Sullivan opera?
+* When was General Manuel Noriega ousted as the leader of Panama and turned over to U.S. authorities?
+* When did Princess Diana and Prince Charles get married?
+* When did the royal wedding of Prince Andrew and Fergie take place?
+* ++ How many people did the United Nations commit to help restore order and distribute humanitarian relief in Somalia in September 1992?
+    >> peut être propager les prep après ?
+    >> même problème que pour les nn
+    
 pcomp
 =====
 
