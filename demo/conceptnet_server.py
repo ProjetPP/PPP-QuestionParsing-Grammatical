@@ -11,7 +11,7 @@ from conceptnet5.query import lookup
 # https://github.com/commonsense/conceptnet5/wiki/API
 
 default_language = 'en'
-default_lookup_limit = 350
+default_lookup_limit = 100
 default_number_results = 50
 
 nouns_set = {x.name().split(".", 1)[0] for x in wn.all_synsets("n")}
@@ -70,7 +70,7 @@ class candidate:
 
     def posTag(self):
         """
-            compute tag with stanford parser
+            compute tag with the set of nouns extracted from nltk
         """
         if self.tag == 0:
             if self.word in nouns_set:
@@ -124,10 +124,8 @@ def associatedWords(pattern,relations):
     computeWeight(res)
     res.sort(key = lambda x: x.score)
     CLOCK.time_step("weights")
-    return {a.word for a in res}
-    #return { res[i].word for i in range(-15,0)}#size(res)-15,size(res))}
-    #return {cand.word for cand in res} # duplicate, set instead
-    #return sorted(nodeNN,key = functools.partial(similarity,word))
+    nb_results = min(len(res),default_number_results)
+    return {a.word for a in res[-nb_results:]}
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
