@@ -4,17 +4,22 @@ import requests
 import sys
 import difflib # string similarity
 import time
-from nltk.corpus import wordnet as wn
+#from nltk.corpus import wordnet as wn
 from conceptnet5.nodes import normalized_concept_name, uri_to_lemmas
 from conceptnet5.query import lookup
 # https://github.com/commonsense/conceptnet5/blob/master/conceptnet5/nodes.py
 # https://github.com/commonsense/conceptnet5/wiki/API
+import pickle
 
 default_language = 'en'
 default_lookup_limit = 100
 default_number_results = 50
 
-nouns_set = {x.name().split(".", 1)[0] for x in wn.all_synsets("n")}
+in_file = open('nouns.pkl','rb')
+nouns_set = pickle.load(in_file)
+in_file.close()
+
+# nouns_set = {x.name().split(".", 1)[0] for x in wn.all_synsets("n")}
 
 class clock:
     def __init__(self):
