@@ -10,13 +10,6 @@ from conceptnet5.query import lookup
 # https://github.com/commonsense/conceptnet5/blob/master/conceptnet5/nodes.py
 # https://github.com/commonsense/conceptnet5/wiki/API
 
-# How to test in a terminal : 
-#   python3
-#   from conceptnet_local import *
-#   normalize('en','elected')
-
-# Run `./conceptnet_local.py elected` to obtain words nounified from elected
-
 default_language = 'en'
 default_lookup_limit = 350
 default_number_results = 50
