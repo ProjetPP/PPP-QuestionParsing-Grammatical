@@ -7,13 +7,11 @@ import time
 #from nltk.corpus import wordnet as wn
 from conceptnet5.nodes import normalized_concept_name, uri_to_lemmas
 from conceptnet5.query import lookup
-# https://github.com/commonsense/conceptnet5/blob/master/conceptnet5/nodes.py
-# https://github.com/commonsense/conceptnet5/wiki/API
 import pickle
 
 default_language = 'en'
-default_lookup_limit = 100
-default_number_results = 50
+default_lookup_limit = 100  # number of uri to extract
+default_number_results = 50 # number of results to return at the end
 
 in_file = open('nouns.pkl','rb')
 nouns_set = pickle.load(in_file)
