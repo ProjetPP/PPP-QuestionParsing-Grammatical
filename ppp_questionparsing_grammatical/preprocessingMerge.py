@@ -53,7 +53,7 @@ class Word:
     def nounifyExcept(self):
         """
             Return the string list of the closest nouns to self (die -> death)
-            Add hard-coded exceptions (e.g. be, have, do, bear...)
+            Replace by hard-coded exceptions if they exist (e.g. be, have, do, bear...)
         """
         if self.word in nounificationExceptions:
             return nounificationExceptions[self.word]
