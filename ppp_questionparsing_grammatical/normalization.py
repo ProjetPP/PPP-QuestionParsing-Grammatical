@@ -66,7 +66,7 @@ def normalize(tree):
         if t.dependency == 'R0':
             result.append(normalize(t))
         if t.dependency == 'R1':
-            result.append(Resource(value=buildValue(buildValue(t))))
+            result.append(Resource(value=buildValue(t)))
         if t.dependency == 'R2': # ou enlever la condition, ça devient R5
             if len(t.child) == 0:
                 result.append(Triple(subject=Resource(value=buildValue(t)), predicate=Resource(value=buildValue(tree)), object=Missing()))
