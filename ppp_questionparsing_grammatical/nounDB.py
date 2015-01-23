@@ -11,6 +11,9 @@ class Nounificator:
     def __str__(self):
         return self.verbToNouns.__str__()
 
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
     def display(self):
         for key in self.verbToNouns.keys():
             print('%s\t:%s' % (key,str(self.verbToNouns[key])))
@@ -24,7 +27,7 @@ class Nounificator:
     def remove(self,verb,noun):
         self.verbToNouns[verb].remove(noun)
         if self.verbToNouns[verb] == []:
-            self.verbToNonuns.pop(verb)
+            self.verbToNouns.pop(verb)
 
     def toNouns(self,verb):
         return self.verbToNouns[verb]
