@@ -42,7 +42,6 @@ class RequestHandlerTest(PPPTestCase(app)):
         self.assertIsInstance(tree.object, Missing)
         self.assertEqual(tree.subject, Resource('United States'))
 
-
     def testQuotationsIntersection(self):
         answer = self.getAnswer("Who wrote \"Le Petit Prince\" and \"Vol de Nuit\"?")
         self.assertEqual(len(answer), 1)

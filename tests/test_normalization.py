@@ -120,7 +120,7 @@ class StandardTripleTests(TestCase):
             },
             "type": "triple",
             "predicate": {
-                "value": "writer",
+                "value": ["writer","author"],
                 "type": "resource"
             }
         },
@@ -134,7 +134,7 @@ class StandardTripleTests(TestCase):
             },
             "type": "triple",
             "predicate": {
-                "value": "writer",
+                "value": ["writer","author"],
                 "type": "resource"
             }
         }
@@ -186,7 +186,7 @@ class StandardTripleTests(TestCase):
         result = normalize(tree)
         self.assertEqual(result,{
     "predicate": {
-        "value": "location",
+        "value": ["place","location","residence"],
         "type": "resource"
     },
     "object": {

@@ -11,5 +11,8 @@ nounificationDict = {
     'impress' : ['impression'],
     'fix' : ['repair'],
     'know' : ['knowledge'],
-    'invent' : ['inventor']
+    'invent' : ['inventor'],
+    'eat' : ['diet'],
+    'cook' : ['recipe'], # add the other alternatives
+    'write' : ['writer','author']
 }

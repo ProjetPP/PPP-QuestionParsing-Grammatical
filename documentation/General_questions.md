@@ -16,6 +16,8 @@ General
 * processQuestionWord doit être exécuter en dernier car ...
 * les mots de position 1000 sont les connecteurs
 * les mots de position 1001 sont les mots propagés/ajoutés par le qw
+* Traiter "does" comme "be" (descendre dans l'arbre pour l'éviter) : Where does the prime minister of united kingdom live
+* conceptnet5/conceptnet5/language/english.py
 
 Gestion des prep(c)_x
 =====================
