@@ -10,8 +10,8 @@ from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd,
 
 def removeWord(t,word):
     """
-        Remove word (of type str*int = s*position_of_s_in_sentence) in t
-        Assume word has no child
+        Remove word (of type str*int = s*position_of_s_in_sentence) from tree t
+        Assume that the node containing word has no child
     """
     assert len(t.wordList) == 1
     if word in t.wordList[0]:
@@ -77,7 +77,7 @@ def checkLists(l1,l2):
     """
         l1 is a list of lists of Words
         l2 is a list of strings
-        Determine wether a string of l2 appears into at least one word of l1, or not (ex: day appears in birthday)
+        Determine whether a string of l2 appears into at least one word of l1, or not (ex: day appears in birthday)
     """
     for s in l2:
         for l in l1:
@@ -87,7 +87,7 @@ def checkLists(l1,l2):
     return False
 
 def checkSub(t,w,excMap=questionExcept):
-    if t.wordList[0][0].index == 1000: # connector so [0][0] is enough
+    if t.wordList[0][0].index == 1000: # connector
         assert len(t.wordList) == 1 and len(t.wordList[0]) == 1
         res = True
         for n in t.child:
@@ -109,17 +109,17 @@ def checkSubInfo(t,w,excMap=questionExcept):
 def processQuestionInfo(t,w,excMap=questionExcept,addMap=questionAdd,wisMap=questionWIs): # TO IMPROVE
     """
         Add info to the first sons of ROOT that are not connectors (ie index != 1000) depending on:
-            - the question word
-            - whether the nodes contain 'identity' (comes from verb be) or not
+          - the question word
+          - whether the nodes contain 'identity' (nounification of verb be) or not
     """
     try:
-        if t.wordList[0][0].index == 1000: # connector so [0][0] is enough
+        if t.wordList[0][0].index == 1000: # connector
             assert len(t.wordList) == 1 and len(t.wordList[0]) == 1
             for n in t.child:
                 processQuestionInfo(n,w)
         elif t.getWords() == ['identity'] and checkSubInfo(t,w): # identity (be) + no info about w in the sons of the root
             t.wordList = [[Word(s,1001)] for s in wisMap[w]] # replace wordList according to the question word
-        elif not t.getWords() == ['identity']  and not checkLists(t.wordList,excMap[w]):   # doesn't contain 'identity' + no info about w
+        elif not t.getWords() == ['identity']  and not checkLists(t.wordList,excMap[w]): # doesn't contain 'identity' + no info about w
             t.wordList = [l + [Word(s,1001)] for l in t.wordList for s in addMap[w]]
     except KeyError:
         pass

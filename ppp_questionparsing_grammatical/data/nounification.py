@@ -1,5 +1,7 @@
-# Exceptions for the class Word.
-nounificationExceptions = {
+
+# Dictionnary of nounifications already known
+
+nounificationDict = {
     'be' : ['identity'],
     'have' : ['possession'],
     'do' : ['process'],

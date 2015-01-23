@@ -11,7 +11,7 @@ class DependenciesTree:
         It is a group of words of the initial sentence.
     """
     def __init__(self, word, namedEntityTag='undef', subtreeType='undef', dependency='undef', child=None, parent=None):
-        self.wordList = [[buildWord(word)]]   # list of the words contained in the node 
+        self.wordList = [[buildWord(word)]]   # list of the expressions/alternatives contained into the node. Each sub-list is a list of Words
         self.namedEntityTag = namedEntityTag  # NER tag (location, ...)
         self.subtreeType = subtreeType        # type of the info represented by the subtree
         self.dependency = dependency          # dependency from self to its parent
@@ -79,7 +79,7 @@ class DependenciesTree:
 
     def getWords(self):
         """
-            List of alternatives strings contained in wordList
+            List of alternatives strings contained into wordList
         """
         l = []
         for w in self.wordList:
@@ -94,7 +94,7 @@ class DependenciesTree:
 
     def printWords(self):
         """
-            Concatenation of all the alternatives strings contained in wordList
+            Concatenation of all the alternatives strings contained into wordList, separated by |
         """
         s = ''
         for w in self.wordList:

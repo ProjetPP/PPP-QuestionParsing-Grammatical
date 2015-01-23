@@ -1,7 +1,7 @@
 import sys
 from nltk.corpus import wordnet as wn
 from .data.exceptions import GrammaticalError, QuotationError
-from .data.nounification import nounificationExceptions
+from .data.nounification import nounificationDict
 
 ########################################
 # Word lemmatization and nounification #
@@ -9,12 +9,12 @@ from .data.nounification import nounificationExceptions
 
 class Word:
     """
-    One word of the sentence.
+        One word of the sentence
     """
     def __init__(self, word, index, pos=None):
         self.word = word    # string that represents the word
         self.index = index  # position in the sentence
-        self.pos = pos      # Part Of Speech tag
+        self.pos = pos      # Part Of Speech tag (verb, noun, ...)
 
     def __str__(self):
         return "({0},{1},{2})".format(str(self.word),str(self.index),str(self.pos))
@@ -22,7 +22,7 @@ class Word:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
-    def nounify(self):
+    def nounifyScratch(self):
         """ 
             Return the string list of the closest nouns to self (die -> death)
             Assume that the POS tag of self is verb
@@ -50,15 +50,15 @@ class Word:
         len_min = min(20,len(result))
         return [result[i][0] for i in range(0,len_min)]
        
-    def nounifyExcept(self):
+    def nounify(self):
         """
             Return the string list of the closest nouns to self (die -> death)
             Replace by hard-coded exceptions if they exist (e.g. be, have, do, bear...)
         """
-        if self.word in nounificationExceptions:
-            return nounificationExceptions[self.word]
+        if self.word in nounificationDict:
+            return nounificationDict[self.word]
         else:
-            return self.nounify()
+            return self.nounifyScratch()
 
     def standardize(self,lmtzr):
         """
@@ -68,20 +68,20 @@ class Word:
         if self.pos and self.pos[0] == 'N':
             self.word=lmtzr.lemmatize(self.word,'n')
         elif self.pos and self.pos[0] == 'V':
-            self.word=lmtzr.lemmatize(self.word,'v') # is it necessary?
-            return self.nounifyExcept()
+            self.word=lmtzr.lemmatize(self.word,'v')
+            return self.nounify()
         return []
 
-def buildWord(word):
+def buildWord(s):
     """
-        if word is of type:
-          word'-number : build Word(word',number)
-          otherwise    : build Word(word,1000)
+        if string s is of type:
+          s'-number : build Word(s',number)
+          otherwise : build Word(s,1000)
     """
-    if word.find('-') != -1:
-        return Word(word[:word.rindex('-')],int(word[word.rindex('-')+1:]))
+    if s.find('-') != -1:
+        return Word(s[:s.rindex('-')],int(s[s.rindex('-')+1:]))
     else:
-        return Word(word,1000)
+        return Word(s,1000)
 
 ###################
 # NER recognition #
