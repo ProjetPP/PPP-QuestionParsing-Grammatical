@@ -9,7 +9,9 @@ from conceptnet5.nodes import normalized_concept_name, uri_to_lemmas
 from conceptnet5.query import lookup
 import pickle
 from nltk.corpus import wordnet as wn
-import nounDB
+import os
+os.environ['PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'] = 'example_config.json'
+from ppp_questionparsing_grammatical import nounDB
 
 default_language = 'en'
 default_lookup_limit = 100  # number of uri to extract
