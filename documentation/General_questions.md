@@ -25,6 +25,8 @@ What is Frozen based on?
 
 * What two US biochemists won the Nobel Prize in medicine in 1992?
 
+https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/issues/72
+
 Analyse du question word
 ========================
 
