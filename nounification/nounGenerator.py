@@ -135,9 +135,9 @@ def associatedWords(pattern,relations):
 
 
 if __name__ == "__main__":
-    CLOCK = Clock()
     database = nounDB.Nounificator()
     verb_list = [x.name().split(".", 1)[0] for x in wn.all_synsets("v")]
+    CLOCK = Clock()
     for i in range(0,len(verb_list)):
         word=normalized_concept_name(default_language,verb_list[i]) # Lemmatization+stemming
         for noun in associatedWords(word,{'/r/RelatedTo','/r/DerivedFrom','/r/CapableOf','/r/Synonym'}):
