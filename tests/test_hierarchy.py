@@ -29,7 +29,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(root.dfsTag,0)
         # Is
         is_=root.child[0]
-        self.assertEqual(is_.wordList,[[Word("identity",2,'VBZ')]])
+        self.assertEqual(is_.wordList,[[Word("identity",1001,None)]])
         self.assertEqual(is_.namedEntityTag,'undef')
         self.assertEqual(is_.dependency,'R0')
         self.assertEqual(is_.parent,root)
@@ -47,7 +47,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(president.dfsTag,0)
         # United States
         us=president.child[0]
-        self.assertEqual(us.wordList,[[Word("United",7,'NNP'),Word("States",8,'NNPS')]])
+        self.assertEqual(us.wordList,[[Word("States",8,'NNPS'),Word("United",7,'NNP')]])
         self.assertEqual(us.namedEntityTag,'LOCATION')
         self.assertEqual(us.dependency,'R5')
         self.assertEqual(us.parent,president)
@@ -69,7 +69,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(root.dfsTag,0)
         # Are
         are=root.child[0]
-        self.assertEqual(are.wordList,[[Word("age",3,'VBP')]])
+        self.assertEqual(are.wordList,[[Word("age",1001,None)]])
         self.assertEqual(are.namedEntityTag,'undef')
         self.assertEqual(are.dependency,'R0')
         self.assertEqual(are.parent,root)
@@ -91,7 +91,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(root.dfsTag,0)
         # Is
         is_=root.child[0]
-        self.assertEqual(is_.wordList,[[Word("identity",2,'VBZ')]])
+        self.assertEqual(is_.wordList,[[Word("identity",1001,None)]])
         self.assertEqual(is_.namedEntityTag,'undef')
         self.assertEqual(is_.dependency,'R0')
         self.assertEqual(is_.parent,root)
@@ -100,7 +100,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(is_.dfsTag,0)
         # President
         president=is_.child[0]
-        self.assertEqual(president.wordList,[[Word("United",4,'NNP'),Word("States",5,'NNPS'),Word("president",6,'NN')]])
+        self.assertTrue(president.wordList == [[Word("president",6,'NN'),Word("United",4,'NNP'),Word("States",5,'NNPS')]] or president.wordList == [[Word("United",4,'NNP'),Word("States",5,'NNPS'),Word("president",6,'NN')]] or  president.wordList == [[Word("States",5,'NNPS'),Word("president",6,'NN'),Word("United",4,'NNP')]] )
         self.assertEqual(president.namedEntityTag,'undef')
         self.assertEqual(president.dependency,'R5s')
         self.assertEqual(president.parent,is_)
@@ -122,7 +122,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(root.dfsTag,0)
         # identity
         identity=root.child[0]
-        self.assertEqual(identity.wordList,[[Word("definition",2,'VBD')]])
+        self.assertEqual(identity.wordList,[[Word("definition",1001,None)]])
         self.assertEqual(identity.namedEntityTag,'undef')
         self.assertEqual(identity.dependency,'R0')
         self.assertEqual(identity.parent,root)
@@ -167,7 +167,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(gilbert.dfsTag,0)
         # sullivan
         sullivan=first2.child[0]
-        self.assertEqual(sullivan.wordList,[[Word("Sullivan",7,'NNP'),Word("opera",8,'NN')]])
+        self.assertEqual(sullivan.wordList,[[Word("opera",8,'NN'),Word("Sullivan",7,'NNP')]])
         self.assertEqual(sullivan.namedEntityTag,'undef')
         self.assertEqual(sullivan.dependency,'Rspl')
         self.assertEqual(sullivan.parent,first2)
@@ -198,7 +198,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(andw.dfsTag,0)
         # identity
         identity1=andw.child[0]
-        self.assertEqual(identity1.wordList,[[Word("identity",2,'VBZ')]])
+        self.assertEqual(identity1.wordList,[[Word("identity",1001,None)]])
         self.assertEqual(identity1.namedEntityTag,'undef')
         self.assertEqual(identity1.dependency,'RconjT')
         self.assertEqual(identity1.parent,andw)
@@ -207,7 +207,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(identity1.dfsTag,0)
         # identity
         identity2=andw.child[1]
-        self.assertEqual(identity2.wordList,[[Word("identity",2,'VBZ')]])
+        self.assertEqual(identity2.wordList,[[Word("identity",1001,None)]])
         self.assertEqual(identity2.namedEntityTag,'undef')
         self.assertEqual(identity2.dependency,'RconjB')
         self.assertEqual(identity2.parent,andw)
@@ -225,7 +225,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(chief.dfsTag,0)
         # prime minister
         prime=identity2.child[0]
-        self.assertEqual(prime.wordList,[[Word("prime",6,'JJ'),Word("minister",7,'NN')]])
+        self.assertEqual(prime.wordList,[[Word("minister",7,'NN'),Word("prime",6,'JJ')]])
         self.assertEqual(prime.namedEntityTag,'undef')
         self.assertEqual(prime.dependency,'R2')
         self.assertEqual(prime.parent,identity2)

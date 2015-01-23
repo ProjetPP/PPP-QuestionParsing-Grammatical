@@ -91,10 +91,13 @@ def checkSub(t,w,excMap=questionExcept):
         assert len(t.wordList) == 1 and len(t.wordList[0]) == 1
         res = True
         for n in t.child:
-            res = res and checkSubInfo(n,w)
+            res = res and checkSub(n,w)
         return res
     else:
-        return not checkLists(t.wordList,excMap[w])
+        try:
+            return not checkLists(t.wordList,excMap[w])
+        except KeyError:
+            return True
 
 def checkSubInfo(t,w,excMap=questionExcept):
     """
@@ -103,7 +106,7 @@ def checkSubInfo(t,w,excMap=questionExcept):
     """
     res = True
     for n in t.child:
-        res = res and checkSub(n,w)
+        res = res and checkSub(n,w,excMap)
     return res
 
 def processQuestionInfo(t,w,excMap=questionExcept,addMap=questionAdd,wisMap=questionWIs): # TO IMPROVE

@@ -82,13 +82,13 @@ class DependenciesTree:
             List of alternatives strings contained into wordList
         """
         l = []
-        for w in self.wordList:
-            w.sort(key = lambda x: x.index)
-            result = w[0].word
-            for i in range(1,len(w)):
-                if w[i].pos != 'POS':
+        for alt in self.wordList:
+            alt.sort(key = lambda x: x.index)
+            result = alt[0].word
+            for i in range(1,len(alt)):
+                if alt[i].pos != 'POS':
                     result += " "
-                result += w[i].word
+                result += alt[i].word
             l.append(result)
         return l
 
