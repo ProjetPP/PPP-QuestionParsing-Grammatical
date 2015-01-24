@@ -32,7 +32,7 @@ class Clock:
         return "%d:%d:%d" % (h,m,s)
     def time_step(self,s,done,total):
         toc = time.time()
-        remaining_time = (toc-self.tic)*total/done
+        remaining_time = (toc-self.tic)*(total-done)/done
         print("%s\t-- %s" % (self.format_time(round(remaining_time)),s))
 
 CLOCK = None
