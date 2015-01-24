@@ -74,7 +74,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(w,Word('fooverb',1,'V'))
 
     def testBasicTreeConstructor(self):
-        n = DependenciesTree('foo-1')
+        n = DependenciesTree('foo',1)
         self.assertEqual(n.wordList, [[Word('foo',1)]])
         self.assertEqual(n.namedEntityTag, 'undef')
         self.assertEqual(n.dependency, 'undef')
@@ -85,12 +85,12 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(n.dfsTag,0)
 
     def testMerge(self):
-        root1 = DependenciesTree('root-1')
-        root2 = DependenciesTree('root-2')
-        node1 = DependenciesTree('n-1','tag1','stype1','dep1',[DependenciesTree('childn-1')])
+        root1 = DependenciesTree('root',1)
+        root2 = DependenciesTree('root',2)
+        node1 = DependenciesTree('n',1,'tag1','stype1','dep1',[DependenciesTree('childn',1)])
         node1.parent = root1
         root1.child += [node1]
-        node2 = DependenciesTree('n-2','tag2','stype2','dep2',[DependenciesTree('childn-2')])
+        node2 = DependenciesTree('n',2,'tag2','stype2','dep2',[DependenciesTree('childn',2)])
         node2.parent = root2
         root2.child += [node2]
         node1.merge(node2,True)

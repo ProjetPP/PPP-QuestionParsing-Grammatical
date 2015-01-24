@@ -76,17 +76,6 @@ class Word:
             return self.nounify()
         return []
 
-def buildWord(s):
-    """
-        if string s is of type:
-          s'-number : build Word(s',number)
-          otherwise : build Word(s,1000)
-    """
-    if s.find('-') != -1:
-        return Word(s[:s.rindex('-')],int(s[s.rindex('-')+1:]))
-    else:
-        return Word(s,1000)
-
 ###################
 # NER recognition #
 ###################

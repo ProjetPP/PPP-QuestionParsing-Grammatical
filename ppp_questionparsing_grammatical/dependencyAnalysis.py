@@ -191,7 +191,7 @@ def conjConnectorsUp(t):
             parentTemp.child.remove(t.parent) # son(n0) \= n1
             parentTemp.child.append(t) # son(n0)=n2
             t.parent = parentTemp # parent(n2) = n0
-            newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,parentTemp], parentTemp.parent)
+            newTree = DependenciesTree(depSave, dependency=parentTemp.dependency, child=[dupl,parentTemp], parent=parentTemp.parent)
             parentTemp.dependency = 'RconjB'
             parentTemp.parent = newTree
         else:
@@ -201,7 +201,7 @@ def conjConnectorsUp(t):
             t.child += t.parent.child # son(n2) = son(n1)
             for n in t.child:
                 n.parent = t
-            newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,t], parentTemp.parent)
+            newTree = DependenciesTree(depSave, dependency=parentTemp.dependency, child=[dupl,t], parent=parentTemp.parent)
             t.dependency = 'RconjB'
             t.parent = newTree
         newTree.parent.child.remove(parentTemp)

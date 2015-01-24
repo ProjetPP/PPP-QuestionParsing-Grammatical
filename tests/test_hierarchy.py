@@ -367,7 +367,6 @@ class HierarchyTests(TestCase):
         self.assertEqual(birthday.dfsTag,0)
         # mickey
         mickey=birthday.child[0]
-        print(str(mickey.wordList[0][0]))
         self.assertEqual(mickey.wordList,[[Word("Mickey",6,'NNP'),Word("Mouse",7,'NNP')]])
         self.assertEqual(mickey.namedEntityTag,'PERSON')
         self.assertEqual(mickey.dependency,'R5')

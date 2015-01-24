@@ -1,5 +1,5 @@
 import sys
-from .preprocessingMerge import Word, mergeNamedEntityTag, buildWord
+from .preprocessingMerge import Word, mergeNamedEntityTag
 from .data.exceptions import QuotationError
 from copy import deepcopy
 import random
@@ -10,8 +10,8 @@ class DependenciesTree:
         One node of the parse tree.
         It is a group of words of the initial sentence.
     """
-    def __init__(self, word, namedEntityTag='undef', subtreeType='undef', dependency='undef', child=None, parent=None):
-        self.wordList = [[buildWord(word)]]   # list of the expressions/alternatives contained into the node. Each sub-list is a list of Words
+    def __init__(self, word, start=1000, namedEntityTag='undef', subtreeType='undef', dependency='undef', child=None, parent=None):
+        self.wordList = [[Word(word,start)]]  # list of the expressions/alternatives contained into the node. Each sub-list is a list of Words
         self.namedEntityTag = namedEntityTag  # NER tag (location, ...)
         self.subtreeType = subtreeType        # type of the info represented by the subtree
         self.dependency = dependency          # dependency from self to its parent
@@ -194,12 +194,12 @@ def computeEdges(r,nameToNodes):
         try:
             n1 = nameToNodes[edge[1]]
         except KeyError:
-            n1 = DependenciesTree(edge[1])
+            n1 = DependenciesTree(edge[1][:edge[1].rindex('-')],int(edge[1][edge[1].rindex('-')+1:]))
             nameToNodes[edge[1]] = n1
         try:
             n2 = nameToNodes[edge[2]]
         except KeyError:
-            n2 = DependenciesTree(edge[2])
+            n2 = DependenciesTree(edge[2][:edge[2].rindex('-')],int(edge[2][edge[2].rindex('-')+1:]))
             nameToNodes[edge[2]] = n2
         # n1 is the parent of n2
         n1.child = n1.child+[n2]
