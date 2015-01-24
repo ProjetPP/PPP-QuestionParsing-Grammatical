@@ -2,31 +2,27 @@
 
 import requests
 import sys
-import difflib # string similarity
-import time
-from conceptnet5.nodes import normalized_concept_name, uri_to_lemmas
-import pickle
 import os
+import time
+import pickle
+import difflib # string similarity
+from conceptnet5.nodes import normalized_concept_name, uri_to_lemmas
+from nltk import word_tokenize, pos_tag
+from nltk.corpus import wordnet as wn
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.sys.path.insert(0,parentdir)
 os.environ['PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'] = '../example_config.json'
 from ppp_questionparsing_grammatical import nounDB
 
 default_language = 'en'
-default_lookup_limit = 500  # number of uri to extract
+default_lookup_limit = 500  # number of uri to lookup
 default_number_results = 50 # number of results to return at the end
 
 wikiFile = open('wikidataProperties.pickle','rb')
 wikidataProperties = pickle.load(wikiFile)
 wikiFile.close()
 
-nounsFile = open('nouns.pickle','rb')
-nounsSet = pickle.load(nounsFile)
-nounsFile.close()
-
-verbsFile = open('verbs.pickle','rb')
-verbsSet = pickle.load(verbsFile)
-verbsFile.close()
+verbsSet = {x.name().split(".", 1)[0] for x in wn.all_synsets("v")}
 
 class Clock:
     def __init__(self):
@@ -92,7 +88,7 @@ class candidate:
             compute tag with the set of nouns extracted from nltk
         """
         if self.tag == 0:
-            if self.word in nounsSet:
+            if pos_tag(word_tokenize(self.word))[0][1] == 'NN':
                 self.tag = 1
             else:
                 self.tag = -1
@@ -151,6 +147,9 @@ def associatedWords(verb,relations):
     res.sort(key = lambda x: x.score)
     nb_results = min(len(res),default_number_results)
     return {a.word for a in res[-nb_results:]}
+
+def test(verb):
+    return associatedWords(verb,{'/r/RelatedTo','/r/DerivedFrom','/r/CapableOf','/r/Synonym'})
 
 if __name__ == "__main__":
     database = nounDB.Nounificator()

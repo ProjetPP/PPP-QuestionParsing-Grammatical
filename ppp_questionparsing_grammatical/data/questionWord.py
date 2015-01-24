@@ -27,7 +27,7 @@ questionExcept = {
     'what time'     : ['time','date','day','month','year'],
     'when'          : ['time','date','day','month','year'],
     'why'           : ['reason','cause','origin'],
-    'where'         : ['place','location','residence'],
+    'where'         : ['place','location','residence','site'],
     'how'           : ['manner','way'],
     'how much'      : ['amount','quantity','number'],
     'how many'      : ['amount','quantity','number'],
