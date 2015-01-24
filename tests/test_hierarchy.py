@@ -333,3 +333,45 @@ class HierarchyTests(TestCase):
         self.assertEqual(len(obama.child),0)
         self.assertEqual(obama.subtreeType,'undef')
         self.assertEqual(obama.dfsTag,0)
+
+    def testPassIdentity(self):
+        tree=computeTree(data.mickey()['sentences'][0])
+        simplify(tree)
+        tree.sort()
+        root=tree
+        # Root
+        self.assertEqual(root.wordList,[[Word("ROOT",0)]])
+        self.assertEqual(root.namedEntityTag,'undef')
+        self.assertEqual(root.dependency,'R0')
+        self.assertEqual(root.parent,None)
+        self.assertEqual(len(root.child),1)
+        self.assertEqual(root.subtreeType,'DATE')
+        self.assertEqual(root.dfsTag,0)
+        # identity
+        identity=root.child[0]
+        self.assertEqual(identity.wordList,[[Word("identity",2,'VBZ')]])
+        self.assertEqual(identity.namedEntityTag,'undef')
+        self.assertEqual(identity.dependency,'R0')
+        self.assertEqual(identity.parent,root)
+        self.assertEqual(len(identity.child),1)
+        self.assertEqual(identity.subtreeType,'DATE')
+        self.assertEqual(identity.dfsTag,0)
+        # birthday
+        birthday=identity.child[0]
+        self.assertEqual(birthday.wordList,[[Word("birthday",4,'NN')]])
+        self.assertEqual(birthday.namedEntityTag,'undef')
+        self.assertEqual(birthday.dependency,'R0')
+        self.assertEqual(birthday.parent,identity)
+        self.assertEqual(len(birthday.child),1)
+        self.assertEqual(birthday.subtreeType,'DATE')
+        self.assertEqual(birthday.dfsTag,0)
+        # mickey
+        mickey=birthday.child[0]
+        print(str(mickey.wordList[0][0]))
+        self.assertEqual(mickey.wordList,[[Word("Mickey",6,'NNP'),Word("Mouse",7,'NNP')]])
+        self.assertEqual(mickey.namedEntityTag,'PERSON')
+        self.assertEqual(mickey.dependency,'R5')
+        self.assertEqual(mickey.parent,birthday)
+        self.assertEqual(len(mickey.child),0)
+        self.assertEqual(mickey.subtreeType,'undef')
+        self.assertEqual(root.dfsTag,0)
