@@ -22,6 +22,14 @@ class Word:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
+    def __lt__(self, other):
+        assert isinstance(other,Word)
+        return self.index < other.index or (self.index == other.index and self.word < other.word) or (self.index == other.index and self.word == other.word and self.pos < other.pos)
+
+    def __gt__(self, other):
+        assert isinstance(other,Word)
+        return self.index > other.index or (self.index == other.index and self.word > other.word) or (self.index == other.index and self.word == other.word and self.pos > other.pos)
+
     def nounifyScratch(self):
         """ 
             Return the string list of the closest nouns to self (die -> death)

@@ -13,7 +13,7 @@ def removeWord(t,word):
         Remove word (of type str*int = s*position_of_s_in_sentence) from tree t
         Assume that the node containing word has no child
     """
-    assert len(t.wordList) == 1
+    assert len(t.wordList) == 1 # no possible alternatives in the tree at this moment
     if word in t.wordList[0]:
         if t.child != []:
             raise QuestionWordError(word,"question word has child")
@@ -56,7 +56,7 @@ def identifyQuestionWord(t):
     if start[0].word.lower() in openQuestionWord: 
         removeWord(t,start[0])
         return start[0].word.lower()
-    if start[0].word.lower() in closeQuestionWord: 
+    if start[0].word.lower() in closeQuestionWord: # close question words with only 1 word for the moment
         return start[0].word.lower()
     return None
 

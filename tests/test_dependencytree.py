@@ -107,6 +107,7 @@ class DependenciesTreeTests(TestCase):
     def testStr(self):
         tree=computeTree(data.give_john_smith()['sentences'][0])
         self.maxDiff=None
+        tree.sort()
         self.assertEqual(str(tree),data.give_john_smith_string())
 
     def testQuotationMerge(self):
@@ -116,6 +117,7 @@ class DependenciesTreeTests(TestCase):
         result=data.give_LSD_LIB()
         tree=computeTree(result['sentences'][0])
         handler.push(tree)
+        tree.sort()
         root=tree
         # Root
         self.assertEqual(root.wordList,[[Word("ROOT",0)]])
@@ -164,6 +166,7 @@ class DependenciesTreeTests(TestCase):
 
     def testEntityTagMerge1(self):
         tree=computeTree(data.give_john_smith()['sentences'][0])
+        tree.sort()
         root=tree
         # Root
         self.assertEqual(root.wordList,[[Word("ROOT",0)]])
@@ -184,7 +187,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(lives.dfsTag,0)
         # John Smith
         smith=lives.child[0]
-        self.assertEqual(smith.wordList,[[Word("Smith",2,'NNP'),Word("John",1,'NNP')]])
+        self.assertEqual(smith.wordList,[[Word("John",1,'NNP'),Word("Smith",2,'NNP')]])
         self.assertEqual(smith.namedEntityTag,'PERSON')
         self.assertEqual(smith.dependency,'nsubj')
         self.assertEqual(smith.parent,lives)
@@ -193,7 +196,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(smith.dfsTag,0)
         # United Kingdom
         kingdom=lives.child[1]
-        self.assertTrue(kingdom.wordList == [[Word("United",6,'NNP'),Word("Kingdom",7,'NNP')]] or kingdom.wordList == [[Word("Kingdom",7,'NNP'),Word("United",6,'NNP')]] )
+        self.assertEqual(kingdom.wordList, [[Word("United",6,'NNP'),Word("Kingdom",7,'NNP')]] )
         self.assertEqual(kingdom.namedEntityTag,'LOCATION')
         self.assertEqual(kingdom.dependency,'prep_in')
         self.assertEqual(kingdom.parent,lives)
@@ -212,6 +215,7 @@ class DependenciesTreeTests(TestCase):
         
     def testEntityTagMerge2(self):
         tree=computeTree(data.give_obama_president_usa()['sentences'][0])
+        tree.sort()
         root=tree
         # Root
         self.assertEqual(root.wordList,[[Word("ROOT",0)]])
@@ -259,7 +263,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(the.dfsTag,0)
         # United States
         united=president.child[1]
-        self.assertTrue(united.wordList == [[Word("United",4,'NNP'),Word("States",5,'NNPS')]] or united.wordList == [[Word("States",5,'NNPS'),Word("United",4,'NNP')]] )
+        self.assertEqual(united.wordList, [[Word("United",4,'NNP'),Word("States",5,'NNPS')]])
         self.assertEqual(united.namedEntityTag,'LOCATION')
         self.assertEqual(united.dependency,'nn')
         self.assertEqual(united.parent,president)

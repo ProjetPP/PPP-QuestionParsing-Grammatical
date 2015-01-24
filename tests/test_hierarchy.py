@@ -18,6 +18,7 @@ class HierarchyTests(TestCase):
     def testHierarchySimplification(self):
         tree=computeTree(data.give_president_of_USA()['sentences'][0])
         simplify(tree)
+        tree.sort()
         root=tree
         # Root
         self.assertEqual(root.wordList,[[Word("ROOT",0)]])
@@ -47,7 +48,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(president.dfsTag,0)
         # United States
         us=president.child[0]
-        self.assertEqual(us.wordList,[[Word("States",8,'NNPS'),Word("United",7,'NNP')]])
+        self.assertEqual(us.wordList,[[Word("United",7,'NNP'),Word("States",8,'NNPS')]])
         self.assertEqual(us.namedEntityTag,'LOCATION')
         self.assertEqual(us.dependency,'R5')
         self.assertEqual(us.parent,president)
@@ -58,6 +59,7 @@ class HierarchyTests(TestCase):
     def testIgnore(self):
         tree=computeTree(data.give_how_old()['sentences'][0])
         simplify(tree)
+        tree.sort()
         root=tree
         # Root
         self.assertEqual(root.wordList,[[Word("ROOT",0)]])
@@ -80,6 +82,7 @@ class HierarchyTests(TestCase):
     def testHierarchySimplification2(self):
         tree=computeTree(data.give_USA_president()['sentences'][0])
         simplify(tree)
+        tree.sort()
         root=tree
         # Root
         self.assertEqual(root.wordList,[[Word("ROOT",0)]])
@@ -100,7 +103,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(is_.dfsTag,0)
         # President
         president=is_.child[0]
-        self.assertTrue(president.wordList == [[Word("president",6,'NN'),Word("United",4,'NNP'),Word("States",5,'NNPS')]] or president.wordList == [[Word("United",4,'NNP'),Word("States",5,'NNPS'),Word("president",6,'NN')]] or  president.wordList == [[Word("States",5,'NNPS'),Word("president",6,'NN'),Word("United",4,'NNP')]] )
+        self.assertEqual(president.wordList, [[Word("United",4,'NNP'),Word("States",5,'NNPS'),Word("president",6,'NN')]])
         self.assertEqual(president.namedEntityTag,'undef')
         self.assertEqual(president.dependency,'R5s')
         self.assertEqual(president.parent,is_)
@@ -111,6 +114,7 @@ class HierarchyTests(TestCase):
     def testHierarchyConnectors1(self):
         tree=computeTree(data.give_opera()['sentences'][0])
         simplify(tree)
+        tree.sort()
         root=tree
         # Root
         self.assertEqual(root.wordList,[[Word("ROOT",0)]])
@@ -167,7 +171,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(gilbert.dfsTag,0)
         # sullivan
         sullivan=first2.child[0]
-        self.assertEqual(sullivan.wordList,[[Word("opera",8,'NN'),Word("Sullivan",7,'NNP')]])
+        self.assertEqual(sullivan.wordList,[[Word("Sullivan",7,'NNP'),Word("opera",8,'NN')]])
         self.assertEqual(sullivan.namedEntityTag,'undef')
         self.assertEqual(sullivan.dependency,'Rspl')
         self.assertEqual(sullivan.parent,first2)
@@ -178,6 +182,7 @@ class HierarchyTests(TestCase):
     def testHierarchyConnectors2(self):
         tree=computeTree(data.give_chief()['sentences'][0])
         simplify(tree)
+        tree.sort()
         root=tree
         # Root
         self.assertEqual(root.wordList,[[Word("ROOT",0)]])
@@ -225,7 +230,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(chief.dfsTag,0)
         # prime minister
         prime=identity2.child[0]
-        self.assertEqual(prime.wordList,[[Word("minister",7,'NN'),Word("prime",6,'JJ')]])
+        self.assertEqual(prime.wordList,[[Word("prime",6,'JJ'),Word("minister",7,'NN')]])
         self.assertEqual(prime.namedEntityTag,'undef')
         self.assertEqual(prime.dependency,'R2')
         self.assertEqual(prime.parent,identity2)
@@ -236,6 +241,7 @@ class HierarchyTests(TestCase):
     def testYesNoQuestion(self):
         tree=computeTree(data.give_born()['sentences'][0])
         simplify(tree)
+        tree.sort()
         root=tree
         # Root
         self.assertEqual(root.wordList,[[Word("ROOT",0)]])
@@ -267,6 +273,7 @@ class HierarchyTests(TestCase):
     def testNoQW(self):
         tree=computeTree(data.birth_date()['sentences'][0])
         simplify(tree)
+        tree.sort()
         root=tree
         # Root
         self.assertEqual(root.wordList,[[Word("ROOT",0)]])
@@ -298,6 +305,7 @@ class HierarchyTests(TestCase):
     def testQuestionInfo(self):
         tree=computeTree(data.birth_place()['sentences'][0])
         simplify(tree)
+        tree.sort()
         root=tree
         # Root
         self.assertEqual(root.wordList,[[Word("ROOT",0)]])
@@ -309,7 +317,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(root.dfsTag,0)
         # birth date
         birth=root.child[0]
-        self.assertEqual(birth.wordList,[[Word("birth",3,'VBN'),Word("time",1001,None)],[Word("birth",3,'VBN'),Word("date",1001,None)]])
+        self.assertEqual(birth.wordList,[[Word("birth",3,'VBN'),Word("date",1001,None)],[Word("birth",3,'VBN'),Word("time",1001,None)]])
         self.assertEqual(birth.namedEntityTag,'undef')
         self.assertEqual(birth.dependency,'R0')
         self.assertEqual(birth.parent,root)

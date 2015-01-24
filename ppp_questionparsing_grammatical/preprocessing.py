@@ -34,6 +34,16 @@ class DependenciesTree:
             self.dfsTag = n
             return n+1
 
+    def sort(self):
+        """
+            Sorting the wordLists of the tree
+        """
+        for t in self.child:
+            t.sort()
+        self.wordList.sort()
+        for alt in self.wordList:
+            alt.sort(key = lambda x: x.index)
+
     def string(self):
         # Concatenation of the words of the root
         w = self.printWords()
@@ -64,7 +74,7 @@ class DependenciesTree:
     def merge(self,other,mergeWords):
         """
             Merge the root of the two given trees into one single node.
-            Merge the two wordList if mergeWords=True (otherwise only keep the WordList of self).
+            Merge the two wordList if mergeWords=True (otherwise only keep the wordList of self).
             The result is stored in node 'self'.
         """
         self.child += other.child
@@ -72,7 +82,6 @@ class DependenciesTree:
             c.parent = self
         if mergeWords:
             self.wordList = [w+v for w in self.wordList for v in other.wordList] # ??? is it ok ???
-            self.wordList.sort(key = lambda x: x.index)
         if other.parent:
             other.parent.child.remove(other)
         other.wordList = None
@@ -96,16 +105,7 @@ class DependenciesTree:
         """
             Concatenation of all the alternatives strings contained into wordList, separated by |
         """
-        s = ''
-        for w in self.wordList:
-            w.sort(key = lambda x: x.index)
-            result = w[0].word
-            for i in range(1,len(w)):
-                if w[i].pos != 'POS':
-                    result += " "
-                result += w[i].word
-            s = s + result + ' | '
-        return s[:s.rindex(' | ')]
+        return ' | '.join(self.getWords())
 
 def index(l,pred):
     """
