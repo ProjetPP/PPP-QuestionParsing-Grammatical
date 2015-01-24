@@ -17,7 +17,7 @@ default_language = 'en'
 default_lookup_limit = 100  # number of uri to extract
 default_number_results = 50 # number of results to return at the end
 
-nouns_set = set(x.name().split(".", 1)[0] for x in wn.all_synsets("n"))
+nounSet = set(x.name().split(".", 1)[0] for x in wn.all_synsets("n"))
 
 
 class Clock:
@@ -84,7 +84,7 @@ class candidate:
             compute tag with the set of nouns extracted from nltk
         """
         if self.tag == 0:
-            if self.word in nouns_set:
+            if self.word in nounSet:
                 self.tag = 1
             else:
                 self.tag = -1
