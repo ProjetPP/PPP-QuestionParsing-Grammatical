@@ -21,6 +21,8 @@ default_number_results = 50 # number of results to return at the end
 
 nounSet = set(x.name().split(".", 1)[0] for x in wn.all_synsets("n"))
 
+wikidataProperties = None
+
 
 class Clock:
     def __init__(self):
@@ -97,6 +99,8 @@ class candidate:
         """
         self.similarity = difflib.SequenceMatcher(a=self.word.lower(), b=self.pattern.lower()).ratio()
         self.score = self.similarity + self.weight # need to be improved
+        if self.word in wikidataProperties:
+            self.score += 10
 
 def computeWeight(r):
     maxw = 0
@@ -141,6 +145,9 @@ def associatedWords(pattern,relations):
 if __name__ == "__main__":
     database = nounDB.Nounificator()
     verb_list = [x.name().split(".", 1)[0] for x in wn.all_synsets("v")]
+    wikiFile = open('wikidataProperties.pickle','rb')
+    wikidataProperties = pickle.load(wikiFile)
+    wikiFile.close()
     CLOCK = Clock()
     for i in range(0,len(verb_list)):
         word=normalized_concept_name(default_language,verb_list[i]) # Lemmatization+stemming
