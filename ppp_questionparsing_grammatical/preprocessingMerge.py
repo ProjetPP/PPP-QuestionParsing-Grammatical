@@ -24,7 +24,7 @@ class Word:
 
     def __lt__(self, other):
         assert isinstance(other,Word)
-        return self.index < other.index or (self.index == other.index and self.word < other.word) or (self.index == other.index and self.word == other.word and self.pos < other.pos)
+        return (self.index,self.word,self.pos) < (other.index,other.word,other.pos)
 
     def nounifyScratch(self):
         """ 
@@ -67,7 +67,7 @@ class Word:
     def standardize(self,lmtzr):
         """
             Apply lemmatization to the word, using the given lemmatizer
-            Return the list of strings that must replaced self.word if nounification is necessary, [] otherwise
+            Return the list of strings that must replaced self.word if nounification is necessary (ie if the word is a verb), [] otherwise
         """
         if self.pos and self.pos[0] == 'N':
             self.word=lmtzr.lemmatize(self.word,'n')
