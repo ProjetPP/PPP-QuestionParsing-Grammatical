@@ -1,6 +1,10 @@
+#!/usr/bin/env python3
+
 import requests
 import json
 import pickle
+import sys
+from nltk.corpus import wordnet as wn
 
 default_language = 'en'
 
@@ -28,8 +32,22 @@ def buildWikidataProperties():
             properties.add(prop['labels'][default_language]['value'])
     return properties
 
+def buildNouns():
+    return {x.name().split('.', 1)[0] for x in wn.all_synsets('n')}
+
+def buildVerbs():
+    return {x.name().split(".", 1)[0] for x in wn.all_synsets("v")}
+
 if __name__ == "__main__":
-    properties = buildWikidataProperties()
-    f = open('wikidataProperties.pickle', 'wb')
-    pickle.dump(properties,f)
+    if len(sys.argv) != 3:
+        sys.exit("Syntax: ./%s storage_file -<database description> (wiki : Wikidata properties, n : nouns, v : verbs)" % sys.argv[0]) # ex: ./extractors file.pkl -wiki
+    data = {}
+    if sys.argv[2] == '-wiki':
+        data = buildWikidataProperties()
+    if sys.argv[2] == '-n':
+        data = buildNouns()
+    if sys.argv[2] == '-v':
+        data = buildVerbs()
+    f = open(sys.argv[1], 'wb') # w+ ?
+    pickle.dump(data,f)
     f.close()

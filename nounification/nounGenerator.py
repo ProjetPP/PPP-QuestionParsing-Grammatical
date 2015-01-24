@@ -4,11 +4,8 @@ import requests
 import sys
 import difflib # string similarity
 import time
-#from nltk.corpus import wordnet as wn
 from conceptnet5.nodes import normalized_concept_name, uri_to_lemmas
-from conceptnet5.query import lookup
 import pickle
-from nltk.corpus import wordnet as wn
 import os
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.sys.path.insert(0,parentdir)
@@ -16,13 +13,20 @@ os.environ['PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'] = '../example_config.json'
 from ppp_questionparsing_grammatical import nounDB
 
 default_language = 'en'
-default_lookup_limit = 100  # number of uri to extract
+default_lookup_limit = 500  # number of uri to extract
 default_number_results = 50 # number of results to return at the end
 
-nounSet = set(x.name().split(".", 1)[0] for x in wn.all_synsets("n"))
+wikiFile = open('wikidataProperties.pickle','rb')
+wikidataProperties = pickle.load(wikiFile)
+wikiFile.close()
 
-wikidataProperties = None
+nounsFile = open('nouns.pickle','rb')
+nounsSet = pickle.load(nounsFile)
+nounsFile.close()
 
+verbsFile = open('verbs.pickle','rb')
+verbsSet = pickle.load(verbsFile)
+verbsFile.close()
 
 class Clock:
     def __init__(self):
@@ -88,7 +92,7 @@ class candidate:
             compute tag with the set of nouns extracted from nltk
         """
         if self.tag == 0:
-            if self.word in nounSet:
+            if self.word in nounsSet:
                 self.tag = 1
             else:
                 self.tag = -1
@@ -100,7 +104,7 @@ class candidate:
         self.similarity = difflib.SequenceMatcher(a=self.word.lower(), b=self.pattern.lower()).ratio()
         self.score = self.similarity + self.weight # need to be improved
         if self.word in wikidataProperties:
-            self.score += 10
+            self.score += 10 # high bonus for the wikidata properties
 
 def computeWeight(r):
     maxw = 0
@@ -111,6 +115,9 @@ def computeWeight(r):
         w.computeScore()
 
 def buildCandidate(pattern,edge):
+    """
+        Return a candidate built from the input edge and the pattern (ie the word that is nounified)
+    """
     uri = "/c/{0}/{1}".format(default_language,pattern)
     if (edge['start'] == uri or edge['start'].startswith(uri+'/')) and edge['end'].startswith('/c/'+default_language):
         cand = candidate(edge['end'],edge['rel'],pattern,edge['weight'])
@@ -125,7 +132,11 @@ def buildCandidate(pattern,edge):
     else:
         return None
 
-def associatedWords(pattern,relations):
+def associatedWords(verb,relations):
+    """
+        Returns the best nb_results candidates to nounify the pattern
+    """
+    pattern = normalized_concept_name(default_language,verb) # Lemmatization+stemming
     uri = "/c/{0}/{1}".format(default_language,pattern)
     r = requests.get('http://127.0.0.1:8084/data/5.3' + uri,params={'limit':default_lookup_limit}).json()
     res = []
@@ -141,19 +152,13 @@ def associatedWords(pattern,relations):
     nb_results = min(len(res),default_number_results)
     return {a.word for a in res[-nb_results:]}
 
-
 if __name__ == "__main__":
     database = nounDB.Nounificator()
-    verb_list = [x.name().split(".", 1)[0] for x in wn.all_synsets("v")]
-    wikiFile = open('wikidataProperties.pickle','rb')
-    wikidataProperties = pickle.load(wikiFile)
-    wikiFile.close()
     CLOCK = Clock()
-    for i in range(0,len(verb_list)):
-        word=normalized_concept_name(default_language,verb_list[i]) # Lemmatization+stemming
-        for noun in associatedWords(word,{'/r/RelatedTo','/r/DerivedFrom','/r/CapableOf','/r/Synonym'}):
-            database.add(verb_list[i],noun)
-        CLOCK.time_step(verb_list[i],i+1,len(verb_list))
+    for verb in verbsSet:
+        for noun in associatedWords(verb,{'/r/RelatedTo','/r/DerivedFrom','/r/CapableOf','/r/Synonym'}):
+            database.add(verb,noun)
+        CLOCK.time_step(verb,i+1,len(verb))
         if (i+1)%300 == 0: # save every 300 verbs (~ 20 min), in case of crash
-            database.save('nouns.%d.pickle' % (i+1))
-    database.save('nouns.pickle')
+            database.save('nounification.%d.pickle' % (i+1))
+    database.save('nounification.pickle')
