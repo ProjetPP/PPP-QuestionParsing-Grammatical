@@ -26,7 +26,7 @@ class RequestHandlerTest(PPPTestCase(app)):
         tree = answer[0].tree
         self.assertIsInstance(tree, Triple)
         predicate = tree.predicate
-        self.assertEqual(predicate, Resource('birth date'))
+        self.assertEqual(predicate, Resource(['birth time','birth date']))
         self.assertIsInstance(tree.object, Missing)
         self.assertIsInstance(tree.subject, Triple)
         tree = tree.subject
@@ -51,9 +51,9 @@ class RequestHandlerTest(PPPTestCase(app)):
         self.assertEqual(len(l), 2, l)
         self.assertEqual(l[0].list[0], Triple(
                 Resource('Le Petit Prince'),
-                Resource('writer'),
+                Resource(['author','writer']),
                 Missing()))
         self.assertEqual(l[1].list[0], Triple(
                 Resource('Vol de Nuit'),
-                Resource('writer'),
+                Resource(['author','writer']),
                 Missing()))
