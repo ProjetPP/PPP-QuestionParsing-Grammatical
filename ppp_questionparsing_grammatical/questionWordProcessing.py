@@ -124,8 +124,8 @@ def processQuestionInfo(t,w,excMap=questionExcept,addMap=questionAdd,wisMap=ques
             if checkSubInfo(t,w): # identity (be) + no info about w in the sons of the root
                 t.wordList = [[Word(s,1001)] for s in wisMap[w]] # replace wordList according to the question word
             else: # do not take the root of t into account into the normalized form
-                assert len(t.child) == 1
-                t.child[0].dependency = 'R0' # !!!!!!!
+                for n in t.child:
+                    n.dependency = 'R0' # !!!!!!!
         elif not checkLists(t.wordList,excMap[w]): # doesn't contain 'identity' + no info about w
             t.wordList = [l + [Word(s,1001)] for l in t.wordList for s in addMap[w]]
     except KeyError:
