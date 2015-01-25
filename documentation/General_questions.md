@@ -11,7 +11,7 @@ General
 * data model : autoriser des listes de prédicats dans les sort ?
 * réecrire demo3 pour le rendre dépendant de DependencyTree
 * ! list += != append
-* t5 peut être enleve
+* t5 peut être enlevé
 * prepMerge: plus de merge parent/fils si conj dependency
 * processQuestionWord doit être exécuter en dernier car ...
 * les mots de position 1000 sont les connecteurs
@@ -22,7 +22,9 @@ General
 * Traiter question word sur forme normalisée ? 
     >> garantir qu'en entrée de normalize chaque noeud contient une seule alternative
     >> ajout des infos sur les premières feuilles / prédicats / ...
-    >> seul les prédicats peuvent contenir des alternatives < le garantir
+    >> seul les prédicats peuvent contenir des alternatives > le garantir
+* Vérifier que les positions/tag sont bien gérées (en particulier sur les alternatives
+
 Gestion des prep(c)_x
 =====================
 
