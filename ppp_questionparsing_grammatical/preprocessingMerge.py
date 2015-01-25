@@ -1,6 +1,5 @@
 import sys
 import os
-from nltk.corpus import wordnet as wn
 from .data.exceptions import NounificationError
 from .nounDB import Nounificator
 
