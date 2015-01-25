@@ -49,11 +49,11 @@ class RequestHandlerTest(PPPTestCase(app)):
         self.assertIsInstance(tree, Intersection)
         l = tree.list
         self.assertEqual(len(l), 2, l)
-        self.assertEqual(l[0].list[0], Triple(
+        self.assertEqual(l[0], Triple(
                 Resource('Le Petit Prince'),
-                Resource(['author','writer']),
+                Resource(['writer','author']),
                 Missing()))
-        self.assertEqual(l[1].list[0], Triple(
+        self.assertEqual(l[1], Triple(
                 Resource('Vol de Nuit'),
-                Resource(['author','writer']),
+                Resource(['writer','author']),
                 Missing()))
