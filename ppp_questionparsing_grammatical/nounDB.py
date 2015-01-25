@@ -25,8 +25,8 @@ class Nounificator:
         f.close()
 
     def display(self):
-        for key in self.verbToNouns.keys():
-            print('%s\t:%s' % (key,str(self.verbToNouns[key])))
+        for key, value in sorted(self.verbToNouns.items()):
+            print('%s\t:%s' % (key,str(value)))
 
     def add(self,verb,noun):
         try:
