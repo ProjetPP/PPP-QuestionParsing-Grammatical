@@ -9,4 +9,3 @@ ppp_questionparsing_grammatical.egg-info/
 htmlcov
 *.png
 *.orig
-*.pickle
