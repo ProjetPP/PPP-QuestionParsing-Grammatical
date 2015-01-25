@@ -2,7 +2,6 @@ import sys
 import os
 from nltk.corpus import wordnet as wn
 from .data.exceptions import NounificationError
-from .data.nounification import nounificationDict
 from .nounDB import Nounificator
 
 ########################################
