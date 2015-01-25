@@ -64,7 +64,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(w.standardize(lmtzr),['death'])
         self.assertEqual(w,Word('die',1,'V'))
         w=Word('write',1,'V')
-        self.assertEqual(w.standardize(lmtzr),['writer','author'])
+        self.assertEqual(w.standardize(lmtzr),['author','writer'])
         self.assertEqual(w,Word('write',1,'V'))
         w=Word('was',1,'V')
         self.assertEqual(w.standardize(lmtzr),['identity'])

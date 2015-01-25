@@ -51,9 +51,9 @@ class RequestHandlerTest(PPPTestCase(app)):
         self.assertEqual(len(l), 2, l)
         self.assertEqual(l[0], Triple(
                 Resource('Le Petit Prince'),
-                Resource(['writer','author']),
+                Resource(['author','writer']),
                 Missing()))
         self.assertEqual(l[1], Triple(
                 Resource('Vol de Nuit'),
-                Resource(['writer','author']),
+                Resource(['author','writer']),
                 Missing()))

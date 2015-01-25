@@ -120,7 +120,7 @@ class StandardTripleTests(TestCase):
             },
             "type": "triple",
             "predicate": {
-                "value": ["writer","author"],
+                "value": ["author","writer"],
                 "type": "resource"
             }
         },
@@ -134,7 +134,7 @@ class StandardTripleTests(TestCase):
             },
             "type": "triple",
             "predicate": {
-                "value": ["writer","author"],
+                "value": ["author","writer"],
                 "type": "resource"
             }
         }
