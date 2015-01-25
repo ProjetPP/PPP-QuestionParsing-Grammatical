@@ -37,7 +37,7 @@ class Clock:
     def time_step(self,s,done,total):
         toc = time.time()
         remaining_time = (toc-self.tic)*(total-done)/done
-        print("%s\t-- %s" % (self.format_time(round(remaining_time)),s))
+        print("%s  \t-- %s (%d/%d)" % (self.format_time(round(remaining_time)),s,done,total))
 
 CLOCK = None
 
@@ -154,10 +154,14 @@ def test(verb):
 if __name__ == "__main__":
     database = nounDB.Nounificator()
     CLOCK = Clock()
+    print('number of verbs: ' + str(len(verbsSet)))
+    i=0
     for verb in verbsSet:
         for noun in associatedWords(verb,{'/r/RelatedTo','/r/DerivedFrom','/r/CapableOf','/r/Synonym'}):
             database.add(verb,noun)
-        CLOCK.time_step(verb,i+1,len(verb))
+        CLOCK.time_step(verb,i+1,len(verbsSet))
         if (i+1)%300 == 0: # save every 300 verbs (~ 20 min), in case of crash
+            print("Database saving...")
             database.save('nounification.%d.pickle' % (i+1))
+        i += 1
     database.save('nounification.pickle')
