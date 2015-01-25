@@ -55,3 +55,7 @@ class Nounificator:
 
     def exists(self,verb):
         return verb in self.verbToNouns
+
+    def merge(self,n):
+        for key, value in n.verbToNouns.items():
+            self.addList(key,value)

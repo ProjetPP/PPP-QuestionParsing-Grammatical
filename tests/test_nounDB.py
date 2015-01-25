@@ -27,6 +27,10 @@ class DependenciesTreeTests(TestCase):
         self.assertTrue('t' in n.toNouns('u'))
         n.removeVerb('u')
         self.assertFalse(n.exists('u'))
+        m = Nounificator()
+        m.add('k','l')
+        n.merge(m)
+        self.assertTrue('l' in n.toNouns('k'))
 
     def testPickle(self):
         n = Nounificator()
