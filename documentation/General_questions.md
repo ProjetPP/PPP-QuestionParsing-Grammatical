@@ -24,6 +24,7 @@ General
     >> ajout des infos sur les premières feuilles / prédicats / ...
     >> seul les prédicats peuvent contenir des alternatives > le garantir
 * Vérifier que les positions/tag sont bien gérées (en particulier sur les alternatives
+* Ecrire des Readme ('bla bla'.split(' '))
 
 Gestion des prep(c)_x
 =====================

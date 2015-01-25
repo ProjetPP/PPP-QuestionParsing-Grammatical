@@ -30,13 +30,15 @@ class Nounificator:
 
     def add(self,verb,noun):
         try:
-            self.verbToNouns[verb].append(noun)
+            if not noun in self.verbToNouns[verb]:
+                self.verbToNouns[verb].append(noun)
         except:
             self.verbToNouns[verb] = [noun]
 
     def addList(self,verb,nounList):
         try:
-            self.verbToNouns[verb] += nounList
+            for n in nounList:
+                self.add(verb,n)
         except:
             self.verbToNouns[verb] = nounList
 

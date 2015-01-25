@@ -9,9 +9,9 @@ import difflib # string similarity
 from conceptnet5.nodes import normalized_concept_name, uri_to_lemmas
 from nltk import word_tokenize, pos_tag
 from nltk.corpus import wordnet as wn
-#parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-#os.sys.path.insert(0,parentdir)
-#os.environ['PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'] = '../example_config.json'
+parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.sys.path.insert(0,parentdir)
+os.environ['PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'] = '../example_config.json'
 from ppp_questionparsing_grammatical import nounDB
 
 default_language = 'en'
