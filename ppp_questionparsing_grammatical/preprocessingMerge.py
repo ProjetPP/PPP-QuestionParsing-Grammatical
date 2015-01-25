@@ -49,9 +49,9 @@ class Word:
             Return the list of strings that must replaced self.word if nounification is necessary (ie if the word is a verb), [] otherwise
         """
         if self.pos and self.pos[0] == 'N':
-            self.word=lmtzr.lemmatize(self.word,'n')
+            self.word=lmtzr.lemmatize(self.word.lower(),'n')
         elif self.pos and self.pos[0] == 'V':
-            self.word=lmtzr.lemmatize(self.word,'v')
+            self.word=lmtzr.lemmatize(self.word.lower(),'v')
             return self.nounify()
         return []
 
