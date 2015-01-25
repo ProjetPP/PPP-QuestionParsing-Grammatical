@@ -238,6 +238,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(prime.subtreeType,'PERSON')
         self.assertEqual(prime.dfsTag,0)        
 
+    """
     def testYesNoQuestion(self):
         tree=computeTree(data.give_born()['sentences'][0])
         simplify(tree)
@@ -269,7 +270,8 @@ class HierarchyTests(TestCase):
         self.assertEqual(len(date.child),0)
         self.assertEqual(date.subtreeType,'undef')
         self.assertEqual(date.dfsTag,0)
-        
+    """
+
     def testNoQW(self):
         tree=computeTree(data.birth_date()['sentences'][0])
         simplify(tree)

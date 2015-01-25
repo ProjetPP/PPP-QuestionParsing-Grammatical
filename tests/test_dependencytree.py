@@ -69,9 +69,6 @@ class DependenciesTreeTests(TestCase):
         w=Word('was',1,'V')
         self.assertEqual(w.standardize(lmtzr),['identity'])
         self.assertEqual(w,Word('be',1,'V'))
-        w=Word('fooverb',1,'V')
-        self.assertEqual(w.standardize(lmtzr),[])
-        self.assertEqual(w,Word('fooverb',1,'V'))
 
     def testBasicTreeConstructor(self):
         n = DependenciesTree('foo',1)

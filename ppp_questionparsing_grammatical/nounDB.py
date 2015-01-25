@@ -14,6 +14,16 @@ class Nounificator:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
+    def load(self,file_name):
+        f = open(file_name, 'rb')
+        self.verbToNouns = pickle.load(f)
+        f.close()
+
+    def save(self,file_name):
+        f = open(file_name, 'wb')
+        pickle.dump(self.verbToNouns, f)
+        f.close()
+
     def display(self):
         for key in self.verbToNouns.keys():
             print('%s\t:%s' % (key,str(self.verbToNouns[key])))
@@ -24,20 +34,22 @@ class Nounificator:
         except:
             self.verbToNouns[verb] = [noun]
 
+    def addList(self,verb,nounList):
+        try:
+            self.verbToNouns[verb] += nounList
+        except:
+            self.verbToNouns[verb] = nounList
+
     def remove(self,verb,noun):
         self.verbToNouns[verb].remove(noun)
         if self.verbToNouns[verb] == []:
             self.verbToNouns.pop(verb)
 
+    def removeVerb(self,verb):
+        self.verbToNouns.pop(verb)
+
     def toNouns(self,verb):
         return self.verbToNouns[verb]
 
-    def load(self,file_name):
-        f = open(file_name, 'rb')
-        self.verbToNouns = pickle.load(f)
-        f.close()
-
-    def save(self,file_name):
-        f = open(file_name, 'wb')
-        pickle.dump(self.verbToNouns, f)
-        f.close()
+    def exists(self,verb):
+        return verb in self.verbToNouns

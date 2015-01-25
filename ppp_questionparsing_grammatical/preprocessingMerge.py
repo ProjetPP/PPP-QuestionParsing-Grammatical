@@ -1,11 +1,18 @@
 import sys
+import os
 from nltk.corpus import wordnet as wn
-from .data.exceptions import GrammaticalError, QuotationError
+from .data.exceptions import NounificationError
 from .data.nounification import nounificationDict
+from .nounDB import Nounificator
 
 ########################################
 # Word lemmatization and nounification #
 ########################################
+
+nManual = Nounificator()
+nManual.load(os.path.join(os.path.dirname(__file__), 'data/nounificationManual.pickle'))
+nAuto = Nounificator()
+nAuto.load(os.path.join(os.path.dirname(__file__), 'data/nounificationAuto.pickle'))
 
 class Word:
     """
@@ -25,44 +32,17 @@ class Word:
     def __lt__(self, other):
         assert isinstance(other,Word)
         return (self.index,self.word,self.pos) < (other.index,other.word,other.pos)
-
-    def nounifyScratch(self):
-        """ 
-            Return the string list of the closest nouns to self (die -> death)
-            Assume that the POS tag of self is verb
-            From George-Bogdan Ivanov on StackOverflow: http://stackoverflow.com/a/16752477/4110059
-        """
-        synsets = wn.synsets(self.word, pos="v")
-        if not synsets: # Word not found
-            return []
-        # Get all lemmas of the word (consider 'a'and 's' equivalent)
-        for s in synsets:
-            lemmas = [l for l in s.lemmas() if s.name().split('.')[1] == "v"]
-        # Get related forms
-        derivationally_related_forms = [(l, l.derivationally_related_forms()) for l in lemmas]
-        # filter only the desired pos (consider 'a' and 's' equivalent)
-        related_noun_lemmas = [l for drf in derivationally_related_forms
-                                 for l in drf[1] 
-                                 if l.synset().name().split('.')[1] == "n"]
-        # Extract the words from the lemmas
-        words = [l.name() for l in related_noun_lemmas]
-        len_words = len(words)
-        # Build the result in the form of a list containing tuples (word, probability)
-        result = [(w, float(words.count(w))/len_words) for w in set(words)]
-        result.sort(key=lambda w: -w[1]) # sorted by probability
-        # return the x most relevant nouns
-        len_min = min(20,len(result))
-        return [result[i][0] for i in range(0,len_min)]
        
     def nounify(self):
         """
             Return the string list of the closest nouns to self (die -> death)
             Replace by hard-coded exceptions if they exist (e.g. be, have, do, bear...)
         """
-        if self.word in nounificationDict:
-            return nounificationDict[self.word]
-        else:
-            return self.nounifyScratch()
+        if nManual.exists(self.word):
+            return nManual.toNouns(self.word)
+        if nAuto.exists(self.word):
+            return nAuto.toNouns(self.word)
+        raise NounificationError(self.word,"cannot nounify this word")
 
     def standardize(self,lmtzr):
         """
