@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ppp_questionparsing_grammatical',
-    version='0.4.7',
+    version='0.4.8',
     description='Natural language processing module for the PPP.',
     url='https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical',
     author='Projet Pensées Profondes',
@@ -25,6 +25,7 @@ setup(
         'Topic :: Software Development :: Libraries',
     ],
     install_requires=[
+        'python3-memcached',
         'ppp_datamodel>=0.5,<0.7',
         'ppp_libmodule>=0.6,<0.8',
         'jsonrpclib-pelix',
