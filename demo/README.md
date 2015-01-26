@@ -1,6 +1,6 @@
-# How to test the question parsing algorithm
+# How to test the Question Parsing algorithm
 
-The files `demo*.py` enable you to test the main steps of the question parsing algorithm. You first need to launch a CoreNLP server, and then run a demo file.
+The files `demo*.py` enable you to test the main steps of the Question Parsing algorithm. You first need to launch a CoreNLP server, and then run a demo file.
 
 ## Launching a server
 

@@ -10,13 +10,13 @@ Question Parsing module for the PPP using a grammatical approach.
 
 With a recent version of pip:
 
-```
+```bash
 pip3 install git+https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical.git
 ```
 
 With an older one:
 
-```
+```bash
 git clone https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical.git
 cd PPP-QuestionParsing-Grammatical
 python3 setup.py install
