@@ -33,7 +33,7 @@ The folder `demo/` contains some demo files and a readme `README.md` that explai
 ## Overview of the main folders
 
 * `deep_tests` and `tests`: unit tests of the project
-* `ppp_questionparsing_grammatical`: 
-* `documentation`: some files that exposes our current thinking on the project (mainly drafts)
+* `ppp_questionparsing_grammatical`: main code of the project
+* `documentation`: some files that expose our current thinking on the project (mainly drafts)
 * `demo`: demo files to test the algorithms
 * `nounification`: scripts used to compute the nounification database
