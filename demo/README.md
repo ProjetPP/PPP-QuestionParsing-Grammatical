@@ -25,7 +25,7 @@ Here is a description of the demo files:
 
 ## Examples
 
-Here is some example on the input question `Where is the capital of Belgium?`.
+Here is some examples on the input question `Where is the capital of Belgium?`.
 
 * Save the dependency graph in dot format into `demo.dot`: 
 ```bash
@@ -58,9 +58,7 @@ Where is the capital of Belgium?
 
 ## Dataset generation
 
-Useful for ML modules.
-
-We assume that a server is launched, and that the input questions are in a file `dataset.in`.
+Fill in a file `dataset.in` with one question per line. Run the following code to parse each question and save its normal form into `dataset.out`:
 
 ```bash
 python3 datasetGeneration.py < dataset.in > dataset.out 2> dataset.error
