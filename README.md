@@ -24,8 +24,16 @@ python3 setup.py install
 
 Use the `--user` option if you want to install it only for the current user.
 
+You can install the main dependencies (especially CoreNLP) using the script file `bootstrap_corenlp.sh` from https://github.com/ProjetPP/Scripts (run `bash bootstrap_corenlp.sh`).
 
-## Overview
+## How to test
 
-* To have a brief overview of the latest functionalities of this module, check the `demo` folder.
-* To have a better understanding of the theory behind the code, check the `documentation` folder.
+The folder `demo/` contains some demo files and a readme `README.md` that explains how to use them.
+
+## Overview of the main folders
+
+* `deep_tests` and `tests`: unit tests of the project
+* `ppp_questionparsing_grammatical`: 
+* `documentation`: some files that exposes our current thinking on the project (mainly drafts)
+* `demo`: demo files to test the algorithms
+* `nounification`: scripts used to compute the nounification database
