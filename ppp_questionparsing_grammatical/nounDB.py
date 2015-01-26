@@ -36,11 +36,8 @@ class Nounificator:
             self.verbToNouns[verb] = [noun]
 
     def addList(self,verb,nounList):
-        try:
-            for n in nounList:
-                self.add(verb,n)
-        except:
-            self.verbToNouns[verb] = nounList
+        for n in nounList:
+            self.add(verb,n)
 
     def remove(self,verb,noun):
         self.verbToNouns[verb].remove(noun)

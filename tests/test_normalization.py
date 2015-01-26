@@ -1,6 +1,6 @@
 import json
 
-from ppp_questionparsing_grammatical import computeTree, simplify, DependenciesTree, QuotationHandler, normalize
+from ppp_questionparsing_grammatical import computeTree, simplify, DependenciesTree, QuotationHandler, normalize, GrammaticalError
 #from ppp_datamodel import Resource, Missing
 import data
 
@@ -262,3 +262,7 @@ class StandardTripleTests(TestCase):
     },
     "type": "last"
 })
+
+    def testCop(self):
+        tree = computeTree(data.black()['sentences'][0])
+        self.assertRaises(GrammaticalError, lambda: simplify(tree))

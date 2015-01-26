@@ -1,6 +1,6 @@
 import json
 from nltk.stem.wordnet import WordNetLemmatizer
-from ppp_questionparsing_grammatical import Word, QuotationHandler, DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother, QuotationError
+from ppp_questionparsing_grammatical import Word, QuotationHandler, DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother, QuotationError, NounificationError
 import data
 
 from unittest import TestCase
@@ -69,6 +69,8 @@ class DependenciesTreeTests(TestCase):
         w=Word('was',1,'V')
         self.assertEqual(w.standardize(lmtzr),['identity'])
         self.assertEqual(w,Word('be',1,'V'))
+        w=Word('fooverb',1,'V')
+        self.assertRaises(NounificationError, lambda: w.standardize(lmtzr))
 
     def testBasicTreeConstructor(self):
         n = DependenciesTree('foo',1)
