@@ -9,7 +9,7 @@ class Nounificator:
         self.verbToNouns = {}
 
     def __str__(self):
-        return self.verbToNouns.__str__()
+        return '\n'.join(["%s:\t%s" % (x,str(self.verbToNouns[x])) for x in self.verbToNouns.keys()])
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -23,10 +23,6 @@ class Nounificator:
         f = open(file_name, 'wb')
         pickle.dump(self.verbToNouns, f)
         f.close()
-
-    def display(self):
-        for key, value in sorted(self.verbToNouns.items()):
-            print('%s\t:%s' % (key,str(value)))
 
     def add(self,verb,noun):
         try:
