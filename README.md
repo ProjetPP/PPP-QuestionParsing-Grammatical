@@ -28,7 +28,7 @@ For instance, we aim at producing the triple `(Rwanda,president,?)` from the que
 }
 ```
 
-See [our website](http://projetpp.github.io/) to learn more about our project and [test our question answering tool](http://askplatyp.us/).
+See [our website](http://projetpp.github.io/) to learn more about the project and [test our question answering tool](http://askplatyp.us/).
 
 ## How to install
 
@@ -48,7 +48,7 @@ python3 setup.py install
 
 Use the `--user` option if you want to install it only for the current user.
 
-You can install the main dependencies (especially CoreNLP) using the script file `bootstrap_corenlp.sh` from https://github.com/ProjetPP/Scripts (run `bash bootstrap_corenlp.sh`).
+You can install the main dependencies (especially CoreNLP) using the script file `bootstrap_corenlp.sh` from https://github.com/ProjetPP/Scripts (clone the `Scripts` repository and run `bash bootstrap_corenlp.sh`).
 
 ## How to test
 
