@@ -6,7 +6,7 @@ The files `demo*.py` enable you to test the main steps of the Question Parsing a
 
 May need to install [jsonrpclib](https://github.com/tcalmant/jsonrpclib) (for python3).
 
-Go to the folder where CoreNLP is installed (`Scripts/` folder if you have git clone the [scripts repository](https://github.com/ProjetPP/Scripts) and run `bash bootstrap_corenlp.sh`). Run:
+Go to the folder where CoreNLP is installed (`Scripts/` folder if you have cloned the [scripts repository](https://github.com/ProjetPP/Scripts) and run `bash bootstrap_corenlp.sh`). Run:
 
 ```bash
 CORENLP="stanford-corenlp-full-2014-08-27" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp
@@ -16,7 +16,7 @@ CORENLP="stanford-corenlp-full-2014-08-27" CORENLP_OPTIONS="-parse.flags \" -mak
 
 Here is a description of the demo files:
 
-* `demo1.py`: Output the direct answer of CoreNLP (this file is the only one that does not need to run a server. On the other hand, it's really slow. Moreover, copula relations are not removed)
+* `demo1.py`: Output the dependency relations graph from CoreNLP (this file is the only one that does not need to run a server. On the other hand, it's really slow. Moreover, copula relations are not removed)
 * `demo2.py`: Output the dependency relations graph from CoreNLP
 * `demo3.py`: Output the dependency relations graph from CoreNLP in dot format
 * `demo4.py`: Output the dependency graph in dot format after preprocessing simplifications (merging of some nodes)
