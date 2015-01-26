@@ -8,3 +8,4 @@ ppp_questionparsing_grammatical.egg-info/
 .coverage
 htmlcov
 *.png
+*.orig

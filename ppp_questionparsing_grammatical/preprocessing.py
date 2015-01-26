@@ -1,5 +1,5 @@
 import sys
-from .preprocessingMerge import Word, mergeNamedEntityTag, buildWord
+from .preprocessingMerge import Word, mergeNamedEntityTag
 from .data.exceptions import QuotationError
 from copy import deepcopy
 import random
@@ -10,8 +10,8 @@ class DependenciesTree:
         One node of the parse tree.
         It is a group of words of the initial sentence.
     """
-    def __init__(self, word, namedEntityTag='undef', subtreeType='undef', dependency='undef', child=None, parent=None):
-        self.wordList = [buildWord(word)]     # list of the words contained in the node 
+    def __init__(self, word, start=1000, namedEntityTag='undef', subtreeType='undef', dependency='undef', child=None, parent=None):
+        self.wordList = [[Word(word,start)]]  # list of the expressions/alternatives contained into the node. Each sub-list is a list of Words
         self.namedEntityTag = namedEntityTag  # NER tag (location, ...)
         self.subtreeType = subtreeType        # type of the info represented by the subtree
         self.dependency = dependency          # dependency from self to its parent
@@ -31,12 +31,22 @@ class DependenciesTree:
         else:
             for t in self.child:
                 n = t.dfsAnnotate(n)
-            self.dfsTag = n+1
+            self.dfsTag = n
             return n+1
+
+    def sort(self):
+        """
+            Sorting the wordLists of the tree
+        """
+        for t in self.child:
+            t.sort()
+        self.wordList.sort()
+        for alt in self.wordList:
+            alt.sort(key = lambda x: x.index)
 
     def string(self):
         # Concatenation of the words of the root
-        w = self.getWords()
+        w = self.printWords()
         s=''
         # Adding the definition of the root (dot format)
         t=''
@@ -44,12 +54,13 @@ class DependenciesTree:
             t+= " [{0}]".format(self.namedEntityTag)
         if self.subtreeType != 'undef':
             t+= " [$ {0}]".format(self.subtreeType)
-        s+="\t\"{0}\"[label=\"{1}{2}\",shape=box];\n".format(self.wordList[0].word+str(self.dfsTag),w,t)
+        s+="\t\"{0}\"[label=\"{1}{2}\",shape=box];\n".format(str(self.dfsTag),w,t)
         # Adding definitions of the edges
         for n in self.child:
-            s+="\t\"{0}\" -> \"{1}\"[label=\"{2}\"];\n".format(self.wordList[0].word+str(self.dfsTag),n.wordList[0].word+str(n.dfsTag),n.dependency)
+            s+="\t\"{0}\" -> \"{1}\"[label=\"{2}\"];\n".format(str(self.dfsTag),str(n.dfsTag),n.dependency)
         # Recursive calls
         for n in self.child:
+            assert n.parent == self
             s+=n.string()
         return s
 
@@ -63,30 +74,38 @@ class DependenciesTree:
     def merge(self,other,mergeWords):
         """
             Merge the root of the two given trees into one single node.
-            Merge the two wordList if mergeWords=True (otherwise only keep the WordList of self).
+            Merge the two wordList if mergeWords=True (otherwise only keep the wordList of self).
             The result is stored in node 'self'.
         """
         self.child += other.child
         for c in other.child:
             c.parent = self
         if mergeWords:
-          self.wordList = other.wordList + self.wordList
-          self.wordList.sort(key = lambda x: x.index)
+            self.wordList = [w+v for w in self.wordList for v in other.wordList] # ??? is it ok ???
         if other.parent:
             other.parent.child.remove(other)
         other.wordList = None
 
     def getWords(self):
         """
-            concatenate all strings of the node (in wordList)
+            List of alternatives strings contained into wordList
         """
-        self.wordList.sort(key = lambda x: x.index)
-        result = self.wordList[0].word
-        for i in range(1,len(self.wordList)):
-            if self.wordList[i].pos != 'POS':
-                result += " "
-            result += self.wordList[i].word
-        return result
+        l = []
+        for alt in self.wordList:
+            alt.sort(key = lambda x: x.index)
+            result = alt[0].word
+            for i in range(1,len(alt)):
+                if alt[i].pos != 'POS':
+                    result += " "
+                result += alt[i].word
+            l.append(result)
+        return l
+
+    def printWords(self):
+        """
+            Concatenation of all the alternatives strings contained into wordList, separated by |
+        """
+        return ' | '.join(self.getWords())
 
 def index(l,pred):
     """
@@ -150,14 +169,16 @@ class QuotationHandler:
         """
         for c in tree.child:
             self.push(c)
+        assert len(tree.wordList) == 1
         replaced = False
-        for i in range(0,len(tree.wordList)):
-            try:
-                tree.wordList[i].word = self.quotations[tree.wordList[i].word]
-                tree.wordList[i].pos = 'QUOTE'
-                replaced = True
-            except KeyError:
-                continue
+        for w in tree.wordList:
+            for i in range(0,len(w)):
+                try:
+                    w[i].word = self.quotations[w[i].word]
+                    w[i].pos = 'QUOTE'
+                    replaced = True
+                except KeyError:
+                    continue
         if replaced:
             tree.namedEntityTag = 'QUOTATION'
         for key in self.quotations.keys():
@@ -173,12 +194,12 @@ def computeEdges(r,nameToNodes):
         try:
             n1 = nameToNodes[edge[1]]
         except KeyError:
-            n1 = DependenciesTree(edge[1])
+            n1 = DependenciesTree(edge[1][:edge[1].rindex('-')],int(edge[1][edge[1].rindex('-')+1:]))
             nameToNodes[edge[1]] = n1
         try:
             n2 = nameToNodes[edge[2]]
         except KeyError:
-            n2 = DependenciesTree(edge[2])
+            n2 = DependenciesTree(edge[2][:edge[2].rindex('-')],int(edge[2][edge[2].rindex('-')+1:]))
             nameToNodes[edge[2]] = n2
         # n1 is the parent of n2
         n1.child = n1.child+[n2]
@@ -199,8 +220,8 @@ def computeTags(r,nameToNodes):
             w=word[0]+'-'+str(index) # key in the nameToNodes map
             try:
                 n = nameToNodes[w]
-                assert len(n.wordList) == 1
-                n.wordList[0].pos = word[1]['PartOfSpeech']
+                assert len(n.wordList) == 1 and len(n.wordList[0]) == 1
+                n.wordList[0][0].pos = word[1]['PartOfSpeech']
                 if word[1]['NamedEntityTag'] != 'O':
                     n.namedEntityTag = word[1]['NamedEntityTag']
             except KeyError:        # this node does not exists (e.g. 'of' preposition)

@@ -4,7 +4,6 @@ from .preprocessing import DependenciesTree
 from .preprocessingMerge import Word
 from copy import deepcopy
 from nltk.stem.wordnet import WordNetLemmatizer
-from nltk.stem.porter import PorterStemmer
 from .data.exceptions import GrammaticalError
 from .data.questionWord import strongQuestionWord
 
@@ -21,15 +20,17 @@ def merge(t,qw):
     t.parent.merge(t,True)
 
 def amodRule(t,qw):
-    if t.namedEntityTag != 'ORDINAL' and t.wordList[0].pos != 'JJS': # [0] : must be improve (search in the whole list?)
+    if t.namedEntityTag != 'ORDINAL' and t.wordList[0][0].pos != 'JJS': # [0] : must be improve (search in the whole list?)
         assert t.parent is not None
         merge(t,qw)
     else:
         t.dependency = 'connectorUp'
 
 def nsubjRule(t,qw):
-    if qw in strongQuestionWord or len(t.child) == 0: # Warning: length can decrease during analysis > needs also the R2 tag
+    if qw in strongQuestionWord: # or len(t.child) == 0: # Warning: length can decrease during analysis > needs also the R2 tag
         t.dependency = 'R5s' # same as R5 except that types are propagated
+    elif t.parent.getWords() != ['identity']:
+        t.dependency = 'R3'
     else:
         t.dependency = 'R2'
         
@@ -192,7 +193,7 @@ def conjConnectorsUp(t):
             parentTemp.child.remove(t.parent) # son(n0) \= n1
             parentTemp.child.append(t) # son(n0)=n2
             t.parent = parentTemp # parent(n2) = n0
-            newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,parentTemp], parentTemp.parent)
+            newTree = DependenciesTree(depSave, dependency=parentTemp.dependency, child=[dupl,parentTemp], parent=parentTemp.parent)
             parentTemp.dependency = 'RconjB'
             parentTemp.parent = newTree
         else:
@@ -202,7 +203,7 @@ def conjConnectorsUp(t):
             t.child += t.parent.child # son(n2) = son(n1)
             for n in t.child:
                 n.parent = t
-            newTree = DependenciesTree(depSave, 'undef', 'undef', parentTemp.dependency, [dupl,t], parentTemp.parent)
+            newTree = DependenciesTree(depSave, dependency=parentTemp.dependency, child=[dupl,t], parent=parentTemp.parent)
             t.dependency = 'RconjB'
             t.parent = newTree
         newTree.parent.child.remove(parentTemp)
@@ -213,20 +214,22 @@ def conjConnectorsUp(t):
         for c in temp:
             conjConnectorsUp(c)
 
-def subStandardize(t,lmtzr,st):
+def subStandardize(t,lmtzr):
     for c in t.child:
-        subStandardize(c,lmtzr,st)
+        subStandardize(c,lmtzr)
     if t.namedEntityTag == 'undef':
-        for w in t.wordList:
-            w.standardize(lmtzr,st)
+        assert len(t.wordList) == 1 and len(t.wordList[0]) == 1 # only [0][0] ?
+        w = t.wordList[0][0]
+        l = w.standardize(lmtzr)
+        if l !=[]:
+            t.wordList = [[Word(x,w.index,w.pos)] for x in l]
 
 def standardize(t):
     """
         Apply lemmatization + nounification
     """
     lmtzr = WordNetLemmatizer()
-    st = PorterStemmer()
-    subStandardize(t,lmtzr,st) # standardize words (lemmatization + nounify nouns)
+    subStandardize(t,lmtzr) # standardize words (lemmatization + nounify nouns)
 
 def simplify(t):
     """

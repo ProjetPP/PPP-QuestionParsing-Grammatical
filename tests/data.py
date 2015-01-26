@@ -68,15 +68,15 @@ def give_john_smith():
 # Dot representation of the tree for "John Smith lives in the United Kingdom."
 def give_john_smith_string():
     s="digraph relations {\n"
-    s+="\t\"ROOT5\"[label=\"ROOT\",shape=box];\n"
-    s+="\t\"ROOT5\" -> \"lives4\"[label=\"root\"];\n"
-    s+="\t\"lives4\"[label=\"lives\",shape=box];\n"
-    s+="\t\"lives4\" -> \"John0\"[label=\"nsubj\"];\n"
-    s+="\t\"lives4\" -> \"United3\"[label=\"prep_in\"];\n"
-    s+="\t\"John0\"[label=\"John Smith [PERSON]\",shape=box];\n"
-    s+="\t\"United3\"[label=\"United Kingdom [LOCATION]\",shape=box];\n"
-    s+="\t\"United3\" -> \"the1\"[label=\"det\"];\n"
-    s+="\t\"the1\"[label=\"the\",shape=box];\n"
+    s+="\t\"4\"[label=\"ROOT\",shape=box];\n"
+    s+="\t\"4\" -> \"3\"[label=\"root\"];\n"
+    s+="\t\"3\"[label=\"lives\",shape=box];\n"
+    s+="\t\"3\" -> \"0\"[label=\"nsubj\"];\n"
+    s+="\t\"3\" -> \"2\"[label=\"prep_in\"];\n"
+    s+="\t\"0\"[label=\"John Smith [PERSON]\",shape=box];\n"
+    s+="\t\"2\"[label=\"United Kingdom [LOCATION]\",shape=box];\n"
+    s+="\t\"2\" -> \"1\"[label=\"det\"];\n"
+    s+="\t\"1\"[label=\"the\",shape=box];\n"
     s+="\tlabelloc=\"t\"\tlabel=\"John Smith lives in the United Kingdom.\";\n"
     s+="}"
     return s
@@ -501,7 +501,15 @@ def king():
 # Parsing result of "What is the highest mountain of Tanzania?"
 def tanzania():
     return {'sentences': [{'text': 'What is the highest mountain of Tanzania?', 'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['dep', 'is-2', 'What-1'], ['det', 'mountain-5', 'the-3'], ['amod', 'mountain-5', 'highest-4'], ['nsubj', 'is-2', 'mountain-5'], ['prep_of', 'mountain-5', 'Tanzania-7']], 'parsetree': '(ROOT (SBARQ (WHNP (WP What)) (SQ (VBZ is) (NP (NP (DT the) (JJS highest) (NN mountain)) (PP (IN of) (NP (NNP Tanzania))))) (. ?)))', 'words': [['What', {'CharacterOffsetBegin': '0', 'Lemma': 'what', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '4', 'PartOfSpeech': 'WP'}], ['is', {'CharacterOffsetBegin': '5', 'Lemma': 'be', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '7', 'PartOfSpeech': 'VBZ'}], ['the', {'CharacterOffsetBegin': '8', 'Lemma': 'the', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '11', 'PartOfSpeech': 'DT'}], ['highest', {'CharacterOffsetBegin': '12', 'Lemma': 'highest', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '19', 'PartOfSpeech': 'JJS'}], ['mountain', {'CharacterOffsetBegin': '20', 'Lemma': 'mountain', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '28', 'PartOfSpeech': 'NN'}], ['of', {'CharacterOffsetBegin': '29', 'Lemma': 'of', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '31', 'PartOfSpeech': 'IN'}], ['Tanzania', {'CharacterOffsetBegin': '32', 'Lemma': 'Tanzania', 'NamedEntityTag': 'LOCATION', 'CharacterOffsetEnd': '40', 'PartOfSpeech': 'NNP'}], ['?', {'CharacterOffsetBegin': '40', 'Lemma': '?', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '41', 'PartOfSpeech': '.'}]], 'dependencies': [['root', 'ROOT', 'is'], ['dep', 'is', 'What'], ['det', 'mountain', 'the'], ['amod', 'mountain', 'highest'], ['nsubj', 'is', 'mountain'], ['prep_of', 'mountain', 'Tanzania']]}]}
-    
+
+# Parsing result of "When is the birthday of Mickey Mouse?"
+def mickey():
+    return {'sentences': [{'parsetree': '(ROOT (SBARQ (WHADVP (WRB When)) (SQ (VBZ is) (NP (NP (DT the) (NN birthday)) (PP (IN of) (NP (NNP Mickey) (NNP Mouse))))) (. ?)))', 'dependencies': [['root', 'ROOT', 'is'], ['advmod', 'is', 'When'], ['det', 'birthday', 'the'], ['nsubj', 'is', 'birthday'], ['nn', 'Mouse', 'Mickey'], ['prep_of', 'birthday', 'Mouse']], 'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['advmod', 'is-2', 'When-1'], ['det', 'birthday-4', 'the-3'], ['nsubj', 'is-2', 'birthday-4'], ['nn', 'Mouse-7', 'Mickey-6'], ['prep_of', 'birthday-4', 'Mouse-7']], 'text': 'When is the birthday of Mickey Mouse?', 'words': [['When', {'CharacterOffsetBegin': '0', 'CharacterOffsetEnd': '4', 'PartOfSpeech': 'WRB', 'NamedEntityTag': 'O', 'Lemma': 'when'}], ['is', {'CharacterOffsetBegin': '5', 'CharacterOffsetEnd': '7', 'PartOfSpeech': 'VBZ', 'NamedEntityTag': 'O', 'Lemma': 'be'}], ['the', {'CharacterOffsetBegin': '8', 'CharacterOffsetEnd': '11', 'PartOfSpeech': 'DT', 'NamedEntityTag': 'O', 'Lemma': 'the'}], ['birthday', {'CharacterOffsetBegin': '12', 'CharacterOffsetEnd': '20', 'PartOfSpeech': 'NN', 'NamedEntityTag': 'O', 'Lemma': 'birthday'}], ['of', {'CharacterOffsetBegin': '21', 'CharacterOffsetEnd': '23', 'PartOfSpeech': 'IN', 'NamedEntityTag': 'O', 'Lemma': 'of'}], ['Mickey', {'CharacterOffsetBegin': '24', 'CharacterOffsetEnd': '30', 'PartOfSpeech': 'NNP', 'NamedEntityTag': 'PERSON', 'Lemma': 'Mickey'}], ['Mouse', {'CharacterOffsetBegin': '31', 'CharacterOffsetEnd': '36', 'PartOfSpeech': 'NNP', 'NamedEntityTag': 'PERSON', 'Lemma': 'Mouse'}], ['?', {'CharacterOffsetBegin': '36', 'CharacterOffsetEnd': '37', 'PartOfSpeech': '.', 'NamedEntityTag': 'O', 'Lemma': '?'}]]}]}
+
+# Parsing result of "What is black and white?"
+def black():
+    return {'sentences': [{'dependencies': [['root', 'ROOT', 'black'], ['dep', 'black', 'What'], ['cop', 'black', 'is'], ['conj_and', 'black', 'white']], 'indexeddependencies': [['root', 'ROOT-0', 'black-3'], ['dep', 'black-3', 'What-1'], ['cop', 'black-3', 'is-2'], ['conj_and', 'black-3', 'white-5']], 'parsetree': '(ROOT (SBARQ (WHNP (WP What)) (SQ (VBZ is) (ADJP (JJ black) (CC and) (JJ white))) (. ?)))', 'text': 'What is black and white?', 'words': [['What', {'Lemma': 'what', 'NamedEntityTag': 'O', 'PartOfSpeech': 'WP', 'CharacterOffsetEnd': '4', 'CharacterOffsetBegin': '0'}], ['is', {'Lemma': 'be', 'NamedEntityTag': 'O', 'PartOfSpeech': 'VBZ', 'CharacterOffsetEnd': '7', 'CharacterOffsetBegin': '5'}], ['black', {'Lemma': 'black', 'NamedEntityTag': 'O', 'PartOfSpeech': 'JJ', 'CharacterOffsetEnd': '13', 'CharacterOffsetBegin': '8'}], ['and', {'Lemma': 'and', 'NamedEntityTag': 'O', 'PartOfSpeech': 'CC', 'CharacterOffsetEnd': '17', 'CharacterOffsetBegin': '14'}], ['white', {'Lemma': 'white', 'NamedEntityTag': 'O', 'PartOfSpeech': 'JJ', 'CharacterOffsetEnd': '23', 'CharacterOffsetBegin': '18'}], ['?', {'Lemma': '?', 'NamedEntityTag': 'O', 'PartOfSpeech': '.', 'CharacterOffsetEnd': '24', 'CharacterOffsetBegin': '23'}]]}]}
+
 def tripleProductionData():
     '''
         Return data corresponding to a tree (root-0)--dep-->(child-1)
