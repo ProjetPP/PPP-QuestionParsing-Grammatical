@@ -29,7 +29,7 @@ Here is some example on the input question `Where is the capital of Belgium?`.
 
 * Save the dependency graph in dot format into `demo.dot`: 
 ```bash
-  python3 demo3.py > demo.dot
+python3 demo3.py > demo.dot
   Where is the capital of Belgium?
 ```
 
@@ -62,6 +62,6 @@ Useful for ML modules.
 
 We assume that a server is launched, and that the input questions are in a file `dataset.in`.
 
-```
-python3 datasetGeneration.py < dataset.in > dataset.out 2> dataset.error
+```bash
+  python3 datasetGeneration.py < dataset.in > dataset.out 2> dataset.error
 ```
