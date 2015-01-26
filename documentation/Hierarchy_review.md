@@ -140,7 +140,7 @@ dobj
 ##### +++
 
 * What did John Hinckley do to impress Jodie Foster?
-* When did they won the lottery? >> dobj = t4
+* When did they won the lottery?
 * What two US biochemists won the Nobel Prize in medicine in 1992?
 * How many films did Ingmar Bergman make? >> with nsubj
 * Who has written "The Hitchhiker's Guide to the Galaxy"?
@@ -159,7 +159,6 @@ For instance, Wikidata returns a good answer for the triple `(Gandhi, killer, ?)
 
 * Who held the endurance record for women pilots in 1929?
 * How many children does Barack Obama have? > not do an intersection each time a node have several children.
-* What did Eddy Caron write? > Should be (?, writer, Eddy Caron), not (Eddy Caron, writer, ?)
 
 ccomp
 =====
@@ -210,6 +209,7 @@ nsubj
 * What was the first Gilbert and Sullivan opera?
 * Who Clinton defeated?
 * Where is the ENS of Lyon?
+* What did Bob write ? > R3 if weak question word + not 'identity'
 
 num
 ===

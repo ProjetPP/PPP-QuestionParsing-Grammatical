@@ -27,8 +27,10 @@ def amodRule(t,qw):
         t.dependency = 'connectorUp'
 
 def nsubjRule(t,qw):
-    if qw in strongQuestionWord or len(t.child) == 0: # Warning: length can decrease during analysis > needs also the R2 tag
+    if qw in strongQuestionWord: # or len(t.child) == 0: # Warning: length can decrease during analysis > needs also the R2 tag
         t.dependency = 'R5s' # same as R5 except that types are propagated
+    elif t.parent.getWords() != ['identity']:
+        t.dependency = 'R3'
     else:
         t.dependency = 'R2'
         
