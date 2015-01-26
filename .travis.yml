@@ -12,6 +12,7 @@ install:
     - python -m nltk.downloader wordnet
 
 before_script:
+  - ./dependencies.sh
   - ./setup.py install
 
 script:
