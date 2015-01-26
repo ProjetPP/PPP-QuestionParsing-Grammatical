@@ -9,7 +9,7 @@ May need to install [jsonrpclib](https://github.com/tcalmant/jsonrpclib) (for py
 Go to the folder where CoreNLP is installed (`Scripts/` folder if you have git clone the (scripts repository)[https://github.com/ProjetPP/Scripts] and run `bash bootstrap_corenlp.sh`). Run:
 
 ```bash
-  CORENLP="stanford-corenlp-full-2014-08-27" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp
+CORENLP="stanford-corenlp-full-2014-08-27" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp
 ```
 
 ## Choosing a demo file
@@ -30,30 +30,30 @@ Here is some example on the input question `Where is the capital of Belgium?`.
 * Save the dependency graph in dot format into `demo.dot`: 
 ```bash
 python3 demo3.py > demo.dot
-  Where is the capital of Belgium?
+Where is the capital of Belgium?
 ```
 
 * Save the dependency graph in ps format after preprocessing simplifications. Display the graph:
 ```bash
-  python3 demo4.py | dot -Tps > demo.ps
-  Where is the capital of Belgium?
-  evince demo.ps
+python3 demo4.py | dot -Tps > demo.ps
+Where is the capital of Belgium?
+evince demo.ps
 ``` 
 
 * Save the dependency graph in ps format after preprocessing simplifications (more laziness):
 ```bash
-  echo "Where is the capital of Belgium?" | python3 demo4.py | dot -Tps > demo.ps
+echo "Where is the capital of Belgium?" | python3 demo4.py | dot -Tps > demo.ps
 ```
 
 * Display the dependency graph in ps format after preprocessing simplifications (even more laziness):
 ```bash
-  bash displaygraph.sh Where is the capital of Belgium?
+bash displaygraph.sh Where is the capital of Belgium?
 ```
 
 * Display the final normal form:
 ```bash
-  python3 demo6.py
-  Where is the capital of Belgium?
+python3 demo6.py
+Where is the capital of Belgium?
 ``` 
 
 ## Dataset generation
@@ -63,5 +63,5 @@ Useful for ML modules.
 We assume that a server is launched, and that the input questions are in a file `dataset.in`.
 
 ```bash
-  python3 datasetGeneration.py < dataset.in > dataset.out 2> dataset.error
+python3 datasetGeneration.py < dataset.in > dataset.out 2> dataset.error
 ```
