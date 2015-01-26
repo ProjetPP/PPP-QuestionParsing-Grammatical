@@ -13,7 +13,7 @@ May need to install [jsonrpclib](https://github.com/tcalmant/jsonrpclib) (for py
 Go to the folder where CoreNLP is installed (usually the Scripts/ folder) and run:
 
 ```
-CORENLP="stanford-corenlp-full-2014-08-27" python3 -m corenlp
+  CORENLP="stanford-corenlp-full-2014-08-27" python3 -m corenlp
 ```
 
 To remove copula relations (other flags can be passed in the same way):
@@ -43,8 +43,7 @@ Presentation of the output using dot
 
 We assume that a server is launched.
 
-You can have a dot file using the following: `python3 > demo.dot` (then, write
-your sentence).
+You can have a dot file using the following: `python3 > demo.dot` (then, write your sentence).
 
 You can also have directly a ps file using the following: `python3 demo3.py | dot -Tps > demo.ps`
 
@@ -63,6 +62,7 @@ More conveniently, use the script `displaygraph`:
 ./displaygraph.sh Who wrote \"Lucy in the Sky with Diamonds\" and \"Let It Be\"?
 ```
 
+
 Dataset generation
 ==================
 
@@ -80,7 +80,7 @@ Description of demo files
 
 * `demo1.py`: parsing without a server. Output the direct answer of CoreNLP (copula relations not removed)
 * `demo2.py`: Start server before. Output the dependency relations graph from CoreNLP
-* `demo3.py`: Start server before. Output the dependency relations graph from CoreNLP in dot format graph
+* `demo3.py`: Start server before. Output the dependency relations graph from CoreNLP in dot format
 * `demo4.py`: Start server before. Output the dependency graph in dot format after preprocessing simplifications (merging of some nodes)
 * `demo5.py`: Start server before. Output the dependency graph in dot format after dependency analysis
 * `demo6.py`: Start server before. Full algorithm, output normal form (tree of triples+connectors) from question

@@ -33,14 +33,20 @@ def buildWikidataProperties():
     return properties
 
 def buildNouns():
+    """
+        Returns the set of all nouns of NLTK
+    """
     return {x.name().split('.', 1)[0] for x in wn.all_synsets('n')}
 
 def buildVerbs():
+    """
+        Returns the set of all verbs of NLTK
+    """
     return {x.name().split(".", 1)[0] for x in wn.all_synsets("v")}
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        sys.exit("Syntax: ./%s storage_file -<database description> (wiki : Wikidata properties, n : nouns, v : verbs)" % sys.argv[0]) # ex: ./extractors file.pkl -wiki
+        sys.exit("Syntax: ./%s storage_file -<database description> (wiki : Wikidata properties, n : nouns, v : verbs)" % sys.argv[0]) # ex: ./extractors.py file.pkl -wiki
     data = {}
     if sys.argv[2] == '-wiki':
         data = buildWikidataProperties()
@@ -48,6 +54,6 @@ if __name__ == "__main__":
         data = buildNouns()
     if sys.argv[2] == '-v':
         data = buildVerbs()
-    f = open(sys.argv[1], 'wb') # w+ ?
+    f = open(sys.argv[1], 'wb')
     pickle.dump(data,f)
     f.close()

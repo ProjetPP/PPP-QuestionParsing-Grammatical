@@ -29,15 +29,10 @@ manufacture
 spend (on)
 kill        : killer (Desires) or: http://www.wikidata.org/wiki/Property:P157
 make        : directed by (http://www.wikidata.org/wiki/Property:P57)
+go to       : 
 
 Score : 
   - si l'un des 2 mots n'est pas facteur de l'autre (préfixe, suffixe...) : inutile de regarder similarité car les 2 mots différent trop
   - s'autoriser à augmenter la limite de lookup, mais uniquement pour récupérer des mots très similaires (runner)
 
 Relacher le test sur ['identity'] (dans questionWordProcessing.py) : si présent dans la liste (et non plus égal) alors ajouter toutes les combinaisons additionelles (et même garder identity ?)
-
-Traiter à part :
-  be 
-  do
-  have
-  go (to) How to get to the ENS Lyon?

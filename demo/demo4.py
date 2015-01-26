@@ -15,8 +15,6 @@ class StanfordNLP:
     def parse(self, text):
         return json.loads(self.server.parse(text))
 
-
-
 def get_tree():
     nlp = StanfordNLP()
     sentence = input("")

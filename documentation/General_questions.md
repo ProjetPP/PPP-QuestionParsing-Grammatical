@@ -10,20 +10,18 @@ General
 * Article : enlever numéro apparaissant dans noeud (et idem pour arbre) / enlever encadrement
 * data model : autoriser des listes de prédicats dans les sort ?
 * réecrire demo3 pour le rendre dépendant de DependencyTree
-* ! list += != append
-* t5 peut être enlevé
+* t5 peut être enlevé ?
 * prepMerge: plus de merge parent/fils si conj dependency
 * processQuestionWord doit être exécuter en dernier car ...
 * les mots de position 1000 sont les connecteurs
 * les mots de position 1001 sont les mots propagés/ajoutés par le qw
 * Traiter "does" comme "be" (descendre dans l'arbre pour l'éviter) : Where does the prime minister of united kingdom live
-* conceptnet5/conceptnet5/language/english.py
 * Dans le question word processing (et plus généralement) : les connecteurs ne sont pas uniquement les 1000. Les 1000 prennent les conj mais pas le superlatives.
 * Traiter question word sur forme normalisée ? 
     >> garantir qu'en entrée de normalize chaque noeud contient une seule alternative
     >> ajout des infos sur les premières feuilles / prédicats / ...
     >> seul les prédicats peuvent contenir des alternatives > le garantir
-* Vérifier que les positions/tag sont bien gérées (en particulier sur les alternatives
+* Vérifier que les positions/tag sont bien gérées (en particulier sur les alternatives)
 * Ecrire des Readme ('bla bla'.split(' '))
 
 Gestion des prep(c)_x
