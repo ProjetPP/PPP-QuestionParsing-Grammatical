@@ -28,12 +28,12 @@ You can install the main dependencies (especially CoreNLP) using the script file
 
 ## How to test
 
-The folder `demo/` contains some demo files and a readme `README.md` that explains how to use them.
+The `demo` folder contains some demo files and a readme `README.md` that explains how to use them.
 
 ## Overview of the main folders
 
-* `deep_tests` and `tests`: unit tests of the project
 * `ppp_questionparsing_grammatical`: main code of the project
-* `documentation`: some files that expose our current thinking on the project (mainly drafts)
 * `demo`: demo files to test the algorithms
 * `nounification`: scripts used to compute the nounification database
+* `deep_tests` and `tests`: unit tests of the project
+* `documentation`: some files that expose our current thinking on the project (mainly drafts)

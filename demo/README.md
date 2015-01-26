@@ -1,70 +1,62 @@
+# How to test the question parsing algorithm
 
-Parsing (loading the module)
-============================
+The files `demo*.py` enable you to test the main steps of the question parsing algorithm. You first need to launch a CoreNLP server, and then run a demo file.
 
-Run (example):
-  `python3 demo1.py`
-
-Launching a server
-==================
+## Launching a server
 
 May need to install [jsonrpclib](https://github.com/tcalmant/jsonrpclib) (for python3).
 
-Go to the folder where CoreNLP is installed (usually the Scripts/ folder) and run:
+Go to the folder where CoreNLP is installed (`Scripts/` folder if you have git clone the (scripts repository)[https://github.com/ProjetPP/Scripts] and run `bash bootstrap_corenlp.sh`). Run:
 
-```
-  CORENLP="stanford-corenlp-full-2014-08-27" python3 -m corenlp
-```
-
-To remove copula relations (other flags can be passed in the same way):
-
-```
+```bash
   CORENLP="stanford-corenlp-full-2014-08-27" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp
 ```
 
-__Our current algorithm is designed to work with copula relations removed.__
+## Choosing a demo file
 
+Here is a description of the demo files:
 
-Parsing using a server
-======================
+* `demo1.py`: Output the direct answer of CoreNLP (this file is the only one that does not need to run a server. On the other hand, it's really slow. Moreover, copula relations are not removed)
+* `demo2.py`: Output the dependency relations graph from CoreNLP
+* `demo3.py`: Output the dependency relations graph from CoreNLP in dot format
+* `demo4.py`: Output the dependency graph in dot format after preprocessing simplifications (merging of some nodes)
+* `demo5.py`: Output the dependency graph in dot format after dependency analysis
+* `demo6.py`: Full algorithm, output the final normal form from question
 
-We assume that a server is launched.
+## Examples
 
-Run (example):
-```
-  python3 demo2.py
-```
+Here is some example on the input question `Where is the capital of Belgium?`.
 
-Using a server enables to parse quicker than loading the module each time.
-
-
-Presentation of the output using dot
-====================================
-
-We assume that a server is launched.
-
-You can have a dot file using the following: `python3 > demo.dot` (then, write your sentence).
-
-You can also have directly a ps file using the following: `python3 demo3.py | dot -Tps > demo.ps`
-
-More laziness: `echo "What is the birth date of the first president of the United States?" | python3 demo3.py | dot -Tps > demo.ps`
-
-
-Tree simplification
-===================
-
-We assume that a server is launched.
-
-Run the same thing as before, replacing `demo3.py` by `demo4.py`.
-
-More conveniently, use the script `displaygraph`:
-```
-./displaygraph.sh Who wrote \"Lucy in the Sky with Diamonds\" and \"Let It Be\"?
+* Save the dependency graph in dot format into `demo.dot`: 
+```bash
+  python3 demo3.py > demo.dot
+  Where is the capital of Belgium?
 ```
 
+* Save the dependency graph in ps format after preprocessing simplifications. Display the graph:
+```bash
+  python3 demo4.py | dot -Tps > demo.ps
+  Where is the capital of Belgium?
+  evince demo.ps
+``` 
 
-Dataset generation
-==================
+* Save the dependency graph in ps format after preprocessing simplifications (more laziness):
+```bash
+  echo "Where is the capital of Belgium?" | python3 demo4.py | dot -Tps > demo.ps
+```
+
+* Display the dependency graph in ps format after preprocessing simplifications (even more laziness):
+```bash
+  bash displaygraph.sh Where is the capital of Belgium?
+```
+
+* Display the final normal form:
+```bash
+  python3 demo6.py
+  Where is the capital of Belgium?
+``` 
+
+## Dataset generation
 
 Useful for ML modules.
 
@@ -73,14 +65,3 @@ We assume that a server is launched, and that the input questions are in a file 
 ```
 python3 datasetGeneration.py < dataset.in > dataset.out 2> dataset.error
 ```
-
-
-Description of demo files
-=========================
-
-* `demo1.py`: parsing without a server. Output the direct answer of CoreNLP (copula relations not removed)
-* `demo2.py`: Start server before. Output the dependency relations graph from CoreNLP
-* `demo3.py`: Start server before. Output the dependency relations graph from CoreNLP in dot format
-* `demo4.py`: Start server before. Output the dependency graph in dot format after preprocessing simplifications (merging of some nodes)
-* `demo5.py`: Start server before. Output the dependency graph in dot format after dependency analysis
-* `demo6.py`: Start server before. Full algorithm, output normal form (tree of triples+connectors) from question
