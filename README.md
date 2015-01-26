@@ -6,6 +6,30 @@ Question Parsing module for the PPP using a grammatical approach.
 [![Code Coverage](https://scrutinizer-ci.com/g/ProjetPP/PPP-QuestionParsing-Grammatical/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ProjetPP/PPP-QuestionParsing-Grammatical/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ProjetPP/PPP-QuestionParsing-Grammatical/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ProjetPP/PPP-QuestionParsing-Grammatical/?branch=master)
 
+## Introduction
+
+The purpose of the Question Parsing is to transform questions into trees of triples, as described into [our datamodel](https://github.com/ProjetPP/Documentation/blob/master/data-model.md), which can be handled by backend modules. 
+
+For instance, we aim at producing the triple `(Rwanda,president,?)` from the question `Who is the president of Rwanda?`. The formal representation of this triple is:
+```
+{
+    "type": "triple",
+    "subject": {
+        "value": "Rwanda",
+        "type": "resource"
+    },
+    "predicate": {
+        "value": "president",
+        "type": "resource"
+    }
+    "object": {
+        "type": "missing"
+    },
+}
+```
+
+See [our website](http://projetpp.github.io/) to learn more about our project and [test our question answering tool](http://askplatyp.us/).
+
 ## How to install
 
 With a recent version of pip:
