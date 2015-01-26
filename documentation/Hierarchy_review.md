@@ -146,14 +146,10 @@ dobj
 * Who has written "The Hitchhiker's Guide to the Galaxy"?
 * Who wrote "The Hitchhiker's Guide to the Galaxy"?
 * Who invented the hula hoop?
+* Who killed Gandhi?
+* Who elected the president ?
 
 look at the verb ? (passive, acted ...)
-
-##### ???
-
-* Who killed Gandhi?
--> t4 would be better if we nounify "killed" into "killer".
-For instance, Wikidata returns a good answer for the triple `(Gandhi, killer, ?)`
 
 ##### ---
 
