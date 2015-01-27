@@ -56,6 +56,8 @@ def normalize(tree):
     """
     if tree.child == []: # leaf
         return Resource(value=buildValue(tree))
+    if tree.child[0].dependency == 'Rexst':
+        return ....................... # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     if tree.child[0].dependency == 'Rspl': # Rspl = superlative, ordinal
         return normalizeSuperlative(tree)
     if tree.child[0].dependency.startswith('Rconj'): # Rconj = conjunction

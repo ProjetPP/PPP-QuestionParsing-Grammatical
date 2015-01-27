@@ -6,6 +6,10 @@ closeQuestionWord = [
     'is', 'are', 'am', 'was', 'were', 'will', 'do', 'does', 'did', 'have', 'had', 'has', 'can', 'could', 'should', 'shall', 'may', 'might', 'would'
 ]
 
+existQuestionWord = [
+    'is there', 'are there'
+]
+
 """
     Open-ended questions
     + What... for, What... like, Why don't, Where from

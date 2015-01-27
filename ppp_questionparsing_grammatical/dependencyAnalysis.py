@@ -117,7 +117,8 @@ dependenciesMap2 = {         # how to handle a -b-> c
      #'R6'        : ignore,        # (!a,normalize(c),?) # not use for the moment
     'Rspl'      : propagateType,  # superlative
     'RconjT'    : propagateType,  # top of a conjunction relation
-    'RconjB'    : propagateType   # bottom of a conjunction relation
+    'RconjB'    : propagateType,  # bottom of a conjunction relation
+    'Rexist'    : propagateType
 }
 
 def collapseMap(t,depMap,qw,down=True):
