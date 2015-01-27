@@ -20,6 +20,19 @@ class RequestHandlerTest(PPPTestCase(app)):
         self.assertEqual(t.predicate, Resource('birth date'))
         self.assertIsInstance(t.object, Missing)
 
+    def testNonSentence(self):
+        answer = self.request({'id': '1', 'language': 'en', 'measures': {}, 'trace': [],
+            'tree': {'type': 'resource', 'value': 'foo'}})
+        self.assertEqual(len(answer), 0)
+
+    def testQuotationError(self):
+        answer = self.getAnswer("What is \"the birth\" date \"of George Washington?")
+        self.assertEqual(len(answer), 0)
+
+    def testResourceOutput(self):
+        answer = self.getAnswer("Yoda")
+        self.assertEqual(len(answer), 0)
+
     def testNested(self):
         answer = self.getAnswer("When was born the daughters of the wife of the president of the United States?")
         self.assertEqual(len(answer), 1)
