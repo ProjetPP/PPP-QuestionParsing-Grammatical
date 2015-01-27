@@ -9,9 +9,13 @@ python:
 
 install:
     - pip install scrutinizer-ocular coverage webtest httmock requests ppp_datamodel ppp_core jsonrpclib-pelix nltk
-    - python -m nltk.downloader wordnet
+    - echo "y
+        y
+        y
+        " | python -m nltk.downloader wordnet
 
 before_script:
+  - ./dependencies.sh
   - ./setup.py install
 
 script:
