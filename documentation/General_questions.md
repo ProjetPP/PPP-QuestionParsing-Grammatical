@@ -86,5 +86,4 @@ Racine à fils multiples
 * dobj + nsubj                      : Which books did Suzanne Collins write?    > (Suzanne Collins, author, ?) + typage "book" sur ?
 * nsubj + dobj (+ do)               : What albums did Pearl Jam record?
 
- 
 
