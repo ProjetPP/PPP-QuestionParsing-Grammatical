@@ -27,8 +27,6 @@ Please, don't remove any example (they are used frequently to check the whole al
 * Who held the endurance record for women pilots in 1929? >> problem with for
 * How many people that live in China speak english?
 * How many USA presidents have visited Iran?
-* Which movies does Quentin Tarantino star in?
-* Which movies did Quentin Tarantino direct, but not star in?
 * Who receives the Nobel Prize in Physics in 2000?
 * When did Diana and Charles get married?
 * Where is Mozambique located? > location/place
@@ -279,3 +277,5 @@ Stanford Parser fails
 * Whose gender is genderqueer?
 * How to get to the ENS Lyon?
 * What albums did Pearl Jam record? (record est probablement mal taggé)
+* Which movies does Quentin Tarantino star in? (idem)
+* Which movies did Quentin Tarantino direct, but not star in?

@@ -57,7 +57,7 @@ Sur premier prédicat si c'est un verbe nounifié ?
 Racine avec auxiliaire autre que "be"
 =====================================
 
-* What albums did Pearl Jam record?
+* What albums did Pearl Jam record? > mauvais parsing ?
 
 Superlative
 ===========
