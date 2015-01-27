@@ -263,6 +263,11 @@ pcomp
 
 * When did Israel begin turning the Gaza Strip and Jericho over to the PLO?
 
+npadvmod
+========
+
+* Is there a doctor here?
+
 Stanford Parser fails
 =====================
 

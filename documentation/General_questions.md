@@ -23,6 +23,7 @@ General
     >> seul les prédicats peuvent contenir des alternatives > le garantir
 * Vérifier que les positions/tag sont bien gérées (en particulier sur les alternatives)
 * Ecrire des Readme ('bla bla'.split(' '))
+* "Is there a pink bird" may be formalized as ∃ (?, instance of, bird) ∩ (?, color, pink)
 
 Gestion des prep(c)_x
 =====================
@@ -44,3 +45,22 @@ How many : placer en tête un opérateur de comptage
       cas particulier de "be" > on ajoute l'info directement dans le noeud
 
 Recherche de wexcept/id... : uniquement prefixe/suffixe (sunday ?)
+
+Superlative
+===========
+
+* What is the most easily identifiable tree
+* What is the most advanced technology ?
+* http://dictionary.cambridge.org/fr/grammaire/grammaire-britannique/most-the-most-mostly
+
+Yes/No questions
+================
+
+Exists
+======
+
+* Is there a ghost in my house
+* Is there a pilot in the plane
+* Is there a king of england
+* http://english.stackexchange.com/questions/34353/is-there-versus-are-there
+* Are there any articles available on the subject?
