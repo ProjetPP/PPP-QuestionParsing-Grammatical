@@ -136,6 +136,7 @@ dobj
 - collapse dobj to comp ?
 - different if a nsubj is present?
 - dobj rules should/can produce tripls with missing subject
+- __hardcoder__ certains dobj comme des types (book, day : which day, ...)
 
 ##### +++
 
@@ -155,6 +156,7 @@ look at the verb ? (passive, acted ...)
 
 * Who held the endurance record for women pilots in 1929?
 * How many children does Barack Obama have? > not do an intersection each time a node have several children.
+* Which books did Suzanne Collins write? (?)
 
 ccomp
 =====
@@ -276,3 +278,4 @@ Stanford Parser fails
 * Is 42 an integer?
 * Whose gender is genderqueer?
 * How to get to the ENS Lyon?
+* What albums did Pearl Jam record? (record est probablement mal taggé)

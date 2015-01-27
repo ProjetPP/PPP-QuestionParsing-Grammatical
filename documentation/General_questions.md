@@ -46,6 +46,19 @@ How many : placer en tête un opérateur de comptage
 
 Recherche de wexcept/id... : uniquement prefixe/suffixe (sunday ?)
 
+Ajout sur racine non pertinent : 
+  * When was Pink Floyd discovered > discovery date
+
+Faire l'ajout sur le premier prédicat ? Contre-ex:
+  * Where is the president of France
+
+Sur premier prédicat si c'est un verbe nounifié ?
+
+Racine avec auxiliaire autre que "be"
+=====================================
+
+* What albums did Pearl Jam record?
+
 Superlative
 ===========
 
@@ -64,3 +77,14 @@ Exists
 * Is there a king of england
 * http://english.stackexchange.com/questions/34353/is-there-versus-are-there
 * Are there any articles available on the subject?
+
+Racine à fils multiples
+=======================
+
+* nsubjpass + prep_in               : What language is spoken in Argentina?     > (Argentina, language, ?)
+* prep_from + prep_to + prep_on     : carpool from Lyon to Paris on December 31 > (?, instance of, carpool) ∩ (?, from, Paris) ∩ (?, to, Lyon) ∩ (?,day, December 31st)
+* dobj + nsubj                      : Which books did Suzanne Collins write?    > (Suzanne Collins, author, ?) + typage "book" sur ?
+* nsubj + dobj (+ do)               : What albums did Pearl Jam record?
+
+ 
+
