@@ -51,4 +51,4 @@ Our databases are stored as binary files, you cannot merge them automatically wi
   - before making any modification, don't forget to make a `git pull`. Once you have finished, quickly `push` :)
   - in case of conflict, don't panic. The class `NounDB` has a merge method. In order to merge a Nounificator `m` into a Nounificator `n`, make: `n.merge(m)`
 
-Finally, if you don't want to deal with our database, you can write down your ideas in the file [nounifyMe.md](...). Then, we copy them into `nounificationManual.pickle` for you ;)
+Finally, if you don't want to deal with our database, you can write down your ideas in the file [nounifyMe.md](https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/blob/master/nounification/nounifyMe.md). Then, we copy them into `nounificationManual.pickle` for you ;)
