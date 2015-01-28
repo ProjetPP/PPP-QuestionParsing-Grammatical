@@ -58,6 +58,6 @@ The `demo` folder contains some demo files and a readme `README.md` that explain
 
 * `ppp_questionparsing_grammatical/`: main code of the project
 * `demo/`: demo files to test the algorithms
-* `nounification/`: scripts used to compute the nounification database
+* `nounification/`: scripts used to compute the nounification database. See the Readme to __help us__ improving this part of the algorithm!
 * `tests/`: unit tests of the project
 * `documentation/`: some files that expose our current thinking on the project (mainly drafts)

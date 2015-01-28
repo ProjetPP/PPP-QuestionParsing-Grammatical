@@ -32,6 +32,7 @@ Actions available (see [NounDB](https://github.com/ProjetPP/PPP-QuestionParsing-
   - Add the noun `author` to the verb `write`: `n.add('write','author')`
   - Add the nouns `inventor` and `invention` to the verb `invent`: `n.addList('invent',['inventor','invention'])` or `n.addList('invent','inventor invention'.split(' '))`
   - Get all the nouns related to the verb `found`: `n.toNouns('found')`
+  - Print all the database: `print(n)`
   - Remove the noun `birth` from the verb `bear`: `n.remove('bear','birth')`
   - Remove the verb `speak` from the database: `n.removeVerb('speak')`
 
