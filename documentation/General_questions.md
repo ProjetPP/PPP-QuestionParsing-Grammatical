@@ -52,6 +52,9 @@ Exists
 
 * Is there a ghost in my house
 * Is there a pilot in the plane
+* Is there a capital in France
 * Is there a king of england > https://www.wikidata.org/wiki/Q18810062
 * http://english.stackexchange.com/questions/34353/is-there-versus-are-there
 * Are there any articles available on the subject?
+* Are there computers in your room
+

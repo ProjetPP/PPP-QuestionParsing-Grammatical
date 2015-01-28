@@ -263,11 +263,21 @@ pcomp
 
 * When did Israel begin turning the Gaza Strip and Jericho over to the PLO?
 
+advmod
+======
+
+* Is there a doctor here?
+
 npadvmod
 ========
 
 * Is there a doctor here?
 * Are there any articles available on the subject? > remplacer père par son fils
+
+tmod
+====
+
+* Are there 29 days in February 
 
 Stanford Parser fails
 =====================
@@ -277,3 +287,5 @@ Stanford Parser fails
 * Is 42 an integer?
 * Whose gender is genderqueer?
 * How to get to the ENS Lyon?
+* Are there pets on the farm?
+* Are there geocaches in this forest?

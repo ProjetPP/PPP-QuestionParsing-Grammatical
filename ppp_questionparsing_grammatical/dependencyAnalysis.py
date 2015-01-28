@@ -73,12 +73,12 @@ dependenciesMap1 = {
             'vmod'      : 'R3',
             'mwe'       : merge,
                 'mark'      : remove,
-            'advmod'    : merge,
+            'advmod'    : 'R2',
                 'neg'       : 'connectorUp', # need a NOT node
             'rcmod'     : 'R4', # temp, need to be analyzed
                 'quantmod'  : remove,
             'nn'        : merge,
-            'npadvmod'  : merge,
+            'npadvmod'  : 'R5',
                 'tmod'      : 'R3',
             'num'       : merge,
             'number'    : merge,
