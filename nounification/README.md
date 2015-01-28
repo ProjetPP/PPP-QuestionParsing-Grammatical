@@ -15,13 +15,14 @@ If you want to help us improving [nounificationManual.pickle](https://github.com
   - run `python3`
   - import the Nounificator class: `from nounDB import *`
   - load `nounificationManual.pickle`:
-  
+
   ```python
   n = Nounificator()
   n.load('data/nounificationManual.pickle')
   ```
-  
+
   - load  `nounificationAuto.pickle` (optional):
+
   ```python
   m = Nounificator()
   m.load('data/nounificationAuto.pickle')
