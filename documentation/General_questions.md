@@ -85,5 +85,5 @@ Racine à fils multiples
 * prep_from + prep_to + prep_on     : carpool from Lyon to Paris on December 31 > (?, instance of, carpool) ∩ (?, from, Paris) ∩ (?, to, Lyon) ∩ (?,day, December 31st)
 * dobj + nsubj                      : Which books did Suzanne Collins write?    > (Suzanne Collins, author, ?) + typage "book" sur ?
 * nsubj + dobj (+ do)               : What albums did Pearl Jam record?
-
+* nsubj + prep_from                 : Are you from Germany?                     > (you,origin,Germany) > yes/no : (subj | pred:be from, do..live | cpt)
 
