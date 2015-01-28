@@ -11,14 +11,16 @@ We have already implemented an algorithm (using ConceptNet) that has automatical
 ## Your task
 
 If you want to help us improving [nounificationManual.pickle](https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/blob/master/ppp_questionparsing_grammatical/data/nounificationManual.pickle), here are the instructions:
-  - go into the [ppp_questionparsing_grammatical](https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/tree/master/ppp_questionparsing_grammatical) repository
+  - go into the [ppp_questionparsing_grammatical](https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/tree/master/ppp_questionparsing_grammatical) folder
   - run `python3`
   - import the Nounificator class: `from nounDB import *`
   - load `nounificationManual.pickle`:
+  
   ```python
   n = Nounificator()
   n.load('data/nounificationManual.pickle')
   ```
+  
   - load  `nounificationAuto.pickle` (optional):
   ```python
   m = Nounificator()
