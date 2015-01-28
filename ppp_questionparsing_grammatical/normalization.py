@@ -1,7 +1,7 @@
 import sys
 import ppp_datamodel
 from .preprocessing import DependenciesTree
-from ppp_datamodel import Resource, Missing, Triple, Last, First, List, Sort, Intersection, Union
+from ppp_datamodel import Resource, Missing, Triple, Last, First, List, Sort, Intersection, Union, Exists
 from .data.conjunction import conjunctionTab
 from .data.superlative import superlativeNoun, superlativeOrder
 from .data.exceptions import GrammaticalError
@@ -56,6 +56,8 @@ def normalize(tree):
     """
     if tree.child == []: # leaf
         return Resource(value=buildValue(tree))
+    if tree.child[0].dependency == 'Rexist':
+        return Exists(list = normalize(tree.child[0]))
     if tree.child[0].dependency == 'Rspl': # Rspl = superlative, ordinal
         return normalizeSuperlative(tree)
     if tree.child[0].dependency.startswith('Rconj'): # Rconj = conjunction

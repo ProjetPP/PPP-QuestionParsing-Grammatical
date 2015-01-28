@@ -27,6 +27,8 @@ Please, don't remove any example (they are used frequently to check the whole al
 * Who held the endurance record for women pilots in 1929? >> problem with for
 * How many people that live in China speak english?
 * How many USA presidents have visited Iran?
+* Which movies does Quentin Tarantino star in?
+* Which movies did Quentin Tarantino direct, but not star in?
 * Who receives the Nobel Prize in Physics in 2000?
 * When did Diana and Charles get married?
 * Where is Mozambique located? > location/place
@@ -263,10 +265,21 @@ pcomp
 
 * When did Israel begin turning the Gaza Strip and Jericho over to the PLO?
 
+advmod
+======
+
+* Is there a doctor here?
+
 npadvmod
 ========
 
 * Is there a doctor here?
+* Are there any articles available on the subject? > remplacer père par son fils
+
+tmod
+====
+
+* Are there 29 days in February 
 
 Stanford Parser fails
 =====================
@@ -276,6 +289,8 @@ Stanford Parser fails
 * Is 42 an integer?
 * Whose gender is genderqueer?
 * How to get to the ENS Lyon?
+* Are there pets on the farm?
+* Are there geocaches in this forest?
 * What albums did Pearl Jam record? (record est probablement mal taggé)
 * Which movies does Quentin Tarantino star in? (idem)
 * Which movies did Quentin Tarantino direct, but not star in?

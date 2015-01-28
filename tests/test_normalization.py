@@ -266,3 +266,27 @@ class StandardTripleTests(TestCase):
     def testCop(self):
         tree = computeTree(data.black()['sentences'][0])
         self.assertRaises(GrammaticalError, lambda: simplify(tree))
+
+    def testExists(self):
+        tree = computeTree(data.king_england()['sentences'][0])
+        qw = simplify(tree)
+        result = normalize(tree)
+        self.assertEqual(result,{
+    "list": {
+        "predicate": {
+            "type": "resource",
+            "value": "king"
+        },
+        "subject": {
+            "type": "resource",
+            "value": "England"
+        },
+        "type": "triple",
+        "object": {
+            "type": "missing"
+        }
+    },
+    "type": "exists"
+}
+)
+

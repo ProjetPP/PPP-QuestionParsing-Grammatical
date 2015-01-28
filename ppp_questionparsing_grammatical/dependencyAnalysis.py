@@ -73,12 +73,12 @@ dependenciesMap1 = {
             'vmod'      : 'R3',
             'mwe'       : merge,
                 'mark'      : remove,
-            'advmod'    : merge,
+            'advmod'    : 'R2',
                 'neg'       : 'connectorUp', # need a NOT node
             'rcmod'     : 'R4', # temp, need to be analyzed
                 'quantmod'  : remove,
             'nn'        : merge,
-            'npadvmod'  : merge,
+            'npadvmod'  : 'R5',
                 'tmod'      : 'R3',
             'num'       : merge,
             'number'    : merge,
@@ -117,7 +117,8 @@ dependenciesMap2 = {         # how to handle a -b-> c
      #'R6'        : ignore,        # (!a,normalize(c),?) # not use for the moment
     'Rspl'      : propagateType,  # superlative
     'RconjT'    : propagateType,  # top of a conjunction relation
-    'RconjB'    : propagateType   # bottom of a conjunction relation
+    'RconjB'    : propagateType,  # bottom of a conjunction relation
+    'Rexist'    : propagateType
 }
 
 def collapseMap(t,depMap,qw,down=True):
