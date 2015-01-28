@@ -37,7 +37,7 @@ Actions available (see [NounDB](https://github.com/ProjetPP/PPP-QuestionParsing-
 
 __Do not forget__ to save the database at the end:
 ```python
-n.save('data/nounificationAuto.pickle')
+n.save('data/nounificationManual.pickle')
 ```
 
 ## Advice
@@ -46,7 +46,7 @@ Be sure to have understood what we want, it is not only nounification! In order 
 
 Look into `nounificationAuto.pickle` if there are interesting results. For instance, if you do `m.toNouns('kill')` you will see that `killer` appears into the list, and it is relevant to add it into `nounificationManual.pickle`.
 
-Our databases are stored as binary files, you cannot merge them automatically with Git. In order to avoid merge conflict, please follow these rules:
+Our databases are stored as binary files, Git cannot merge them automatically. In order to avoid merge conflict, please follow these rules:
   - `nounificationManual.pickle` must only be changed in the `Master` branch of the repository
   - before making any modification, don't forget to make a `git pull`. Once you have finished, quickly `push` :)
   - in case of conflict, don't panic. The class `NounDB` has a merge method. In order to merge a Nounificator `m` into a Nounificator `n`, make: `n.merge(m)`
