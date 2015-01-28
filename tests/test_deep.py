@@ -1,6 +1,6 @@
 from unittest import TestCase
 from ppp_datamodel.communication import Request
-from ppp_datamodel import Triple, Resource, Missing, Intersection
+from ppp_datamodel import Triple, Resource, Missing, Intersection, Exists
 from ppp_libmodule.tests import PPPTestCase
 
 from ppp_questionparsing_grammatical import app
@@ -73,3 +73,11 @@ class RequestHandlerTest(PPPTestCase(app)):
         self.assertTrue('writer' in l[1].predicate.value)
         self.assertIsInstance(l[0].object, Missing)
         self.assertIsInstance(l[1].object, Missing)
+
+    def testExist(self):
+        answer = self.getAnswer("Is there a capital of France?")
+        self.assertEqual(len(answer), 1)
+        tree = answer[0].tree
+        self.assertIsInstance(tree, Exists)
+        tree = tree.list
+        self.assertEqual(tree,Triple(Resource('France'),Resource('capital'),Missing()))
