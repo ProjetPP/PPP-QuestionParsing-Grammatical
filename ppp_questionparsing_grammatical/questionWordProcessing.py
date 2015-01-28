@@ -2,7 +2,7 @@ import sys
 from .preprocessingMerge import Word
 from .preprocessing import DependenciesTree
 from .data.exceptions import QuestionWordError
-from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd, questionWIs, questionType, questionExcept
+from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd, questionWIs, questionType, questionExcept, existQuestionWord
 
 #####################################
 # Identify and remove question word #
@@ -51,6 +51,9 @@ def identifyQuestionWord(t):
             pass
     if start[1] and start[0].word.lower() + ' ' + start[1].word.lower() in openQuestionWord:
         removeWord(t,start[0])
+        removeWord(t,start[1])
+        return start[0].word.lower() + ' ' + start[1].word.lower()
+    if start[1] and start[0].word.lower() + ' ' + start[1].word.lower() in existQuestionWord:
         removeWord(t,start[1])
         return start[0].word.lower() + ' ' + start[1].word.lower()
     if start[0].word.lower() in openQuestionWord: 
@@ -138,4 +141,7 @@ def processQuestionWord(t,w):
           into the sons of ROOT (ex: When -> add "date")
     """
     processQuestionType(t,w)  # type the ROOT according to the question word
-    processQuestionInfo(t.child[0],w)
+    if w in existQuestionWord:
+        t.child[0].dependency = 'Rexist'
+    if w in openQuestionWord:
+        processQuestionInfo(t.child[0],w)
