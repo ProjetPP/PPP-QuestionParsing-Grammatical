@@ -17,7 +17,6 @@ General
     >> seul les prédicats peuvent contenir des alternatives > le garantir
 * Recherche de wexcept/id... : uniquement prefixe/suffixe (sunday ?)
 * Vérifier que les positions/tag sont bien gérées (en particulier sur les alternatives)
-* Ecrire des Readme ('bla bla'.split(' '))
 
 Remarks
 =======
@@ -57,4 +56,4 @@ Exists
 * http://english.stackexchange.com/questions/34353/is-there-versus-are-there
 * Are there any articles available on the subject?
 * Are there computers in your room
-
+* Does a king of England exist?

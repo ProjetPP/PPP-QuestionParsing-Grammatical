@@ -294,3 +294,5 @@ Stanford Parser fails
 * What albums did Pearl Jam record? (record est probablement mal taggé)
 * Which movies does Quentin Tarantino star in? (idem)
 * Which movies did Quentin Tarantino direct, but not star in?
+* Are there beers in Germany?
+
