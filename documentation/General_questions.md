@@ -63,7 +63,9 @@ Racine à fils multiples
 
 * nsubjpass + prep_in               : What language is spoken in Argentina?     > (Argentina, language, ?)
 * prep_from + prep_to + prep_on     : carpool from Lyon to Paris on December 31 > (?, instance of, carpool) ∩ (?, from, Paris) ∩ (?, to, Lyon) ∩ (?,day, December 31st)
-* dobj + nsubj                      : Which books did Suzanne Collins write?    > (Suzanne Collins, author, ?) + typage "book" sur ?
+* nsubj + dobj                      : Which books did Suzanne Collins write?    > (Suzanne Collins, author, ?) + typage "book" sur ?
 * nsubj + dobj (+ do)               : What albums did Pearl Jam record?
 * nsubj + prep_from                 : Are you from Germany?                     > (you,origin,Germany) > yes/no : (subj | pred:be from, do..live | cpt)
+* nsubj + prep_by                   : List movies directed by Spielberg
+* prep_of + prep_of                 : list of president of usa
 * nsubj + prep_by                   : List movies directed by Spielberg
