@@ -10,13 +10,22 @@ existQuestionWord = [
     'is there', 'are there'
 ]
 
+semiQuestionWord = [
+    'show me', 'show them', 'show us', 'show him', 'show her', 'give me', 'give them', 'give us', 'give him', 'give her'
+]
+
+# semi questions words that cannot be removed from the tree
+predicateQuestionWord = [
+    'list of', 'give', 'show' 
+]
+
 """
     Open-ended questions
     + What... for, What... like, Why don't, Where from
     Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
 """
 openQuestionWord = [
-    'what', 'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'who', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'which', 'whom', 'whose', 'how big'
+    'list', 'what', 'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'who', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'which', 'whom', 'whose', 'how big'
 ]
 
 # question word that implies to add an extra triple (in practice: rule R2 vs R5s) (ex: where is the capital of france : (france,capital,?) --> ((france,capital,?),location,?)
