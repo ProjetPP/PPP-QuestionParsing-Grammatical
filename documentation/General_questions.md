@@ -58,6 +58,20 @@ Exists
 * Are there computers in your room
 * Does a king of England exist?
 
+Semi question words
+===================
+
+* Show me Star Wars movies
+* List movies directed by Spielberg
+* List books by Roald Dahl
+* List albums of Pink Floyd
+* List films with Jack Nicholson
+* List of US presidents
+* List of presidents of France
+* Give me the capital of France
+* Give the capital of France
+* Give us the capital of France
+
 Racine à fils multiples
 =======================
 
