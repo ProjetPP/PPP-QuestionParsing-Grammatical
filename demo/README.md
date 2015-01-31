@@ -22,6 +22,7 @@ Here is a description of the demo files:
 * `demo4.py`: Output the dependency graph in dot format after preprocessing simplifications (merging of some nodes)
 * `demo5.py`: Output the dependency graph in dot format after dependency analysis
 * `demo6.py`: Full algorithm, output the final normal form from question
+* `demo7.py`: Full algorithm, output the final normal form from question in dot format. __You need to install the [PPP-CLI tool](https://github.com/ProjetPP/PPP-CLI) before__
 
 ## Examples
 
@@ -54,6 +55,13 @@ bash displaygraph.sh Where is the capital of Belgium?
 ```bash
 python3 demo6.py
 Where is the capital of Belgium?
+``` 
+
+* Save the normal from in ps format (you need to install the [PPP-CLI tool](https://github.com/ProjetPP/PPP-CLI) before). Display the graph:
+```bash
+python3 demo7.py | dot -Tps > demo.ps
+Where is the capital of Belgium?
+evince demo.ps
 ``` 
 
 ## Dataset generation
