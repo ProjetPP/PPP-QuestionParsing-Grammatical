@@ -62,8 +62,7 @@ Where is the capital of Belgium?
 python3 demo7.py | dot -Tps > demo.ps
 Where is the capital of Belgium?
 evince demo.ps
-``` 
-<img align="center" src="readmePictures/normalForm.pngg" />
+```
 
 ## Dataset generation
 
