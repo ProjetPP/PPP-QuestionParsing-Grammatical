@@ -63,8 +63,9 @@ python3 demo7.py | dot -Tps > demo.ps
 Where is the capital of Belgium?
 evince demo.ps
 ``` 
-
+<div style="text-align:center" markdown="1">
 ![Normal form of "Where is the capital of Belgium?"](readmePictures/normalForm.png)
+</div>
 
 ## Dataset generation
 
