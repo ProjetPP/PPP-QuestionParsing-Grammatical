@@ -64,6 +64,8 @@ Where is the capital of Belgium?
 evince demo.ps
 ``` 
 
+![Normal form of "Where is the capital of Belgium?"](readmePictures/normalForm.png)
+
 ## Dataset generation
 
 Fill in a file `dataset.in` with one question per line. Run the following code to parse each question and save its normal form into `dataset.out`:
