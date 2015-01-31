@@ -26,7 +26,7 @@ class DependenciesTreeTests(TestCase):
 
     def testOtherQuotationMakrs(self):
         handler = QuotationHandler("foo")
-        sentence = "The person who sing ‘Let It Be’ and “Lucy in the Sky with Diamonds” also sing \"Yellow Submarine\"."
+        sentence = "The person who sing “Let It Be” and “Lucy in the Sky with Diamonds” also sing \"Yellow Submarine\"."
         expected = "The person who sing foo0 and foo1 also sing foo2."
         real = handler.pull(sentence)
         self.assertEqual(real,expected)
