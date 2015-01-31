@@ -121,7 +121,7 @@ class QuotationHandler:
     """
         An object to handle quotations in the sentences.
     """
-    quotationList = ['‘','’','“','”','"']
+    quotationList = ['“','”','"']
     def __init__(self,replacement=None):
         self.replacement = replacement
         self.replacementIndex = 0
