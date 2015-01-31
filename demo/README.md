@@ -63,7 +63,7 @@ python3 demo7.py | dot -Tps > demo.ps
 Where is the capital of Belgium?
 evince demo.ps
 ``` 
-<img style="float: center" style="width: 10%; height: 10%" src="readmePictures/normalForm.png">
+<img align="center" src="readmePictures/normalForm.pngg" />
 
 ## Dataset generation
 
