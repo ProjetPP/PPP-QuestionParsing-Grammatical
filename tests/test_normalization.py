@@ -287,6 +287,99 @@ class StandardTripleTests(TestCase):
         }
     },
     "type": "exists"
-}
-)
+})
 
+    def testSemiQuestionWord1(self):
+        tree = computeTree(data.roald()['sentences'][0])
+        qw = simplify(tree)
+        result = normalize(tree)
+        self.assertEqual(result,{
+    "subject": {
+        "value": "Roald Dahl",
+        "type": "resource"
+    },
+    "type": "triple",
+    "predicate": {
+        "value": "book",
+        "type": "resource"
+    },
+    "object": {
+        "type": "missing"
+    }
+})
+
+    def testSemiQuestionWord2(self):
+        tree = computeTree(data.list_president1()['sentences'][0])
+        qw = simplify(tree)
+        result = normalize(tree)
+        self.assertEqual(result,{
+    "subject": {
+        "type": "resource",
+        "value": "US president"
+    },
+    "type": "triple",
+    "object": {
+        "type": "missing"
+    },
+    "predicate": {
+        "type": "resource",
+        "value": "list"
+    }
+})
+
+    def testSemiQuestionWord3(self):
+        tree = computeTree(data.list_president2()['sentences'][0])
+        qw = simplify(tree)
+        result = normalize(tree)
+        self.assertEqual(result,{
+    "type": "triple",
+    "object": {
+        "type": "missing"
+    },
+    "predicate": {
+        "type": "resource",
+        "value": "president"
+    },
+    "subject": {
+        "type": "resource",
+        "value": "France"
+    }
+})
+
+    def testSemiQuestionWord4(self):
+        tree = computeTree(data.capital1()['sentences'][0])
+        qw = simplify(tree)
+        result = normalize(tree)
+        self.assertEqual(result,{
+    "predicate": {
+        "type": "resource",
+        "value": "capital"
+    },
+    "type": "triple",
+    "subject": {
+        "type": "resource",
+        "value": "France"
+    },
+    "object": {
+        "type": "missing"
+    }
+})
+
+    def testSemiQuestionWord5(self):
+        tree = computeTree(data.capital2()['sentences'][0])
+        qw = simplify(tree)
+        result = normalize(tree)
+        self.assertEqual(result,{
+    "predicate": {
+        "type": "resource",
+        "value": "capital"
+    },
+    "type": "triple",
+    "subject": {
+        "type": "resource",
+        "value": "France"
+    },
+    "object": {
+        "type": "missing"
+    }
+})

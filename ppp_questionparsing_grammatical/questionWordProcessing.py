@@ -2,7 +2,7 @@ import sys
 from .preprocessingMerge import Word
 from .preprocessing import DependenciesTree
 from .data.exceptions import QuestionWordError
-from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd, questionWIs, questionType, questionExcept, existQuestionWord
+from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd, questionWIs, questionType, questionExcept, existQuestionWord, semiQuestionWord, predicateQuestionWord
 
 #####################################
 # Identify and remove question word #
@@ -43,24 +43,32 @@ def identifyQuestionWord(t):
     start = [None,None]
     firstWords(t,start)
     if not start[0]: # the first word is not in the tree, we extract it directly from the sentence
-        start[0] = Word(t.text.split(' ', 1)[0],1)
+        start[0] = Word(t.text.split(' ')[0],1)
     if not start[1]:
         try:
-            start[1] = Word(t.text.split(' ', 1)[1],2)
+            start[1] = Word(t.text.split(' ')[1],2)
         except IndexError:
             pass
-    if start[1] and start[0].word.lower() + ' ' + start[1].word.lower() in openQuestionWord:
+    if start[1]:
+        w = start[0].word.lower() + ' ' + start[1].word.lower()
+        if w in openQuestionWord:
+            removeWord(t,start[0])
+            removeWord(t,start[1])
+            return w
+        if w in existQuestionWord:
+            removeWord(t,start[1])
+            return w
+        if w in predicateQuestionWord:
+            return w
+        if w in semiQuestionWord:
+            removeWord(t,start[1])
+            return w
+    w = start[0].word.lower()
+    if w in openQuestionWord: 
         removeWord(t,start[0])
-        removeWord(t,start[1])
-        return start[0].word.lower() + ' ' + start[1].word.lower()
-    if start[1] and start[0].word.lower() + ' ' + start[1].word.lower() in existQuestionWord:
-        removeWord(t,start[1])
-        return start[0].word.lower() + ' ' + start[1].word.lower()
-    if start[0].word.lower() in openQuestionWord: 
-        removeWord(t,start[0])
-        return start[0].word.lower()
-    if start[0].word.lower() in closeQuestionWord: # close question words with only 1 word for the moment
-        return start[0].word.lower()
+        return w
+    if w in predicateQuestionWord or w in closeQuestionWord:
+        return w
     return None
 
 #############################################
@@ -143,5 +151,8 @@ def processQuestionWord(t,w):
     processQuestionType(t,w)  # type the ROOT according to the question word
     if w in existQuestionWord:
         t.child[0].dependency = 'Rexist'
+    if w in semiQuestionWord or w in predicateQuestionWord:
+        if len(t.child[0].child) == 1:
+            t.child[0].child[0].dependency = 'R2'
     if w in openQuestionWord:
         processQuestionInfo(t.child[0],w)
