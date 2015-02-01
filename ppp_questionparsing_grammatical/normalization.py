@@ -21,16 +21,17 @@ def normalizeSuperlative(tree):
     """
         Handle Rspl dependency (superlative, ordinal)
     """
-    assert len(tree.getWords()) == 1 # only one possible superlative
-    assert len(tree.child) == 1
-    if buildValue(tree) in superlativeNoun:
-        if buildValue(tree) in superlativeOrder:
-            return superlativeOrder[buildValue(tree)](list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[buildValue(tree)]))
+    assert len(tree.getWords()) == 1 and len(tree.child) == 1
+    pred = buildValue(tree).split()[-1]
+    order = buildValue(tree).split()[0]
+    if pred in superlativeNoun:
+        if order in superlativeOrder:
+            return superlativeOrder[order](list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[pred]))
         else:
-            return First(list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[buildValue(tree)])) # First by default
+            return First(list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[pred])) # First by default
     else:
-        if buildValue(tree) in superlativeOrder:
-            return superlativeOrder[buildValue(tree)](list=Sort(list=normalize(tree.child[0]),predicate='default')) # default predicate
+        if order in superlativeOrder:
+            return superlativeOrder[order](list=Sort(list=normalize(tree.child[0]),predicate='default')) # default predicate
         else:
             return First(list=Sort(list=normalize(tree.child[0]),predicate='default'))
 

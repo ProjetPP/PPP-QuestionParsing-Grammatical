@@ -30,7 +30,9 @@ superlativeNoun = {
     'warmest'   : 'temperature',
     'wettest'   : 'humidity',
     'widest'    : 'width',
-    'youngest'  : 'age'
+    'youngest'  : 'age',
+    #
+    'recent'    : 'date'
 }
 
 superlativeOrder = {
@@ -65,5 +67,7 @@ superlativeOrder = {
     'warmest'   : Last,
     'wettest'   : Last,
     'widest'    : Last,
-    'youngest'  : First
+    'youngest'  : First,
+    #
+    'most'      : First
 }
