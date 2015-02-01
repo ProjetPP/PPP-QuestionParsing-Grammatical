@@ -28,7 +28,7 @@ def normalizeSuperlative(tree):
         else:
             return First(list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[buildValue(tree)])) # First by default
     else:
-        if  buildValue(tree) in superlativeOrder:
+        if buildValue(tree) in superlativeOrder:
             return superlativeOrder[buildValue(tree)](list=Sort(list=normalize(tree.child[0]),predicate='default')) # default predicate
         else:
             return First(list=Sort(list=normalize(tree.child[0]),predicate='default'))
