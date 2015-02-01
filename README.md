@@ -21,10 +21,10 @@ For instance, we aim at producing the triple `(Rwanda,president,?)` from the que
     "predicate": {
         "value": "president",
         "type": "resource"
-    }
+    },
     "object": {
         "type": "missing"
-    },
+    }
 }
 ```
 
@@ -52,7 +52,7 @@ You can install the main dependencies (especially CoreNLP) using the script file
 
 ## How to test
 
-The `demo` folder contains some demo files and a readme `README.md` that explains how to use them.
+The `demo` folder contains some demo files and a `README.md` that explains how to use them.
 
 ## Overview of the main folders
 

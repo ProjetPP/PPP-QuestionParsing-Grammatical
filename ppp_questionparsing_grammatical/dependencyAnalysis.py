@@ -20,7 +20,7 @@ def merge(t,qw):
     t.parent.merge(t,True)
 
 def amodRule(t,qw):
-    if t.namedEntityTag != 'ORDINAL' and t.wordList[0][0].pos != 'JJS': # [0] : must be improve (search in the whole list?)
+    if t.namedEntityTag != 'ORDINAL' and t.wordList[0][0].pos != 'JJS': # [0] : must be improve? (search in the whole list?)
         assert t.parent is not None
         merge(t,qw)
     else:
