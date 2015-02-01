@@ -263,6 +263,32 @@ class StandardTripleTests(TestCase):
     "type": "last"
 })
 
+    def testNormalizeSuperl2(self):
+        tree = computeTree(data.car()['sentences'][0])
+        qw = simplify(tree)
+        result = normalize(tree)
+        self.assertEqual(result,{
+    "list": {
+        "list": {
+            "subject": {
+                "value": "world",
+                "type": "resource"
+            },
+            "predicate": {
+                "value": "car",
+                "type": "resource"
+            },
+            "object": {
+                "type": "missing"
+            },
+            "type": "triple"
+        },
+        "predicate": "cost",
+        "type": "sort"
+    },
+    "type": "last"
+})
+
     def testCop(self):
         tree = computeTree(data.black()['sentences'][0])
         self.assertRaises(GrammaticalError, lambda: simplify(tree))

@@ -20,6 +20,12 @@ def merge(t,qw):
     t.parent.merge(t,True)
 
 def amodRule(t,qw):
+    if t.wordList[0][0].pos == 'JJ':
+        if len(t.child) > 0 and t.child[0].wordList[0][0].pos == 'RBS':
+            assert len(t.child) == 1 and len(t.child[0].child) == 0
+            merge(t.child[0],qw)
+            t.dependency = 'connectorUp'
+            return
     if t.namedEntityTag != 'ORDINAL' and t.wordList[0][0].pos != 'JJS': # [0] : must be improve? (search in the whole list?)
         assert t.parent is not None
         merge(t,qw)

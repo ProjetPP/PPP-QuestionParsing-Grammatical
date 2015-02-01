@@ -21,8 +21,7 @@ def normalizeSuperlative(tree):
     """
         Handle Rspl dependency (superlative, ordinal)
     """
-    assert len(tree.getWords()) == 1 # only one possible superlative
-    assert len(tree.child) == 1
+    assert len(tree.getWords()) == 1 and len(tree.child) == 1
     if buildValue(tree) in superlativeNoun:
         if buildValue(tree) in superlativeOrder:
             return superlativeOrder[buildValue(tree)](list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[buildValue(tree)]))
