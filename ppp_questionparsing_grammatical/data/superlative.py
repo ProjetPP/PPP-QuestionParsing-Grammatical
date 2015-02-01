@@ -70,6 +70,6 @@ superlativeOrder = {
     'widest'    : Last,
     'youngest'  : First,
     #
-    'most recent'    : First,
+    'most recent'    : Last,
     'most expensive' : Last
 }
