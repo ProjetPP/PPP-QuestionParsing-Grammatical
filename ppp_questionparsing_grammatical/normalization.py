@@ -24,14 +24,14 @@ def normalizeSuperlative(tree):
     assert len(tree.getWords()) == 1 and len(tree.child) == 1
     if buildValue(tree) in superlativeNoun:
         if buildValue(tree) in superlativeOrder:
-            return superlativeOrder[buildValue(tree)](list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[buildValue(tree)]))
+            return superlativeOrder[buildValue(tree)](list=Sort(list=normalize(tree.child[0]),predicate=Resource(value=superlativeNoun[buildValue(tree)])))
         else:
-            return First(list=Sort(list=normalize(tree.child[0]),predicate=superlativeNoun[buildValue(tree)])) # First by default
+            return First(list=Sort(list=normalize(tree.child[0]),predicate=Resource(value=superlativeNoun[buildValue(tree)]))) # First by default
     else:
         if buildValue(tree) in superlativeOrder:
-            return superlativeOrder[buildValue(tree)](list=Sort(list=normalize(tree.child[0]),predicate='default')) # default predicate
+            return superlativeOrder[buildValue(tree)](list=Sort(list=normalize(tree.child[0]),predicate=Resource(value='default'))) # default predicate
         else:
-            return First(list=Sort(list=normalize(tree.child[0]),predicate='default'))
+            return First(list=Sort(list=normalize(tree.child[0]),predicate=Resource(value='default')))
 
 def normalizeConjunction(tree):
     """
