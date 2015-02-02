@@ -59,7 +59,10 @@ class StandardTripleTests(TestCase):
                     "value": "Gilbert",
                     "type": "resource"
                 },
-                "predicate": "default",
+                "predicate": {
+                    "value" : "default",
+                    "type"  : "resource"
+                },
                 "type": "sort"
             },
             "type": "first"
@@ -70,7 +73,10 @@ class StandardTripleTests(TestCase):
                     "value": "Sullivan opera",
                     "type": "resource"
                 },
-                "predicate": "default",
+                "predicate": {
+                    "value" : "default",
+                    "type"  : "resource"
+                },
                 "type": "sort"
             },
             "type": "first"
@@ -257,7 +263,10 @@ class StandardTripleTests(TestCase):
             },
             "type": "triple"
         },
-        "predicate": "height",
+        "predicate": {
+                    "value" : "height",
+                    "type"  : "resource"
+                },
         "type": "sort"
     },
     "type": "last"
@@ -283,7 +292,10 @@ class StandardTripleTests(TestCase):
             },
             "type": "triple"
         },
-        "predicate": "cost",
+        "predicate": {
+                    "value" : "cost",
+                    "type"  : "resource"
+                },
         "type": "sort"
     },
     "type": "last"
