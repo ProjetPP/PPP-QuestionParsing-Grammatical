@@ -3,9 +3,9 @@ from ppp_datamodel import Triple, Resource, Missing, Intersection, Exists
 # expected[q] is the expected tree produced by the module for the question q.
 
 expected = {
-    'What is the birth date of George Washington?':
+    'What is the birth date of Bob Marley?':
     Triple(
-        Resource('George Washington'),
+        Resource('Bob Marley'),
         Resource('birth date'),
         Missing()
     ),
