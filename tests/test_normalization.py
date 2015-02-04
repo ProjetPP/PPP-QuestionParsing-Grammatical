@@ -120,29 +120,47 @@ class StandardTripleTests(TestCase):
             "object": {
                 "type": "missing"
             },
+            "predicate": {
+                "list": [
+                    {
+                        "value": "author",
+                        "type": "resource"
+                    },
+                    {
+                        "value": "writer",
+                        "type": "resource"
+                    }
+                ],
+                "type": "list"
+            },
             "subject": {
                 "value": "Lucy in the Sky with Diamonds",
                 "type": "resource"
             },
-            "type": "triple",
-            "predicate": {
-                "value": ["author","writer"],
-                "type": "resource"
-            }
+            "type": "triple"
         },
         {
             "object": {
                 "type": "missing"
             },
+            "predicate": {
+                "list": [
+                    {
+                        "value": "author",
+                        "type": "resource"
+                    },
+                    {
+                        "value": "writer",
+                        "type": "resource"
+                    }
+                ],
+                "type": "list"
+            },
             "subject": {
                 "value": "Let It Be",
                 "type": "resource"
             },
-            "type": "triple",
-            "predicate": {
-                "value": ["author","writer"],
-                "type": "resource"
-            }
+            "type": "triple"
         }
     ],
     "type": "intersection"
@@ -191,16 +209,29 @@ class StandardTripleTests(TestCase):
         qw = simplify(tree)
         result = normalize(tree)
         self.assertEqual(result,{
-    "predicate": {
-        "value": ["place","location","residence"],
-        "type": "resource"
+    "subject": {
+        "type": "resource",
+        "value": "mistake"
     },
     "object": {
         "type": "missing"
     },
-    "subject": {
-        "value": "mistake",
-        "type": "resource"
+    "predicate": {
+        "type": "list",
+        "list": [
+            {
+                "type": "resource",
+                "value": "place"
+            },
+            {
+                "type": "resource",
+                "value": "location"
+            },
+            {
+                "type": "resource",
+                "value": "residence"
+            }
+        ]
     },
     "type": "triple"
 })

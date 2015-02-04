@@ -1,6 +1,6 @@
 from unittest import TestCase
 from ppp_datamodel.communication import Request
-from ppp_datamodel import Triple, Resource, Missing, Intersection, Exists
+from ppp_datamodel import Triple, Resource, Missing, Intersection, Exists, List
 from ppp_libmodule.tests import PPPTestCase
 
 from ppp_questionparsing_grammatical import app
@@ -39,8 +39,8 @@ class RequestHandlerTest(PPPTestCase(app)):
         tree = answer[0].tree
         self.assertIsInstance(tree, Triple)
         predicate = tree.predicate
-        self.assertIsInstance(predicate,Resource)
-        self.assertTrue('birth date' in predicate.value)
+        self.assertIsInstance(predicate,List)
+        self.assertTrue(Resource(value='birth date') in predicate.list)
         self.assertIsInstance(tree.object, Missing)
         self.assertIsInstance(tree.subject, Triple)
         tree = tree.subject
@@ -67,10 +67,10 @@ class RequestHandlerTest(PPPTestCase(app)):
         self.assertIsInstance(l[1],Triple)
         self.assertTrue(l[0].subject == Resource('Le Petit Prince') or l[1].subject == Resource('Le Petit Prince'))
         self.assertTrue(l[0].subject == Resource('Vol de Nuit') or l[1].subject == Resource('Vol de Nuit'))
-        self.assertIsInstance(l[0].predicate, Resource)
-        self.assertIsInstance(l[1].predicate, Resource)
-        self.assertTrue('writer' in l[0].predicate.value)
-        self.assertTrue('writer' in l[1].predicate.value)
+        self.assertIsInstance(l[0].predicate, List)
+        self.assertIsInstance(l[1].predicate, List)
+        self.assertTrue(Resource(value='writer') in l[0].predicate.list)
+        self.assertTrue(Resource(value='writer') in l[1].predicate.list)
         self.assertIsInstance(l[0].object, Missing)
         self.assertIsInstance(l[1].object, Missing)
 
