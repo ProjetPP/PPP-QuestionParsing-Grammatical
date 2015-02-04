@@ -51,4 +51,32 @@ expected = {
             Missing()
         )
     ),
+
+    'Give me the capital of Australia.':
+    Triple(
+        Resource('Australia'),
+        Resource('capital'),
+        Missing()
+    ),
+
+    'What is the English for "星際大戰四部曲：曙光乍現"?':
+    Triple(
+        Resource('星際大戰四部曲：曙光乍現'),
+        Resource('English'),
+        Missing()
+    ),
+
+    'What is the English for "حرب النجوم الجزء الخامس: الإمبراطورية تعيد الضربات"?':
+    Triple(
+        Resource('حرب النجوم الجزء الخامس: الإمبراطورية تعيد الضربات'),
+        Resource('English'),
+        Missing()
+    ),
+
+    'What is the English for "Звёздные войны. Эпизод VI: Возвращение джедая"?':
+    Triple(
+        Resource('Звёздные войны. Эпизод VI: Возвращение джедая'),
+        Resource('English'),
+        Missing()
+    ),
 }
