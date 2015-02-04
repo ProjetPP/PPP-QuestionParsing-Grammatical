@@ -1,4 +1,4 @@
-from ppp_datamodel import Triple, Resource, Missing, Intersection, Exists
+from ppp_datamodel import Triple, Resource, Missing, Intersection, Exists, First, Last, Sort
 
 # expected[q] is the expected tree produced by the module for the question q.
 
@@ -49,6 +49,18 @@ expected = {
             Resource('France'),
             Resource('capital'),
             Missing()
+        )
+    ),
+
+    'What is the highest mountain in the world?':
+    Last(
+        Sort(
+            Triple(
+                Resource('world'),
+                Resource('mountain'),
+                Missing()
+            ),
+            Resource('height')
         )
     ),
 
