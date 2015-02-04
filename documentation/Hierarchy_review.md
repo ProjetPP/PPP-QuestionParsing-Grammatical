@@ -209,14 +209,14 @@ nsubj
 ##### +++
 
 * Who elected the president of France?
-* What was the first Gilbert and Sullivan opera?
+* What was the first Gilbert and Sullivan opera? >> problem or parsing failure ???
 * Who Clinton defeated?
-* Where is the ENS of Lyon?
-* What did Bob write ? > R3 if weak question word + not 'identity'
+* Where is the ENS of Lyon? >> problem or parsing failure ???
+* What did Bob write ? > R3 if weak question word + not 'identity' >> problem or parsing failure ???
 
 ##### ---
 
-* What actor married John F. Kennedy's siste
+* What actor married John F. Kennedy's sister
 
 num
 ===

@@ -83,7 +83,7 @@ Racine à fils multiples
 * nsubj + prep_by                   : List movies directed by Spielberg
 * prep_of + prep_of                 : list of president of usa
 * nsubj + prep_by                   : List movies directed by Spielberg
-* nsubj + prep_in                   : How many gas stations are there in the United States?
+
 
 instance of:
 
@@ -93,6 +93,7 @@ instance of:
 * nsubj + dobj (+ do)               : What albums did Pearl Jam record?
 * nsubj + dobj                      : What dictator has the nickname "El Maximo"?
 * nsubj + dobj                      : What actor married John F. Kennedy's sister? > (?, instance of, actor) ∩ (?, wife, (John F. Kennedy, sister, ?))
+* nsubj + prep_in                   : How many gas stations are there in the United States?
 
 * voir Problematic questions dans hierarchy review
 
