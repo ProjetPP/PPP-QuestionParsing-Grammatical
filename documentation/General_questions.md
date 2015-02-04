@@ -17,6 +17,10 @@ General
     >> seul les prédicats peuvent contenir des alternatives > le garantir
 * Recherche de wexcept/id... : uniquement prefixe/suffixe (sunday ?)
 * Vérifier que les positions/tag sont bien gérées (en particulier sur les alternatives)
+* What's the name of King Arthur's sword? > 's n'est pas reconnu comme le verbe être > ajouter des lemmatize except comme dans conceptnet
+* Multiple predicates pour les sort
+* Tell me where the DuPont company is located. Name the Ranger who was always after Yogi Bear.
+* How do you solve "Rubik's Cube"? > en quoi est transformé how
 
 Remarks
 =======
@@ -75,11 +79,25 @@ Semi question words
 Racine à fils multiples
 =======================
 
-* nsubjpass + prep_in               : What language is spoken in Argentina?     > (Argentina, language, ?)
-* prep_from + prep_to + prep_on     : carpool from Lyon to Paris on December 31 > (?, instance of, carpool) ∩ (?, from, Paris) ∩ (?, to, Lyon) ∩ (?,day, December 31st)
-* nsubj + dobj                      : Which books did Suzanne Collins write?    > (Suzanne Collins, author, ?) + typage "book" sur ?
-* nsubj + dobj (+ do)               : What albums did Pearl Jam record?
 * nsubj + prep_from                 : Are you from Germany?                     > (you,origin,Germany) > yes/no : (subj | pred:be from, do..live | cpt)
 * nsubj + prep_by                   : List movies directed by Spielberg
 * prep_of + prep_of                 : list of president of usa
 * nsubj + prep_by                   : List movies directed by Spielberg
+* nsubj + prep_in                   : How many gas stations are there in the United States?
+
+instance of:
+
+* prep_from + prep_to + prep_on     : carpool from Lyon to Paris on December 31 > (?, instance of, carpool) ∩ (?, from, Paris) ∩ (?, to, Lyon) ∩ (?,day, December 31st)
+* nsubjpass + prep_in               : What language is spoken in Argentina?     > (Argentina, language, ?)
+* nsubj + dobj                      : Which books did Suzanne Collins write?    > (Suzanne Collins, author, ?) + typage "book" sur ?
+* nsubj + dobj (+ do)               : What albums did Pearl Jam record?
+* nsubj + dobj                      : What dictator has the nickname "El Maximo"?
+* nsubj + dobj                      : What actor married John F. Kennedy's sister? > (?, instance of, actor) ∩ (?, wife, (John F. Kennedy, sister, ?))
+
+* voir Problematic questions dans hierarchy review
+
+Amélioration des question maps
+==============================
+
+* How much : ajouter cost
+* Plus généralement : réduire le nb de map, ajouter + d'infos

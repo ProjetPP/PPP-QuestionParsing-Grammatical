@@ -3,6 +3,7 @@ from ppp_datamodel import Intersection, First, Last
 superlativeNoun = {
     # associate relevant predicate to each uperlative
     'biggest'   : 'size',
+    'smallest'  : 'size',
     'broadest'  : 'width',
     'coldest'   : 'temperature',
     'deepest'   : 'depth',
@@ -44,6 +45,7 @@ superlativeOrder = {
     'first'     : First,
     'last'      : Last,
     'biggest'   : Last,
+    'smallest'  : Last,
     'broadest'  : Last,
     'coldest'   : First,
     'deepest'   : Last,
