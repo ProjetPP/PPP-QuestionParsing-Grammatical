@@ -11,6 +11,7 @@ Please, don't remove any example (they are used frequently to check the whole al
 * appos
 * dep (no hope... the stanford parser needs to be improved/trained)
 * dobj
+* nsubj
 
 ### Problematic questions
 
@@ -89,6 +90,7 @@ Current rule: merge
 * How long did the Charles Manson murder trial last?
 * What two US biochemists won the Nobel Prize in medicine in 1992?
 * Who is the US president?
+* When was Benjamin Disraeli prime minister?
 
 ##### +++
   
@@ -200,6 +202,9 @@ nsubj
 
 - only if a = is/was/... ?
 - when is/... is replaced, it's more relevant to produce a R5 rule
+- sometimes it's relevent to produce an "instance of" triple.
+- not "instance of" only if is/was/... ?
+- new rules Rnsubj ????
 
 ##### +++
 
@@ -208,6 +213,10 @@ nsubj
 * Who Clinton defeated?
 * Where is the ENS of Lyon?
 * What did Bob write ? > R3 if weak question word + not 'identity'
+
+##### ---
+
+* What actor married John F. Kennedy's siste
 
 num
 ===
@@ -240,6 +249,7 @@ Exemples :
 * What percentage of the world's plant and animal species can be found in the Amazon forests?
 * Good: Who is section manager for guidance and control systems at JPL?
 * Bad: How many people did the United Nations commit to help restore order and distribute humanitarian relief in Somalia in September 1992?
+* Bad: Which Italian city is home to the Cathedral of Santa Maria del Fiore or the Duomo?
 
 Problem with merging:
 ---------------------

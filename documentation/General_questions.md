@@ -17,6 +17,10 @@ General
     >> seul les prédicats peuvent contenir des alternatives > le garantir
 * Recherche de wexcept/id... : uniquement prefixe/suffixe (sunday ?)
 * Vérifier que les positions/tag sont bien gérées (en particulier sur les alternatives)
+* What's the name of King Arthur's sword? > 's n'est pas reconnu comme le verbe être > ajouter des lemmatize except comme dans conceptnet
+* Multiple predicates pour les sort
+* Tell me where the DuPont company is located. Name the Ranger who was always after Yogi Bear.
+* How do you solve "Rubik's Cube"? > en quoi est transformé how
 
 Remarks
 =======
@@ -83,3 +87,13 @@ Racine à fils multiples
 * nsubj + prep_by                   : List movies directed by Spielberg
 * prep_of + prep_of                 : list of president of usa
 * nsubj + prep_by                   : List movies directed by Spielberg
+* nsubj + prep_in                   : How many gas stations are there in the United States?
+* nsubj + dobj                      : What dictator has the nickname "El Maximo"?
+* nsubj + dobj                      : What actor married John F. Kennedy's sister? > (?, instance of, actor) ∩ (?, wife, (John F. Kennedy, sister, ?))
+* voir Problematic questions dans hierarchy review
+
+Amélioration des question maps
+==============================
+
+* How much : ajouter cost
+* Plus généralement : réduire le nb de map, ajouter + d'infos
