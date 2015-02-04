@@ -22,14 +22,15 @@ def normalizeSuperlative(tree):
         Handle Rspl dependency (superlative, ordinal)
     """
     assert len(tree.getWords()) == 1 and len(tree.child) == 1
-    if buildValue(tree) in superlativeNoun:
-        if buildValue(tree) in superlativeOrder:
-            return superlativeOrder[buildValue(tree)](list=Sort(list=normalize(tree.child[0]),predicate=Resource(value=superlativeNoun[buildValue(tree)])))
+    superlative = buildValue(tree)
+    if superlative in superlativeNoun:
+        if superlative in superlativeOrder:
+            return superlativeOrder[superlative](list=Sort(list=normalize(tree.child[0]),predicate=Resource(value=superlativeNoun[superlative])))
         else:
-            return First(list=Sort(list=normalize(tree.child[0]),predicate=Resource(value=superlativeNoun[buildValue(tree)]))) # First by default
+            return First(list=Sort(list=normalize(tree.child[0]),predicate=Resource(value=superlativeNoun[superlative]))) # First by default
     else:
-        if buildValue(tree) in superlativeOrder:
-            return superlativeOrder[buildValue(tree)](list=Sort(list=normalize(tree.child[0]),predicate=Resource(value='default'))) # default predicate
+        if superlative in superlativeOrder:
+            return superlativeOrder[superlative](list=Sort(list=normalize(tree.child[0]),predicate=Resource(value='default'))) # default predicate
         else:
             return First(list=Sort(list=normalize(tree.child[0]),predicate=Resource(value='default')))
 
@@ -40,14 +41,15 @@ def normalizeConjunction(tree):
     result = []
     assert len(tree.getWords()) == 1
     assert len(tree.child) == 2 and tree.child[0].dependency.startswith('Rconj') and tree.child[1].dependency.startswith('Rconj')
+    conjunction = buildValue(tree)
     if tree.child[0].dependency == 'RconjT':
         result = [normalize(tree.child[0]),normalize(tree.child[1])]
     else:
         result = [normalize(tree.child[1]),normalize(tree.child[0])]    
     try:
-        return conjunctionTab[buildValue(tree)](list=result)
+        return conjunctionTab[conjunction](list=result)
     except KeyError:
-        raise GrammaticalError(buildValue(tree),"conjunction unknown")
+        raise GrammaticalError(conjunction,"conjunction unknown")
 
 def normalize(tree):
     """
