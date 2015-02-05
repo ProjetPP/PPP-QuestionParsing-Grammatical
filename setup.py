@@ -36,7 +36,7 @@ setup(
         'ppp_questionparsing_grammatical.data',
     ],
     package_data={
-        'ppp_questionparsing_grammatical': ['data/*'],
+        'ppp_questionparsing_grammatical': ['data/*.{pickle,py}'],
     },
 )
 
