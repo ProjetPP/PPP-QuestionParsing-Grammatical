@@ -87,7 +87,7 @@ def mergeNamedEntityTagSisterBrother(t):
         mergeNamedEntityTagSisterBrother(c)
     tagToNodes = {}
     for c in t.child:
-        if c.namedEntityTag == 'undef':
+        if c.namedEntityTag == 'undef' or c.dependency.startswith('conj'):
             continue
         try:
             tagToNodes[c.namedEntityTag+c.dependency].add(c)
