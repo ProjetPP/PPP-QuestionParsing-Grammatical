@@ -20,22 +20,16 @@ Please, don't remove any example (they are used frequently to check the whole al
 * How far is Yaroslavl from Moscow?
 * What effect does a prism have on light?
 * Where was the movie "Somewhere in Time" filmed? (not always the same result?)
-* What city is Purdue University in?
-* Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"? >> problem of redundancy (book + title of the book)
-* What U.S. state is Fort Knox in?
 * What country in Latin America is the largest one?
 * He is the biggest and fattest man >> problem with amod and 2*conj
 * Who held the endurance record for women pilots in 1929? >> problem with for
 * How many people that live in China speak english?
 * How many USA presidents have visited Iran?
-* Which movies does Quentin Tarantino star in?
 * Which movies did Quentin Tarantino direct, but not star in?
 * Who receives the Nobel Prize in Physics in 2000?
 * When did Diana and Charles get married?
 * Where is Mozambique located? > location/place
 * Who built the first pyramid? > consider "pyramide" as (single) triple / predicate
-* Who wrote the book, "Huckleberry Finn"?
-* What kind of animal is Babar?
 * Who was the first Taiwanese President?
 * What is the brightest star visible from Earth?
 
@@ -48,6 +42,13 @@ Current rule: don't merge/remove appos
 
 * Who came up with the name, El Nino?
 * Who wrote the song, "Stardust"? > (sometimes dep instead of appos) replace the father by the son || or R5 (or R2) rule?
+* Who wrote the book, "Huckleberry Finn"?
+* Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"? >> problem of redundancy (book + title of the book)
+
+prt
+===
+
+* Who came up with the name, El Nino?
 
 xcomp
 =====
@@ -209,9 +210,9 @@ nsubj
 ##### +++
 
 * Who elected the president of France?
-* What was the first Gilbert and Sullivan opera? >> problem or parsing failure ???
+* What was the first Gilbert and Sullivan opera?
 * Who Clinton defeated?
-* Where is the ENS of Lyon? >> problem or parsing failure ???
+* Where is the ENS of Lyon?
 * What did Bob write ? > R3 if weak question word + not 'identity' >> problem or parsing failure ???
 
 ##### ---
@@ -306,3 +307,9 @@ Stanford Parser fails
 * Which movies did Quentin Tarantino direct, but not star in?
 * Are there beers in Germany?
 * Show me Star Wars movies
+* What country is the biggest producer of tungsten?
+* How long did the Charles Manson murder trial last?
+* What kind of animal is Babar?
+* Which movies does Quentin Tarantino star in?
+* What U.S. state is Fort Knox in?
+* What city is Purdue University in?

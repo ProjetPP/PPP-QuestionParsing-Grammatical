@@ -21,6 +21,13 @@ General
 * Multiple predicates pour les sort
 * Tell me where the DuPont company is located. Name the Ranger who was always after Yogi Bear.
 * How do you solve "Rubik's Cube"? > en quoi est transformé how
+* réduire le nb de map, ajouter + d'infos
+* How many : opérateur de comptage 
+    >> How many films did Ingmar Bergman make?
+    >> How many children does Barack Obama have?
+* nounificatin : Which books did Suzanne Collins write? > author n'est pas un prédicat de Suzanne C. ?
+    >> http://www.wikidata.org/wiki/Q33977
+    >> http://www.wikidata.org/wiki/Property:P800 notable works, literary works, bibliography work, works
 
 Remarks
 =======
@@ -75,30 +82,64 @@ Semi question words
 * Give me the capital of France
 * Give the capital of France
 * Give us the capital of France
+* list of president of usa (mal parsé)
 
 Racine à fils multiples
 =======================
 
 * nsubj + prep_from                 : Are you from Germany?                     > (you,origin,Germany) > yes/no : (subj | pred:be from, do..live | cpt)
-* nsubj + prep_by                   : List movies directed by Spielberg
-* prep_of + prep_of                 : list of president of usa
-* nsubj + prep_by                   : List movies directed by Spielberg
+* dobj + prep_for                   : Who held the endurance record for women pilots in 1929?
 
 
-instance of:
+#### instance_of
 
-* prep_from + prep_to + prep_on     : carpool from Lyon to Paris on December 31 > (?, instance of, carpool) ∩ (?, from, Paris) ∩ (?, to, Lyon) ∩ (?,day, December 31st)
-* nsubjpass + prep_in               : What language is spoken in Argentina?     > (Argentina, language, ?)
-* nsubj + dobj                      : Which books did Suzanne Collins write?    > (Suzanne Collins, author, ?) + typage "book" sur ?
-* nsubj + dobj (+ do)               : What albums did Pearl Jam record?
+Mot interrogatif dans un sous-arbre nsubj
+position(verbe) > position(nsubj)
+
+* nsubjpass + prep_in               : What language is spoken in Argentina? 
 * nsubj + dobj                      : What dictator has the nickname "El Maximo"?
 * nsubj + dobj                      : What actor married John F. Kennedy's sister? > (?, instance of, actor) ∩ (?, wife, (John F. Kennedy, sister, ?))
+* nsubj + prep_by                   : List movies directed by Spielberg
+* nsubjpass                         : Which president has been killed by Oswald? > remove nsubjpass
+* What actor married John F. Kennedy's sister
+* nsubjpass                         : which books were written by Victor Hugo
+
+#### instance_of exception
+
+position(verbe) > position(nsubj) mais pas d'instance_of
+
+* nsubj + dobj                      : Which books did Suzanne Collins write?    > (Suzanne Collins, author, ?) ∩ (books, typage "book" sur ?
 * nsubj + prep_in                   : How many gas stations are there in the United States?
+* What did John Hinckley do to impress Jodie Foster?
 
-* voir Problematic questions dans hierarchy review
+#### nsubj avec verbe nécessaire
 
-Amélioration des question maps
-==============================
+Mot interrogatif est dobj
 
-* How much : ajouter cost
-* Plus généralement : réduire le nb de map, ajouter + d'infos
+* Is there a ghost in my house
+* Are there computers in your room
+* What is the most beautiful country in Europe?
+* Who was the first Taiwanese President?
+* What was the monetary value of the Nobel Peace Prize in 1989? 
+* When was Benjamin Disraeli prime minister?
+* nsubjpass : Where was Ulysses S. Grant born?
+* nsubjpass : Where is Inoco based?
+* What was the first Gilbert and Sullivan opera?
+* Where is the ENS of Lyon?
+* What did Bob write ?
+* Who is the author of Sea and Sky?
+
+#### Question word nsubj
+
+No subject after preprocessing
+
+* Who wrote the song, "Stardust"?
+* Who invented the hula hoop?
+* nsubjpass : Who was killed by Oswald?
+* Who elected the president ?
+
+#### ???
+
+* nsubj + dobj (+ do)               : What albums did Pearl Jam record? (cf parsing de: Which books did Suzanne Collins write)
+* How many films did Ingmar Bergman make?
+* Who Clinton defeated?
