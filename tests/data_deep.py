@@ -1,94 +1,59 @@
-from ppp_datamodel import Triple, Resource, Missing, Intersection, Exists, First, Last, Sort
+from ppp_datamodel import Triple as T
+from ppp_datamodel import Resource as R
+from ppp_datamodel import Missing as M
+from ppp_datamodel import Intersection as I
+from ppp_datamodel import Exists as E
+from ppp_datamodel import First as F
+from ppp_datamodel import Last as L
+from ppp_datamodel import Sort as S
 
 # expected[q] is the expected tree produced by the module for the question q.
 
 expected = {
     'What is the birth date of Bob Marley?':
-    Triple(
-        Resource('Bob Marley'),
-        Resource('birth date'),
-        Missing()
-    ),
+    T(R('Bob Marley'),R('birth date'),M()),
 
     'When was born the daughters of the wife of the president of the United States?':
-    Triple(
-        Triple(
-            Triple(
-                Triple(
-                    Resource('United States'),
-                    Resource('president'),
-                    Missing()
-                ),
-                Resource('wife'),
-                Missing()
+    T(
+        T(
+            T(
+                T(R('United States'),R('president'),M()),
+                R('wife'),
+                M()
             ),
-            Resource('daughter'),
-            Missing()
+            R('daughter'),
+            M()
         ),
-        Resource('birth date'),
-        Missing()
+        R('birth date'),
+        M()
     ),
 
     'Who wrote "Le Petit Prince" and "Vol de Nuit"':
-    Intersection([
-        Triple(
-            Resource('Le Petit Prince'),
-            Resource('writer'),
-            Missing()
-        ),
-        Triple(
-            Resource('Vol de Nuit'),
-            Resource('writer'),
-            Missing()
-        )
+    I([
+        T(R('Le Petit Prince'),R('writer'),M()),
+        T(R('Vol de Nuit'),R('writer'),M())
     ]),
 
     'Is there a capital of France?':
-    Exists(
-        Triple(
-            Resource('France'),
-            Resource('capital'),
-            Missing()
-        )
-    ),
+    E(T(R('France'),R('capital'),M())),
 
     'What is the highest mountain in the world?':
-    Last(
-        Sort(
-            Triple(
-                Resource('world'),
-                Resource('mountain'),
-                Missing()
-            ),
-            Resource('height')
+    L(
+        S(
+            T(R('world'),R('mountain'),M()),
+            R('height')
         )
     ),
 
     'Give me the capital of Australia.':
-    Triple(
-        Resource('Australia'),
-        Resource('capital'),
-        Missing()
-    ),
+    T(R('Australia'),R('capital'),M()),
 
     'What is the English for "星際大戰四部曲：曙光乍現"?':
-    Triple(
-        Resource('星際大戰四部曲：曙光乍現'),
-        Resource('English'),
-        Missing()
-    ),
+    T(R('星際大戰四部曲：曙光乍現'),R('English'),M()),
 
     'What is the English for "حرب النجوم الجزء الخامس: الإمبراطورية تعيد الضربات"?':
-    Triple(
-        Resource('حرب النجوم الجزء الخامس: الإمبراطورية تعيد الضربات'),
-        Resource('English'),
-        Missing()
-    ),
+    T(R('حرب النجوم الجزء الخامس: الإمبراطورية تعيد الضربات'),R('English'),M()),
 
     'What is the English for "Звёздные войны. Эпизод VI: Возвращение джедая"?':
-    Triple(
-        Resource('Звёздные войны. Эпизод VI: Возвращение джедая'),
-        Resource('English'),
-        Missing()
-    ),
+    T(R('Звёздные войны. Эпизод VI: Возвращение джедая'),R('English'),M()),
 }
