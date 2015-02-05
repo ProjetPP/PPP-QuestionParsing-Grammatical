@@ -1,5 +1,6 @@
 import sys
 import os
+from pkg_resources import resource_string
 from .data.exceptions import NounificationError
 from .nounDB import Nounificator
 
@@ -8,9 +9,9 @@ from .nounDB import Nounificator
 ########################################
 
 nManual = Nounificator()
-nManual.load(os.path.join(os.path.dirname(__file__), 'data/nounificationManual.pickle'))
+nManual.load(resource_string('ppp_questionparsing_grammatical', 'data/nounificationManual.pickle'))
 nAuto = Nounificator()
-nAuto.load(os.path.join(os.path.dirname(__file__), 'data/nounificationAuto.pickle'))
+nAuto.load(resource_string('ppp_questionparsing_grammatical', 'data/nounificationAuto.pickle'))
 
 class Word:
     """
