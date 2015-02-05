@@ -90,26 +90,27 @@ Racine à fils multiples
 * dobj + prep_for                   : Who held the endurance record for women pilots in 1929?
 
 
+----------------------------------------------------------------------
+
 #### instance_of
 
 Mot interrogatif dans un sous-arbre nsubj
 position(verbe) > position(nsubj)
 
 * nsubjpass + prep_in               : What language is spoken in Argentina? 
-* nsubj + dobj                      : What dictator has the nickname "El Maximo"?
-* nsubj + dobj                      : What actor married John F. Kennedy's sister? > (?, instance of, actor) ∩ (?, wife, (John F. Kennedy, sister, ?))
+* nsubj + dobj                      : -What dictator has the nickname "El Maximo"?
+* nsubj + dobj                      : -What actor married John F. Kennedy's sister?
 * nsubj + prep_by                   : List movies directed by Spielberg
-* nsubjpass                         : Which president has been killed by Oswald? > remove nsubjpass
-* nsubjpass                         : which books were written by Victor Hugo
-
-__Règle__ : si le mot interrogatif (s'il existe) est dans un sous-arbre nsubj, produire un triplet instance_of à partir de la relation nsubj incriminée (nsubj et nsubjpass identiques)
+* nsubjpass                         : Which president has been killed by Oswald?
+* nsubjpass                         : which book was authored by Victor Hugo
 
 #### instance_of exception
 
 position(verbe) > position(nsubj) mais pas d'instance_of
 
-* nsubj + dobj                      : Which books did Suzanne Collins write?    > (Suzanne Collins, author, ?) ∩ (books, typage "book" sur ?
-* nsubj + prep_in                   : How many gas stations are there in the United States?
+* nsubj + dobj                      : -Which books did Suzanne Collins write? 
+* When was the president of the United States born
+* nsubj + prep_in                   : -How many gas stations are there in the United States?
 * What did John Hinckley do to impress Jodie Foster?
 
 #### nsubj avec verbe nécessaire
@@ -117,7 +118,7 @@ position(verbe) > position(nsubj) mais pas d'instance_of
 Mot interrogatif est relié directement au verbe + pas dans un sous arbre sujet (souvent dep)
 
 * What is the most beautiful country in Europe?
-* Who was the first Taiwanese President?
+* -Who was the first Taiwanese President? > problème fusion
 * What was the monetary value of the Nobel Peace Prize in 1989? 
 * When was Benjamin Disraeli prime minister? > -advmod-> When
 * nsubjpass : Where was Ulysses S. Grant born?
@@ -143,3 +144,16 @@ No subject after preprocessing
 * nsubj + dobj (+ do)               : What albums did Pearl Jam record? (cf parsing de: Which books did Suzanne Collins write)
 * How many films did Ingmar Bergman make?
 * Who Clinton defeated?
+
+#### TODO
+
+Who is the United States president                                                              >> nice
+What dictator has the nickname "El Maximo"? / What albums did Pearl Jam record?                 >> traiter tous les auxiliaires comme be. Et dobj ici ? Généraliser la
+                                                                                                   règle d'évitation à toutes les relations ? Uniquement sur les fils de 
+                                                                                                   la racine ?
+Who was the leader of the Branch Davidian Cult confronted by the FBI in Waco, Texas in 1993?    >> gros sujet
+Where was Ulysses S. Grant born? / What actor married John F. Kennedy's sister?                 >> merge "S." car index entre les 2
+Where is the ENS of Lyon?                                                                       >> merge car majuscule
+Where is Inoco based?                                                                           >> revoir la nounification associée
+Who Clinton defeated?                                                                           >> prq nounification échoue ? non lemmatizé ?
+Rapprocher/renommer les règles R.. similaires

@@ -33,21 +33,12 @@ def amodRule(t,qw):
         t.dependency = 'connectorUp'
 
 def nsubjRule(t,qw):
-    #print(t.getWords())
-    #print(t.wordList[0].pos)
-    #print(t.parent.getWords())
-    #print(t.parent.wordList[0].pos)
-    if t.wordList[0][0].index < t.parent.wordList[0][0].index:
-        #print(t.wordList[0][0].pos)
-        #print(t.parent.wordList[0][0].pos)
-        t.dependency = 'R6'    
+    if qw in strongQuestionWord: # or len(t.child) == 0: # Warning: length can decrease during analysis > needs also the R2 tag
+        t.dependency = 'R5s' # same as R5 except that types are propagated
+    #elif t.parent.getWords() != ['identity']:
+    #    t.dependency = 'R3'
     else:
-        if qw in strongQuestionWord: # or len(t.child) == 0: # Warning: length can decrease during analysis > needs also the R2 tag
-            t.dependency = 'R5s' # same as R5 except that types are propagated
-        #elif t.parent.getWords() != ['identity']:
-        #    t.dependency = 'R3'
-        else:
-            t.dependency = 'R2'
+        t.dependency = 'R2'
 
 def nnRule(t,qw):
     if (t.namedEntityTag != 'undef' or t.parent.namedEntityTag != 'undef') and (t.namedEntityTag == 'undef' or t.parent.namedEntityTag == 'undef'): # ou t.namedEntityTag != t.parent.namedEntityTag ????????
@@ -79,6 +70,8 @@ dependenciesMap1 = {
             'subj'      : impossible,
                 'nsubj'     : nsubjRule,
                     'nsubjpass'    : nsubjRule, # instead of R5
+                'nsubj_qw'     : 'R6', # !!!!!!!!!
+                    'nsubjpass_qw'    : 'R6',
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
         'cc'        : impossible,
