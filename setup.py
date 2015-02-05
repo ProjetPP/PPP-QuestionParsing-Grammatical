@@ -35,6 +35,9 @@ setup(
         'ppp_questionparsing_grammatical',
         'ppp_questionparsing_grammatical.data',
     ],
+    package_data={
+        'ppp_questionparsing_grammatical': ['data/*'],
+    },
 )
 
 import sys
