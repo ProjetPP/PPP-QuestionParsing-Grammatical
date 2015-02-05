@@ -100,8 +100,9 @@ position(verbe) > position(nsubj)
 * nsubj + dobj                      : What actor married John F. Kennedy's sister? > (?, instance of, actor) ∩ (?, wife, (John F. Kennedy, sister, ?))
 * nsubj + prep_by                   : List movies directed by Spielberg
 * nsubjpass                         : Which president has been killed by Oswald? > remove nsubjpass
-* What actor married John F. Kennedy's sister
 * nsubjpass                         : which books were written by Victor Hugo
+
+__Règle__ : si le mot interrogatif (s'il existe) est dans un sous-arbre nsubj, produire un triplet instance_of à partir de la relation nsubj incriminée (nsubj et nsubjpass identiques)
 
 #### instance_of exception
 
@@ -113,20 +114,20 @@ position(verbe) > position(nsubj) mais pas d'instance_of
 
 #### nsubj avec verbe nécessaire
 
-Mot interrogatif est dobj
+Mot interrogatif est relié directement au verbe + pas dans un sous arbre sujet (souvent dep)
 
-* Is there a ghost in my house
-* Are there computers in your room
 * What is the most beautiful country in Europe?
 * Who was the first Taiwanese President?
 * What was the monetary value of the Nobel Peace Prize in 1989? 
-* When was Benjamin Disraeli prime minister?
+* When was Benjamin Disraeli prime minister? > -advmod-> When
 * nsubjpass : Where was Ulysses S. Grant born?
 * nsubjpass : Where is Inoco based?
 * What was the first Gilbert and Sullivan opera?
 * Where is the ENS of Lyon?
-* What did Bob write ?
+* What did Bob write ? -dobj-> What
 * Who is the author of Sea and Sky?
+* Is there a ghost in my house -xcomp-> there
+* Are there computers in your room
 
 #### Question word nsubj
 

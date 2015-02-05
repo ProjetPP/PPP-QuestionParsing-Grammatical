@@ -92,6 +92,7 @@ Current rule: merge
 * What two US biochemists won the Nobel Prize in medicine in 1992?
 * Who is the US president?
 * When was Benjamin Disraeli prime minister?
+* What dictator has the nickname "El Maximo"?
 
 ##### +++
   
@@ -313,3 +314,4 @@ Stanford Parser fails
 * Which movies does Quentin Tarantino star in?
 * What U.S. state is Fort Knox in?
 * What city is Purdue University in?
+* When was Benjamin Disraeli prime minister?

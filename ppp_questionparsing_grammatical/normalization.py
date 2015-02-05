@@ -81,8 +81,10 @@ def normalize(tree):
             result.append(Triple(subject=Missing(), predicate=normalize(t), object=buildValue(tree)))
         if t.dependency == 'R5' or t.dependency == 'R5s':
             result.append(Triple(subject=normalize(t), predicate=buildValue(tree), object=Missing()))
-        #if t.dependency == 'R6': # not use for the moment
-        #   result.append(Triple(subject=buildValue(tree), predicate=normalize(t), object=Missing()))
+        if t.dependency == 'R6':
+           result.append(Triple(subject=Missing(), predicate=Resource(value='instance of'), object=normalize(t)))
+        if t.dependency == 'R7':
+            result.append(Triple(subject=buildValue(tree), predicate=normalize(t), object=Missing()))
     if len(result) == 1:
         return result[0]
     else:

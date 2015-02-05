@@ -33,17 +33,35 @@ def amodRule(t,qw):
         t.dependency = 'connectorUp'
 
 def nsubjRule(t,qw):
-    if qw in strongQuestionWord: # or len(t.child) == 0: # Warning: length can decrease during analysis > needs also the R2 tag
-        t.dependency = 'R5s' # same as R5 except that types are propagated
-    elif t.parent.getWords() != ['identity']:
-        t.dependency = 'R3'
+    #print(t.getWords())
+    #print(t.wordList[0].pos)
+    #print(t.parent.getWords())
+    #print(t.parent.wordList[0].pos)
+    if t.wordList[0][0].index < t.parent.wordList[0][0].index:
+        #print(t.wordList[0][0].pos)
+        #print(t.parent.wordList[0][0].pos)
+        t.dependency = 'R6'    
     else:
-        t.dependency = 'R2'
-        
+        if qw in strongQuestionWord: # or len(t.child) == 0: # Warning: length can decrease during analysis > needs also the R2 tag
+            t.dependency = 'R5s' # same as R5 except that types are propagated
+        #elif t.parent.getWords() != ['identity']:
+        #    t.dependency = 'R3'
+        else:
+            t.dependency = 'R2'
+
+def nnRule(t,qw):
+    if (t.namedEntityTag != 'undef' or t.parent.namedEntityTag != 'undef') and (t.namedEntityTag == 'undef' or t.parent.namedEntityTag == 'undef'): # ou t.namedEntityTag != t.parent.namedEntityTag ????????
+        if t.namedEntityTag != 'undef':
+            t.dependency = 'R5'
+        else:
+            t.dependency = 'R7'
+    else:
+        merge(t,qw)
+
 dependenciesMap1 = {
     'undef'     : 'R0',
     'root'      : 'R0',
-    'dep'       : 'R1', # ? instead of R2
+    'dep'       : 'R1',
         'aux'       : remove,
             'auxpass'   : remove,
             'cop'       : impossible,
@@ -55,12 +73,12 @@ dependenciesMap1 = {
                 'xcomp'     : 'R3',
                 'pcomp'     : 'R3',
                 'obj'       : impossible,
-                    'dobj'      : 'R5', #_+ instead of R5
+                    'dobj'      : 'R5',
                     'iobj'      : 'R3',
-                    'pobj'      : 'R3', # -
+                    'pobj'      : 'R3',
             'subj'      : impossible,
                 'nsubj'     : nsubjRule,
-                    'nsubjpass'    : 'R5', #_+ ? instead of R4
+                    'nsubjpass'    : nsubjRule, # instead of R5
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
         'cc'        : impossible,
@@ -83,17 +101,17 @@ dependenciesMap1 = {
                 'neg'       : 'connectorUp', # need a NOT node
             'rcmod'     : 'R4', # temp, need to be analyzed
                 'quantmod'  : remove,
-            'nn'        : merge,
+            'nn'        : nnRule,
             'npadvmod'  : 'R5',
                 'tmod'      : 'R3',
             'num'       : merge,
             'number'    : merge,
-            'prep'      : 'R5', # ?
-            'prepc'     : 'R5', # ?
+            'prep'      : 'R5',
+            'prepc'     : 'R5',
             'poss'      : 'R5',
             'possessive': impossible,
             'prt'       : merge,
-        'parataxis' : remove, #  ?
+        'parataxis' : remove,
         'punct'     : impossible,
         'ref'       : impossible,
         'sdep'      : impossible,
@@ -120,7 +138,8 @@ dependenciesMap2 = {         # how to handle a -b-> c
     'R4'        : ignore,         # (?,normalize(c),!a)
     'R5'        : ignore,         # (normalize(c),!a,?)
     'R5s'       : propagateType,  # (normalize(c),!a,?)
-     #'R6'        : ignore,        # (!a,normalize(c),?) # not use for the moment
+    'R6'        : propagateType,  # (?,instance of,c)
+    'R7'        : ignore,         # (!a,normalize(c),?)
     'Rspl'      : propagateType,  # superlative
     'RconjT'    : propagateType,  # top of a conjunction relation
     'RconjB'    : propagateType,  # bottom of a conjunction relation
