@@ -17,7 +17,6 @@ General
     >> seul les prédicats peuvent contenir des alternatives > le garantir
 * Recherche de wexcept/id... : uniquement prefixe/suffixe (sunday ?)
 * Vérifier que les positions/tag sont bien gérées (en particulier sur les alternatives)
-* What's the name of King Arthur's sword? > 's n'est pas reconnu comme le verbe être > ajouter des lemmatize except comme dans conceptnet
 * Multiple predicates pour les sort
 * Tell me where the DuPont company is located. Name the Ranger who was always after Yogi Bear.
 * How do you solve "Rubik's Cube"? > en quoi est transformé how
