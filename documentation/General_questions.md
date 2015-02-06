@@ -133,11 +133,13 @@ Tag "S." car index entre les 2 + relation nn:
   * Where was Ulysses S. Grant born?
   * What actor married John F. Kennedy's sister?
 
-Nice:
+Good:
   * Who is the United States president
+  * What was the first Gilbert and Sullivan opera?
+  * Obama is the United States president.
+  * Who is the United States president?
 
 Plus généralement : avoir une fonction de preprocessing qui applique des corrections sur l'arbre de dépendances dès le début (ajout de tags,...)
-
 _________________________________________________________________________________________________________________________________
 
 Nounification et inversion de triplets

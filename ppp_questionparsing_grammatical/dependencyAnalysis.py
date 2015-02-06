@@ -41,7 +41,7 @@ def nsubjRule(t,qw):
         t.dependency = 'R2'
 
 def nnRule(t,qw):
-    if t.namedEntityTag != t.parent.namedEntityTag: #or don't merge too if tags are not the same
+    if t.namedEntityTag != t.parent.namedEntityTag: # or don't merge too if tags are not the same
         if t.namedEntityTag != 'undef': # is it relevant ? see the debate about nounification and triple inversion
             t.dependency = 'R5'
         else:
