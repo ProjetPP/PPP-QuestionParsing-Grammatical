@@ -122,8 +122,8 @@ Racine à fils multiples
 _________________________________________________________________________________________________________________________________
 _________________________________________________________________________________________________________________________________
 
-Améliorer le NER
-================
+Améliorer le MWE recognition
+============================
 
 Rattraper un mauvais parsing:
   * who is the president of the United states of america
@@ -137,7 +137,9 @@ Good:
   * Who is the United States president
   * What was the first Gilbert and Sullivan opera?
   * Obama is the United States president.
-  * Who is the United States president?
+
+Amod:
+  * Who is the French president? >> nécessite avant de transformer French en France
 
 Plus généralement : avoir une fonction de preprocessing qui applique des corrections sur l'arbre de dépendances dès le début (ajout de tags,...)
 _________________________________________________________________________________________________________________________________
