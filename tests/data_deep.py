@@ -2,6 +2,7 @@ from ppp_datamodel import Triple as T
 from ppp_datamodel import Resource as R
 from ppp_datamodel import Missing as M
 from ppp_datamodel import Intersection as I
+from ppp_datamodel import Union as U
 from ppp_datamodel import Exists as E
 from ppp_datamodel import First as F
 from ppp_datamodel import Last as L
