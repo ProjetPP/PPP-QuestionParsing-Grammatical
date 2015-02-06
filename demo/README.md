@@ -69,5 +69,5 @@ evince demo.ps
 Fill in a file `dataset.in` with one question per line. Run the following code to parse each question and save its normal form into `dataset.out`:
 
 ```bash
-python3 datasetGeneration.py < dataset.in > dataset.out 2> dataset.error
+python3 datasetGeneration.py < dataset.in 1> dataset.out 2> dataset.error
 ```
