@@ -1,5 +1,6 @@
 import sys
 import os
+from pkg_resources import resource_filename
 from .data.exceptions import NounificationError
 from .nounDB import Nounificator
 
@@ -8,9 +9,9 @@ from .nounDB import Nounificator
 ########################################
 
 nManual = Nounificator()
-nManual.load(os.path.join(os.path.dirname(__file__), 'data/nounificationManual.pickle'))
+nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManual.pickle'))
 nAuto = Nounificator()
-nAuto.load(os.path.join(os.path.dirname(__file__), 'data/nounificationAuto.pickle'))
+nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAuto.pickle'))
 
 class Word:
     """
@@ -87,7 +88,7 @@ def mergeNamedEntityTagSisterBrother(t):
         mergeNamedEntityTagSisterBrother(c)
     tagToNodes = {}
     for c in t.child:
-        if c.namedEntityTag == 'undef':
+        if c.namedEntityTag == 'undef' or c.dependency.startswith('conj'):
             continue
         try:
             tagToNodes[c.namedEntityTag+c.dependency].add(c)
