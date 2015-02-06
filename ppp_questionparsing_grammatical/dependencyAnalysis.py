@@ -49,15 +49,22 @@ def nnRule(t,qw):
     else:
         merge(t,qw)
 
+def prepByRule(t,qw):
+    if t.parent.wordList[0][0].pos == 'V':
+        t.dependency = 'R3'
+    else:
+        t.dependency = 'R5'
+
 dependenciesMap1 = {
     'undef'     : 'R0',
     'root'      : 'R0',
+    'inst_of'   : 'R6', # !!!!!!!!! <<<<<<<<
     'dep'       : 'R1',
         'aux'       : remove,
             'auxpass'   : remove,
             'cop'       : impossible,
         'arg'       : impossible,
-            'agent'     : 'R5',
+            'agent'     : 'R3',
             'comp'      : 'R3',
                 'acomp'     : 'R3',
                 'ccomp'     : 'R5',
@@ -70,8 +77,6 @@ dependenciesMap1 = {
             'subj'      : impossible,
                 'nsubj'     : nsubjRule,
                     'nsubjpass'    : nsubjRule, # instead of R5
-                'nsubj_qw'     : 'R6', # !!!!!!!!!
-                    'nsubjpass_qw'    : 'R6',
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
         'cc'        : impossible,
@@ -100,7 +105,7 @@ dependenciesMap1 = {
             'num'       : merge,
             'number'    : merge,
             'prep'      : 'R5',
-            'prepc'     : 'R5',
+            'prep_by'   : prepByRule,
             'poss'      : 'R5',
             'possessive': impossible,
             'prt'       : merge,
@@ -166,8 +171,7 @@ def collapsePrep(t):
     temp = list(t.child) # copy, because t.child is changed while iterating
     for c in temp:
         collapsePrep(c)
-    if t.dependency.startswith('prep'): # prep_x or prepc_x (others?)
-        # prep = t.dependency[t.dependency.index('_')+1:] # not used for the moment
+    if t.dependency.startswith('prep') and t.dependency != 'prep_by': # prep_x or prepc_x (others?)
         t.dependency = 'prep' # suffix of the prep not analyzed for the moment (just removed)
 
 def connectorUp(t):

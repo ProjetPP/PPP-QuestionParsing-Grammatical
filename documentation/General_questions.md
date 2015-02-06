@@ -19,9 +19,14 @@ General
 * Tell me where the DuPont company is located. Name the Ranger who was always after Yogi Bear.
 * How do you solve "Rubik's Cube"? > en quoi est transformé how
 * réduire le nb de map, ajouter + d'infos
-* How many : opérateur de comptage 
+* Who was the leader of the Branch Davidian Cult confronted by the FBI in Waco, Texas in 1993?    >> gros sujet
+* Where is Inoco based?                                                                           >> revoir la nounification associée
+* Who Clinton defeated?                                                                           >> prq nounification échoue ? non lemmatizé ?
+* Rapprocher/renommer les règles R.. similaires
+* __How many__ : opérateur de comptage 
     >> How many films did Ingmar Bergman make?
     >> How many children does Barack Obama have?
+    >> cf instance_of sur dobj >> on récupère la liste produite en sortie et on renvoie sa taille
 
 Remarks
 =======
@@ -52,6 +57,7 @@ Yes/No questions
 ================
 
 * Yes/no question: product dobj relation?
+* nsubj + prep_from                 : Are you from Germany?                     > (you,origin,Germany) > yes/no : (subj | pred:be from, do..live | cpt)
 
 Conjonction
 ===========
@@ -114,15 +120,10 @@ Semi question words
 * Give us the capital of France
 * list of president of usa > mal parsé
 
-Racine à fils multiples
-=======================
-
-* nsubj + prep_from                 : Are you from Germany?                     > (you,origin,Germany) > yes/no : (subj | pred:be from, do..live | cpt)
-* dobj + prep_for                   : Who held the endurance record for women pilots in 1929?
 _________________________________________________________________________________________________________________________________
 _________________________________________________________________________________________________________________________________
 
-Améliorer le MWE recognition
+Améliorer la MWE recognition
 ============================
 
 Rattraper un mauvais parsing:
@@ -140,77 +141,108 @@ Good:
 
 Amod:
   * Who is the French president? >> nécessite avant de transformer French en France
+  * Who was the first Taiwanese President?
 
 Plus généralement : avoir une fonction de preprocessing qui applique des corrections sur l'arbre de dépendances dès le début (ajout de tags,...)
+
 _________________________________________________________________________________________________________________________________
 
-Nounification et inversion de triplets
-======================================
+Trancher entre R3 et R5
+=======================
 
-Which books did Suzanne Collins write? > author n'est pas un prédicat de Suzanne C. ?
-  >> http://www.wikidata.org/wiki/Q33977
-  >> http://www.wikidata.org/wiki/Property:P800 notable works, literary works, bibliography work, works
+Rnew : 
+  - nom -> R5
+  - auxiliaire + strong qw -> R5
+  - verbe -> R3
+  - auxiliaire 
+   * is : règle d'évitement R2
+   * What dictator has the nickname "El Maximo"? >> autres : R5 ? __ici__ dobj donc déjà pris en compte == ne considérer que "is" comme auxiliaire
 
-Same problem : 
-  * which book was authored by Victor Hugo
-  * List movies directed by Spielberg
-  * Which president has been killed by Oswald
-  * List books by Roald Dahl
+R3:
+  - What did John Hinckley do to impress Jodie Foster?
 
-Contre-ex : 
-  * who is the author of Narnia
-  * capital of France
+Passer nsubj en Rnew:
+  * verbe auxiliaire : 
+   - 
+  * verbe non auxiliaire : (actuellement perdu si pas strong qw)
+   - Which books did Suzanne Collins write?
+   - How many films did Ingmar Bergman make?
+   - Who Clinton defeated?
+   - What did Bob write ?
 
-Good (?): 
-  * Who elected the president of France?
+Laisser dobj + V en R5:
+  * verbe auxiliaire : 
+   - 
+  * verbe non auxiliaire : 
+   - When did they won the lottery?
+   - Who invented the hula hoop?
+   - Who has written "The Hitchhiker's Guide to the Galaxy"?
+   - Who elected the president of France?
+   > oui
 
-Solutions (?):
-  * ça n'arrive que dans certains cas (prep_by, agent...) > inverser ces règles
-  * dans la nounification, prévoir les cas symétriques > authored = [works,author,...]
-  * voir ce qui est fait pour la nn rule
+Laisser nsubjpass en R5:
+  * verbe auxiliaire : 
+   - 
+  * verbe non auxiliaire : 
+   - When was the president of the United States born
+   > oui
 
-R7 : nécessaire ou se rapproche du problème nounification/triplet inverse ???
+Passer prep en Rnew
+  * verbe auxiliaire : 
+   - 
+  * verbe non auxiliaire : 
+   - Who was killed by Oswald
+   - List movies directed by Spielberg
+  * nom : 
+   - List of books by Roald Dahl
+   - president of France
+
+Insensible à Rnew:
+  * Verbes : 
+   - agent
+  * Nom :
+   - poss
+
 _________________________________________________________________________________________________________________________________
 
-Amélioration de nsubj avec instance_of
-======================================
+Amélioration de nsubj/dobj avec instance_of
+===========================================
 
-#### instance_of
+#### instance_of + nsubj(pass)
 
 Mot interrogatif dans un sous-arbre nsubj
 position(verbe) > position(nsubj)
 
 * nsubjpass + prep_in               : What language is spoken in Argentina? 
-* nsubj + dobj                      : -What dictator has the nickname "El Maximo"?
 * nsubj + dobj                      : -What actor married John F. Kennedy's sister?
 * nsubj + prep_by                   : List movies directed by Spielberg
 * nsubjpass                         : Which president has been killed by Oswald?
 * nsubjpass                         : which book was authored by Victor Hugo
 
-#### instance_of exception
+#### instance_of + dobj
 
-position(verbe) > position(nsubj) mais pas d'instance_of
+* Which books did Suzanne Collins write?
+* How many films did Ingmar Bergman make?
+* How many children does Barack Obama have?
+* How many gas stations are there in the United States?
 
-* nsubj + dobj                      : -Which books did Suzanne Collins write? 
-* When was the president of the United States born
-* nsubj + prep_in                   : -How many gas stations are there in the United States?
-* What did John Hinckley do to impress Jodie Foster?
+> pas forcément une instance_of (seulement si profondeur > 1 ?). Dans ce cas-là, réintégrer la partie dans le reste de l'arbre ?
 
 #### nsubj avec verbe nécessaire
 
 Mot interrogatif est relié directement au verbe + pas dans un sous arbre sujet (souvent dep)
 
 * What is the most beautiful country in Europe?
-* -Who was the first Taiwanese President? > problème fusion
+* Who was the first Taiwanese President?
 * What was the monetary value of the Nobel Peace Prize in 1989? 
-* When was Benjamin Disraeli prime minister? > -advmod-> When
+* When was Benjamin Disraeli prime minister?
 * nsubjpass : Where was Ulysses S. Grant born?
 * nsubjpass : Where is Inoco based?
 * What was the first Gilbert and Sullivan opera?
 * Where is the ENS of Lyon?
-* What did Bob write ? -dobj-> What
+* What did Bob write ?
 * Who is the author of Sea and Sky?
-* Is there a ghost in my house -xcomp-> there
+* Is there a ghost in my house
 * Are there computers in your room
 
 #### Question word nsubj
@@ -219,26 +251,17 @@ No subject after preprocessing
 
 * Who wrote the song, "Stardust"?
 * Who invented the hula hoop?
-* nsubjpass : Who was killed by Oswald?
 * Who elected the president ?
+* Who was killed by Oswald?
 
 #### ???
 
 * nsubj + dobj (+ do)               : What albums did Pearl Jam record? (cf parsing de: Which books did Suzanne Collins write)
-* How many films did Ingmar Bergman make?
 * Who Clinton defeated?
 
-_________________________________________________________________________________________________________________________________
+#### Autres
 
-TODO
-====
+* instance of + tmod : which day was the president born
+* instance of + prep_of : Of which country is Paris the capital?
 
-What dictator has the nickname "El Maximo"? / What albums did Pearl Jam record?                 >> traiter tous les auxiliaires comme be. Et dobj ici ? Généraliser la
-                                                                                                   règle d'évitation à toutes les relations ? Uniquement sur les fils de 
-                                                                                                   la racine ?
-Who was the leader of the Branch Davidian Cult confronted by the FBI in Waco, Texas in 1993?    >> gros sujet
-Where is Inoco based?                                                                           >> revoir la nounification associée
-Who Clinton defeated?                                                                           >> prq nounification échoue ? non lemmatizé ?
-Rapprocher/renommer les règles R.. similaires
-R7 : nécessaire ou se rapproche du problème nounification/triplet inverse ???
-instance of + tmod : which day was the president born
+

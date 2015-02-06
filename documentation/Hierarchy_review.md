@@ -105,13 +105,20 @@ nsubjpass
   
 ##### ---
 
-* Which president has been killed by Oswald? > remove nsubjpass
+* Which president has been killed by Oswald?
 
 ##### +++
 
 * Who was killed by Oswald?
 * Where is Inoco based?
 * Where was George Washington born?
+
+agent
+=====
+
+* Which president has been killed by Oswald?
+* Who was killed by Oswald?
+* which book was authored by Victor Hugo
 
 cop
 ===
@@ -147,20 +154,19 @@ dobj
 * What did John Hinckley do to impress Jodie Foster?
 * When did they won the lottery?
 * What two US biochemists won the Nobel Prize in medicine in 1992?
-* How many films did Ingmar Bergman make? >> with nsubj
+* How many films did Ingmar Bergman make?
 * Who has written "The Hitchhiker's Guide to the Galaxy"?
 * Who wrote "The Hitchhiker's Guide to the Galaxy"?
 * Who invented the hula hoop?
 * Who killed Gandhi?
-* Who elected the president ?
+* Who elected the president?
 
 look at the verb ? (passive, acted ...)
 
 ##### ---
 
-* Who held the endurance record for women pilots in 1929?
 * How many children does Barack Obama have? > not do an intersection each time a node have several children.
-* Which books did Suzanne Collins write? (?)
+* Which books did Suzanne Collins write?
 
 ccomp
 =====
@@ -286,3 +292,5 @@ Stanford Parser fails
 * When was Benjamin Disraeli prime minister?
 * list of president of usa
 * Show me Star Wars movies
+* Who held the endurance record for women pilots in 1929?
+* What dictator has the nickname "El Maximo"?

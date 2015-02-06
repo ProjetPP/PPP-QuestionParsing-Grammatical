@@ -8,14 +8,14 @@ from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd,
 # Identify and remove question word #
 #####################################
 
-def updateNsubjRule(t):
+def prepareInstanceOf(t):
     """
         Replace nsubj(pass) rule by nsubj(pass)_qw, if it appears on a path from the root of t to the root of the whole tree
     """
-    if t.dependency == 'nsubj' or t.dependency == 'nsubjpass':
-        t.dependency += '_qw'
+    if t.dependency in ['nsubj','nsubjpass','dobj']:
+        t.dependency = 'inst_of'
     if t.parent:
-        updateNsubjRule(t.parent)
+        prepareInstanceOf(t.parent)
 
 def removeWord(t,word):
     """
@@ -39,10 +39,10 @@ def firstWords(t,start):
     for n in t.wordList[0]:
         if n.index == 1:
             start[0] = n
-            updateNsubjRule(t)
+            prepareInstanceOf(t)
         elif n.index == 2:
             start[1] =n
-            updateNsubjRule(t)
+            prepareInstanceOf(t)
     for c in t.child:
         firstWords(c,start)
 
