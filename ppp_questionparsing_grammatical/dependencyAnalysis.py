@@ -41,8 +41,8 @@ def nsubjRule(t,qw):
         t.dependency = 'R2'
 
 def nnRule(t,qw):
-    if (t.namedEntityTag != 'undef' or t.parent.namedEntityTag != 'undef') and (t.namedEntityTag == 'undef' or t.parent.namedEntityTag == 'undef'): # ou t.namedEntityTag != t.parent.namedEntityTag ????????
-        if t.namedEntityTag != 'undef':
+    if t.namedEntityTag != t.parent.namedEntityTag: #or don't merge too if tags are not the same
+        if t.namedEntityTag != 'undef': # is it relevant ? see the debate about nounification and triple inversion
             t.dependency = 'R5'
         else:
             t.dependency = 'R7'
@@ -78,7 +78,7 @@ dependenciesMap1 = {
         'conj'      : 'R0',
             'conj_and'  : ignore,
             'conj_or'   : ignore,
-            'conj_negcc': ignore, #?
+            'conj_negcc': ignore,
         'expl'      : remove,
         'mod'       : 'R4',
             'amod'      : amodRule,
@@ -92,7 +92,7 @@ dependenciesMap1 = {
                 'mark'      : remove,
             'advmod'    : 'R2',
                 'neg'       : 'connectorUp', # need a NOT node
-            'rcmod'     : 'R4', # temp, need to be analyzed
+            'rcmod'     : 'R4',
                 'quantmod'  : remove,
             'nn'        : nnRule,
             'npadvmod'  : 'R5',

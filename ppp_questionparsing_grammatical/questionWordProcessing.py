@@ -8,7 +8,10 @@ from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd,
 # Identify and remove question word #
 #####################################
 
-def updateNsubjRule(t): # replace all nsubj(pass) rules by nsubj(pass)_qw, if they appear on a path from the root of t to the root of the whole tree
+def updateNsubjRule(t):
+    """
+        Replace nsubj(pass) rule by nsubj(pass)_qw, if it appears on a path from the root of t to the root of the whole tree
+    """
     if t.dependency == 'nsubj' or t.dependency == 'nsubjpass':
         t.dependency += '_qw'
     if t.parent:

@@ -55,13 +55,13 @@ class StandardTripleTests(TestCase):
     "list": [
         {
             "list": {
+                "predicate": {
+                    "value": "default",
+                    "type": "resource"
+                },
                 "list": {
                     "value": "Gilbert",
                     "type": "resource"
-                },
-                "predicate": {
-                    "value" : "default",
-                    "type"  : "resource"
                 },
                 "type": "sort"
             },
@@ -69,13 +69,23 @@ class StandardTripleTests(TestCase):
         },
         {
             "list": {
-                "list": {
-                    "value": "Sullivan opera",
+                "predicate": {
+                    "value": "default",
                     "type": "resource"
                 },
-                "predicate": {
-                    "value" : "default",
-                    "type"  : "resource"
+                "list": {
+                    "predicate": {
+                        "value": "opera",
+                        "type": "resource"
+                    },
+                    "object": {
+                        "type": "missing"
+                    },
+                    "subject": {
+                        "value": "Sullivan",
+                        "type": "resource"
+                    },
+                    "type": "triple"
                 },
                 "type": "sort"
             },
@@ -83,8 +93,7 @@ class StandardTripleTests(TestCase):
         }
     ],
     "type": "intersection"
-}
-)
+})
 
     def testNormalize1(self):
         tree = computeTree(data.give_president_of_USA()['sentences'][0])
@@ -174,24 +183,20 @@ class StandardTripleTests(TestCase):
     "type": "intersection",
     "list": [
         {
-            "object": {
-                "type": "missing"
-            },
             "type": "triple",
             "predicate": {
-                "value": "identity",
+                "value": "instance of",
                 "type": "resource"
             },
             "subject": {
+                "type": "missing"
+            },
+            "object": {
                 "value": "Obama",
                 "type": "resource"
             }
         },
         {
-            "object": {
-                "value": "United States president",
-                "type": "resource"
-            },
             "type": "triple",
             "predicate": {
                 "value": "identity",
@@ -199,6 +204,20 @@ class StandardTripleTests(TestCase):
             },
             "subject": {
                 "type": "missing"
+            },
+            "object": {
+                "type": "triple",
+                "predicate": {
+                    "value": "president",
+                    "type": "resource"
+                },
+                "subject": {
+                    "value": "United States",
+                    "type": "resource"
+                },
+                "object": {
+                    "type": "missing"
+                }
             }
         }
     ]
@@ -382,17 +401,17 @@ class StandardTripleTests(TestCase):
         qw = simplify(tree)
         result = normalize(tree)
         self.assertEqual(result,{
-    "subject": {
-        "type": "resource",
-        "value": "US president"
-    },
-    "type": "triple",
     "object": {
         "type": "missing"
     },
     "predicate": {
-        "type": "resource",
-        "value": "list"
+        "value": "president",
+        "type": "resource"
+    },
+    "type": "triple",
+    "subject": {
+        "value": "US",
+        "type": "resource"
     }
 })
 

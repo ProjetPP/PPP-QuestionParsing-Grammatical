@@ -241,37 +241,6 @@ conj
 
 * When did Rococo painting and architecture flourish?
 
-conj_and
-========
-
-Exemples :
-----------
-* Who makes and distributes bells?
-* Who is the author of Sea and Sky?
-* What percentage of the world's plant and animal species can be found in the Amazon forests?
-* Good: Who is section manager for guidance and control systems at JPL?
-* Bad: How many people did the United Nations commit to help restore order and distribute humanitarian relief in Somalia in September 1992?
-* Bad: Which Italian city is home to the Cathedral of Santa Maria del Fiore or the Duomo?
-
-Problem with merging:
----------------------
-* What is the length of border between the Ukraine and Russia?
-
-Comment construire les sous arbres
-----------------------------------
-* What was the first Gilbert and Sullivan opera?
-* When was General Manuel Noriega ousted as the leader of Panama and turned over to U.S. authorities?
-* When did Princess Diana and Prince Charles get married?
-* When did the royal wedding of Prince Andrew and Fergie take place?
-* ++ How many people did the United Nations commit to help restore order and distribute humanitarian relief in Somalia in September 1992?
-    >> peut être propager les prep après ?
-    >> même problème que pour les nn
-
-Merge nn with the 2 nodes if nn above them:
- - When did Princess Diana and Charles get married?
- - When did Princess Diana and Prince Charles get married?
- - Who is section manager for guidance and control systems at JPL?
-
 pcomp
 =====
 
@@ -315,3 +284,5 @@ Stanford Parser fails
 * What U.S. state is Fort Knox in?
 * What city is Purdue University in?
 * When was Benjamin Disraeli prime minister?
+* list of president of usa
+* Show me Star Wars movies

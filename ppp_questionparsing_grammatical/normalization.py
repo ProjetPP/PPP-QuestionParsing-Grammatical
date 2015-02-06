@@ -10,7 +10,7 @@ def buildValue(tree):
     """
         Used to build the values of the normal form.
             len(tree.getWords()) = 1 -> single value -> return a resource
-            len(tree.getWords()) > 1 -> alternatives, use a list of resources
+            len(tree.getWords()) > 1 -> multiple alternatives -> return a list of resources
     """
     if len(tree.getWords()) == 1:
         return Resource(value=tree.getWords()[0])
@@ -65,12 +65,11 @@ def normalize(tree):
         return normalizeConjunction(tree)
     result = []
     for t in tree.child: # R0 ... R5
-        assert t.dependency != 'Rspl' and not t.dependency.startswith('Rconj')
         if t.dependency == 'R0':
             result.append(normalize(t))
         if t.dependency == 'R1':
             result.append(buildValue(t))
-        if t.dependency == 'R2': # ou enlever la condition, ça devient R5
+        if t.dependency == 'R2':
             if len(t.child) == 0:
                 result.append(Triple(subject=buildValue(t), predicate=buildValue(tree), object=Missing()))
             else:
