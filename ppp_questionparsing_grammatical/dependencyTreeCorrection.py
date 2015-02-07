@@ -1,4 +1,4 @@
-def addNER(tree, nameToNodes, words):
+def addNamedEntityTag(tree, nameToNodes, words):
     """
         If a word v is between 2 words u and w that have the same NER tag,
         and v is linked to u or w by a nn relation,
@@ -11,13 +11,13 @@ def addNER(tree, nameToNodes, words):
         previous = nameToNodes[words[i-1]]
         current = nameToNodes[words[i]]
         next = nameToNodes[words[i+1]]
-        if previous.namedEntityTag != 'undef' and previous.namedEntityTag == next.namedEntityTag:
+        if current.namedEntityTag == 'undef' and previous.namedEntityTag != 'undef' and previous.namedEntityTag == next.namedEntityTag:
             if nnDependent(previous, current) or nnDependent(next, current):
                 current.namedEntityTag = previous.namedEntityTag
 
-def correct(tree, stanfordResult, nameToNodes):
+def correctTree(tree, nameToNodes, stanfordResult=None):
     """
         Correct the tree returned by the Stanford Parser, according to several heuristics.
     """
     words = sorted(nameToNodes.keys(), key = lambda x: int(x.split('-')[-1]))
-    addNER(tree, nameToNodes, words)
+    addNamedEntityTag(tree, nameToNodes, words)
