@@ -282,7 +282,7 @@ class HierarchyTests(TestCase):
         date=birth.child[0]
         self.assertEqual(date.wordList,[[Word("1900",4,'CD')]])
         self.assertEqual(date.namedEntityTag,'DATE')
-        self.assertEqual(date.dependency,'R5')
+        self.assertEqual(date.dependency,'R3')
         self.assertEqual(date.parent,birth)
         self.assertEqual(len(date.child),0)
         self.assertEqual(date.subtreeType,'undef')
