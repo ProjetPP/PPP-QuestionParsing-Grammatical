@@ -6,6 +6,8 @@ from ppp_libmodule.tests import PPPTestCase
 from ppp_questionparsing_grammatical import app
 from ppp_datamodel.utils import InclusionTestCase
 
+import sys
+
 import data_deep
 
 class RequestHandlerTest(PPPTestCase(app),InclusionTestCase):
@@ -38,3 +40,4 @@ class RequestHandlerTest(PPPTestCase(app),InclusionTestCase):
     def testQuestions(self):
         for (sentence,expectedTree) in data_deep.expected.items():
             self.checkQuestion(sentence,expectedTree)
+        print("Deep test: %s questions successfully checked." % len(data_deep.expected.items()), file=sys.stderr)
