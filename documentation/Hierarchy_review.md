@@ -295,3 +295,4 @@ Stanford Parser fails
 * Show me Star Wars movies
 * Who held the endurance record for women pilots in 1929?
 * What dictator has the nickname "El Maximo"?
+* Of which country is Paris the capital?

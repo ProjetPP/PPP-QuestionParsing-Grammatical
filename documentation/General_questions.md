@@ -268,7 +268,8 @@ No subject after preprocessing
 
 #### Autres !!!!
 
-* instance of + tmod : which day was the president born
-* instance of + prep_of : Of which country is Paris the capital?
-
+* tmod : which day was the president born
+* prep_of : Of which country is Paris the capital?
+* prep_in : In which countries is the Lake Victoria? https://www.google.fr/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=%22in+which+countries%22
+* prep_from : From which country is Alan Turing?
 

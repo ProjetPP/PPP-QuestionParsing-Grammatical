@@ -12,6 +12,12 @@ def prepareInstanceOf(t):
     """
         Replace nsubj(pass) rule by nsubj(pass)_qw, if it appears on a path from the root of t to the root of the whole tree
     """
+    #if t.dependency == 'root':
+    #    return
+    #else:
+    #    t.dependency = 'inst_of'
+    #    if t.parent:
+    #        prepareInstanceOf(t.parent)
     if t.dependency in ['nsubj','nsubjpass','dobj']:
         t.dependency = 'inst_of'
     if t.parent:
