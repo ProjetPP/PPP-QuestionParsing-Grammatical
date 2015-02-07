@@ -161,4 +161,7 @@ expected = {
 
     'What is the D Day?':
     T(R('d Day'),R('definition'),M()),
+
+    'Where is Inoco based?':
+    T(R('inoco'),R('location'),M()),    
 }

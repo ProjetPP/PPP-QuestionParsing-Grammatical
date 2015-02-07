@@ -10,8 +10,6 @@ Please, don't remove any example (they are used frequently to check the whole al
 
 * appos
 * dep (no hope... the stanford parser needs to be improved/trained)
-* dobj
-* nsubj
 
 ### Problematic questions
 
@@ -131,6 +129,8 @@ cop doesn't always disappear -> needs to remove it manually
 * What is the brightest star visible from Earth? >> cop not removed! change what <-> is
 * Who is the president black and blue?
 * What is black and white?
+* What is the UN headquarter?
+* What is the United States national day?
 
 prep
 ====
@@ -298,3 +298,4 @@ Stanford Parser fails
 * What dictator has the nickname "El Maximo"?
 * Of which country is Paris the capital?
 * List of books by Roald Dahl.
+* What albums did Pearl Jam record?

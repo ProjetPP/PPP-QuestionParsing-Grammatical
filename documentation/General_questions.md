@@ -261,15 +261,10 @@ No subject after preprocessing
 * Who elected the president ?
 * Who was killed by Oswald?
 
-#### ???
-
-* nsubj + dobj (+ do)               : What albums did Pearl Jam record? (cf parsing de: Which books did Suzanne Collins write)
-* Who Clinton defeated?
-
 #### Autres !!!!
 
 * tmod : which day was the president born
-* prep_of : Of which country is Paris the capital?
+* prep_of : Of which country is Paris the capital? > mal parsé
 * prep_in : In which countries is the Lake Victoria? https://www.google.fr/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=%22in+which+countries%22
 * prep_from : From which country is Alan Turing?
 
