@@ -28,20 +28,24 @@ symbol = {
     'sort': 'S',
 }
 
+def smallDepth(t):
+    allowedTypes = {'resource', 'missing'}
+    return t.subject.type in allowedTypes and t.predicate.type in allowedTypes and t.object.type in allowedTypes
+
 def string_of_triple(t, indent=BASE_INDENT):
     if t.type == 'missing':
         return '%s%s()' % (' '*indent*INDENT_NUMBER, symbol[t.type])
     elif t.type == 'resource':
         return '%s%s("%s")' % (' '*indent*INDENT_NUMBER, symbol[t.type], t.value)
     elif t.type == 'triple':
-        if t.subject.type in {'resource', 'missing'} and t.predicate.type in {'resource', 'missing'} and t.object.type in {'resource', 'missing'}:
+        if smallDepth(t):
             i = 0
         else:
             i = indent+1
         _subject = string_of_triple(t.subject, i)
         _predicate = string_of_triple(t.predicate, i)
         _object = string_of_triple(t.object, i)
-        if t.subject.type in {'resource', 'missing'} and t.predicate.type in {'resource', 'missing'} and t.object.type in {'resource', 'missing'}:
+        if smallDepth(t):
             return '%s%s(%s, %s, %s)' % (' '*indent*INDENT_NUMBER, symbol[t.type], _subject, _predicate, _object)
         else:
             return '{0}{1}(\n{2},\n{3},\n{4}\n{0})'.format(' '*indent*INDENT_NUMBER, symbol[t.type], _subject, _predicate, _object)
