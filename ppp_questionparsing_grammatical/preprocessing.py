@@ -1,6 +1,7 @@
 import sys
 from .preprocessingMerge import Word, mergeNamedEntityTag
 from .data.exceptions import QuotationError
+from .dependencyTreeCorrection import correct
 from copy import deepcopy
 import random
 import string
@@ -246,6 +247,7 @@ def computeTree(r):
     computeEdges(r,nameToNodes)
     computeTags(r,nameToNodes)
     tree = nameToNodes['ROOT-0']                 # the tree is built
+    correct(tree, r, nameToNodes)
     initText(tree,r['text'].replace('"','\\\"'))
     mergeNamedEntityTag(tree)                    # NER merging
     return tree
