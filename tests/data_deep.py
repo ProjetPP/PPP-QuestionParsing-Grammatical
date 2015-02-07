@@ -38,7 +38,26 @@ expected = {
         M()
     ),
 
-    'Who wrote "Le Petit Prince" and "Vol de Nuit"':
+    'Who are the daughters of the wife of the husband of the wife of the president of the United States?':
+    T(
+        T(
+            T(
+                T(
+                    T(R('United States'),R('president'),M()),
+                    R('wife'),
+                    M()
+                ),
+                R('husband'),
+                M()
+            ),
+            R('wife'),
+            M()
+        ),
+        R('daughter'),
+        M()
+    ),
+
+    'Who wrote \"Le Petit Prince\" and \"Vol de Nuit\"':
     I([
         T(R('Le Petit Prince'), R('writer'), M()),
         T(R('Vol de Nuit'), R('writer'), M())
@@ -173,4 +192,72 @@ expected = {
 
     'Where is Inoco based?':
     T(R('inoco'),R('location'),M()),    
+
+    'Who is the author of \"Le Petit Prince\"?':
+    T(R('Le Petit Prince'),R('author'),M()),    
+
+    'Who are the Beatles\' members?':
+    T(R('beatles'),R('member'),M()),
+
+    'What is the biggest country in South America?':
+    L(
+        S(
+            T(R('South America'),R('country'),M()),
+            R('size')
+        )
+    ),
+
+    'Who is the author of \"Animal Farm\" and \"1984\"?':
+    I([
+        T(R('1984'),R('author'),M()),
+        T(R('Animal Farm'),R('author'),M())
+    ]),
+
+    'Who was Darth Vader’s son?':
+    T(R('Darth Vader'),R('son'),M()),
+
+    'What was the monetary value of the Nobel Peace Prize in 1989?':
+    T(
+        T(R('1989'),R('Nobel Peace Prize'),M()),
+        R('monetary value'),
+        M()
+    ),
+
+    'What is the continent of Fiji and Guam?':
+    I([
+        T(R('Fiji'),R('continent'),M()),
+        T(R('Guam'),R('continent'),M())
+    ]),
+
+    'Who is the first president of France?':
+    F(
+        S(
+            T(R('France'),R('president'),M()),
+            R('default')
+        )
+    ),
+
+    'What is the most expensive car in the world?':
+    L(
+        S(
+            T(R('world'),R('car'),M()),
+            R('cost')
+        )
+    ),
+
+    'Give the capital of France':
+    T(R('France'),R('capital'),M()),
+
+    'Is there a king of England?':
+    E(
+        T(R('England'),R('king'),M())
+    ),
+
+    'What is the highest mountain of Tanzania?':
+    L(
+        S(
+            T(R('Tanzania'),R('mountain'),M()),
+            R('height')
+        )
+    ),
 }
