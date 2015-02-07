@@ -124,13 +124,13 @@ expected = {
         R('birth date'),
         M()
     ),
-    
+
     'From which country is Alan Turing?':
     I([
         T(M(), R('instance of'), R('country')),
         T(R('Alan Turing'), R('country of citizenship'), M())
     ]),
-    
+
     'In which countries is the Lake Victoria?':
     I([
         T(M(), R('instance of'), R('country')),
@@ -147,6 +147,12 @@ expected = {
         )
     ]),
 
+    'Who is J. F. Kennedy?':
+    T(R('J. F. Kennedy'), R('identity'), M()),
+
+    'Who is J. F. K.?':
+    T(R('J. F. K.'), R('identity'), M()),
+
     'Where was Ulysses S. Grant born?':
     T(R('Ulysses S. Grant'), R('birth place'), M()),
 
@@ -161,6 +167,9 @@ expected = {
 
     'What is the D Day?':
     T(R('d Day'),R('definition'),M()),
+
+    'What is the natural language processing?':
+    T(R('natural language processing'), R('definition'), M()),
 
     'Where is Inoco based?':
     T(R('inoco'),R('location'),M()),    
