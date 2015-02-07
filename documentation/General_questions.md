@@ -145,6 +145,8 @@ Amod:
 
 Plus généralement : avoir une fonction de preprocessing qui applique des corrections sur l'arbre de dépendances dès le début (ajout de tags,...)
 
+What organization was founded by the Rev. Jerry Falwell? >> tagger Rev car majuscule
+
 _________________________________________________________________________________________________________________________________
 
 Trancher entre R3 et R5
