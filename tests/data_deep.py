@@ -69,4 +69,22 @@ expected = {
 
     'What is the English for "Звёздные войны. Эпизод VI: Возвращение джедая"?':
     T(R('Звёздные войны. Эпизод VI: Возвращение джедая'), R('English'), M()),
+
+    'List movies directed by Spielberg.':
+    I([
+        T(M(), R('instance of'), R('movie')),
+        T(M(), R('director'), R('Spielberg'))
+    ]),
+
+    'Which books were authored by Victor Hugo?':
+    I([
+        T(M(), R('instance of'), R('book')),
+        T(M(), R('author'), R('Victor Hugo'))
+    ]),
+
+    'Which president has been killed by Oswald?':
+    I([
+        T(M(), R('instance of'), R('president')),
+        T(M(), R('killer'), R('Oswald'))
+    ]),
 }
