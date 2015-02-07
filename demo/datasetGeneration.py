@@ -2,7 +2,10 @@ from demo6 import get_answer
 import json
 import sys
 import os
-from ppp_questionparsing_grammatical.data.exceptions import GrammaticalError, QuotationError
+from ppp_questionparsing_grammatical.data.exceptions import GrammaticalError, QuotationError, QuestionWordError
+
+INDENT_NUMBER=4
+BASE_INDENT=1
 
 class TripleError(Exception):
     """
@@ -12,22 +15,57 @@ class TripleError(Exception):
         self.expression = expression
         self.message = message
 
-def string_of_triple(t,missing,separator):
+symbol = {
+    'missing': 'M',
+    'resource': 'R',
+    'triple': 'T',
+    'list': 'List',
+    'intersection': 'I',
+    'union': 'U',
+    'exists': 'E',
+    'first': 'F',
+    'last': 'L',
+    'sort': 'S',
+}
+
+def smallDepth(t):
+    allowedTypes = {'resource', 'missing'}
+    return t.subject.type in allowedTypes and t.predicate.type in allowedTypes and t.object.type in allowedTypes
+
+def stringOfTriple(t, indent):
+    if smallDepth(t):
+        i = 0
+    else:
+        i = indent+1
+    _subject = stringOfTree(t.subject, i)
+    _predicate = stringOfTree(t.predicate, i)
+    _object = stringOfTree(t.object, i)
+    if smallDepth(t):
+        return '%s%s(%s, %s, %s)' % (' '*indent*INDENT_NUMBER, symbol[t.type], _subject, _predicate, _object)
+    else:
+        return '{0}{1}(\n{2},\n{3},\n{4}\n{0})'.format(' '*indent*INDENT_NUMBER, symbol[t.type], _subject, _predicate, _object)
+
+def stringOfTree(t, indent=BASE_INDENT):
     if t.type == 'missing':
-        return missing
-    if t.type == 'resource':
-        return str(t.value)
-    if t.type == 'triple':
-        _subject = string_of_triple(t.subject,missing,separator)
-        _predicate = string_of_triple(t.predicate,missing,separator)
-        _object = string_of_triple(t.object,missing,separator)
-        return "({1}{0}{2}{0}{3})".format(separator,_subject,_predicate,_object)
+        return '%s%s()' % (' '*indent*INDENT_NUMBER, symbol[t.type])
+    elif t.type == 'resource':
+        return '%s%s("%s")' % (' '*indent*INDENT_NUMBER, symbol[t.type], t.value)
+    elif t.type == 'triple':
+        return stringOfTriple(t, indent)
+    elif t.type in {'list', 'intersection', 'union'}:
+        l = ',\n'.join(stringOfTree(x, indent+1) for x in t.list)
+        return '{0}{1}([\n{2}\n{0}])'.format(' '*indent*INDENT_NUMBER, symbol[t.type], l)
+    elif t.type in {'exists', 'first', 'last', 'sort'}:
+        l = stringOfTree(t.list, indent+1)
+        return '{0}{1}(\n{2}\n{0})'.format(' '*indent*INDENT_NUMBER, symbol[t.type], l)
     raise TripleError(t,"Wrong triple (new datamodel connectors?).")
 
-def process_string(s,missing='?',separator=','):
-    return string_of_triple(get_answer(s),missing,separator)
+def process_string(s):
+    return stringOfTree(get_answer(s))
 
 if __name__ == "__main__":
+    flag = False
+    print('data = {')
     while True:
         try:
             s = input("")
@@ -41,11 +79,19 @@ if __name__ == "__main__":
         except QuotationError:
             sys.stderr.write("#QuotationError:\t{0}\n".format(s))
             continue
+        except QuestionWordError:
+            sys.stderr.write("#QuestionWordError:\t{0}\n".format(s))
+            continue
         except RuntimeError:
             sys.stderr.write("#RuntimeError:\t{0}\n".format(s))
             continue
         except IndexError:
             sys.stderr.write("#IndexError:\t{0}\n".format(s))
             continue
-        print(s)
-        print(result)
+        if flag:
+            print('')
+        else:
+            flag=True
+        print('%s\'%s\':' % (' '*BASE_INDENT*INDENT_NUMBER, s))
+        print('%s,' % result)
+    print('}')
