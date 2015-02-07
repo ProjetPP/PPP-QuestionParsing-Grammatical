@@ -32,33 +32,36 @@ def smallDepth(t):
     allowedTypes = {'resource', 'missing'}
     return t.subject.type in allowedTypes and t.predicate.type in allowedTypes and t.object.type in allowedTypes
 
-def string_of_triple(t, indent=BASE_INDENT):
+def stringOfTriple(t, indent):
+    if smallDepth(t):
+        i = 0
+    else:
+        i = indent+1
+    _subject = stringOfTree(t.subject, i)
+    _predicate = stringOfTree(t.predicate, i)
+    _object = stringOfTree(t.object, i)
+    if smallDepth(t):
+        return '%s%s(%s, %s, %s)' % (' '*indent*INDENT_NUMBER, symbol[t.type], _subject, _predicate, _object)
+    else:
+        return '{0}{1}(\n{2},\n{3},\n{4}\n{0})'.format(' '*indent*INDENT_NUMBER, symbol[t.type], _subject, _predicate, _object)
+
+def stringOfTree(t, indent=BASE_INDENT):
     if t.type == 'missing':
         return '%s%s()' % (' '*indent*INDENT_NUMBER, symbol[t.type])
     elif t.type == 'resource':
         return '%s%s("%s")' % (' '*indent*INDENT_NUMBER, symbol[t.type], t.value)
     elif t.type == 'triple':
-        if smallDepth(t):
-            i = 0
-        else:
-            i = indent+1
-        _subject = string_of_triple(t.subject, i)
-        _predicate = string_of_triple(t.predicate, i)
-        _object = string_of_triple(t.object, i)
-        if smallDepth(t):
-            return '%s%s(%s, %s, %s)' % (' '*indent*INDENT_NUMBER, symbol[t.type], _subject, _predicate, _object)
-        else:
-            return '{0}{1}(\n{2},\n{3},\n{4}\n{0})'.format(' '*indent*INDENT_NUMBER, symbol[t.type], _subject, _predicate, _object)
+        return stringOfTriple(t, indent)
     elif t.type in {'list', 'intersection', 'union'}:
-        l = ',\n'.join(string_of_triple(x, indent+1) for x in t.list)
+        l = ',\n'.join(stringOfTree(x, indent+1) for x in t.list)
         return '{0}{1}([\n{2}\n{0}])'.format(' '*indent*INDENT_NUMBER, symbol[t.type], l)
     elif t.type in {'exists', 'first', 'last', 'sort'}:
-        l = string_of_triple(t.list, indent+1)
+        l = stringOfTree(t.list, indent+1)
         return '{0}{1}(\n{2}\n{0})'.format(' '*indent*INDENT_NUMBER, symbol[t.type], l)
     raise TripleError(t,"Wrong triple (new datamodel connectors?).")
 
 def process_string(s):
-    return string_of_triple(get_answer(s))
+    return stringOfTree(get_answer(s))
 
 if __name__ == "__main__":
     flag = False
