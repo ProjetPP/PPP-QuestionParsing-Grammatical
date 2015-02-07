@@ -149,4 +149,11 @@ expected = {
 
     'Where was Ulysses S. Grant born?':
     T(R('Ulysses S. Grant'), R('birth place'), M()),
+
+    'Who is the US president?':
+    T(R('US'),R('president'),M()),
+
+    'Who is the United States president?':
+    T(R('United States'),R('president'),M()),
+
 }
