@@ -1,8 +1,7 @@
 import sys
 from .preprocessingMerge import Word
 from .preprocessing import DependenciesTree
-from .data.exceptions import QuestionWordError
-from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd, questionWIs, questionType, questionExcept, existQuestionWord, semiQuestionWord, predicateQuestionWord
+from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd, questionWIs, questionType, questionExcept, existQuestionWord, semiQuestionWord
 
 #####################################
 # Identify and remove question word #
@@ -12,26 +11,25 @@ def prepareInstanceOf(t):
     """
         Replace nsubj(pass) rule by nsubj(pass)_qw, if it appears on a path from the root of t to the root of the whole tree
     """
-    #if t.dependency == 'root':
-    #    return
-    #else:
-    #    t.dependency = 'inst_of'
-    #    if t.parent:
-    #        prepareInstanceOf(t.parent)
-    if t.dependency in ['nsubj','nsubjpass','dobj']:
+    if t.dependency == 'root':
+        return
+    else:
         t.dependency = 'inst_of'
-    if t.parent:
-        prepareInstanceOf(t.parent)
+        if t.parent:
+            prepareInstanceOf(t.parent)
 
 def removeWord(t,word):
     """
         Remove word (of type str*int = s*position_of_s_in_sentence) from tree t
-        Assume that the node containing word has no child
     """
     assert len(t.wordList) == 1 # no possible alternatives in the tree at this moment
     if word in t.wordList[0]:
-        if t.child != []:
-            raise QuestionWordError(word,"question word has child")
+        prepareInstanceOf(t) # <<<
+        if t.child != []: # the question is in the middle of the tree
+            for u in t.child:
+                u.dependency = t.dependency
+                u.parent = t.parent
+                t.parent.child.append(u)
         t.parent.child.remove(t)
     else:
         for c in t.child:
@@ -45,16 +43,14 @@ def firstWords(t,start):
     for n in t.wordList[0]:
         if n.index == 1:
             start[0] = n
-            prepareInstanceOf(t)
         elif n.index == 2:
             start[1] =n
-            prepareInstanceOf(t)
     for c in t.child:
         firstWords(c,start)
 
 def identifyQuestionWord(t):
     """
-        Identify, remove (if open qw) and return the question word.
+        Identify, remove (if necessary) and return the question word.
         If there is no question word, return None.
     """
     start = [None,None]
@@ -68,23 +64,18 @@ def identifyQuestionWord(t):
             pass
     if start[1]:
         w = start[0].word.lower() + ' ' + start[1].word.lower()
-        if w in openQuestionWord:
+        if w in openQuestionWord or w in semiQuestionWord:
             removeWord(t,start[0])
             removeWord(t,start[1])
             return w
         if w in existQuestionWord:
             removeWord(t,start[1])
             return w
-        if w in predicateQuestionWord:
-            return w
-        if w in semiQuestionWord:
-            removeWord(t,start[1])
-            return w
     w = start[0].word.lower()
-    if w in openQuestionWord: 
+    if w in openQuestionWord or w in semiQuestionWord:
         removeWord(t,start[0])
         return w
-    if w in predicateQuestionWord or w in closeQuestionWord:
+    if w in closeQuestionWord:
         return w
     return None
 
@@ -134,7 +125,8 @@ def checkSubInfo(t,w,excMap=questionExcept):
     """
     res = True
     for n in t.child:
-        res = res and checkSub(n,w,excMap)
+        if n.dependency != 'R6': # don't go through "instance of" subtree
+            res = res and checkSub(n,w,excMap)
     return res
 
 def processQuestionInfo(t,w,excMap=questionExcept,addMap=questionAdd,wisMap=questionWIs): # TO IMPROVE
@@ -168,8 +160,5 @@ def processQuestionWord(t,w):
     processQuestionType(t,w)  # type the ROOT according to the question word
     if w in existQuestionWord:
         t.child[0].dependency = 'Rexist'
-    if w in semiQuestionWord or w in predicateQuestionWord:
-        if len(t.child[0].child) == 1:
-            t.child[0].child[0].dependency = 'R2'
     if w in openQuestionWord:
         processQuestionInfo(t.child[0],w)

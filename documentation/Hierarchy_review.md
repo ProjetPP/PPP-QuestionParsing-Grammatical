@@ -54,6 +54,7 @@ xcomp
 =====
 
 * What did John Hinckley do to impress Jodie Foster?
+* Obama is the United States president.
 
 amod
 ====

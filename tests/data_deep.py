@@ -121,4 +121,16 @@ expected = {
         R('birth date'),
         M()
     ),
+    
+    'From which country is Alan Turing?':
+    I([
+        T(M(), R('instance of'), R('country')),
+        T(R('Alan Turing'), R('country of citizenship'), M())
+    ]),
+    
+    'In which countries is the Lake Victoria?':
+    I([
+        T(M(), R('instance of'), R('country')),
+        T(R('Lake Victoria'), R('country'), M())
+    ]),
 }

@@ -185,13 +185,13 @@ class StandardTripleTests(TestCase):
         {
             "type": "triple",
             "predicate": {
-                "value": "instance of",
+                "value": "identity",
                 "type": "resource"
             },
-            "subject": {
+            "object": {
                 "type": "missing"
             },
-            "object": {
+            "subject": {
                 "value": "Obama",
                 "type": "resource"
             }
@@ -249,6 +249,10 @@ class StandardTripleTests(TestCase):
             {
                 "type": "resource",
                 "value": "residence"
+            },
+            {
+                "type": "resource",
+                "value": "country"
             }
         ]
     },
