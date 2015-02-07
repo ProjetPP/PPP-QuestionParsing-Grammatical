@@ -32,33 +32,27 @@ def amodRule(t,qw):
     else:
         t.dependency = 'connectorUp'
 
-def nsubjRule(t,qw):
-    if qw in strongQuestionWord: # or len(t.child) == 0: # Warning: length can decrease during analysis > needs also the R2 tag
-        t.dependency = 'R5s' # same as R5 except that types are propagated
-    #elif t.parent.getWords() != ['identity']:
-    #    t.dependency = 'R3'
-    else:
-        t.dependency = 'R2'
-
-def nnRule(t,qw):
-    if t.namedEntityTag != t.parent.namedEntityTag: # or don't merge too if tags are not the same
-        if t.namedEntityTag != 'undef': # is it relevant ? see the debate about nounification and triple inversion
+def nnRule(t,qw): # ????
+    if t.namedEntityTag != t.parent.namedEntityTag:
+        if t.namedEntityTag != 'undef':
             t.dependency = 'R5'
         else:
-            t.dependency = 'R7'
+            t.dependency = 'R7' # <<
     else:
         merge(t,qw)
 
-def prepByRule(t,qw):
-    if t.parent.wordList[0][0].pos == 'V':
-        t.dependency = 'R3'
-    else:
+def mixedRule(t,qw):
+    if (t.parent.getWords() == ['identity'] and qw in strongQuestionWord) or not t.parent.wordList[0][0].pos.startswith('V'):
         t.dependency = 'R5'
+    elif t.parent.getWords() == ['identity']:
+        t.dependency = 'R2'
+    else:
+        t.dependency = 'R3'
 
 dependenciesMap1 = {
     'undef'     : 'R0',
     'root'      : 'R0',
-    'inst_of'   : 'R6', # !!!!!!!!! <<<<<<<<
+    'inst_of'   : 'R6', # <<
     'dep'       : 'R1',
         'aux'       : remove,
             'auxpass'   : remove,
@@ -75,8 +69,8 @@ dependenciesMap1 = {
                     'iobj'      : 'R3',
                     'pobj'      : 'R3',
             'subj'      : impossible,
-                'nsubj'     : nsubjRule,
-                    'nsubjpass'    : nsubjRule, # instead of R5
+                'nsubj'     : mixedRule, # <<
+                    'nsubjpass'    : 'R5', # or R2 if necessary
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
         'cc'        : impossible,
@@ -104,8 +98,7 @@ dependenciesMap1 = {
                 'tmod'      : 'R3',
             'num'       : merge,
             'number'    : merge,
-            'prep'      : 'R5',
-            'prep_by'   : prepByRule,
+            'prep'   : mixedRule, # <<
             'poss'      : 'R5',
             'possessive': impossible,
             'prt'       : merge,
@@ -135,7 +128,6 @@ dependenciesMap2 = {         # how to handle a -b-> c
     'R3'        : ignore,         # (?,!a,normalize(c))
     'R4'        : ignore,         # (?,normalize(c),!a)
     'R5'        : ignore,         # (normalize(c),!a,?)
-    'R5s'       : propagateType,  # (normalize(c),!a,?)
     'R6'        : propagateType,  # (?,instance of,c)
     'R7'        : ignore,         # (!a,normalize(c),?)
     'Rspl'      : propagateType,  # superlative
@@ -171,7 +163,7 @@ def collapsePrep(t):
     temp = list(t.child) # copy, because t.child is changed while iterating
     for c in temp:
         collapsePrep(c)
-    if t.dependency.startswith('prep') and t.dependency != 'prep_by': # prep_x or prepc_x (others?)
+    if t.dependency.startswith('prep'): # prep_x or prepc_x (others?)
         t.dependency = 'prep' # suffix of the prep not analyzed for the moment (just removed)
 
 def connectorUp(t):

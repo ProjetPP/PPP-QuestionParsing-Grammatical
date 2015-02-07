@@ -19,6 +19,8 @@ General
 * Tell me where the DuPont company is located. Name the Ranger who was always after Yogi Bear.
 * How do you solve "Rubik's Cube"? > en quoi est transformé how
 * réduire le nb de map, ajouter + d'infos
+* autres auxiliaire (have) : What dictator has the nickname "El Maximo"
+* propagation de types : nsubjRule + qw in strongQuestionWord = R5s
 * Who was the leader of the Branch Davidian Cult confronted by the FBI in Waco, Texas in 1993?    >> gros sujet
 * Where is Inoco based?                                                                           >> revoir la nounification associée
 * Who Clinton defeated?                                                                           >> prq nounification échoue ? non lemmatizé ?
@@ -153,57 +155,59 @@ Trancher entre R3 et R5
 =======================
 
 Rnew : 
-  - nom -> R5
-  - auxiliaire + strong qw -> R5
+  - nom (ou autre != verbe) -> R5
+  - be + strong qw -> R5
   - verbe -> R3
-  - auxiliaire 
-   * is : règle d'évitement R2
-   * What dictator has the nickname "El Maximo"? >> autres : R5 ? __ici__ dobj donc déjà pris en compte == ne considérer que "is" comme auxiliaire
+  - be + not strong qw -> règle d'évitement R2
 
-R3:
-  - What did John Hinckley do to impress Jodie Foster?
-
-Passer nsubj en Rnew:
+nsubj (Rnew):
   * verbe auxiliaire : 
-   - 
+   - Who is Obama
   * verbe non auxiliaire : (actuellement perdu si pas strong qw)
    - Which books did Suzanne Collins write?
    - How many films did Ingmar Bergman make?
    - Who Clinton defeated?
    - What did Bob write ?
+  * nom : 
+   - ne devrais pas arriver
 
-Laisser dobj + V en R5:
+dobj (R5):
   * verbe auxiliaire : 
-   - 
+   - ne devrais pas arriver
   * verbe non auxiliaire : 
    - When did they won the lottery?
    - Who invented the hula hoop?
    - Who has written "The Hitchhiker's Guide to the Galaxy"?
    - Who elected the president of France?
-   > oui
+  * nom : 
+   - ne devrais pas arriver
 
-Laisser nsubjpass en R5:
+nsubjpass (R5):
   * verbe auxiliaire : 
-   - 
+   - ne devrais pas arriver ? > ok dans ce cas-là pour ne pas faire un R2 (mais mettre un warning dans la map)
   * verbe non auxiliaire : 
    - When was the president of the United States born
-   > oui
+   - Where is Inoco based?
+  * nom : 
+   - ne devrais pas arriver
 
 Passer prep en Rnew
   * verbe auxiliaire : 
    - 
   * verbe non auxiliaire : 
-   - Who was killed by Oswald
    - List movies directed by Spielberg
   * nom : 
    - List of books by Roald Dahl
    - president of France
 
 Insensible à Rnew:
-  * Verbes : 
+  * Verbes (R3) : 
    - agent
-  * Nom :
+  * Nom (R5) :
    - poss
+
+Placés en observation : 
+  - xsubj, acomp, ccomp, xcomp, pcomp, pobj, iobj, vmod, advmod, rcmod, npadvmod
 
 _________________________________________________________________________________________________________________________________
 
@@ -261,7 +265,7 @@ No subject after preprocessing
 * nsubj + dobj (+ do)               : What albums did Pearl Jam record? (cf parsing de: Which books did Suzanne Collins write)
 * Who Clinton defeated?
 
-#### Autres
+#### Autres !!!!
 
 * instance of + tmod : which day was the president born
 * instance of + prep_of : Of which country is Paris the capital?

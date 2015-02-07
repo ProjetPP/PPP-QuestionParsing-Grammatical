@@ -165,7 +165,7 @@ look at the verb ? (passive, acted ...)
 
 ##### ---
 
-* How many children does Barack Obama have? > not do an intersection each time a node have several children.
+* How many children does Barack Obama have?
 * Which books did Suzanne Collins write?
 
 ccomp
@@ -267,6 +267,7 @@ tmod
 ====
 
 * Are there 29 days in February 
+* which day was the president born
 
 Stanford Parser fails
 =====================
