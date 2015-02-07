@@ -221,7 +221,7 @@ Mot interrogatif dans un sous-arbre nsubj
 position(verbe) > position(nsubj)
 
 * nsubjpass + prep_in               : What language is spoken in Argentina? 
-* nsubj + dobj                      : -What actor married John F. Kennedy's sister?
+* nsubj + dobj                      : What actor married John F. Kennedy's sister?
 * nsubj + prep_by                   : List movies directed by Spielberg
 * nsubjpass                         : Which president has been killed by Oswald?
 * nsubjpass                         : which book was authored by Victor Hugo

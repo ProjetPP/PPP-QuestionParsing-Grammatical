@@ -136,4 +136,17 @@ expected = {
         T(M(), R('instance of'), R('country')),
         T(R('Lake Victoria'), R('country'), M())
     ]),
+
+    'What actor married John F. Kennedy\'s sister?':
+    I([
+        T(M(), R('instance of'), R('actor')),
+        T(
+            T(R('John F. Kennedy'),R('sister'),M()),
+            R('husband'),
+            M()
+        )
+    ]),
+
+    'Where was Ulysses S. Grant born?':
+    T(R('Ulysses S. Grant'), R('birth place'), M()),
 }
