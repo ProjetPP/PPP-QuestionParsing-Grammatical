@@ -95,7 +95,7 @@ dependenciesMap1 = {
                 'tmod'      : 'R3',
             'num'       : merge,
             'number'    : merge,
-            'prep'   : mixedRule, # <<
+            'prep'      : mixedRule, # <<
             'poss'      : 'R5',
             'possessive': impossible,
             'prt'       : merge,

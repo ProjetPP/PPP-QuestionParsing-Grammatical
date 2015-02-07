@@ -260,4 +260,12 @@ expected = {
             R('height')
         )
     ),
+
+    'What is the coldest place on earth?':
+    F(
+        S(
+            T(R('earth'),R('place'),M()),
+            R('temperature')
+        )
+    ),
 }

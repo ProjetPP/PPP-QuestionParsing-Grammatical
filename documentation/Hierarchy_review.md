@@ -215,6 +215,11 @@ nsubj
 - not "instance of" only if is/was/... ?
 - new rules Rnsubj ????
 
+* Who is Obama
+* Which books did Suzanne Collins write?
+* How many films did Ingmar Bergman make?
+* Who Clinton defeated?
+
 ##### +++
 
 * Who elected the president of France?
@@ -222,10 +227,11 @@ nsubj
 * Who Clinton defeated?
 * Where is the ENS of Lyon?
 * What did Bob write ? > R3 if weak question word + not 'identity' >> problem or parsing failure ???
+* What actor married John F. Kennedy's sister
 
 ##### ---
 
-* What actor married John F. Kennedy's sister
+* What does "Janelle" mean?
 
 num
 ===
@@ -269,6 +275,8 @@ tmod
 
 * Are there 29 days in February 
 * which day was the president born
+
+_________________________________________________________________________________________________________________________________
 
 Stanford Parser fails
 =====================

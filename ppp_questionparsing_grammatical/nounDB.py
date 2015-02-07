@@ -9,7 +9,7 @@ class Nounificator:
         self.verbToNouns = {}
 
     def __str__(self):
-        return '\n'.join(["%s:\t%s" % (x,str(self.verbToNouns[x])) for x in self.verbToNouns.keys()])
+        return '\n'.join(["%s:\t%s" % (x,str(self.verbToNouns[x])) for x in sorted(self.verbToNouns.keys())])
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__

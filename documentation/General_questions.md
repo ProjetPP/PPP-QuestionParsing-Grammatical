@@ -95,33 +95,6 @@ Merge nn with the 2 nodes if nn above them:
  - When did Princess Diana and Prince Charles get married?
  - Who is section manager for guidance and control systems at JPL?
 
-Exists
-======
-
-* Is there a ghost in my house
-* Is there a pilot in the plane
-* Is there a capital in France
-* Is there a king of england > https://www.wikidata.org/wiki/Q18810062
-* http://english.stackexchange.com/questions/34353/is-there-versus-are-there
-* Are there any articles available on the subject?
-* Are there computers in your room
-* Does a king of England exist?
-
-Semi question words
-===================
-
-* Show me Star Wars movies > mal parsé
-* List movies directed by Spielberg
-* List books by Roald Dahl
-* List albums of Pink Floyd
-* List films with Jack Nicholson
-* List of US presidents
-* List of presidents of France
-* Give me the capital of France
-* Give the capital of France
-* Give us the capital of France
-* list of president of usa > mal parsé
-
 _________________________________________________________________________________________________________________________________
 _________________________________________________________________________________________________________________________________
 
@@ -132,10 +105,6 @@ Rattraper un mauvais parsing:
   * who is the president of the United states of america
   * Where is the ENS of Lyon? (merge car majuscule?)
 
-Tag "S." car index entre les 2 + relation nn: 
-  * Where was Ulysses S. Grant born?
-  * What actor married John F. Kennedy's sister?
-
 Good:
   * Who is the United States president
   * What was the first Gilbert and Sullivan opera?
@@ -145,51 +114,12 @@ Amod:
   * Who is the French president? >> nécessite avant de transformer French en France
   * Who was the first Taiwanese President?
 
-Plus généralement : avoir une fonction de preprocessing qui applique des corrections sur l'arbre de dépendances dès le début (ajout de tags,...)
-
 What organization was founded by the Rev. Jerry Falwell? >> tagger Rev car majuscule
 
 _________________________________________________________________________________________________________________________________
 
-Trancher entre R3 et R5
-=======================
-
-Rnew : 
-  - nom (ou autre != verbe) -> R5
-  - be + strong qw -> R5
-  - verbe -> R3
-  - be + not strong qw -> règle d'évitement R2
-
-nsubj (Rnew):
-  * verbe auxiliaire : 
-   - Who is Obama
-  * verbe non auxiliaire : (actuellement perdu si pas strong qw)
-   - Which books did Suzanne Collins write?
-   - How many films did Ingmar Bergman make?
-   - Who Clinton defeated?
-   - What did Bob write ?
-  * nom : 
-   - ne devrais pas arriver
-
-dobj (R5):
-  * verbe auxiliaire : 
-   - ne devrais pas arriver
-  * verbe non auxiliaire : 
-   - When did they won the lottery?
-   - Who invented the hula hoop?
-   - Who has written "The Hitchhiker's Guide to the Galaxy"?
-   - Who elected the president of France?
-  * nom : 
-   - ne devrais pas arriver
-
-nsubjpass (R5):
-  * verbe auxiliaire : 
-   - ne devrais pas arriver ? > ok dans ce cas-là pour ne pas faire un R2 (mais mettre un warning dans la map)
-  * verbe non auxiliaire : 
-   - When was the president of the United States born
-   - Where is Inoco based?
-  * nom : 
-   - ne devrais pas arriver
+Traitement des prep
+===================
 
 Passer prep en Rnew
   * verbe auxiliaire : 
@@ -197,74 +127,8 @@ Passer prep en Rnew
   * verbe non auxiliaire : 
    - List movies directed by Spielberg
    - What language is spoken in Argentina? :(
+   - What kings ruled on France?
   * nom : 
    - List of books by Roald Dahl
    - president of France
-
-Insensible à Rnew:
-  * Verbes (R3) : 
-   - agent
-  * Nom (R5) :
-   - poss
-
-Placés en observation : 
-  - xsubj, acomp, ccomp, xcomp, pcomp, pobj, iobj, vmod, advmod, rcmod, npadvmod
-
-_________________________________________________________________________________________________________________________________
-
-Amélioration de nsubj/dobj avec instance_of
-===========================================
-
-#### instance_of + nsubj(pass)
-
-Mot interrogatif dans un sous-arbre nsubj
-position(verbe) > position(nsubj)
-
-* nsubjpass + prep_in               : What language is spoken in Argentina? 
-* nsubj + dobj                      : What actor married John F. Kennedy's sister?
-* nsubj + prep_by                   : List movies directed by Spielberg
-* nsubjpass                         : Which president has been killed by Oswald?
-* nsubjpass                         : which book was authored by Victor Hugo
-
-#### instance_of + dobj
-
-* Which books did Suzanne Collins write?
-* How many films did Ingmar Bergman make?
-* How many children does Barack Obama have?
-* How many gas stations are there in the United States?
-
-> pas forcément une instance_of (seulement si profondeur > 1 ?). Dans ce cas-là, réintégrer la partie dans le reste de l'arbre ?
-
-#### nsubj avec verbe nécessaire
-
-Mot interrogatif est relié directement au verbe + pas dans un sous arbre sujet (souvent dep)
-
-* What is the most beautiful country in Europe?
-* Who was the first Taiwanese President?
-* What was the monetary value of the Nobel Peace Prize in 1989? 
-* When was Benjamin Disraeli prime minister?
-* nsubjpass : Where was Ulysses S. Grant born?
-* nsubjpass : Where is Inoco based?
-* What was the first Gilbert and Sullivan opera?
-* Where is the ENS of Lyon?
-* What did Bob write ?
-* Who is the author of Sea and Sky?
-* Is there a ghost in my house
-* Are there computers in your room
-
-#### Question word nsubj
-
-No subject after preprocessing
-
-* Who wrote the song, "Stardust"?
-* Who invented the hula hoop?
-* Who elected the president ?
-* Who was killed by Oswald?
-
-#### Autres !!!!
-
-* tmod : which day was the president born
-* prep_of : Of which country is Paris the capital? > mal parsé
-* prep_in : In which countries is the Lake Victoria? https://www.google.fr/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=%22in+which+countries%22
-* prep_from : From which country is Alan Turing?
 
