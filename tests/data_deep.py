@@ -87,4 +87,38 @@ expected = {
         T(M(), R('instance of'), R('president')),
         T(M(), R('killer'), R('Oswald'))
     ]),
+    
+    'Who invented the hula hoop?':
+    T(R('hula hoop'),R('inventor'),M()),
+
+    'Who was killed by Oswald?':
+    T(M(), R('killer'), R('Oswald')),
+
+    'Which books did Suzanne Collins write?':
+    I([
+        T(M(), R('instance of'), R('book')),
+        T(M(), R('author'), R('Suzanne Collins'))
+    ]),
+
+    'president of France?':
+    T(R('France'),R('president'),M()),
+
+    'Give us the queen of England':
+    T(R('England'),R('queen'),M()),
+
+    'Who is Babar?':
+    T(R('Babar'),R('identity'),M()),
+
+    'What did George Orwell write?':
+    T(M(),R('author'),R('George Orwell')),
+
+    'Who has written \"The Hitchhiker\'s Guide to the Galaxy\"?':
+    T(R('The Hitchhiker\'s Guide to the Galaxy'),R('author'),M()),
+
+    'When was the president of the United States born':
+    T(
+        T(R('United States'),R('president'),M()),
+        R('birth date'),
+        M()
+    ),
 }
