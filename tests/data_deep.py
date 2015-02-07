@@ -14,6 +14,9 @@ expected = {
     'Who is the prime minister of France?':
     T(R('France'), R('prime minister'), M()),
 
+    'Who is Homer J. Simpson?':
+    T(R('Homer J. Simpson'), R('identity'), M()),
+
     'Who is the France\'s prime minister?':
     T(R('France'), R('prime minister'), M()),
 
