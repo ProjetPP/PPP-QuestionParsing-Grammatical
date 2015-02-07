@@ -13,9 +13,9 @@ def buildValue(tree):
             len(tree.getWords()) > 1 -> multiple alternatives -> return a list of resources
     """
     if len(tree.getWords()) == 1:
-        return Resource(value=tree.getWords()[0])
+        return Resource(tree.getWords()[0])
     else:
-        return List([Resource(value=x) for x in tree.getWords()])
+        return List([Resource(x) for x in tree.getWords()])
 
 def normalizeSuperlative(tree):
     """
@@ -25,14 +25,14 @@ def normalizeSuperlative(tree):
     superlative = tree.getWords()[0]
     if superlative in superlativeNoun:
         if superlative in superlativeOrder:
-            return superlativeOrder[superlative](list=Sort(list=normalize(tree.child[0]),predicate=Resource(value=superlativeNoun[superlative])))
+            return superlativeOrder[superlative](Sort(normalize(tree.child[0]),Resource(superlativeNoun[superlative])))
         else:
-            return First(list=Sort(list=normalize(tree.child[0]),predicate=Resource(value=superlativeNoun[superlative]))) # First by default
+            return First(Sort(normalize(tree.child[0]),Resource(superlativeNoun[superlative]))) # First by default
     else:
         if superlative in superlativeOrder:
-            return superlativeOrder[superlative](list=Sort(list=normalize(tree.child[0]),predicate=Resource(value='default'))) # default predicate
+            return superlativeOrder[superlative](Sort(normalize(tree.child[0]),Resource('default'))) # default predicate
         else:
-            return First(list=Sort(list=normalize(tree.child[0]),predicate=Resource(value='default')))
+            return First(Sort(normalize(tree.child[0]),Resource('default')))
 
 def normalizeConjunction(tree):
     """
@@ -47,7 +47,7 @@ def normalizeConjunction(tree):
     else:
         result = [normalize(tree.child[1]),normalize(tree.child[0])]    
     try:
-        return conjunctionTab[conjunction](list=result)
+        return conjunctionTab[conjunction](result)
     except KeyError:
         raise GrammaticalError(conjunction,"conjunction unknown")
 
@@ -58,33 +58,33 @@ def normalize(tree):
     if tree.child == []: # leaf
         return buildValue(tree)
     if tree.child[0].dependency == 'Rexist':
-        return Exists(list = normalize(tree.child[0]))
+        return Exists(normalize(tree.child[0]))
     if tree.child[0].dependency == 'Rspl': # Rspl = superlative, ordinal
         return normalizeSuperlative(tree)
     if tree.child[0].dependency.startswith('Rconj'): # Rconj = conjunction
         return normalizeConjunction(tree)
     result = []
-    for t in tree.child: # R0 ... R5
+    for t in tree.child: # R0 ... R7
         if t.dependency == 'R0':
             result.append(normalize(t))
         if t.dependency == 'R1':
             result.append(buildValue(t))
         if t.dependency == 'R2':
             if len(t.child) == 0:
-                result.append(Triple(subject=buildValue(t), predicate=buildValue(tree), object=Missing()))
+                result.append(Triple(buildValue(t),buildValue(tree),Missing()))
             else:
                 result.append(normalize(t))
         if t.dependency == 'R3':
-            result.append(Triple(subject=Missing(), predicate=buildValue(tree), object=normalize(t)))
+            result.append(Triple(Missing(),buildValue(tree),normalize(t)))
         if t.dependency == 'R4':
-            result.append(Triple(subject=Missing(), predicate=normalize(t), object=buildValue(tree)))
-        if t.dependency == 'R5' or t.dependency == 'R5s':
-            result.append(Triple(subject=normalize(t), predicate=buildValue(tree), object=Missing()))
+            result.append(Triple(Missing(),normalize(t),buildValue(tree)))
+        if t.dependency == 'R5':
+            result.append(Triple(normalize(t),buildValue(tree),Missing()))
         if t.dependency == 'R6':
-           result.append(Triple(subject=Missing(), predicate=Resource(value='instance of'), object=normalize(t)))
+           result.append(Triple(Missing(),Resource('instance of'),normalize(t)))
         if t.dependency == 'R7':
-            result.append(Triple(subject=buildValue(tree), predicate=normalize(t), object=Missing()))
+            result.append(Triple(buildValue(tree),normalize(t),Missing()))
     if len(result) == 1:
         return result[0]
     else:
-        return Intersection(list=result)
+        return Intersection(result)

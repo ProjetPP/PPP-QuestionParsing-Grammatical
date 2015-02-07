@@ -198,21 +198,21 @@ def conjConnectorsUp(t):
         dupl = None
         newTree = None
         if len(t.parent.child) == 1:
-            parentTemp = t.parent.parent # n0
-            t.dependency = t.parent.dependency # dependency(n2)
-            t.parent.child.remove(t) # son(n1) \= n2
-            dupl = deepcopy(parentTemp) # n0'
-            parentTemp.child.remove(t.parent) # son(n0) \= n1
-            parentTemp.child.append(t) # son(n0)=n2
-            t.parent = parentTemp # parent(n2) = n0
+            parentTemp = t.parent.parent
+            t.dependency = t.parent.dependency
+            t.parent.child.remove(t)
+            dupl = deepcopy(parentTemp)
+            parentTemp.child.remove(t.parent)
+            parentTemp.child.append(t)
+            t.parent = parentTemp
             newTree = DependenciesTree(depSave, dependency=parentTemp.dependency, child=[dupl,parentTemp], parent=parentTemp.parent)
             parentTemp.dependency = 'RconjB'
             parentTemp.parent = newTree
         else:
-            parentTemp = t.parent # n0
-            parentTemp.child.remove(t) # son(n1) \= n2
-            dupl = deepcopy(parentTemp) # n0'
-            t.child += t.parent.child # son(n2) = son(n1)
+            parentTemp = t.parent
+            parentTemp.child.remove(t)
+            dupl = deepcopy(parentTemp)
+            t.child += t.parent.child
             for n in t.child:
                 n.parent = t
             newTree = DependenciesTree(depSave, dependency=parentTemp.dependency, child=[dupl,t], parent=parentTemp.parent)
