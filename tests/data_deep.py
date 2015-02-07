@@ -156,4 +156,9 @@ expected = {
     'Who is the United States president?':
     T(R('United States'),R('president'),M()),
 
+    'What is a chocolate sunday?':
+    T(R('chocolate sunday'),R('definition'),M()),
+
+    'What is the D Day?':
+    T(R('d Day'),R('definition'),M()),
 }

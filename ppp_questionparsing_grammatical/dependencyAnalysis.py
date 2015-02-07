@@ -26,18 +26,15 @@ def amodRule(t,qw):
             merge(t.child[0],qw)
             t.dependency = 'connectorUp'
             return
-    if t.namedEntityTag != 'ORDINAL' and t.wordList[0][0].pos != 'JJS': # [0] : must be improve? (search in the whole list?)
+    if t.namedEntityTag != 'ORDINAL' and t.wordList[0][0].pos != 'JJS': # [0] : must be improved? (search in the whole list?)
         assert t.parent is not None
         merge(t,qw)
     else:
         t.dependency = 'connectorUp'
 
 def nnRule(t,qw): # ????
-    if t.namedEntityTag != t.parent.namedEntityTag:
-        if t.namedEntityTag != 'undef':
-            t.dependency = 'R5'
-        else:
-            t.dependency = 'R7' # <<
+    if t.namedEntityTag != t.parent.namedEntityTag and t.namedEntityTag != 'undef':
+        t.dependency = 'R5'
     else:
         merge(t,qw)
 
