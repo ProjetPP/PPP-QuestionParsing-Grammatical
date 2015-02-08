@@ -23,6 +23,41 @@ expected = {
     'What is the birth date of Bob Marley?':
     T(R('Bob Marley'), R('birth date'), M()),
 
+    'How fast is a cheetah?':
+    T(R('cheetah'), R('speed'), M()),
+
+    'How wide is a tennis court?':
+    T(R('tennis court'), R('width'), M()),
+
+    'How old is Big Ben?':
+    T(R('Big Ben'), R('age'), M()),
+
+    'How tall is Burj Khalifa?':
+    T(R('Burj Khalifa'), R('height'), M()),
+
+    'How old is the son of the main actor of "I, Robot"?':
+    T(
+        T(
+            T(R('I, Robot'), R('main actor'), M()),
+            R('son'),
+            M()
+        ),
+        R('age'),
+        M()
+    ),
+
+    'How fast is the most expensive car in the World?':
+    T(
+        L(
+            S(
+                T(R('world'), R('car'), M()),
+                R('cost')
+            ),
+        ),
+        R('speed'),
+        M()
+    ),
+
     'When was born the daughters of the wife of the president of the United States?':
     T(
         T(
