@@ -27,7 +27,7 @@ semiQuestionWord = [
 # Other classifications #
 #########################
 
-# question word that implies to add an extra triple (in practice: rule R2 vs R5s) (ex: where is the capital of france : (france,capital,?) --> ((france,capital,?),location,?)
+# question word that implies to add an extra triple (in practice: rule R2 vs R5) (ex: where is the capital of france : (france,capital,?) --> ((france,capital,?),location,?)
 strongQuestionWord = [
     'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'whose', 'how big', 'in which', 'from which'
 ]

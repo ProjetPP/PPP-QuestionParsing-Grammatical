@@ -9,7 +9,7 @@ from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd,
 
 def prepareInstanceOf(t):
     """
-        Replace nsubj(pass) rule by nsubj(pass)_qw, if it appears on a path from the root of t to the root of the whole tree
+        Replace by 'inst_of' the dependencies that appears on a path from the root of t to the root of the whole tree
     """
     if t.dependency == 'root':
         return
@@ -55,7 +55,7 @@ def identifyQuestionWord(t):
     """
     start = [None,None]
     firstWords(t,start)
-    if not start[0]: # the first word is not in the tree, we extract it directly from the sentence
+    if not start[0]: # the first word is not in the tree, we extract it directly from the sentence    
         start[0] = Word(t.text.split(' ')[0],1)
     if not start[1]:
         try:
@@ -110,7 +110,8 @@ def checkSub(t,w,excMap=questionExcept):
         assert len(t.wordList) == 1 and len(t.wordList[0]) == 1
         res = True
         for n in t.child:
-            res = res and checkSub(n,w)
+            if n.dependency != 'R6': # don't go through "instance of" edges
+                res = res and checkSub(n,w)
         return res
     else:
         try:
@@ -125,7 +126,7 @@ def checkSubInfo(t,w,excMap=questionExcept):
     """
     res = True
     for n in t.child:
-        if n.dependency != 'R6': # don't go through "instance of" subtree
+        if n.dependency != 'R6': # don't go through "instance of" edges
             res = res and checkSub(n,w,excMap)
     return res
 

@@ -26,9 +26,11 @@ General
 * Who Clinton defeated?                                                                           >> prq nounification échoue ? non lemmatizé ?
 * Rapprocher/renommer les règles R.. similaires
 * __How many__ : opérateur de comptage 
-    >> How many films did Ingmar Bergman make?
-    >> How many children does Barack Obama have?
-    >> cf instance_of sur dobj >> on récupère la liste produite en sortie et on renvoie sa taille
+   > How many films did Ingmar Bergman make?
+   > How many children does Barack Obama have?
+   > How many gas stations are there in the United States?
+   > cf instance_of sur dobj >> on récupère la liste produite en sortie et on renvoie sa taille
+   > How much did Mercury spend on advertising in 1993?
 
 Remarks
 =======
@@ -132,4 +134,104 @@ Passer prep en Rnew
   * nom : 
    - List of books by Roald Dahl
    - president of France
+
+_________________________________________________________________________________________________________________________________
+
+### nsubj
+
+R5
+==
+
+* Where does the president live?
+
+R3
+==
+
+R5 ou R3
+========
+
+* What did George Orwell write?
+* Which books did Suzanne Collins write?
+
+### nsubpass
+
+R5
+==
+
+R3
+==
+
+R5 ou R3
+========
+
+* Where was Ulysses S. Grant born?
+* Where is Inoco based?
+
+### agent
+
+R5
+==
+
+R3
+==
+
+R5 ou R3
+========
+
+* Who was killed by Oswald?
+* Which president has been killed by Oswald?
+* Which books were authored by Victor Hugo?
+
+----------------
+
+### dobj
+
+R5
+==
+
+R3
+==
+
+R5 ou R3
+========
+
+* Who developed Microsoft?
+* What actor married John F. Kennedy's sister?
+* Who has written "The Hitchhiker's Guide to the Galaxy"?
+* Who wrote the song, "Stardust"?
+* Who invented the hula hoop?
+* Who elected the president ?
+* Who killed Gandhi?
+
+### prep (+ V)
+
+R5
+==
+
+R3
+==
+
+* Which kings ruled on France
+* List movies directed by Spielberg
+
+R5 ou R3
+========
+
+* What language is spoken in Argentina?
+* Who followed Willy Brandt as chancellor of the Federal Republic of Germany?
+* Who was born on 1984
+
+----------------
+
+The animal | lives in | the farm.
+ Subject     Predicate   Object    >> ( animal , residence , farm )
+
+The animal | lives in | the farm.
+  Object     Predicate   Subject   >> ( farm , inhabitant , animal )
+
+---------------
+
+processQuestionInfo dans questionWordProcessing doit être le seul habilité à affaiblir une règle en R2 (ou R3 bis) (mais pas en R0: where is the residence)
+dependency analysis pose un R5/R3 puis processQuestionInfo affaiblie les dépendances de plus haut niveau s'il trouve l'info en-dessous
+
 
