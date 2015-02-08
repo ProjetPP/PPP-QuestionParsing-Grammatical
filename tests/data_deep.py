@@ -305,7 +305,7 @@ expected = {
     ),
 
     'Who developed Microsoft?':
-    T(R('microsoft'),R('developer'),M()),
+    T(R('Microsoft'),R('developer'),M()),
 
     'Give me all companies in Munich':
     T(R('Munich'),R('company'),M()),
