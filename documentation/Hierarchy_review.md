@@ -54,6 +54,10 @@ xcomp
 * What did John Hinckley do to impress Jodie Foster?
 * Obama is the United States president.
 
+##### +++
+
+* Who developed Skype
+
 amod
 ====
 
@@ -209,16 +213,22 @@ vmod
 nsubj
 =====
 
-- only if a = is/was/... ?
-- when is/... is replaced, it's more relevant to produce a R5 rule
-- sometimes it's relevent to produce an "instance of" triple.
-- not "instance of" only if is/was/... ?
-- new rules Rnsubj ????
-
 * Who is Obama
 * Which books did Suzanne Collins write?
 * How many films did Ingmar Bergman make?
 * Who Clinton defeated?
+
+nsubj (Rnew):
+
+verbe auxiliaire :
+ - Who is Obama
+verbe non auxiliaire : (actuellement perdu si pas strong qw)
+ - Which books did Suzanne Collins write?
+ - How many films did Ingmar Bergman make?
+ - Who Clinton defeated?
+ - What did Bob write ?
+nom :
+ - ne devrais pas arriver
 
 ##### +++
 
@@ -232,6 +242,7 @@ nsubj
 ##### ---
 
 * What does "Janelle" mean?
+
 
 num
 ===

@@ -59,7 +59,7 @@ dependenciesMap1 = {
             'comp'      : 'R3',
                 'acomp'     : 'R3',
                 'ccomp'     : 'R5',
-                'xcomp'     : 'R3',
+                'xcomp'     : 'R5',
                 'pcomp'     : 'R3',
                 'obj'       : impossible,
                     'dobj'      : 'R5',

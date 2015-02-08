@@ -202,10 +202,10 @@ class StandardTripleTests(TestCase):
                 "value": "identity",
                 "type": "resource"
             },
-            "subject": {
+            "object": {
                 "type": "missing"
             },
-            "object": {
+            "subject": {
                 "type": "triple",
                 "predicate": {
                     "value": "president",

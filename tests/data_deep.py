@@ -268,4 +268,10 @@ expected = {
             R('temperature')
         )
     ),
+
+    'Who developed Microsof?':
+    T(R('microsof'),R('developer'),M()),
+
+    'Give me all companies in Munich':
+    T(R('Munich'),R('company'),M()),
 }
