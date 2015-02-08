@@ -42,7 +42,7 @@ Gestion des prep(c)_x
 =====================
 
 go -prep_to-> ... = go to -prep->
-What is Frozen based on?
+* What is Frozen based on?
 
 * What two US biochemists won the Nobel Prize in medicine in 1992?
 
@@ -128,6 +128,7 @@ Passer prep en Rnew
    - List movies directed by Spielberg
    - What language is spoken in Argentina? :(
    - What kings ruled on France?
+   - Who was born on 1984?
   * nom : 
    - List of books by Roald Dahl
    - president of France

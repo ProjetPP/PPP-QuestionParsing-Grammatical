@@ -4,14 +4,11 @@ Amélioration de nsubj/dobj avec instance_of
 
 #### instance_of + nsubj(pass)
 
-Mot interrogatif dans un sous-arbre nsubj
-position(verbe) > position(nsubj)
-
-* nsubjpass + prep_in               : What language is spoken in Argentina? 
-* nsubj + dobj                      : What actor married John F. Kennedy's sister?
-* nsubj + prep_by                   : List movies directed by Spielberg
-* nsubjpass                         : Which president has been killed by Oswald?
-* nsubjpass                         : which book was authored by Victor Hugo
+* nsubjpass + prep_in    : What language is spoken in Argentina? 
+* nsubj + dobj           : What actor married John F. Kennedy's sister?
+* nsubj + prep_by        : List movies directed by Spielberg
+* nsubjpass              : Which president has been killed by Oswald?
+* nsubjpass              : which book was authored by Victor Hugo
 
 #### instance_of + dobj
 
@@ -20,11 +17,7 @@ position(verbe) > position(nsubj)
 * How many children does Barack Obama have?
 * How many gas stations are there in the United States?
 
-> pas forcément une instance_of (seulement si profondeur > 1 ?). Dans ce cas-là, réintégrer la partie dans le reste de l'arbre ?
-
 #### nsubj avec verbe nécessaire
-
-Mot interrogatif est relié directement au verbe + pas dans un sous arbre sujet (souvent dep)
 
 * What is the most beautiful country in Europe?
 * Who was the first Taiwanese President?
@@ -48,7 +41,7 @@ No subject after preprocessing
 * Who elected the president ?
 * Who was killed by Oswald?
 
-#### Autres !!!!
+#### Autres
 
 * tmod : which day was the president born
 * prep_of : Of which country is Paris the capital? > mal parsé
