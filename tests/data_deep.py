@@ -58,6 +58,22 @@ expected = {
         M()
     ),
 
+    'When was the daughters of the wife of the president of the United States born?':
+    T(
+        T(
+            T(
+                T(R('United States'), R('president'), M()),
+                R('wife'),
+                M()
+            ),
+            R('daughter'),
+            M()
+        ),
+        R('birth date'),
+        M()
+    ),
+
+    # this question is not correct (see previous question), and so the parsing fails (no subject in the dependency tree, but a dobj). However, it's interesting to be able to handle such questions
     'When was born the daughters of the wife of the president of the United States?':
     T(
         T(
@@ -304,8 +320,8 @@ expected = {
         )
     ),
 
-    'Who developed Microsof?':
-    T(R('microsof'),R('developer'),M()),
+    'Who developed Microsoft?':
+    T(R('Microsoft'),R('developer'),M()),
 
     'Give me all companies in Munich':
     T(R('Munich'),R('company'),M()),
