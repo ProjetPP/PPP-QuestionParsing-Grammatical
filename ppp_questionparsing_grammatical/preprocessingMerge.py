@@ -1,7 +1,6 @@
 import sys
 import os
 from pkg_resources import resource_filename
-from .data.exceptions import NounificationError
 from .nounDB import Nounificator
 
 ########################################
@@ -12,6 +11,17 @@ nManual = Nounificator()
 nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManual.pickle'))
 nAuto = Nounificator()
 nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAuto.pickle'))
+
+def nounify(s):
+    """
+        Return the string list of the closest nouns to s (die -> death)
+        Replace by hard-coded exceptions if they exist (e.g. be, have, do, bear...)
+    """
+    if nManual.exists(s):
+        return nManual.toNouns(s)
+    if nAuto.exists(s):
+        return nAuto.toNouns(s)
+    return []
 
 class Word:
     """
@@ -31,17 +41,6 @@ class Word:
     def __lt__(self, other):
         assert isinstance(other,Word)
         return (self.index,self.word,self.pos) < (other.index,other.word,other.pos)
-       
-    def nounify(self):
-        """
-            Return the string list of the closest nouns to self (die -> death)
-            Replace by hard-coded exceptions if they exist (e.g. be, have, do, bear...)
-        """
-        if nManual.exists(self.word):
-            return nManual.toNouns(self.word)
-        if nAuto.exists(self.word):
-            return nAuto.toNouns(self.word)
-        raise NounificationError(self.word,"cannot nounify this word")
 
     def standardize(self,lmtzr):
         """
@@ -51,8 +50,11 @@ class Word:
         if self.pos and self.pos[0] == 'N':
             self.word=lmtzr.lemmatize(self.word.lower(),'n')
         elif self.pos and self.pos[0] == 'V':
-            self.word=lmtzr.lemmatize(self.word.lower(),'v')
-            return self.nounify()
+            s = lmtzr.lemmatize(self.word.lower().split()[0],'v')
+            if self.pos != 'VBN':
+                return list(set(nounify(s) + [s]))
+            else:
+                return list(set(nounify(s) + nounify(self.word.lower()) + [self.word.lower()]))
         return []
 
 ###################

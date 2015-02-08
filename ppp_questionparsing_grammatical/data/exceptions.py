@@ -8,7 +8,7 @@ class QuotationError(Exception):
         self.expression = expression
         self.message = message
 
-class NounificationError(Exception):
-    def __init__(self, expression, message):
-        self.expression = expression
-        self.message = message
+#class NounificationError(Exception):
+#    def __init__(self, expression, message):
+#        self.expression = expression
+#        self.message = message

@@ -161,6 +161,9 @@ def collapsePrep(t):
     for c in temp:
         collapsePrep(c)
     if t.dependency.startswith('prep'): # prep_x or prepc_x (others?)
+        prep = ' '.join(t.dependency.split('_')[1:])
+        if t.parent.wordList[0][0].pos == 'VBN':
+            t.parent.wordList[0][0].word += ' ' + prep
         t.dependency = 'prep' # suffix of the prep not analyzed for the moment (just removed)
 
 def connectorUp(t):
@@ -249,8 +252,8 @@ def simplify(t):
         collapse dependencies of tree t
     """
     qw = identifyQuestionWord(t)             # identify and remove question word
-    standardize(t)                           # lemmatize, nounify
     collapsePrep(t)                          # replace prep(c)_x by prep(c)
+    standardize(t)                           # lemmatize, nounify
     collapseMap(t,dependenciesMap1,qw)       # collapse the tree according to dependenciesMap1
     conjConnectorsUp(t)                      # remove conjonction connectors
     connectorUp(t)                           # remove remaining amod connectors

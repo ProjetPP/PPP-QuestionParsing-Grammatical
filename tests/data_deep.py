@@ -304,9 +304,12 @@ expected = {
         )
     ),
 
-    'Who developed Microsof?':
-    T(R('microsof'),R('developer'),M()),
+    'Who developed Microsoft?':
+    T(R('microsoft'),R('developer'),M()),
 
     'Give me all companies in Munich':
     T(R('Munich'),R('company'),M()),
+
+    'Where does the prime minister of United Kingdom live?':
+    
 }

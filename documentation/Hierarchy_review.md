@@ -217,6 +217,7 @@ nsubj
 * Which books did Suzanne Collins write?
 * How many films did Ingmar Bergman make?
 * Who Clinton defeated?
+* Where does the prime minister of United Kingdom live?
 
 nsubj (Rnew):
 
@@ -234,9 +235,7 @@ nom :
 
 * Who elected the president of France?
 * What was the first Gilbert and Sullivan opera?
-* Who Clinton defeated?
 * Where is the ENS of Lyon?
-* What did Bob write ? > R3 if weak question word + not 'identity' >> problem or parsing failure ???
 * What actor married John F. Kennedy's sister
 
 ##### ---
