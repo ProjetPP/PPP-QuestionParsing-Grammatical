@@ -23,6 +23,9 @@ expected = {
     'What is the birth date of Bob Marley?':
     T(R('Bob Marley'), R('birth date'), M()),
 
+    'Who lives in the farm?':
+    T(M(), R('residence'), R('farm')),
+
     'How fast is a cheetah?':
     T(R('cheetah'), R('speed'), M()),
 
@@ -94,7 +97,7 @@ expected = {
         T(
             T(
                 T(
-                    T(R('United States'),R('president'),M()),
+                    T(R('United States'), R('president'), M()),
                     R('wife'),
                     M()
                 ),
@@ -160,9 +163,9 @@ expected = {
         T(M(), R('instance of'), R('president')),
         T(M(), R('killer'), R('Oswald'))
     ]),
-    
+
     'Who invented the hula hoop?':
-    T(R('hula hoop'),R('inventor'),M()),
+    T(R('hula hoop'), R('inventor'), M()),
 
     'Who was killed by Oswald?':
     T(M(), R('killer'), R('Oswald')),
@@ -174,23 +177,23 @@ expected = {
     ]),
 
     'president of France?':
-    T(R('France'),R('president'),M()),
+    T(R('France'), R('president'), M()),
 
     'Give us the queen of England':
-    T(R('England'),R('queen'),M()),
+    T(R('England'), R('queen'), M()),
 
     'Who is Babar?':
-    T(R('Babar'),R('identity'),M()),
+    T(R('Babar'), R('identity'), M()),
 
     'What did George Orwell write?':
-    T(M(),R('author'),R('George Orwell')),
+    T(M(), R('author'), R('George Orwell')),
 
     'Who has written \"The Hitchhiker\'s Guide to the Galaxy\"?':
-    T(R('The Hitchhiker\'s Guide to the Galaxy'),R('author'),M()),
+    T(R('The Hitchhiker\'s Guide to the Galaxy'), R('author'), M()),
 
     'When was the president of the United States born':
     T(
-        T(R('United States'),R('president'),M()),
+        T(R('United States'), R('president'), M()),
         R('birth date'),
         M()
     ),
@@ -211,7 +214,7 @@ expected = {
     I([
         T(M(), R('instance of'), R('actor')),
         T(
-            T(R('John F. Kennedy'),R('sister'),M()),
+            T(R('John F. Kennedy'), R('sister'), M()),
             R('husband'),
             M()
         )
@@ -227,63 +230,63 @@ expected = {
     T(R('Ulysses S. Grant'), R('birth place'), M()),
 
     'Who is the US president?':
-    T(R('US'),R('president'),M()),
+    T(R('US'), R('president'), M()),
 
     'Who is the United States president?':
-    T(R('United States'),R('president'),M()),
+    T(R('United States'), R('president'), M()),
 
     'What is a chocolate sunday?':
-    T(R('chocolate sunday'),R('definition'),M()),
+    T(R('chocolate sunday'), R('definition'), M()),
 
     'What is the D Day?':
-    T(R('d Day'),R('definition'),M()),
+    T(R('d Day'), R('definition'), M()),
 
     'What is the natural language processing?':
     T(R('natural language processing'), R('definition'), M()),
 
     'Where is Inoco based?':
-    T(R('inoco'),R('location'),M()),    
+    T(R('inoco'), R('location'), M()),
 
     'Who is the author of \"Le Petit Prince\"?':
-    T(R('Le Petit Prince'),R('author'),M()),    
+    T(R('Le Petit Prince'), R('author'), M()),
 
     'Who are the Beatles\' members?':
-    T(R('beatles'),R('member'),M()),
+    T(R('beatles'), R('member'), M()),
 
     'What is the biggest country in South America?':
     L(
         S(
-            T(R('South America'),R('country'),M()),
+            T(R('South America'), R('country'), M()),
             R('size')
         )
     ),
 
     'Who is the author of \"Animal Farm\" and \"1984\"?':
     I([
-        T(R('1984'),R('author'),M()),
-        T(R('Animal Farm'),R('author'),M())
+        T(R('1984'), R('author'), M()),
+        T(R('Animal Farm'), R('author'), M())
     ]),
 
     'Who was Darth Vader’s son?':
-    T(R('Darth Vader'),R('son'),M()),
+    T(R('Darth Vader'), R('son'), M()),
 
     'What was the monetary value of the Nobel Peace Prize in 1989?':
     T(
-        T(R('1989'),R('Nobel Peace Prize'),M()),
+        T(R('1989'), R('Nobel Peace Prize'), M()),
         R('monetary value'),
         M()
     ),
 
     'What is the continent of Fiji and Guam?':
     I([
-        T(R('Fiji'),R('continent'),M()),
-        T(R('Guam'),R('continent'),M())
+        T(R('Fiji'), R('continent'), M()),
+        T(R('Guam'), R('continent'), M())
     ]),
 
     'Who is the first president of France?':
     F(
         S(
-            T(R('France'),R('president'),M()),
+            T(R('France'), R('president'), M()),
             R('default')
         )
     ),
@@ -291,23 +294,23 @@ expected = {
     'What is the most expensive car in the world?':
     L(
         S(
-            T(R('world'),R('car'),M()),
+            T(R('world'), R('car'), M()),
             R('cost')
         )
     ),
 
     'Give the capital of France':
-    T(R('France'),R('capital'),M()),
+    T(R('France'), R('capital'), M()),
 
     'Is there a king of England?':
     E(
-        T(R('England'),R('king'),M())
+        T(R('England'), R('king'), M())
     ),
 
     'What is the highest mountain of Tanzania?':
     L(
         S(
-            T(R('Tanzania'),R('mountain'),M()),
+            T(R('Tanzania'), R('mountain'), M()),
             R('height')
         )
     ),
@@ -315,14 +318,14 @@ expected = {
     'What is the coldest place on earth?':
     F(
         S(
-            T(R('earth'),R('place'),M()),
+            T(R('earth'), R('place'), M()),
             R('temperature')
         )
     ),
 
     'Who developed Microsoft?':
-    T(R('Microsoft'),R('developer'),M()),
+    T(R('Microsoft'), R('developer'), M()),
 
     'Give me all companies in Munich':
-    T(R('Munich'),R('company'),M()),
+    T(R('Munich'), R('company'), M()),
 }
