@@ -217,6 +217,7 @@ nsubj
 * Which books did Suzanne Collins write?
 * How many films did Ingmar Bergman make?
 * Who Clinton defeated?
+* Where does the prime minister of United Kingdom live?
 
 nsubj (Rnew):
 

@@ -46,8 +46,6 @@ def mixedRule(t,qw):
     else:
         t.dependency = 'R3'
 
-# agent = nsubjpass = nsubj
-# dobj = v + prep
 dependenciesMap1 = {
     'undef'     : 'R0',
     'root'      : 'R0',
