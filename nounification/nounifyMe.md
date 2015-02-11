@@ -5,4 +5,5 @@
 - build : constructor
 - lead : leader
 - play : player, musician, actor
-
+- make : realisator (How many films did Ingmar Bergman make?)
+- Who Clinton defeated?

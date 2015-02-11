@@ -26,48 +26,55 @@ def amodRule(t,qw):
             merge(t.child[0],qw)
             t.dependency = 'connectorUp'
             return
-    if t.namedEntityTag != 'ORDINAL' and t.wordList[0][0].pos != 'JJS': # [0] : must be improve? (search in the whole list?)
+    if t.namedEntityTag != 'ORDINAL' and t.wordList[0][0].pos != 'JJS': # [0] : must be improved? (search in the whole list?)
         assert t.parent is not None
         merge(t,qw)
     else:
         t.dependency = 'connectorUp'
 
-def nsubjRule(t,qw):
-    if qw in strongQuestionWord: # or len(t.child) == 0: # Warning: length can decrease during analysis > needs also the R2 tag
-        t.dependency = 'R5s' # same as R5 except that types are propagated
-    elif t.parent.getWords() != ['identity']:
-        t.dependency = 'R3'
+def nnRule(t,qw):
+    if t.namedEntityTag != t.parent.namedEntityTag and t.namedEntityTag != 'undef':
+        t.dependency = 'R5'
     else:
+        merge(t,qw)
+
+def mixedRule(t,qw):
+    if (t.parent.getWords() == ['identity'] and qw in strongQuestionWord) or not t.parent.wordList[0][0].pos.startswith('V'):
+        t.dependency = 'R5'
+    elif t.parent.getWords() == ['identity']:
         t.dependency = 'R2'
-        
+    else:
+        t.dependency = 'R3'
+
 dependenciesMap1 = {
     'undef'     : 'R0',
     'root'      : 'R0',
-    'dep'       : 'R1', # ? instead of R2
+    'inst_of'   : 'R6', # <<
+    'dep'       : 'R1',
         'aux'       : remove,
             'auxpass'   : remove,
             'cop'       : impossible,
         'arg'       : impossible,
-            'agent'     : 'R5',
+            'agent'     : 'R3',
             'comp'      : 'R3',
                 'acomp'     : 'R3',
                 'ccomp'     : 'R5',
-                'xcomp'     : 'R3',
+                'xcomp'     : 'R5',
                 'pcomp'     : 'R3',
                 'obj'       : impossible,
-                    'dobj'      : 'R5', #_+ instead of R5
+                    'dobj'      : 'R5',
                     'iobj'      : 'R3',
-                    'pobj'      : 'R3', # -
+                    'pobj'      : 'R3',
             'subj'      : impossible,
-                'nsubj'     : nsubjRule,
-                    'nsubjpass'    : 'R5', #_+ ? instead of R4
+                'nsubj'     : mixedRule, # <<
+                    'nsubjpass'    : 'R5', # or R2 if necessary
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
         'cc'        : impossible,
         'conj'      : 'R0',
             'conj_and'  : ignore,
             'conj_or'   : ignore,
-            'conj_negcc': ignore, #?
+            'conj_negcc': ignore,
         'expl'      : remove,
         'mod'       : 'R4',
             'amod'      : amodRule,
@@ -81,19 +88,18 @@ dependenciesMap1 = {
                 'mark'      : remove,
             'advmod'    : 'R2',
                 'neg'       : 'connectorUp', # need a NOT node
-            'rcmod'     : 'R4', # temp, need to be analyzed
+            'rcmod'     : 'R4',
                 'quantmod'  : remove,
-            'nn'        : merge,
+            'nn'        : nnRule,
             'npadvmod'  : 'R5',
                 'tmod'      : 'R3',
             'num'       : merge,
             'number'    : merge,
-            'prep'      : 'R5', # ?
-            'prepc'     : 'R5', # ?
+            'prep'      : mixedRule, # <<
             'poss'      : 'R5',
             'possessive': impossible,
             'prt'       : merge,
-        'parataxis' : remove, #  ?
+        'parataxis' : remove,
         'punct'     : impossible,
         'ref'       : impossible,
         'sdep'      : impossible,
@@ -119,8 +125,8 @@ dependenciesMap2 = {         # how to handle a -b-> c
     'R3'        : ignore,         # (?,!a,normalize(c))
     'R4'        : ignore,         # (?,normalize(c),!a)
     'R5'        : ignore,         # (normalize(c),!a,?)
-    'R5s'       : propagateType,  # (normalize(c),!a,?)
-     #'R6'        : ignore,        # (!a,normalize(c),?) # not use for the moment
+    'R6'        : propagateType,  # (?,instance of,c)
+    'R7'        : ignore,         # (!a,normalize(c),?)
     'Rspl'      : propagateType,  # superlative
     'RconjT'    : propagateType,  # top of a conjunction relation
     'RconjB'    : propagateType,  # bottom of a conjunction relation
@@ -155,7 +161,6 @@ def collapsePrep(t):
     for c in temp:
         collapsePrep(c)
     if t.dependency.startswith('prep'): # prep_x or prepc_x (others?)
-        # prep = t.dependency[t.dependency.index('_')+1:] # not used for the moment
         t.dependency = 'prep' # suffix of the prep not analyzed for the moment (just removed)
 
 def connectorUp(t):
@@ -193,21 +198,21 @@ def conjConnectorsUp(t):
         dupl = None
         newTree = None
         if len(t.parent.child) == 1:
-            parentTemp = t.parent.parent # n0
-            t.dependency = t.parent.dependency # dependency(n2)
-            t.parent.child.remove(t) # son(n1) \= n2
-            dupl = deepcopy(parentTemp) # n0'
-            parentTemp.child.remove(t.parent) # son(n0) \= n1
-            parentTemp.child.append(t) # son(n0)=n2
-            t.parent = parentTemp # parent(n2) = n0
+            parentTemp = t.parent.parent
+            t.dependency = t.parent.dependency
+            t.parent.child.remove(t)
+            dupl = deepcopy(parentTemp)
+            parentTemp.child.remove(t.parent)
+            parentTemp.child.append(t)
+            t.parent = parentTemp
             newTree = DependenciesTree(depSave, dependency=parentTemp.dependency, child=[dupl,parentTemp], parent=parentTemp.parent)
             parentTemp.dependency = 'RconjB'
             parentTemp.parent = newTree
         else:
-            parentTemp = t.parent # n0
-            parentTemp.child.remove(t) # son(n1) \= n2
-            dupl = deepcopy(parentTemp) # n0'
-            t.child += t.parent.child # son(n2) = son(n1)
+            parentTemp = t.parent
+            parentTemp.child.remove(t)
+            dupl = deepcopy(parentTemp)
+            t.child += t.parent.child
             for n in t.child:
                 n.parent = t
             newTree = DependenciesTree(depSave, dependency=parentTemp.dependency, child=[dupl,t], parent=parentTemp.parent)
@@ -225,7 +230,7 @@ def subStandardize(t,lmtzr):
     for c in t.child:
         subStandardize(c,lmtzr)
     if t.namedEntityTag == 'undef':
-        assert len(t.wordList) == 1 and len(t.wordList[0]) == 1 # only [0][0] ?
+        assert len(t.wordList) == 1 and len(t.wordList[0]) == 1 # len(t.wordList[0])=1 because the wordList of size>1 have been built by NER merging
         w = t.wordList[0][0]
         l = w.standardize(lmtzr)
         if l !=[]:

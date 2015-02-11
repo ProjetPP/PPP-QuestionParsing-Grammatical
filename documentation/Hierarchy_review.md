@@ -10,8 +10,6 @@ Please, don't remove any example (they are used frequently to check the whole al
 
 * appos
 * dep (no hope... the stanford parser needs to be improved/trained)
-* dobj
-* nsubj
 
 ### Problematic questions
 
@@ -20,22 +18,16 @@ Please, don't remove any example (they are used frequently to check the whole al
 * How far is Yaroslavl from Moscow?
 * What effect does a prism have on light?
 * Where was the movie "Somewhere in Time" filmed? (not always the same result?)
-* What city is Purdue University in?
-* Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"? >> problem of redundancy (book + title of the book)
-* What U.S. state is Fort Knox in?
 * What country in Latin America is the largest one?
 * He is the biggest and fattest man >> problem with amod and 2*conj
 * Who held the endurance record for women pilots in 1929? >> problem with for
 * How many people that live in China speak english?
 * How many USA presidents have visited Iran?
-* Which movies does Quentin Tarantino star in?
 * Which movies did Quentin Tarantino direct, but not star in?
 * Who receives the Nobel Prize in Physics in 2000?
 * When did Diana and Charles get married?
 * Where is Mozambique located? > location/place
 * Who built the first pyramid? > consider "pyramide" as (single) triple / predicate
-* Who wrote the book, "Huckleberry Finn"?
-* What kind of animal is Babar?
 * Who was the first Taiwanese President?
 * What is the brightest star visible from Earth?
 
@@ -48,11 +40,23 @@ Current rule: don't merge/remove appos
 
 * Who came up with the name, El Nino?
 * Who wrote the song, "Stardust"? > (sometimes dep instead of appos) replace the father by the son || or R5 (or R2) rule?
+* Who wrote the book, "Huckleberry Finn"?
+* Who is the author of the book, "The Iron Lady : A Biography of Margaret Thatcher"? >> problem of redundancy (book + title of the book)
+
+prt
+===
+
+* Who came up with the name, El Nino?
 
 xcomp
 =====
 
 * What did John Hinckley do to impress Jodie Foster?
+* Obama is the United States president.
+
+##### +++
+
+* Who developed Skype
 
 amod
 ====
@@ -91,6 +95,7 @@ Current rule: merge
 * What two US biochemists won the Nobel Prize in medicine in 1992?
 * Who is the US president?
 * When was Benjamin Disraeli prime minister?
+* What dictator has the nickname "El Maximo"?
 
 ##### +++
   
@@ -103,13 +108,20 @@ nsubjpass
   
 ##### ---
 
-* Which president has been killed by Oswald? > remove nsubjpass
+* Which president has been killed by Oswald?
 
 ##### +++
 
 * Who was killed by Oswald?
 * Where is Inoco based?
 * Where was George Washington born?
+
+agent
+=====
+
+* Which president has been killed by Oswald?
+* Who was killed by Oswald?
+* which book was authored by Victor Hugo
 
 cop
 ===
@@ -121,6 +133,8 @@ cop doesn't always disappear -> needs to remove it manually
 * What is the brightest star visible from Earth? >> cop not removed! change what <-> is
 * Who is the president black and blue?
 * What is black and white?
+* What is the UN headquarter?
+* What is the United States national day?
 
 prep
 ====
@@ -145,20 +159,19 @@ dobj
 * What did John Hinckley do to impress Jodie Foster?
 * When did they won the lottery?
 * What two US biochemists won the Nobel Prize in medicine in 1992?
-* How many films did Ingmar Bergman make? >> with nsubj
+* How many films did Ingmar Bergman make?
 * Who has written "The Hitchhiker's Guide to the Galaxy"?
 * Who wrote "The Hitchhiker's Guide to the Galaxy"?
 * Who invented the hula hoop?
 * Who killed Gandhi?
-* Who elected the president ?
+* Who elected the president?
 
 look at the verb ? (passive, acted ...)
 
 ##### ---
 
-* Who held the endurance record for women pilots in 1929?
-* How many children does Barack Obama have? > not do an intersection each time a node have several children.
-* Which books did Suzanne Collins write? (?)
+* How many children does Barack Obama have?
+* Which books did Suzanne Collins write?
 
 ccomp
 =====
@@ -200,23 +213,37 @@ vmod
 nsubj
 =====
 
-- only if a = is/was/... ?
-- when is/... is replaced, it's more relevant to produce a R5 rule
-- sometimes it's relevent to produce an "instance of" triple.
-- not "instance of" only if is/was/... ?
-- new rules Rnsubj ????
+* Who is Obama
+* Which books did Suzanne Collins write?
+* How many films did Ingmar Bergman make?
+* Who Clinton defeated?
+* Where does the prime minister of United Kingdom live?
+
+nsubj (Rnew):
+
+verbe auxiliaire :
+ - Who is Obama
+verbe non auxiliaire : (actuellement perdu si pas strong qw)
+ - Which books did Suzanne Collins write?
+ - How many films did Ingmar Bergman make?
+ - Who Clinton defeated?
+ - What did Bob write ?
+nom :
+ - ne devrais pas arriver
 
 ##### +++
 
 * Who elected the president of France?
-* What was the first Gilbert and Sullivan opera? >> problem or parsing failure ???
+* What was the first Gilbert and Sullivan opera?
 * Who Clinton defeated?
-* Where is the ENS of Lyon? >> problem or parsing failure ???
+* Where is the ENS of Lyon?
 * What did Bob write ? > R3 if weak question word + not 'identity' >> problem or parsing failure ???
+* What actor married John F. Kennedy's sister
 
 ##### ---
 
-* What actor married John F. Kennedy's sister
+* What does "Janelle" mean?
+
 
 num
 ===
@@ -239,37 +266,6 @@ conj
 
 * When did Rococo painting and architecture flourish?
 
-conj_and
-========
-
-Exemples :
-----------
-* Who makes and distributes bells?
-* Who is the author of Sea and Sky?
-* What percentage of the world's plant and animal species can be found in the Amazon forests?
-* Good: Who is section manager for guidance and control systems at JPL?
-* Bad: How many people did the United Nations commit to help restore order and distribute humanitarian relief in Somalia in September 1992?
-* Bad: Which Italian city is home to the Cathedral of Santa Maria del Fiore or the Duomo?
-
-Problem with merging:
----------------------
-* What is the length of border between the Ukraine and Russia?
-
-Comment construire les sous arbres
-----------------------------------
-* What was the first Gilbert and Sullivan opera?
-* When was General Manuel Noriega ousted as the leader of Panama and turned over to U.S. authorities?
-* When did Princess Diana and Prince Charles get married?
-* When did the royal wedding of Prince Andrew and Fergie take place?
-* ++ How many people did the United Nations commit to help restore order and distribute humanitarian relief in Somalia in September 1992?
-    >> peut être propager les prep après ?
-    >> même problème que pour les nn
-
-Merge nn with the 2 nodes if nn above them:
- - When did Princess Diana and Charles get married?
- - When did Princess Diana and Prince Charles get married?
- - Who is section manager for guidance and control systems at JPL?
-
 pcomp
 =====
 
@@ -290,6 +286,9 @@ tmod
 ====
 
 * Are there 29 days in February 
+* which day was the president born
+
+_________________________________________________________________________________________________________________________________
 
 Stanford Parser fails
 =====================
@@ -306,3 +305,17 @@ Stanford Parser fails
 * Which movies did Quentin Tarantino direct, but not star in?
 * Are there beers in Germany?
 * Show me Star Wars movies
+* What country is the biggest producer of tungsten?
+* How long did the Charles Manson murder trial last?
+* What kind of animal is Babar?
+* Which movies does Quentin Tarantino star in?
+* What U.S. state is Fort Knox in?
+* What city is Purdue University in?
+* When was Benjamin Disraeli prime minister?
+* list of president of usa
+* Show me Star Wars movies
+* Who held the endurance record for women pilots in 1929?
+* What dictator has the nickname "El Maximo"?
+* Of which country is Paris the capital?
+* List of books by Roald Dahl.
+* What albums did Pearl Jam record?

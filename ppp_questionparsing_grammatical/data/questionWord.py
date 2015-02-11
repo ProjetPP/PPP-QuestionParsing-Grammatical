@@ -1,37 +1,40 @@
-"""
-    Taken from: http://www.interopia.com/education/all-question-words-in-english/
-    Yes/no question
-"""
+
+###########################
+# Possible question words #
+###########################
+
+# Open-ended questions + What... for, What... like, Why don't, Where from + Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
+openQuestionWord = [
+    'list', 'what', 'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'who', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'which', 'whom', 'whose', 'how big', 'of which', 'in which', 'from which'
+]
+
+# Yes/no questions
 closeQuestionWord = [
     'is', 'are', 'am', 'was', 'were', 'will', 'do', 'does', 'did', 'have', 'had', 'has', 'can', 'could', 'should', 'shall', 'may', 'might', 'would'
 ]
 
+# Exists questions
 existQuestionWord = [
     'is there', 'are there'
 ]
 
+# Other questions
 semiQuestionWord = [
-    'show me', 'show them', 'show us', 'show him', 'show her', 'give me', 'give them', 'give us', 'give him', 'give her'
+    'show me', 'show them', 'show us', 'show him', 'show her', 'give me', 'give them', 'give us', 'give him', 'give her', 'list of', 'give', 'show'
 ]
 
-# semi questions words that cannot be removed from the tree
-predicateQuestionWord = [
-    'list of', 'give', 'show' 
-]
+#########################
+# Other classifications #
+#########################
 
-"""
-    Open-ended questions
-    + What... for, What... like, Why don't, Where from
-    Rarely used: Wherefore, Whatever, Wherewith, Whither, Whence, However
-"""
-openQuestionWord = [
-    'list', 'what', 'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'who', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'which', 'whom', 'whose', 'how big'
-]
-
-# question word that implies to add an extra triple (in practice: rule R2 vs R5s) (ex: where is the capital of france : (france,capital,?) --> ((france,capital,?),location,?)
+# question word that implies to add an extra triple (in practice: rule R2 vs R5) (ex: where is the capital of france : (france,capital,?) --> ((france,capital,?),location,?)
 strongQuestionWord = [
-    'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'whose', 'how big'
+    'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'whose', 'how big', 'in which', 'from which'
 ]
+
+#######################
+# Question words maps #
+#######################
 
 questionExcept = {
     # words that already contain the info of the question word
@@ -40,7 +43,7 @@ questionExcept = {
     'what time'     : ['time','date','day','month','year'],
     'when'          : ['time','date','day','month','year'],
     'why'           : ['reason','cause','origin'],
-    'where'         : ['place','location','residence','site'],
+    'where'         : ['place','location','residence','site','country'],
     'how'           : ['manner','way'],
     'how much'      : ['amount','quantity','number'],
     'how many'      : ['amount','quantity','number'],
@@ -54,7 +57,9 @@ questionExcept = {
     'how often'     : ['frequency'],
     'how come'      : ['reason'],
     'whose'         : ['owner'],
-    'how big'       : ['size']
+    'how big'       : ['size'],
+    'in which'      : ['place','location','residence','site','country'],
+    'from which'    : ['place','location','residence','site','citizenship','nationality','country of citizenship','country'],
 }
 
 questionAdd = {
@@ -64,7 +69,7 @@ questionAdd = {
     'what time'     : ['time','date'],
     'when'          : ['time','date'],
     'why'           : ['reason','cause','origin'],
-    'where'         : ['place','location','residence'],
+    'where'         : ['place','location','residence','country'],
     'how'           : ['manner'],
     'how much'      : ['amount','quantity','number'],
     'how many'      : ['amount','quantity','number'],
@@ -79,7 +84,9 @@ questionAdd = {
     'how come'      : ['reason'],
     #'which'         : ['choice'],
     'whose'         : ['owner'],
-    'how big'       : ['size']
+    'how big'       : ['size'],
+    'in which'      : ['place','location','residence','country'],
+    'from which'    : ['place','location','residence','origin','citizenship','nationality','country of citizenship','country']
 }
 
 
@@ -92,7 +99,7 @@ questionWIs = {
     'what time'     : ['time'],
     'when'          : ['date'],
     'why'           : ['reason'],
-    'where'         : ['place','location','residence'],
+    'where'         : ['place','location','residence','country'],
     'who'           : ['identity'],
     'how'           : ['manner'],
     'how much'      : ['amount'],
@@ -109,7 +116,9 @@ questionWIs = {
     'which'         : ['choice'], # ?
     'whom'          : ['identity'],
     'whose'         : ['owner'],
-    'how big'       : ['size']
+    'how big'       : ['size'],
+    'in which'      : ['place','location','residence','country'],
+    'from which'    : ['place','location','residence','origin','citizenship','nationality','country of citizenship','country']
 }
 
 questionType = {
@@ -130,5 +139,7 @@ questionType = {
     'how often'     : 'NUMBER',
     'whom'          : 'PERSON',
     'whose'         : 'PERSON',
-    'how big'       : 'NUMBER'
+    'how big'       : 'NUMBER',
+    'in which'      : 'LOCATION',
+    'from which'    : 'LOCATION',
 }

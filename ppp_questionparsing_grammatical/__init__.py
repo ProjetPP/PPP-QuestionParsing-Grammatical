@@ -2,7 +2,7 @@
 
 from ppp_libmodule import HttpRequestHandler
 from .preprocessingMerge import mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother, mergeNamedEntityTag
-from .preprocessing import Word, DependenciesTree, computeTree, QuotationHandler
+from .preprocessing import Word, DependenciesTree, computeTree, QuotationHandler, correctTree
 from .questionWordProcessing import identifyQuestionWord
 from .dependencyAnalysis import simplify
 from .normalization import normalize
@@ -16,4 +16,4 @@ def app(environ, start_response):
     return HttpRequestHandler(environ, start_response, RequestHandler) \
             .dispatch()
 
-__all__ = ['DependenciesTree','computeTree','QuotationHandler','mergeNamedEntityTagChildParent','mergeNamedEntityTagSisterBrother','mergeNamedEntityTag','simplify', 'identifyQuestionWord','normalize','QuotationError','NounificationError','GrammaticalError','Nounificator']
+__all__ = ['DependenciesTree','computeTree','QuotationHandler','correctTree','mergeNamedEntityTagChildParent','mergeNamedEntityTagSisterBrother','mergeNamedEntityTag','simplify', 'identifyQuestionWord','normalize','QuotationError','NounificationError','GrammaticalError','Nounificator']
