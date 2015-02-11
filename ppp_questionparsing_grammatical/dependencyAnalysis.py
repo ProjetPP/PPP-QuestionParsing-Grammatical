@@ -32,7 +32,7 @@ def amodRule(t,qw):
     else:
         t.dependency = 'connectorUp'
 
-def nnRule(t,qw): # ????
+def nnRule(t,qw):
     if t.namedEntityTag != t.parent.namedEntityTag and t.namedEntityTag != 'undef':
         t.dependency = 'R5'
     else:

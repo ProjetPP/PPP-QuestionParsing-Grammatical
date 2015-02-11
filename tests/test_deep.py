@@ -11,6 +11,13 @@ import sys
 import data_deep
 
 class RequestHandlerTest(PPPTestCase(app),InclusionTestCase):
+    def getFrench(self, sentence, lenAnswer):
+        assert(lenAnswer < 2)
+        j = {'id': '1', 'language': 'fr', 'measures': {}, 'trace': [],
+            'tree': {'type': 'sentence', 'value': 'Ceci est une phrase'}}
+        r = self.request(j)
+        self.assertEqual(len(r),[])
+
     def getAnswer(self, sentence, lenAnswer):
         assert(lenAnswer < 2)
         j = {'id': '1', 'language': 'en', 'measures': {}, 'trace': [],

@@ -74,7 +74,8 @@ class RequestHandler:
         self.request = request
 
     def answer(self):
-        if not isinstance(self.request.tree, Sentence):
+        if not isinstance(self.request.tree, Sentence) or \
+                self.request.language != 'en':
             return []
         sentence = self.request.tree.value
         try:
