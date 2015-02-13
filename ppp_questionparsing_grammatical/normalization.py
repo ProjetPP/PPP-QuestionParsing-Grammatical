@@ -6,6 +6,13 @@ from .data.conjunction import conjunctionTab
 from .data.superlative import superlativeNoun, superlativeOrder
 from .data.exceptions import GrammaticalError
 from nltk.stem.wordnet import WordNetLemmatizer
+from pkg_resources import resource_filename
+from .nounDB import Nounificator
+
+nManual = Nounificator()
+nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManual.pickle'))
+nAuto = Nounificator()
+nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAuto.pickle'))
 
 lemmatizer = WordNetLemmatizer()
 
@@ -35,38 +42,37 @@ def buildValue(tree):
 def buildPredicate(tree):
     lDirect = []
     lReverse = []
-    if tree.wordList[0].pos[0] == 'V':
-        assert (len(tree.wordList)==1)
-        w = tree.printWordList().lower()
-        wLem = lmtzr.lemmatize(w.split()[0],'v') # only the first word (based on -> base)
-        if nManual.exists(wLem):
-            lDirect = nManual.toNouns(wLem,0)
-            lReverse = nManual.toNouns(wLem,1)
-        elif nAuto.exists(wLem):
-            lDirect += nAuto.toNouns(wLem) # 0 par défaut
-        if self.pos == 'VBN':
-            lDirect.append(w)
-            wLem = lmtzr.lemmatize(w,'v') # whole word (based on -> base on)
-            if nManual.exists(wLem):
-                lDirect += nManual.toNouns(wLem,0)
-                lReverse += nManual.toNouns(wLem,1)
-            elif nAuto.exists(wLem):
-                lDirect += nAuto.toNouns(wLem) # 0 par défaut           
-        if len(lDirect) == 0:
-            if len(lReverse) == 0:
-                return Resource(wLem)
-            elif len(lReverse) == 1:
-                return Resource(wLem) ## value/reverse_value : lReserve[0]
-            else:
-                return List([Resource(wLem) for x in lReverse]) ## value/reverse_value : lReserve
-        elif len(lDirect) == 1:
+    if tree.wordList[0].pos[0] == 'V': # Rules On
+        assert len(tree.wordList)==1
+        w = tree.wordList[0].word.lower() # rules on / ruled on
+        wSplit = w.split() # [rules,on] / [ruled,on]
+        wSplit[0] = lmtzr.lemmatize(wSplit[0],'v') # [rule,on] / [rule,on]
+        if tree.wordList[0].pos == 'VBN':
+            pastPart = w # .. / ruled on
+        elif wSplit[0] in .......: # ICI : map des participes passés
+            pastPart = ' '.join([.......wSplit[0]......]+wSplit[1:]) # ruled on / ..
+        else:
+            pastPart = ' '.join([wSplit[0]+'ed']+wSplit[1:])
+        # Production of the direct and reverse list
+        lDirect.append(pastParst) # ruled on
+        w = ' '.join(wSplit) # rule on
+        if nManual.exists(wSplit[0]):
+            lDirect += nManual.toNouns(wSplit[0],0)
+            lReverse += nManual.toNouns(wSplit[0],1)
+        if len(wSplit) > 1 and nManual.exists(w):
+            lDirect += nManual.toNouns(w,0)
+            lReverse += nManual.toNouns(w,1)
+        if len(lDirect) == 1 and len(lReverse) == 0 and nAuto.exists(wSplit[0]):
+            lDirect += nAuto.toNouns(wSplit[0])
+        # Production of the resource         
+        if len(lDirect) == 1:
             if len(lReverse) == 0:
                 return Resource(lDirect[0])
             elif len(lReverse) == 1:
                 return Resource(lDirect[0]) ## value/reverse_value : lReserve[0]
             else:
                 return List([Resource(lDirect[0]) for x in lReverse]) ## value/reverse_value : lReserve
-        else:
+        else: # len(lDirect) > 1
             if len(lReverse) == 0:
                 return List([Resource(x) for x in lDirect])
             elif len(lReverse) == 1:
@@ -161,40 +167,6 @@ def questionWordEnhancement(tree,qw):
 ###################
 
 def normalFormProduction(tree,qw):
-
-######################
-
-
-from pkg_resources import resource_filename
-from .nounDB import Nounificator
-
-nManual = Nounificator()
-nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManual.pickle'))
-nAuto = Nounificator()
-nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAuto.pickle'))
-
-def nounify(s):
-    """
-        Return the string list of the closest nouns to s (die -> death)
-        Replace by hard-coded exceptions if they exist (e.g. be, have, do, bear...)
-    """
-    if nManual.exists(s):
-        return nManual.toNouns(s)
-    if nAuto.exists(s):
-        return nAuto.toNouns(s)
-    return []
-
-def standardize(self,lmtzr):
-        """
-            Apply lemmatization to the word, using the given lemmatizer
-            Return the list of strings that must replaced self.word if nounification is necessary (ie if the word is a verb), [] otherwise
-        """
-        if self.pos and self.pos[0] == 'N':
-            self.word=lmtzr.lemmatize(self.word.lower(),'n')
-        elif self.pos and self.pos[0] == 'V':
-            s = lmtzr.lemmatize(self.word.lower().split()[0],'v')
-            if self.pos != 'VBN':
-                return list(set(nounify(s))) # + [s] ??? list(set) ???
-            else:
-                return list(set(nounify(s) + nounify(self.word.lower()))) # + [self.word.lower()]
-        return []
+    nf = normalize(tree)
+    questionWordEnhancement(tree,qw)
+    return nf

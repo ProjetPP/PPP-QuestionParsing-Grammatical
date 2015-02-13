@@ -73,11 +73,7 @@ class DependenciesTree:
             List of alternatives strings contained into wordList
         """
         self.wordList.sort(key = lambda x: x.index)
-        result = self.wordList[0]
-        for i in range(1,len(alt)):
-            if self.wordList[i].pos != 'POS': # do not print part of speech words (?, ., ! ...)
-                result += " " + self.wordList[i] 
-        return result
+        return ' '.join([x for x in self.wordList if self.wordList[i].pos != 'POS'])
 
     def string(self):
         # Concatenation of the words of the root
