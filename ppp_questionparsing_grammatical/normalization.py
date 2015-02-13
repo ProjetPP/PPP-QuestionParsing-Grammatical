@@ -5,24 +5,86 @@ from ppp_datamodel import Resource, Missing, Triple, Last, First, List, Sort, In
 from .data.conjunction import conjunctionTab
 from .data.superlative import superlativeNoun, superlativeOrder
 from .data.exceptions import GrammaticalError
+from nltk.stem.wordnet import WordNetLemmatizer
+
+lemmatizer = WordNetLemmatizer()
+
+################
+# Build values #
+################
+
+def lemmatize(tree,lmtzr=lemmatizer):
+    """
+        Apply lemmatization to the word, using the given lemmatizer
+        This function is not suppposed to be applied on future predicates
+    """
+    if t.namedEntityTag == 'undef':
+        for w in t.wordList:
+            if w.pos and w.pos[0] == 'N':
+                w.word = lmtzr.lemmatize(w.word.lower(),'n')
+            elif w.pos and w.pos[0] == 'V':
+                w.word = lmtzr.lemmatize(w.word.lower(),'v')
 
 def buildValue(tree):
     """
-        Used to build the values of the normal form.
-            len(tree.getWords()) = 1 -> single value -> return a resource
-            len(tree.getWords()) > 1 -> multiple alternatives -> return a list of resources
+        Used to build the values of the normal form (except for predicates)
     """
-    if len(tree.getWords()) == 1:
-        return Resource(tree.getWords()[0])
+    lemmatize(tree)
+    return Resource(tree.printWordList())
+
+def buildPredicate(tree):
+    lDirect = []
+    lReverse = []
+    if tree.wordList[0].pos[0] == 'V':
+        assert (len(tree.wordList)==1)
+        w = tree.printWordList().lower()
+        wLem = lmtzr.lemmatize(w.split()[0],'v') # only the first word (based on -> base)
+        if nManual.exists(wLem):
+            lDirect = nManual.toNouns(wLem,0)
+            lReverse = nManual.toNouns(wLem,1)
+        elif nAuto.exists(wLem):
+            lDirect += nAuto.toNouns(wLem) # 0 par défaut
+        if self.pos == 'VBN':
+            lDirect.append(w)
+            wLem = lmtzr.lemmatize(w,'v') # whole word (based on -> base on)
+            if nManual.exists(wLem):
+                lDirect += nManual.toNouns(wLem,0)
+                lReverse += nManual.toNouns(wLem,1)
+            elif nAuto.exists(wLem):
+                lDirect += nAuto.toNouns(wLem) # 0 par défaut           
+        if len(lDirect) == 0:
+            if len(lReverse) == 0:
+                return Resource(wLem)
+            elif len(lReverse) == 1:
+                return Resource(wLem) ## value/reverse_value : lReserve[0]
+            else:
+                return List([Resource(wLem) for x in lReverse]) ## value/reverse_value : lReserve
+        elif len(lDirect) == 1:
+            if len(lReverse) == 0:
+                return Resource(lDirect[0])
+            elif len(lReverse) == 1:
+                return Resource(lDirect[0]) ## value/reverse_value : lReserve[0]
+            else:
+                return List([Resource(lDirect[0]) for x in lReverse]) ## value/reverse_value : lReserve
+        else:
+            if len(lReverse) == 0:
+                return List([Resource(x) for x in lDirect])
+            elif len(lReverse) == 1:
+                return List([Resource(x) for x in lDirect]) ## value/reverse_value : lReserve[0]
+            else:
+                return List([Resource(x) for x in lDirect for y in lReverse])## value/reverse_value : lReserve
     else:
-        return List([Resource(x) for x in tree.getWords()])
+        return buildValue(tree)
+
+###########################################
+# Recursive production of the normal form #
+###########################################
 
 def normalizeSuperlative(tree):
     """
         Handle Rspl dependency (superlative, ordinal)
     """
-    assert len(tree.getWords()) == 1 and len(tree.child) == 1
-    superlative = tree.getWords()[0]
+    superlative = buildValue(tree)
     if superlative in superlativeNoun:
         if superlative in superlativeOrder:
             return superlativeOrder[superlative](Sort(normalize(tree.child[0]),Resource(superlativeNoun[superlative])))
@@ -39,9 +101,8 @@ def normalizeConjunction(tree):
         Handle Rconj dependency (conjunction)
     """
     result = []
-    assert len(tree.getWords()) == 1
     assert len(tree.child) == 2 and tree.child[0].dependency.startswith('Rconj') and tree.child[1].dependency.startswith('Rconj')
-    conjunction = tree.getWords()[0]
+    conjunction = buildValue(tree)
     if tree.child[0].dependency == 'RconjT':
         result = [normalize(tree.child[0]),normalize(tree.child[1])]
     else:
@@ -71,23 +132,35 @@ def normalize(tree):
             result.append(buildValue(t))
         if t.dependency == 'R2':
             if len(t.child) == 0:
-                result.append(Triple(buildValue(t),buildValue(tree),Missing()))
+                result.append(Triple(buildValue(t),buildPredicate(tree),Missing()))
             else:
                 result.append(normalize(t))
         if t.dependency == 'R3':
-            result.append(Triple(Missing(),buildValue(tree),normalize(t)))
+            result.append(Triple(Missing(),buildPredicate(tree),normalize(t)))
         if t.dependency == 'R4':
             result.append(Triple(Missing(),normalize(t),buildValue(tree)))
         if t.dependency == 'R5':
-            result.append(Triple(normalize(t),buildValue(tree),Missing()))
+            result.append(Triple(normalize(t),buildPredicate(tree),Missing()))
         if t.dependency == 'R6':
            result.append(Triple(Missing(),Resource('instance of'),normalize(t)))
         if t.dependency == 'R7':
-            result.append(Triple(buildValue(tree),normalize(t),Missing()))
+            result.append(Triple(buildValue(tree),normalize(t),Missing())) ## normalize dans prédicat ????
     if len(result) == 1:
         return result[0]
     else:
         return Intersection(result)
+
+###############################################
+# Improve the normal form depending on the qw #
+###############################################
+
+def questionWordEnhancement(tree,qw):
+
+###################
+# Global function #
+###################
+
+def normalFormProduction(tree,qw):
 
 ######################
 
@@ -111,8 +184,7 @@ def nounify(s):
         return nAuto.toNouns(s)
     return []
 
-#Word:
-    def standardize(self,lmtzr):
+def standardize(self,lmtzr):
         """
             Apply lemmatization to the word, using the given lemmatizer
             Return the list of strings that must replaced self.word if nounification is necessary (ie if the word is a verb), [] otherwise
@@ -124,28 +196,5 @@ def nounify(s):
             if self.pos != 'VBN':
                 return list(set(nounify(s))) # + [s] ??? list(set) ???
             else:
-                return list(set(nounify(s) + nounify(self.word.lower()))) #+ + [self.word.lower()]
+                return list(set(nounify(s) + nounify(self.word.lower()))) # + [self.word.lower()]
         return []
-
-#########################
-
-from nltk.stem.wordnet import WordNetLemmatizer
-from .data.exceptions import GrammaticalError
-from .data.questionWord import strongQuestionWord
-
-def subStandardize(t,lmtzr):
-    for c in t.child:
-        subStandardize(c,lmtzr)
-    if t.namedEntityTag == 'undef':
-        assert len(t.wordList) == 1 and len(t.wordList[0]) == 1 # len(t.wordList[0])=1 because the wordList of size>1 have been built by NER merging
-        w = t.wordList[0][0]
-        l = w.standardize(lmtzr)
-        if l !=[]:
-            t.wordList = [[Word(x,w.index,w.pos)] for x in l]
-
-def standardize(t):
-    """
-        Apply lemmatization + nounification
-    """
-    lmtzr = WordNetLemmatizer()
-    subStandardize(t,lmtzr) # standardize words (lemmatization + nounify nouns)
