@@ -1,10 +1,35 @@
 import sys
-from .preprocessingMerge import Word, mergeNamedEntityTag
-from .data.exceptions import QuotationError
+import os
 from .dependencyTreeCorrection import correctTree
-from copy import deepcopy
 import random
 import string
+
+########
+# Word #
+########
+
+class Word:
+    """
+        One word of the sentence
+    """
+    def __init__(self, word, index, pos=None):
+        self.word = word    # string that represents the word
+        self.index = index  # position in the sentence
+        self.pos = pos      # Part Of Speech tag (verb, noun, ...)
+
+    def __str__(self):
+        return "({0},{1},{2})".format(str(self.word),str(self.index),str(self.pos))
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
+    def __lt__(self, other):
+        assert isinstance(other,Word)
+        return (self.index,self.word,self.pos) < (other.index,other.word,other.pos)
+
+###################
+# Dependency tree #
+###################
 
 class DependenciesTree:
     """
@@ -12,7 +37,7 @@ class DependenciesTree:
         It is a group of words of the initial sentence.
     """
     def __init__(self, word, start=1000, namedEntityTag='undef', subtreeType='undef', dependency='undef', child=None, parent=None):
-        self.wordList = [[Word(word,start)]]  # list of the expressions/alternatives contained into the node. Each sub-list is a list of Words
+        self.wordList = [Word(word,start)]    # list of the words contained into the node
         self.namedEntityTag = namedEntityTag  # NER tag (location, ...)
         self.subtreeType = subtreeType        # type of the info represented by the subtree
         self.dependency = dependency          # dependency from self to its parent
@@ -41,13 +66,22 @@ class DependenciesTree:
         """
         for t in self.child:
             t.sort()
-        self.wordList.sort()
-        for alt in self.wordList:
-            alt.sort(key = lambda x: x.index)
+        self.wordList.sort(key = lambda x: x.index)
+
+    def printWordList(self):
+        """
+            List of alternatives strings contained into wordList
+        """
+        self.wordList.sort(key = lambda x: x.index)
+        result = self.wordList[0]
+        for i in range(1,len(alt)):
+            if self.wordList[i].pos != 'POS': # do not print part of speech words (?, ., ! ...)
+                result += " " + self.wordList[i] 
+        return result
 
     def string(self):
         # Concatenation of the words of the root
-        w = self.printWords()
+        w = self.printWordList()
         s=''
         # Adding the definition of the root (dot format)
         t=''
@@ -82,108 +116,10 @@ class DependenciesTree:
         for c in other.child:
             c.parent = self
         if mergeWords:
-            self.wordList = [w+v for w in self.wordList for v in other.wordList] # ??? is it ok ???
+            self.wordList += other.wordList ### !!!
         if other.parent:
             other.parent.child.remove(other)
         other.wordList = None
-
-    def getWords(self):
-        """
-            List of alternatives strings contained into wordList
-        """
-        l = []
-        for alt in self.wordList:
-            alt.sort(key = lambda x: x.index)
-            result = alt[0].word
-            for i in range(1,len(alt)):
-                if alt[i].pos != 'POS':
-                    result += " "
-                result += alt[i].word
-            l.append(result)
-        return l
-
-    def printWords(self):
-        """
-            Concatenation of all the alternatives strings contained into wordList, separated by |
-        """
-        return ' | '.join(self.getWords())
-
-def index(l,pred):
-    """
-        Return the index of the first element of l which is in pred.
-        Raise ValueError if there is not such an element.
-    """
-    for i in range(0,len(l)):
-        if l[i] in pred:
-            return i
-    raise ValueError
-
-class QuotationHandler:
-    """
-        An object to handle quotations in the sentences.
-    """
-    quotationList = ['“','”','"']
-    def __init__(self,replacement=None):
-        self.replacement = replacement
-        self.replacementIndex = 0
-        self.quotations = {}
-        random.seed()
-
-    def checkQuotation(self,sentence):
-        """
-            Check that there is an even number of quotation marks.
-            Raise QuotationError otherwise.
-        """
-        if len([c for c in sentence if c in self.quotationList]) % 2 == 1:
-            raise QuotationError(sentence,"Odd number of quotation marks.")
-
-    def getReplacement(self,sentence):
-        """
-            Return a random string which does not appear in the sentence.
-        """
-        sep = "".join(random.sample(string.ascii_uppercase,3))
-        while sep in sentence:
-            sep = "".join(random.sample(string.ascii_uppercase,3))
-        return sep
-
-    def pull(self,sentence):
-        """
-            Remove/pull the quotations from the sentence, and replace them.
-        """
-        if not self.replacement:
-            self.replacement = self.getReplacement(sentence)
-        if self.replacementIndex == 0:
-            self.checkQuotation(sentence)
-        try:
-            indexBegin = index(sentence,self.quotationList)
-            indexEnd = indexBegin+index(sentence[indexBegin+1:],self.quotationList)+1
-        except ValueError:
-            return sentence
-        replacement = self.replacement+str(self.replacementIndex)
-        self.replacementIndex += 1
-        self.quotations[replacement] = sentence[indexBegin+1:indexEnd]
-        return self.pull(sentence[0:indexBegin]+replacement+sentence[indexEnd+1:])
-
-    def push(self,tree):
-        """
-            Replace/push the spaces in the nodes of the tree.
-        """
-        for c in tree.child:
-            self.push(c)
-        assert len(tree.wordList) == 1
-        replaced = False
-        for w in tree.wordList:
-            for i in range(0,len(w)):
-                try:
-                    w[i].word = self.quotations[w[i].word]
-                    w[i].pos = 'QUOTE'
-                    replaced = True
-                except KeyError:
-                    continue
-        if replaced:
-            tree.namedEntityTag = 'QUOTATION'
-        for key in self.quotations.keys():
-            tree.text = tree.text.replace(key,"``"+self.quotations[key]+"''")
 
 def computeEdges(r,nameToNodes):
     """
@@ -221,8 +157,8 @@ def computeTags(r,nameToNodes):
             w=word[0]+'-'+str(index) # key in the nameToNodes map
             try:
                 n = nameToNodes[w]
-                assert len(n.wordList) == 1 and len(n.wordList[0]) == 1
-                n.wordList[0][0].pos = word[1]['PartOfSpeech']
+                assert len(n.wordList) == 1
+                n.wordList[0].pos = word[1]['PartOfSpeech']
                 if word[1]['NamedEntityTag'] != 'O':
                     n.namedEntityTag = word[1]['NamedEntityTag']
             except KeyError:        # this node does not exists (e.g. 'of' preposition)
@@ -236,6 +172,10 @@ def initText(t,s):
     for c in t.child:
         initText(c,s)
 
+###################
+# Global function #
+###################
+
 def computeTree(r):
     """
         Compute the dependence tree.
@@ -247,7 +187,6 @@ def computeTree(r):
     computeEdges(r,nameToNodes)
     computeTags(r,nameToNodes)
     tree = nameToNodes['ROOT-0']                 # the tree is built
-    correctTree(tree, nameToNodes, r)
-    initText(tree,r['text'].replace('"','\\\"'))
-    mergeNamedEntityTag(tree)                    # NER merging
+    correctTree(tree, nameToNodes, r)            # some obvious corrections on the tree produced by the stanford parser
+    initText(tree,r['text'].replace('"','\\\"')) # each node contains the input question
     return tree

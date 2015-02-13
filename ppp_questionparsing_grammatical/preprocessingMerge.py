@@ -1,61 +1,85 @@
 import sys
 import os
-from pkg_resources import resource_filename
-from .nounDB import Nounificator
+from .data.exceptions import QuotationError
 
-########################################
-# Word lemmatization and nounification #
-########################################
+#####################
+# Quotation merging #
+#####################
 
-nManual = Nounificator()
-nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManual.pickle'))
-nAuto = Nounificator()
-nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAuto.pickle'))
-
-def nounify(s):
+def index(l,pred):
     """
-        Return the string list of the closest nouns to s (die -> death)
-        Replace by hard-coded exceptions if they exist (e.g. be, have, do, bear...)
+        Return the index of the first element of l which is in pred.
+        Raise ValueError if there is not such an element.
     """
-    if nManual.exists(s):
-        return nManual.toNouns(s)
-    if nAuto.exists(s):
-        return nAuto.toNouns(s)
-    return []
+    for i in range(0,len(l)):
+        if l[i] in pred:
+            return i
+    raise ValueError
 
-class Word:
+class QuotationHandler:
     """
-        One word of the sentence
+        An object to handle quotations in the sentences.
     """
-    def __init__(self, word, index, pos=None):
-        self.word = word    # string that represents the word
-        self.index = index  # position in the sentence
-        self.pos = pos      # Part Of Speech tag (verb, noun, ...)
+    quotationList = ['“','”','"']
+    def __init__(self,replacement=None):
+        self.replacement = replacement
+        self.replacementIndex = 0
+        self.quotations = {}
+        random.seed()
 
-    def __str__(self):
-        return "({0},{1},{2})".format(str(self.word),str(self.index),str(self.pos))
-
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
-
-    def __lt__(self, other):
-        assert isinstance(other,Word)
-        return (self.index,self.word,self.pos) < (other.index,other.word,other.pos)
-
-    def standardize(self,lmtzr):
+    def checkQuotation(self,sentence):
         """
-            Apply lemmatization to the word, using the given lemmatizer
-            Return the list of strings that must replaced self.word if nounification is necessary (ie if the word is a verb), [] otherwise
+            Check that there is an even number of quotation marks.
+            Raise QuotationError otherwise.
         """
-        if self.pos and self.pos[0] == 'N':
-            self.word=lmtzr.lemmatize(self.word.lower(),'n')
-        elif self.pos and self.pos[0] == 'V':
-            s = lmtzr.lemmatize(self.word.lower().split()[0],'v')
-            if self.pos != 'VBN':
-                return list(set(nounify(s) + [s]))
-            else:
-                return list(set(nounify(s) + nounify(self.word.lower()) + [self.word.lower()]))
-        return []
+        if len([c for c in sentence if c in self.quotationList]) % 2 == 1:
+            raise QuotationError(sentence,"Odd number of quotation marks.")
+
+    def getReplacement(self,sentence):
+        """
+            Return a random string which does not appear in the sentence.
+        """
+        sep = "".join(random.sample(string.ascii_uppercase,3))
+        while sep in sentence:
+            sep = "".join(random.sample(string.ascii_uppercase,3))
+        return sep
+
+    def pull(self,sentence):
+        """
+            Remove/pull the quotations from the sentence, and replace them.
+        """
+        if not self.replacement:
+            self.replacement = self.getReplacement(sentence)
+        if self.replacementIndex == 0:
+            self.checkQuotation(sentence)
+        try:
+            indexBegin = index(sentence,self.quotationList)
+            indexEnd = indexBegin+index(sentence[indexBegin+1:],self.quotationList)+1
+        except ValueError:
+            return sentence
+        replacement = self.replacement+str(self.replacementIndex)
+        self.replacementIndex += 1
+        self.quotations[replacement] = sentence[indexBegin+1:indexEnd]
+        return self.pull(sentence[0:indexBegin]+replacement+sentence[indexEnd+1:])
+
+    def push(self,tree):
+        """
+            Replace/push the spaces in the nodes of the tree.
+        """
+        for c in tree.child:
+            self.push(c)
+        replaced = False
+        for w in tree.wordList:
+            try:
+                w.word = self.quotations[w.word]
+                w.pos = 'QUOTE'
+                replaced = True
+            except KeyError:
+                continue
+        if replaced:
+            tree.namedEntityTag = 'QUOTATION'
+        for key in self.quotations.keys():
+            tree.text = tree.text.replace(key,"``"+self.quotations[key]+"''")
 
 ###################
 # NER recognition #
@@ -104,3 +128,10 @@ def mergeNamedEntityTagSisterBrother(t):
 def mergeNamedEntityTag(t):
     mergeNamedEntityTagChildParent(t)
     mergeNamedEntityTagSisterBrother(t)
+
+###################
+# Global function #
+###################
+
+def preprocessingMerge(t):
+    mergeNamedEntityTag(t)

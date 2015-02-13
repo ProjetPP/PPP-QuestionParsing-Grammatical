@@ -22,8 +22,7 @@ def removeWord(t,word):
     """
         Remove word (of type str*int = s*position_of_s_in_sentence) from tree t
     """
-    assert len(t.wordList) == 1 # no possible alternatives in the tree at this moment
-    if word in t.wordList[0]:
+    if word in t.wordList:
         prepareInstanceOf(t) # <<<
         if t.child != []: # the question is in the middle of the tree
             for u in t.child:
@@ -39,8 +38,7 @@ def firstWords(t,start):
     """
         Put the 2 first words of the sentence (if they are in the tree) in start (list of size 2)
     """
-    assert len(t.wordList) == 1
-    for n in t.wordList[0]:
+    for n in t.wordList:
         if n.index == 1:
             start[0] = n
         elif n.index == 2:
@@ -79,9 +77,9 @@ def identifyQuestionWord(t):
         return w
     return None
 
-#############################################
-# Process question word to improve the tree #
-#############################################
+########################################################
+# Process question word to improve the dependency tree #
+########################################################
 
 def processQuestionType(t,w,typeMap=questionType):
     """
@@ -91,6 +89,15 @@ def processQuestionType(t,w,typeMap=questionType):
         t.subtreeType = typeMap[w]
     except KeyError:
         pass
+
+def questionWordDependencyTree(t,w):
+    processQuestionType(t,w)  # type the ROOT according to the question word 
+    if w in existQuestionWord:
+        t.child[0].dependency = 'Rexist'
+
+####################################################
+# Process question word to improve the normal form #
+####################################################
 
 def checkLists(l1,l2):
     """
@@ -142,24 +149,21 @@ def processQuestionInfo(t,w,excMap=questionExcept,addMap=questionAdd,wisMap=ques
             for n in t.child:
                 processQuestionInfo(n,w)
         elif t.getWords() == ['identity']:
-            if checkSubInfo(t,w): # identity (be) + no info about w in the sons of the root
-                t.wordList = [[Word(s,1001)] for s in wisMap[w]] # replace wordList according to the question word
-            else: # do not take the root of t into account into the normalized form
-                for n in t.child:
-                    n.dependency = 'R0' # !!!!!!!
+            #if checkSubInfo(t,w): # identity (be) + no info about w in the sons of the root
+            t.wordList = [[Word(s,1001)] for s in wisMap[w]] # replace wordList according to the question word
+            #else: # do not take the root of t into account into the normalized form
+            #    for n in t.child:
+            #        n.dependency = 'R0' # !!!!!!! Where is the place ?
+            # this analysis is performed into dependencyAnalysis.py
         elif not checkLists(t.wordList,excMap[w]): # doesn't contain 'identity' + no info about w
             t.wordList = [l + [Word(s,1001)] for l in t.wordList for s in addMap[w]]
     except KeyError:
         pass
 
-def processQuestionWord(t,w):
+def questionWordNormalForm(t,w):
     """
-        Type the root
         Try to include the info contained in the question word
           into the sons of ROOT (ex: When -> add "date")
     """
-    processQuestionType(t,w)  # type the ROOT according to the question word
-    if w in existQuestionWord:
-        t.child[0].dependency = 'Rexist'
     if w in openQuestionWord:
         processQuestionInfo(t.child[0],w)

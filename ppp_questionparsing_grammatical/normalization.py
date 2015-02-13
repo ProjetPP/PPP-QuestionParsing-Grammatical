@@ -88,3 +88,64 @@ def normalize(tree):
         return result[0]
     else:
         return Intersection(result)
+
+######################
+
+
+from pkg_resources import resource_filename
+from .nounDB import Nounificator
+
+nManual = Nounificator()
+nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManual.pickle'))
+nAuto = Nounificator()
+nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAuto.pickle'))
+
+def nounify(s):
+    """
+        Return the string list of the closest nouns to s (die -> death)
+        Replace by hard-coded exceptions if they exist (e.g. be, have, do, bear...)
+    """
+    if nManual.exists(s):
+        return nManual.toNouns(s)
+    if nAuto.exists(s):
+        return nAuto.toNouns(s)
+    return []
+
+#Word:
+    def standardize(self,lmtzr):
+        """
+            Apply lemmatization to the word, using the given lemmatizer
+            Return the list of strings that must replaced self.word if nounification is necessary (ie if the word is a verb), [] otherwise
+        """
+        if self.pos and self.pos[0] == 'N':
+            self.word=lmtzr.lemmatize(self.word.lower(),'n')
+        elif self.pos and self.pos[0] == 'V':
+            s = lmtzr.lemmatize(self.word.lower().split()[0],'v')
+            if self.pos != 'VBN':
+                return list(set(nounify(s))) # + [s] ??? list(set) ???
+            else:
+                return list(set(nounify(s) + nounify(self.word.lower()))) #+ + [self.word.lower()]
+        return []
+
+#########################
+
+from nltk.stem.wordnet import WordNetLemmatizer
+from .data.exceptions import GrammaticalError
+from .data.questionWord import strongQuestionWord
+
+def subStandardize(t,lmtzr):
+    for c in t.child:
+        subStandardize(c,lmtzr)
+    if t.namedEntityTag == 'undef':
+        assert len(t.wordList) == 1 and len(t.wordList[0]) == 1 # len(t.wordList[0])=1 because the wordList of size>1 have been built by NER merging
+        w = t.wordList[0][0]
+        l = w.standardize(lmtzr)
+        if l !=[]:
+            t.wordList = [[Word(x,w.index,w.pos)] for x in l]
+
+def standardize(t):
+    """
+        Apply lemmatization + nounification
+    """
+    lmtzr = WordNetLemmatizer()
+    subStandardize(t,lmtzr) # standardize words (lemmatization + nounify nouns)
