@@ -33,7 +33,7 @@ def lemmatize(tree,lmtzr=lemmatizer):
     """
     if tree.namedEntityTag == 'undef':
         for w in tree.wordList:
-            if w.pos and w.pos[0] == 'N':
+            if w.pos in ('NN','NNS'):
                 w.word = lmtzr.lemmatize(w.word.lower(),'n')
             elif w.pos and w.pos[0] == 'V':
                 w.word = lmtzr.lemmatize(w.word.lower(),'v')

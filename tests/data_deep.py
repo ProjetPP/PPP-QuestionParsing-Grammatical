@@ -330,4 +330,5 @@ expected = {
     T(R('Munich'), R('company'), M()),
 
     #'Where does the prime minister of United Kingdom live?':
+    #'Where is ENS Lyon?':
 }
