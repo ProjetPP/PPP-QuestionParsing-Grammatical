@@ -96,7 +96,7 @@ def normalizeSuperlative(tree):
     """
         Handle Rspl dependency (superlative, ordinal)
     """
-    superlative = buildValue(tree)
+    superlative = buildValue(tree).value
     if superlative in superlativeNoun:
         if superlative in superlativeOrder:
             return superlativeOrder[superlative](Sort(normalize(tree.child[0]),Resource(superlativeNoun[superlative])))

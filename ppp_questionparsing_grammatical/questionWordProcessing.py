@@ -1,6 +1,6 @@
 import sys
 from .dependencyTree import Word, DependenciesTree
-from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd, questionWIs, questionType, questionExcept, existQuestionWord, semiQuestionWord
+from .data.questionWord import closeQuestionWord, openQuestionWord, strongQuestionWord, questionAdd, questionWIs, questionType, questionExcept, existQuestionWord, semiQuestionWord
 from ppp_datamodel import Resource, Triple, Missing, Intersection, List, Union, And, Or, Exists, First, Last, Sort
 
 #####################################
@@ -127,8 +127,14 @@ def processQuestionInfo(nf,w,excMap=questionExcept,addMap=questionAdd,wisMap=que
         predList = extractPredicates(nf)
         try:
             if 'identity' in predList:
-                return Triple(nf.subject,List([Resource(x) for x in wisMap[w]]),nf.object) # perte des autres infos (types, ...)
-            elif (set(predList) & set(excMap[w])) == set() and not 'instance of' in predList: # intersection not empty
+                if w in strongQuestionWord or isinstance(nf.subject,Resource) or isinstance(nf.object,Resource):
+                    return Triple(nf.subject,List([Resource(x) for x in wisMap[w]]),nf.object) # perte des autres infos (types, ...)
+                else:
+                    if isinstance(nf.subject,Missing):
+                        return nf.object
+                    else:
+                        return nf.subject
+            elif set(predList) & set(excMap[w]) == set() and not 'instance of' in predList: # intersection not empty
                 return Triple(nf.subject,List([Resource(x) for x in predList] + [Resource(x+' '+y) for x in predList for y in addMap[w]]),nf.object) # perte des autres infos (types, ...) !!!!
             else:
                 return nf
@@ -142,5 +148,4 @@ def questionWordNormalForm(nf,w):
     """
     if w in openQuestionWord:
         return processQuestionInfo(nf,w)
-    else:
-        return nf
+    return nf
