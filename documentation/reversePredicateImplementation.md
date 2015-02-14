@@ -36,7 +36,7 @@ dependencyAnalysis.py :
 
 questionWordProcessing.py :
  - une fonction qui extrait le qw (agit dans dependencyAnalysis.py)
- - une fonction qui place les types (agit dans dependencyAnalysis.py) __TODO__
+ - une fonction qui place les types (agit dans dependencyAnalysis.py)
  - une fonction qui ajoute les infos (agit dans normalization.py) __TODO__
 
 normalization.py :
@@ -50,3 +50,10 @@ normalization.py :
 
 Quotation Start -> computeTree -> Quotation End -> preprocessingMerge -> simplify
 
+les positions 1000, 1001 n'ont plus lieu d'être
+
+processQuestionInfo : gestion des reverse, perte d'infos sur les triplets
+
+fusions des prep : conserver Words distincts
+
+enlever les règles qui produisent des prédicats arbres !

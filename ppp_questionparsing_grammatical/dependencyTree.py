@@ -1,8 +1,7 @@
 import sys
 import os
-from .dependencyTreeCorrection import correctTree
-import random
 import string
+from .dependencyTreeCorrection import correctTree
 
 ########
 # Word #
@@ -73,7 +72,7 @@ class DependenciesTree:
             List of alternatives strings contained into wordList
         """
         self.wordList.sort(key = lambda x: x.index)
-        return ' '.join([x for x in self.wordList if self.wordList[i].pos != 'POS'])
+        return ' '.join([x.word for x in self.wordList if x.pos != 'POS']) # don't print part of speech word (?, !, ...)
 
     def string(self):
         # Concatenation of the words of the root

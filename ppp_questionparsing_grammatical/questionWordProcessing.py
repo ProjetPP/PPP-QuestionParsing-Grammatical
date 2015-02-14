@@ -1,7 +1,7 @@
 import sys
-from .preprocessingMerge import Word
-from .preprocessing import DependenciesTree
+from .dependencyTree import Word, DependenciesTree
 from .data.questionWord import closeQuestionWord, openQuestionWord, questionAdd, questionWIs, questionType, questionExcept, existQuestionWord, semiQuestionWord
+from ppp_datamodel import Resource, Triple, Missing, Intersection, List, Union, And, Or, Exists, First, Last, Sort
 
 #####################################
 # Identify and remove question word #
@@ -99,71 +99,39 @@ def questionWordDependencyTree(t,w):
 # Process question word to improve the normal form #
 ####################################################
 
-def checkLists(l1,l2):
+def extractPredicates(nf):
     """
-        l1 is a list of lists of Words
-        l2 is a list of strings
-        Determine whether a string of l2 appears into at least one word of l1, or not (ex: day appears in birthday)
+        Assume that nf is a triple
+        Returns the lists of strings (values) that are predicates of the triple
     """
-    for s in l2:
-        for l in l1:
-            for w in l:
-                if w.word.find(s) != -1:
-                    return True
-    return False
-
-def checkSub(t,w,excMap=questionExcept):
-    if t.wordList[0][0].index == 1000: # connector
-        assert len(t.wordList) == 1 and len(t.wordList[0]) == 1
-        res = True
-        for n in t.child:
-            if n.dependency != 'R6': # don't go through "instance of" edges
-                res = res and checkSub(n,w)
-        return res
+    assert isinstance(nf,Triple)
+    assert isinstance(nf.predicate,Resource) or isinstance(nf.predicate,List)
+    if isinstance(nf.predicate,Resource):
+        return [nf.predicate.value]
     else:
+        return [x.value for x in nf.predicate.list]
+
+def processQuestionInfo(nf,w,excMap=questionExcept,addMap=questionAdd,wisMap=questionWIs):
+    """
+        Add info into the first triples depending on the question word
+    """
+    if isinstance(nf, (List,Sort,Intersection,Union,And,Or,Last,First,Exists)):
+        for u in nf.list:
+            processQuestionInfo(u,w)
+    if isinstance(nf,Triple):
+        predList = extractPredicates(nf)
         try:
-            return not checkLists(t.wordList,excMap[w])
+            if 'identity' in predList:
+               nf.predicate = List([Resource(x) for x in wisMap[w]]) # perte des autres infos (types, ...)
+            elif (set(predList) & set(excMap[w])) != set() and not 'instance of' in predList: # intersection not empty
+               nf.predicate = List([Resource(x+' '+y) for x in predList for y in addMap[w]]) # perte des autres infos (types, ...) !!!!
         except KeyError:
-            return True
+            pass
 
-def checkSubInfo(t,w,excMap=questionExcept):
-    """
-        return false if one of the __sons__ of t contains the information related to w in excMap, otherwise true
-        pass the connectors
-    """
-    res = True
-    for n in t.child:
-        if n.dependency != 'R6': # don't go through "instance of" edges
-            res = res and checkSub(n,w,excMap)
-    return res
-
-def processQuestionInfo(t,w,excMap=questionExcept,addMap=questionAdd,wisMap=questionWIs): # TO IMPROVE
-    """
-        Add info to the first sons of ROOT that are not connectors (ie index != 1000) depending on:
-          - the question word
-          - whether the nodes contain 'identity' (nounification of verb be) or not
-    """
-    try:
-        if t.wordList[0][0].index == 1000: # connector
-            assert len(t.wordList) == 1 and len(t.wordList[0]) == 1
-            for n in t.child:
-                processQuestionInfo(n,w)
-        elif t.getWords() == ['identity']:
-            #if checkSubInfo(t,w): # identity (be) + no info about w in the sons of the root
-            t.wordList = [[Word(s,1001)] for s in wisMap[w]] # replace wordList according to the question word
-            #else: # do not take the root of t into account into the normalized form
-            #    for n in t.child:
-            #        n.dependency = 'R0' # !!!!!!! Where is the place ?
-            # this analysis is performed into dependencyAnalysis.py
-        elif not checkLists(t.wordList,excMap[w]): # doesn't contain 'identity' + no info about w
-            t.wordList = [l + [Word(s,1001)] for l in t.wordList for s in addMap[w]]
-    except KeyError:
-        pass
-
-def questionWordNormalForm(t,w):
+def questionWordNormalForm(nf,w):
     """
         Try to include the info contained in the question word
           into the sons of ROOT (ex: When -> add "date")
     """
     if w in openQuestionWord:
-        processQuestionInfo(t.child[0],w)
+        processQuestionInfo(nf,w)

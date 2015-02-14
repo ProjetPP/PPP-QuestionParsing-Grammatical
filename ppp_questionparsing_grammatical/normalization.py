@@ -1,13 +1,15 @@
 import sys
 import ppp_datamodel
-from .preprocessing import DependenciesTree
+from .dependencyTree import DependenciesTree
 from ppp_datamodel import Resource, Missing, Triple, Last, First, List, Sort, Intersection, Union, Exists
+from .questionWordProcessing import questionWordNormalForm
 from .data.conjunction import conjunctionTab
 from .data.superlative import superlativeNoun, superlativeOrder
 from .data.exceptions import GrammaticalError
 from nltk.stem.wordnet import WordNetLemmatizer
 from pkg_resources import resource_filename
 from .nounDB import Nounificator
+import pickle
 
 nManual = Nounificator()
 nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManual.pickle'))
@@ -15,6 +17,10 @@ nAuto = Nounificator()
 nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAuto.pickle'))
 
 lemmatizer = WordNetLemmatizer()
+
+file = open(resource_filename('ppp_questionparsing_grammatical', 'data/pastParticiple.pickle'), 'rb')
+pastPartSet = pickle.load(file)
+file.close()
 
 ################
 # Build values #
@@ -25,8 +31,8 @@ def lemmatize(tree,lmtzr=lemmatizer):
         Apply lemmatization to the word, using the given lemmatizer
         This function is not suppposed to be applied on future predicates
     """
-    if t.namedEntityTag == 'undef':
-        for w in t.wordList:
+    if tree.namedEntityTag == 'undef':
+        for w in tree.wordList:
             if w.pos and w.pos[0] == 'N':
                 w.word = lmtzr.lemmatize(w.word.lower(),'n')
             elif w.pos and w.pos[0] == 'V':
@@ -39,33 +45,33 @@ def buildValue(tree):
     lemmatize(tree)
     return Resource(tree.printWordList())
 
-def buildPredicate(tree):
+def buildPredicate(tree,lmtzr=lemmatizer):
     lDirect = []
     lReverse = []
-    if tree.wordList[0].pos[0] == 'V': # Rules On
-        assert len(tree.wordList)==1
+    if tree.wordList[0].pos[0] == 'V': # Rules On / rULes oN
+        assert len(tree.wordList)==1 # sinon faire un sort
         w = tree.wordList[0].word.lower() # rules on / ruled on
         wSplit = w.split() # [rules,on] / [ruled,on]
         wSplit[0] = lmtzr.lemmatize(wSplit[0],'v') # [rule,on] / [rule,on]
         if tree.wordList[0].pos == 'VBN':
             pastPart = w # .. / ruled on
-        elif wSplit[0] in .......: # ICI : map des participes passés
-            pastPart = ' '.join([.......wSplit[0]......]+wSplit[1:]) # ruled on / ..
+        elif wSplit[0] in pastPartSet: # ICI : map des participes passés
+            pastPart = ' '.join([pastPartSet[wSplit[0]]]+wSplit[1:]) # ruled on / ..
         else:
             pastPart = ' '.join([wSplit[0]+'ed']+wSplit[1:])
-        # Production of the direct and reverse list
-        lDirect.append(pastParst) # ruled on
+        # Production of the direct and reverse lists
+        lDirect.append(pastPart) # ruled on
         w = ' '.join(wSplit) # rule on
         if nManual.exists(wSplit[0]):
-            lDirect += nManual.toNouns(wSplit[0],0)
-            lReverse += nManual.toNouns(wSplit[0],1)
+            lDirect += nManual.toNouns(wSplit[0])#*,0)
+            #*lReverse += nManual.toNouns(wSplit[0],1)
         if len(wSplit) > 1 and nManual.exists(w):
-            lDirect += nManual.toNouns(w,0)
-            lReverse += nManual.toNouns(w,1)
+            lDirect += nManual.toNouns(w)#*,0)
+            #*lReverse += nManual.toNouns(w,1)
         if len(lDirect) == 1 and len(lReverse) == 0 and nAuto.exists(wSplit[0]):
             lDirect += nAuto.toNouns(wSplit[0])
         # Production of the resource         
-        if len(lDirect) == 1:
+        if len(lDirect) == 1: # at least 1 (past part always added)
             if len(lReverse) == 0:
                 return Resource(lDirect[0])
             elif len(lReverse) == 1:
@@ -144,23 +150,17 @@ def normalize(tree):
         if t.dependency == 'R3':
             result.append(Triple(Missing(),buildPredicate(tree),normalize(t)))
         if t.dependency == 'R4':
-            result.append(Triple(Missing(),normalize(t),buildValue(tree)))
+            result.append(Triple(Missing(),normalize(t),buildValue(tree))) ## normalize dans prédicat ????
         if t.dependency == 'R5':
             result.append(Triple(normalize(t),buildPredicate(tree),Missing()))
         if t.dependency == 'R6':
            result.append(Triple(Missing(),Resource('instance of'),normalize(t)))
         if t.dependency == 'R7':
-            result.append(Triple(buildValue(tree),normalize(t),Missing())) ## normalize dans prédicat ????
+            result.append(Triple(buildValue(tree),normalize(t),Missing())) ## normalize dans prédicat ???? << plus utilisé ?
     if len(result) == 1:
         return result[0]
     else:
         return Intersection(result)
-
-###############################################
-# Improve the normal form depending on the qw #
-###############################################
-
-def questionWordEnhancement(tree,qw):
 
 ###################
 # Global function #
@@ -168,5 +168,5 @@ def questionWordEnhancement(tree,qw):
 
 def normalFormProduction(tree,qw):
     nf = normalize(tree)
-    questionWordEnhancement(tree,qw)
+    questionWordNormalForm(nf,qw)
     return nf

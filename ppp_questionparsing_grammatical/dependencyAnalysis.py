@@ -37,7 +37,7 @@ def nnRule(t,qw):
     else:
         merge(t,qw)
 
-def mixedRule(t,qw):
+def mixedRule(t,qw): # nsubj, prep
     if (t.parent.getWords() == 'identity' and qw in strongQuestionWord) or not t.parent.wordList[0].pos.startswith('V'):
         t.dependency = 'R5'
     elif t.parent.getWords() == 'identity':
@@ -45,6 +45,8 @@ def mixedRule(t,qw):
     else:
         t.dependency = 'R3'
 
+# nsubj, nsubjpass, agent
+# dobj, v+prep
 dependenciesMap1 = {
     'undef'     : 'R0',
     'root'      : 'R0',
@@ -65,7 +67,7 @@ dependenciesMap1 = {
                     'iobj'      : 'R3',
                     'pobj'      : 'R3',
             'subj'      : impossible,
-                'nsubj'     : mixedRule, # <<
+                'nsubj'     : 'R5', # <<
                     'nsubjpass'    : 'R5', # or R2 if necessary
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
@@ -94,7 +96,7 @@ dependenciesMap1 = {
                 'tmod'      : 'R3',
             'num'       : merge,
             'number'    : merge,
-            'prep'      : mixedRule, # <<
+            'prep'      : 'R5', # <<
             'poss'      : 'R5',
             'possessive': impossible,
             'prt'       : merge,

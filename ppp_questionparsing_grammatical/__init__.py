@@ -1,11 +1,12 @@
 """Natural language processing module for the PPP."""
 
 from ppp_libmodule import HttpRequestHandler
-from .preprocessingMerge import mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother, mergeNamedEntityTag
-from .preprocessing import Word, DependenciesTree, computeTree, QuotationHandler, correctTree
-from .questionWordProcessing import identifyQuestionWord
+from .dependencyTree import Word, DependenciesTree, computeTree
+from .dependencyTreeCorrection import correctTree
+from .preprocessingMerge import mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother, mergeNamedEntityTag, QuotationHandler, preprocessingMerge
+from .questionWordProcessing import identifyQuestionWord, questionWordDependencyTree, questionWordNormalForm
 from .dependencyAnalysis import simplify
-from .normalization import normalize
+from .normalization import normalFormProduction
 from .data.exceptions import QuotationError, GrammaticalError
 from .nounDB import Nounificator
 
@@ -16,4 +17,4 @@ def app(environ, start_response):
     return HttpRequestHandler(environ, start_response, RequestHandler) \
             .dispatch()
 
-__all__ = ['DependenciesTree','computeTree','QuotationHandler','correctTree','mergeNamedEntityTagChildParent','mergeNamedEntityTagSisterBrother','mergeNamedEntityTag','simplify', 'identifyQuestionWord','normalize','QuotationError','GrammaticalError','Nounificator']
+__all__ = ['DependenciesTree','computeTree','QuotationHandler','correctTree','mergeNamedEntityTagChildParent','mergeNamedEntityTagSisterBrother','mergeNamedEntityTag','simplify', 'identifyQuestionWord','normalize','QuotationError','GrammaticalError','Nounificator','preprocessingMerge']

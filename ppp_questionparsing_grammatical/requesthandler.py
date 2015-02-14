@@ -23,7 +23,7 @@ from ppp_datamodel.communication import TraceItem, Response
 from ppp_libmodule.exceptions import ClientError
 
 from .config import Config
-from . import computeTree, simplify, normalize, QuotationHandler, QuotationError
+from . import computeTree, preprocessingMerge, simplify, normalFormProduction, QuotationHandler, QuotationError
 
 def connect_memcached():
     mc = memcache.Client(Config().memcached_servers)
@@ -65,8 +65,9 @@ def parse(sentence):
     result = stanfordnlp.parse(nonAmbiguousSentence)
     tree = computeTree(result['sentences'][0])
     handler.push(tree)
+    preprocessingMerge(tree)
     qw = simplify(tree)
-    return normalize(tree)
+    return normalFormProduction(tree,qw)
 
 class RequestHandler:
     __slots__ = ('request',)

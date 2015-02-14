@@ -1,6 +1,9 @@
 import sys
 import os
+import random
+import string
 from .data.exceptions import QuotationError
+from .dependencyTree import DependenciesTree
 
 #####################
 # Quotation merging #
