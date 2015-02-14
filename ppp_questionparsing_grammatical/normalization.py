@@ -168,5 +168,4 @@ def normalize(tree):
 
 def normalFormProduction(tree,qw):
     nf = normalize(tree)
-    questionWordNormalForm(nf,qw)
-    return nf
+    return questionWordNormalForm(nf,qw)

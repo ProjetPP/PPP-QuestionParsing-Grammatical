@@ -11,6 +11,7 @@ class Word:
     """
         One word of the sentence
     """
+    __slots__ = ('word', 'index', 'pos')
     def __init__(self, word, index, pos=None):
         self.word = word    # string that represents the word
         self.index = index  # position in the sentence
@@ -20,7 +21,9 @@ class Word:
         return "({0},{1},{2})".format(str(self.word),str(self.index),str(self.pos))
 
     def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+        return self.word == other.word and \
+                self.index == other.index and \
+                self.pos == other.pos
 
     def __lt__(self, other):
         assert isinstance(other,Word)
@@ -35,6 +38,7 @@ class DependenciesTree:
         One node of the parse tree.
         It is a group of words of the initial sentence.
     """
+    __slots__ = ('wordList', 'namedEntityTag', 'subtreeType', 'dependency', 'child', 'text', 'parent', 'dfsTag')
     def __init__(self, word, start=1000, namedEntityTag='undef', subtreeType='undef', dependency='undef', child=None, parent=None):
         self.wordList = [Word(word,start)]    # list of the words contained into the node
         self.namedEntityTag = namedEntityTag  # NER tag (location, ...)
@@ -126,15 +130,17 @@ def computeEdges(r,nameToNodes):
         try:
             n1 = nameToNodes[edge[1]]
         except KeyError:
-            n1 = DependenciesTree(edge[1][:edge[1].rindex('-')],int(edge[1][edge[1].rindex('-')+1:]))
+            t = edge[1].rsplit('-', 1)
+            n1 = DependenciesTree(t[0], int(t[1]))
             nameToNodes[edge[1]] = n1
         try:
             n2 = nameToNodes[edge[2]]
         except KeyError:
-            n2 = DependenciesTree(edge[2][:edge[2].rindex('-')],int(edge[2][edge[2].rindex('-')+1:]))
+            t = edge[2].rsplit('-', 1)
+            n2 = DependenciesTree(t[0], int(t[1]))
             nameToNodes[edge[2]] = n2
         # n1 is the parent of n2
-        n1.child = n1.child+[n2]
+        n1.child.append(n2)
         n2.parent = n1
         n2.dependency = edge[0]
 

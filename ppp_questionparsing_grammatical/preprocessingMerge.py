@@ -14,8 +14,8 @@ def index(l,pred):
         Return the index of the first element of l which is in pred.
         Raise ValueError if there is not such an element.
     """
-    for i in range(0,len(l)):
-        if l[i] in pred:
+    for (i, x) in enumerate(l):
+        if x in pred:
             return i
     raise ValueError
 
@@ -23,6 +23,7 @@ class QuotationHandler:
     """
         An object to handle quotations in the sentences.
     """
+    __slots__ = ('replacement', 'replacementIndex', 'quotations')
     quotationList = ['“','”','"']
     def __init__(self,replacement=None):
         self.replacement = replacement

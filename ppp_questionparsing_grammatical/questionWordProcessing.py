@@ -24,11 +24,10 @@ def removeWord(t,word):
     """
     if word in t.wordList:
         prepareInstanceOf(t) # <<<
-        if t.child != []: # the question is in the middle of the tree
-            for u in t.child:
-                u.dependency = t.dependency
-                u.parent = t.parent
-                t.parent.child.append(u)
+        for u in t.child: # the question is in the middle of the tree
+            u.dependency = t.dependency
+            u.parent = t.parent
+            t.parent.child.append(u)
         t.parent.child.remove(t)
     else:
         for c in t.child:
@@ -42,7 +41,7 @@ def firstWords(t,start):
         if n.index == 1:
             start[0] = n
         elif n.index == 2:
-            start[1] =n
+            start[1] = n
     for c in t.child:
         firstWords(c,start)
 
@@ -54,10 +53,10 @@ def identifyQuestionWord(t):
     start = [None,None]
     firstWords(t,start)
     if not start[0]: # the first word is not in the tree, we extract it directly from the sentence    
-        start[0] = Word(t.text.split(' ')[0],1)
+        start[0] = Word(t.text.split(' ',1)[0],1)
     if not start[1]:
         try:
-            start[1] = Word(t.text.split(' ')[1],2)
+            start[1] = Word(t.text.split(' ',1)[1],2)
         except IndexError:
             pass
     if start[1]:
@@ -104,8 +103,7 @@ def extractPredicates(nf):
         Assume that nf is a triple
         Returns the lists of strings (values) that are predicates of the triple
     """
-    assert isinstance(nf,Triple)
-    assert isinstance(nf.predicate,Resource) or isinstance(nf.predicate,List)
+    assert isinstance(nf,Triple) and (isinstance(nf.predicate,Resource) or isinstance(nf.predicate,List))
     if isinstance(nf.predicate,Resource):
         return [nf.predicate.value]
     else:
@@ -115,20 +113,27 @@ def processQuestionInfo(nf,w,excMap=questionExcept,addMap=questionAdd,wisMap=que
     """
         Add info into the first triples depending on the question word
     """
-    if isinstance(nf, (List,Sort,Intersection,Union,And,Or,Last,First,Exists)):
+    if isinstance(nf, (List,Intersection,Union,And,Or,Last,First,Exists)):
+        result = []
         for u in nf.list:
-            processQuestionInfo(u,w)
+            result.append(processQuestionInfo(u,w))
+        return type(nf)(result)
+    if isinstance(nf, Sort):
+        result = []
+        for u in nf.list:
+            result.append(processQuestionInfo(u,w))
+        return Sort(result,nf.predicate)
     if isinstance(nf,Triple):
         predList = extractPredicates(nf)
         try:
             if 'identity' in predList:
-                #print(nf)
-                #print(nf.predicate)   
-                nf.predicate = List([Resource(x) for x in wisMap[w]]) # perte des autres infos (types, ...)
-            elif (set(predList) & set(excMap[w])) != set() and not 'instance of' in predList: # intersection not empty
-                nf.predicate = List([Resource(x+' '+y) for x in predList for y in addMap[w]]) # perte des autres infos (types, ...) !!!!
+                return Triple(nf.subject,List([Resource(x) for x in wisMap[w]]),nf.object) # perte des autres infos (types, ...)
+            elif (set(predList) & set(excMap[w])) == set() and not 'instance of' in predList: # intersection not empty
+                return Triple(nf.subject,List([Resource(x) for x in predList] + [Resource(x+' '+y) for x in predList for y in addMap[w]]),nf.object) # perte des autres infos (types, ...) !!!!
+            else:
+                return nf
         except KeyError:
-            pass
+            return nf
 
 def questionWordNormalForm(nf,w):
     """
@@ -136,4 +141,6 @@ def questionWordNormalForm(nf,w):
           into the sons of ROOT (ex: When -> add "date")
     """
     if w in openQuestionWord:
-        processQuestionInfo(nf,w)
+        return processQuestionInfo(nf,w)
+    else:
+        return nf
