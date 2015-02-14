@@ -122,9 +122,11 @@ def processQuestionInfo(nf,w,excMap=questionExcept,addMap=questionAdd,wisMap=que
         predList = extractPredicates(nf)
         try:
             if 'identity' in predList:
-               nf.predicate = List([Resource(x) for x in wisMap[w]]) # perte des autres infos (types, ...)
+                #print(nf)
+                #print(nf.predicate)   
+                nf.predicate = List([Resource(x) for x in wisMap[w]]) # perte des autres infos (types, ...)
             elif (set(predList) & set(excMap[w])) != set() and not 'instance of' in predList: # intersection not empty
-               nf.predicate = List([Resource(x+' '+y) for x in predList for y in addMap[w]]) # perte des autres infos (types, ...) !!!!
+                nf.predicate = List([Resource(x+' '+y) for x in predList for y in addMap[w]]) # perte des autres infos (types, ...) !!!!
         except KeyError:
             pass
 
