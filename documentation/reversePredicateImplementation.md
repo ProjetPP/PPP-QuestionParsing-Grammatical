@@ -57,3 +57,7 @@ processQuestionInfo : gestion des reverse, perte d'infos sur les triplets
 fusions des prep : conserver Words distincts
 
 enlever les règles qui produisent des prédicats arbres !
+
+Who is Homer J. Simpson? > prq une liste dans prédicat
+
+nettoyer les en-têtes

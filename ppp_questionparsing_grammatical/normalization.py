@@ -12,9 +12,9 @@ from .nounDB import Nounificator
 import pickle
 
 nManual = Nounificator()
-nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManual.pickle'))
+nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManualBetter.pickle'))
 nAuto = Nounificator()
-nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAuto.pickle'))
+nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAutoBetter.pickle'))
 
 lemmatizer = WordNetLemmatizer()
 
@@ -45,11 +45,11 @@ def buildValue(tree):
     lemmatize(tree)
     return Resource(tree.printWordList())
 
-def buildPredicate(tree,lmtzr=lemmatizer):
+def buildPredicate(tree,n,lmtzr=lemmatizer):
     lDirect = []
     lReverse = []
     if tree.wordList[0].pos[0] == 'V': # Rules On / rULes oN
-        assert len(tree.wordList)==1 # sinon faire un sort
+        assert len(tree.wordList) == 1 # sinon faire un sort
         w = tree.wordList[0].word.lower() # rules on / ruled on
         wSplit = w.split() # [rules,on] / [ruled,on]
         wSplit[0] = lmtzr.lemmatize(wSplit[0],'v') # [rule,on] / [rule,on]
@@ -63,14 +63,14 @@ def buildPredicate(tree,lmtzr=lemmatizer):
         lDirect.append(pastPart) # ruled on
         w = ' '.join(wSplit) # rule on
         if nManual.exists(wSplit[0]):
-            lDirect += nManual.toNouns(wSplit[0])#*,0)
-            #*lReverse += nManual.toNouns(wSplit[0],1)
+            lDirect += nManual.toNouns(wSplit[0],0)
+            lReverse += nManual.toNouns(wSplit[0],1)
         if len(wSplit) > 1 and nManual.exists(w):
-            lDirect += nManual.toNouns(w)#*,0)
+            lDirect += nManual.toNouns(w,0)
             #*lReverse += nManual.toNouns(w,1)
         if len(lDirect) == 1 and len(lReverse) == 0 and nAuto.exists(wSplit[0]):
-            lDirect += nAuto.toNouns(wSplit[0])
-        # Production of the resource         
+            lDirect += nAuto.toNouns(wSplit[0],0)
+        # Production of the resource
         if len(lDirect) == 1: # at least 1 (past part always added)
             if len(lReverse) == 0:
                 return Resource(lDirect[0])
@@ -84,7 +84,7 @@ def buildPredicate(tree,lmtzr=lemmatizer):
             elif len(lReverse) == 1:
                 return List([Resource(x) for x in lDirect]) ## value/reverse_value : lReserve[0]
             else:
-                return List([Resource(x) for x in lDirect for y in lReverse])## value/reverse_value : lReserve
+                return List([Resource(x) for x in lDirect for y in lReverse]) ## value/reverse_value : lReserve
     else:
         return buildValue(tree)
 
@@ -114,7 +114,7 @@ def normalizeConjunction(tree):
     """
     result = []
     assert len(tree.child) == 2 and tree.child[0].dependency.startswith('Rconj') and tree.child[1].dependency.startswith('Rconj')
-    conjunction = buildValue(tree)
+    conjunction = buildValue(tree).value
     if tree.child[0].dependency == 'RconjT':
         result = [normalize(tree.child[0]),normalize(tree.child[1])]
     else:
@@ -144,15 +144,15 @@ def normalize(tree):
             result.append(buildValue(t))
         if t.dependency == 'R2':
             if len(t.child) == 0:
-                result.append(Triple(buildValue(t),buildPredicate(tree),Missing()))
+                result.append(Triple(buildValue(t),buildPredicate(tree,0),Missing()))
             else:
                 result.append(normalize(t))
         if t.dependency == 'R3':
-            result.append(Triple(Missing(),buildPredicate(tree),normalize(t)))
+            result.append(Triple(Missing(),buildPredicate(tree,1),normalize(t)))
         if t.dependency == 'R4':
             result.append(Triple(Missing(),normalize(t),buildValue(tree))) ## normalize dans prédicat ????
         if t.dependency == 'R5':
-            result.append(Triple(normalize(t),buildPredicate(tree),Missing()))
+            result.append(Triple(normalize(t),buildPredicate(tree,0),Missing()))
         if t.dependency == 'R6':
            result.append(Triple(Missing(),Resource('instance of'),normalize(t)))
         if t.dependency == 'R7':

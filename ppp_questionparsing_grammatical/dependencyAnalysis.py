@@ -37,16 +37,12 @@ def nnRule(t,qw):
     else:
         merge(t,qw)
 
-def mixedRule(t,qw): # nsubj, prep
-    if (t.parent.getWords() == 'identity' and qw in strongQuestionWord) or not t.parent.wordList[0].pos.startswith('V'):
-        t.dependency = 'R5'
-    elif t.parent.getWords() == 'identity':
-        t.dependency = 'R2'
-    else:
+def prepRule(t,qw): # nsubj, prep
+    if t.parent.wordList[0].pos[0] == 'V':
         t.dependency = 'R3'
+    else:
+        t.dependency = 'R5'
 
-# nsubj, nsubjpass, agent
-# dobj, v+prep
 dependenciesMap1 = {
     'undef'     : 'R0',
     'root'      : 'R0',
@@ -56,7 +52,7 @@ dependenciesMap1 = {
             'auxpass'   : remove,
             'cop'       : impossible,
         'arg'       : impossible,
-            'agent'     : 'R3',
+            'agent'     : 'R5', # <<
             'comp'      : 'R3',
                 'acomp'     : 'R3',
                 'ccomp'     : 'R5',
@@ -68,7 +64,7 @@ dependenciesMap1 = {
                     'pobj'      : 'R3',
             'subj'      : impossible,
                 'nsubj'     : 'R5', # <<
-                    'nsubjpass'    : 'R5', # or R2 if necessary
+                    'nsubjpass'    : 'R3',# <<
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
         'cc'        : impossible,
@@ -96,7 +92,7 @@ dependenciesMap1 = {
                 'tmod'      : 'R3',
             'num'       : merge,
             'number'    : merge,
-            'prep'      : 'R5', # <<
+            'prep'      : prepRule, # <<
             'poss'      : 'R5',
             'possessive': impossible,
             'prt'       : merge,
@@ -163,7 +159,7 @@ def collapsePrep(t):
         collapsePrep(c)
     if t.dependency.startswith('prep'): # prep_x or prepc_x (others?)
         prep = ' '.join(t.dependency.split('_')[1:]) # type of the prep (of, in, ...)
-        if t.parent.wordList[0].pos == 'VBN':
+        if t.parent.wordList[0].pos[0] == 'V':
             t.parent.wordList[0].word += ' ' + prep
         t.dependency = 'prep'
 
@@ -237,7 +233,6 @@ def simplify(t):
     """
     qw = identifyQuestionWord(t)             # identify and remove question word
     collapsePrep(t)                          # replace prep(c)_x by prep(c)
-    #standardize(t)                           # lemmatize, nounify
     collapseMap(t,dependenciesMap1,qw)       # collapse the tree according to dependenciesMap1
     conjConnectorsUp(t)                      # remove conjonction connectors
     connectorUp(t)                           # remove remaining amod connectors

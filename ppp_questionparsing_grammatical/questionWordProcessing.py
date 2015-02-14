@@ -61,13 +61,13 @@ def identifyQuestionWord(t):
             pass
     if start[1]:
         w = start[0].word.lower() + ' ' + start[1].word.lower()
-        if w in openQuestionWord or w in semiQuestionWord:
+        if w in openQuestionWord or w in semiQuestionWord or w in existQuestionWord:
             removeWord(t,start[0])
             removeWord(t,start[1])
             return w
-        if w in existQuestionWord:
-            removeWord(t,start[1])
-            return w
+        #if w in existQuestionWord:
+        #    removeWord(t,start[1])
+        #    return w
     w = start[0].word.lower()
     if w in openQuestionWord or w in semiQuestionWord:
         removeWord(t,start[0])
