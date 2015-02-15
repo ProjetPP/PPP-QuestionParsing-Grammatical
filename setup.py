@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ppp_questionparsing_grammatical',
-    version='0.5.2',
+    version='0.6.1',
     description='Natural language processing module for the PPP.',
     url='https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical',
     author='Projet Pensées Profondes',
@@ -36,7 +36,7 @@ setup(
         'ppp_questionparsing_grammatical.data',
     ],
     package_data={
-        'ppp_questionparsing_grammatical': ['data/*.{pickle,py}'],
+        'ppp_questionparsing_grammatical': ['data/*.pickle'],
     },
 )
 
