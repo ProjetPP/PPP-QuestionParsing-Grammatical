@@ -28,7 +28,6 @@ lemmatizer = WordNetLemmatizer()
 def lemmatize(tree,lmtzr=lemmatizer):
     """
         Apply lemmatization to the word, using the given lemmatizer
-        This function is not suppposed to be applied on future predicates
     """
     if tree.namedEntityTag == 'undef':
         for w in tree.wordList:
@@ -44,46 +43,59 @@ def buildValue(tree):
     lemmatize(tree)
     return Resource(tree.printWordList())
 
-def buildPredicate(tree,n,lmtzr=lemmatizer):
-    lDirect = []
+def verbStandardize(tree,lmtzr=lemmatizer):
+    """
+        Assume that tree.wordList is a verb v
+        Produce (v1,v2) where v1=lemmatize(v) and v2 is the past participle of v
+    """
+    w = tree.printWordList().lower() # rules on / ruled on
+    wSplit = w.split() # [rules,on] / [ruled,on]
+    wSplit[0] = lmtzr.lemmatize(wSplit[0],'v') # [rule,on] / [rule,on]
+    if tree.wordList[0].pos == 'VBN':
+        pastPart = w # .. / ruled on
+    elif wSplit[0] in pastPartDict: # ICI : map des participes passés
+        pastPart = ' '.join([pastPartDict[wSplit[0]]]+wSplit[1:]) # ruled on / ..
+    else:
+        pastPart = ' '.join([wSplit[0]+'ed']+wSplit[1:])
+    return (' '.join(wSplit),pastPart)
+
+def buildPredicateVerb(tree,n):
+    """
+        n=0 : direct triple, n=1 : reverse triple
+    """
+    lem = verbStandardize(tree)
+    lDirect = [lem[1]]
     lReverse = []
-    if tree.wordList[0].pos[0] == 'V': # Rules On / rULes oN
-        assert len(tree.wordList) == 1 # sinon faire un sort
-        w = tree.wordList[0].word.lower() # rules on / ruled on
-        wSplit = w.split() # [rules,on] / [ruled,on]
-        wSplit[0] = lmtzr.lemmatize(wSplit[0],'v') # [rule,on] / [rule,on]
-        if tree.wordList[0].pos == 'VBN':
-            pastPart = w # .. / ruled on
-        elif wSplit[0] in pastPartDict: # ICI : map des participes passés
-            pastPart = ' '.join([pastPartDict[wSplit[0]]]+wSplit[1:]) # ruled on / ..
+    if nManual.exists(lem[0]):
+        lDirect += nManual.toNouns(lem[0],0)
+        lReverse += nManual.toNouns(lem[0],1)
+    elif len(lem[0].split()) > 1 and nManual.exists(lem[0].split()[0]):
+        lDirect += nManual.toNouns(lem[0].split()[0],0)
+        lReverse += nManual.toNouns(lem[0].split()[0],1)
+    elif nAuto.exists(lem[0].split()[0]):
+        lDirect += nAuto.toNouns(lem[0].split()[0],0)
+    # Production of the resource
+    if len(lDirect) == 1: # at least 1 (past part always added)
+        if len(lReverse) == 0:
+            return Resource(lDirect[0])
+        elif len(lReverse) == 1:
+            return Resource(lDirect[0]) ## value/reverse_value : lReserve[0]
         else:
-            pastPart = ' '.join([wSplit[0]+'ed']+wSplit[1:])
-        # Production of the direct and reverse lists
-        lDirect.append(pastPart) # ruled on
-        w = ' '.join(wSplit) # rule on
-        if nManual.exists(w):
-            lDirect += nManual.toNouns(w,0)
-            lReverse += nManual.toNouns(w,1)
-        elif len(wSplit) > 1 and nManual.exists(wSplit[0]):
-            lDirect += nManual.toNouns(wSplit[0],0)
-            #*lReverse += nManual.toNouns(wSplit[0],1)
-        if len(lDirect) == 1 and len(lReverse) == 0 and nAuto.exists(wSplit[0]):
-            lDirect += nAuto.toNouns(wSplit[0],0)
-        # Production of the resource
-        if len(lDirect) == 1: # at least 1 (past part always added)
-            if len(lReverse) == 0:
-                return Resource(lDirect[0])
-            elif len(lReverse) == 1:
-                return Resource(lDirect[0]) ## value/reverse_value : lReserve[0]
-            else:
-                return List([Resource(lDirect[0]) for x in lReverse]) ## value/reverse_value : lReserve
-        else: # len(lDirect) > 1
-            if len(lReverse) == 0:
-                return List([Resource(x) for x in lDirect])
-            elif len(lReverse) == 1:
-                return List([Resource(x) for x in lDirect]) ## value/reverse_value : lReserve[0]
-            else:
-                return List([Resource(x) for x in lDirect for y in lReverse]) ## value/reverse_value : lReserve
+            return List([Resource(lDirect[0]) for x in lReverse]) ## value/reverse_value : lReserve
+    else: # len(lDirect) > 1
+        if len(lReverse) == 0:
+            return List([Resource(x) for x in lDirect])
+        elif len(lReverse) == 1:
+            return List([Resource(x) for x in lDirect]) ## value/reverse_value : lReserve[0]
+        else:
+            return List([Resource(x) for x in lDirect for y in lReverse]) ## value/reverse_value : lReserve
+
+def buildPredicate(tree,n):
+    """
+        n=0 : direct triple, n=1 : reverse triple
+    """
+    if tree.wordList[0].pos[0] == 'V':
+        return buildPredicateVerb(tree,n)
     else:
         return buildValue(tree)
 

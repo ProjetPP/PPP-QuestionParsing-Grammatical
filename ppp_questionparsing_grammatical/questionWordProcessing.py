@@ -97,7 +97,7 @@ def questionWordDependencyTree(t,w):
 
 def extractPredicates(nf):
     """
-        Assume that nf is a triple
+        Assume that nf is a triple of depth 1
         Returns the lists of strings (values) that are predicates of the triple
     """
     assert isinstance(nf,Triple) and (isinstance(nf.predicate,Resource) or isinstance(nf.predicate,List))

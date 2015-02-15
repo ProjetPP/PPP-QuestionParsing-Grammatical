@@ -151,7 +151,7 @@ class PreprocessingMergeTests(TestCase):
         self.assertEqual(root.dfsTag,0)
         # Lives
         lives=root.child[0]
-        self.assertEqual(lives.wordList,[Word("lives",3,'VBZ')])
+        self.assertEqual(lives.wordList,[Word("lives in",3,'VBZ')])
         self.assertEqual(lives.namedEntityTag,'undef')
         self.assertEqual(lives.dependency,'root')
         self.assertEqual(lives.parent,tree)
@@ -171,7 +171,7 @@ class PreprocessingMergeTests(TestCase):
         kingdom=lives.child[1]
         self.assertEqual(kingdom.wordList, [Word("United",6,'NNP'),Word("Kingdom",7,'NNP')])
         self.assertEqual(kingdom.namedEntityTag,'LOCATION')
-        self.assertEqual(kingdom.dependency,'prep_in')
+        self.assertEqual(kingdom.dependency,'prep')
         self.assertEqual(kingdom.parent,lives)
         self.assertEqual(len(kingdom.child),1)
         self.assertEqual(kingdom.subtreeType,'undef')

@@ -338,4 +338,16 @@ expected = {
     
     'Where is ENS Lyon?':
     T(R('ENS Lyon'),R('location'),M()),
+
+    #'What language is spoken in Argentina?':
+    #'What is the capital of India?':
+    #'What kings ruled on France?':
+    #'Who was born on 1984?":
+    #'What author is the author of 1984?':
+    #'Where does David Cameron live':
+    #'Who wrote \"James and the Giant Peach\"?':
+    #'Where does the animal live?':
+    #'Who lives in the farm?':
+    #'What did Roald Dahl write':
+    #'who was Liz Taylor married to?":
 }

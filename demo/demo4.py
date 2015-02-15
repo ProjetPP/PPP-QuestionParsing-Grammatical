@@ -23,6 +23,7 @@ def get_tree():
     result = nlp.parse(simplifiedSentence)
     tree = ppp_questionparsing_grammatical.computeTree(result['sentences'][0])
     handler.push(tree)
+    ppp_questionparsing_grammatical.preprocessingMerge(tree)
     return tree
 
 if __name__ == "__main__":

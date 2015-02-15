@@ -133,9 +133,34 @@ def mergeNamedEntityTag(t):
     mergeNamedEntityTagChildParent(t)
     mergeNamedEntityTagSisterBrother(t)
 
+##########################
+# Preposition processing #
+##########################
+
+prepSet = ['in','for','to','with','about','at','of','on','from','between','against']
+
+def mergePrepNode(t):
+    temp = list(t.child) # copy, because t.child is changed while iterating
+    for c in temp:
+        mergePrepNode(c)
+    if t.printWordList() in prepSet:
+        t.parent.merge(t,True)
+
+def mergePrepEdge(t):
+    temp = list(t.child) # copy, because t.child is changed while iterating
+    for c in temp:
+        mergePrepEdge(c)
+    if t.dependency.startswith('prep'): # prep_x or prepc_x (others?)
+        prep = ' '.join(t.dependency.split('_')[1:]) # type of the prep (of, in, ...)
+        if t.parent.wordList[0].pos[0] == 'V':
+            t.parent.wordList[0].word += ' ' + prep
+        t.dependency = 'prep'
+
 ###################
 # Global function #
 ###################
 
 def preprocessingMerge(t):
     mergeNamedEntityTag(t)
+    mergePrepNode(t)
+    mergePrepEdge(t)

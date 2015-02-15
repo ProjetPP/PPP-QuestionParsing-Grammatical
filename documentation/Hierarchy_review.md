@@ -54,6 +54,7 @@ xcomp
 * What did John Hinckley do to impress Jodie Foster?
 * Obama is the United States president.
 * who was Liz Taylor married to?
+* What is 802.11?
 
 ##### +++
 
@@ -106,7 +107,9 @@ Current rule: merge
 
 nsubjpass
 =========
-  
+
+Rule R5 ? Misparsed ?
+
 ##### ---
 
 * Which president has been killed by Oswald?
@@ -116,6 +119,7 @@ nsubjpass
 * Who was killed by Oswald?
 * Where is Inoco based?
 * Where was George Washington born?
+* who was Liz Taylor married to?
 
 agent
 =====
@@ -318,3 +322,6 @@ Stanford Parser fails
 * Of which country is Paris the capital?
 * List of books by Roald Dahl.
 * What albums did Pearl Jam record?
+* What is 802.11?
+* What is P=NP?
+* What is forcing?

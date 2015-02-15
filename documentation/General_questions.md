@@ -220,18 +220,3 @@ R5 ou R3
 * What language is spoken in Argentina?
 * Who followed Willy Brandt as chancellor of the Federal Republic of Germany?
 * Who was born on 1984
-
-----------------
-
-The animal | lives in | the farm.
- Subject     Predicate   Object    >> ( animal , residence , farm )
-
-The animal | lives in | the farm.
-  Object     Predicate   Subject   >> ( farm , inhabitant , animal )
-
----------------
-
-processQuestionInfo dans questionWordProcessing doit être le seul habilité à affaiblir une règle en R2 (ou R3 bis) (mais pas en R0: where is the residence)
-dependency analysis pose un R5/R3 puis processQuestionInfo affaiblie les dépendances de plus haut niveau s'il trouve l'info en-dessous
-
-

@@ -160,18 +160,9 @@ def collapseMap(t,depMap,qw,down=True):
         for c in temp:
             collapseMap(c,depMap,qw,down)
 
-def collapsePrep(t):
-    """
-        Replace prep(c)_x by prep
-    """
-    temp = list(t.child) # copy, because t.child is changed while iterating
-    for c in temp:
-        collapsePrep(c)
-    if t.dependency.startswith('prep'): # prep_x or prepc_x (others?)
-        prep = ' '.join(t.dependency.split('_')[1:]) # type of the prep (of, in, ...)
-        if t.parent.wordList[0].pos[0] == 'V':
-            t.parent.wordList[0].word += ' ' + prep
-        t.dependency = 'prep'
+##########################
+# Connectors rebalancing #
+##########################
 
 def connectorUp(t):
     """
@@ -246,7 +237,6 @@ def simplify(t):
         collapse dependencies of tree t
     """
     qw = identifyQuestionWord(t)             # identify and remove question word
-    collapsePrep(t)                          # replace prep(c)_x by prep(c)
     collapseMap(t,dependenciesMap1,qw)       # collapse the tree according to dependenciesMap1
     conjConnectorsUp(t)                      # remove conjonction connectors
     connectorUp(t)                           # remove remaining amod connectors
