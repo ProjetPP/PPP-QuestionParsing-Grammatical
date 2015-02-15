@@ -1,10 +1,8 @@
 import sys
 from .questionWordProcessing import identifyQuestionWord, questionWordDependencyTree
-from .dependencyTree import Word, DependenciesTree, computeTree
-from .preprocessingMerge import preprocessingMerge
+from .dependencyTree import Word, DependenciesTree
 from copy import deepcopy
 from .data.exceptions import GrammaticalError
-from .data.questionWord import strongQuestionWord
 
 ##############################
 # General analysis functions #

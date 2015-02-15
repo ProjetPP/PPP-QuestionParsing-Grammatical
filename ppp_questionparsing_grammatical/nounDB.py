@@ -6,8 +6,8 @@ class Nounificator:
     """
 
     def __init__(self):
-        self.verbToNounsDirect = {}
-        self.verbToNounsReverse = {}
+        self.verbToNounsDirect = {}  # code 0
+        self.verbToNounsReverse = {} # code 1
 
     def select(self,x):
         if x[1] == 0:
@@ -55,7 +55,7 @@ class Nounificator:
         else:
             target = self.verbToNounsReverse
         target[verb].remove(noun)
-        if targets[verb] == []:
+        if target[verb] == []:
             target.pop(verb)
 
     def removeVerb(self,verb,n):
@@ -79,7 +79,7 @@ class Nounificator:
         return verb in self.verbToNounsDirect or verb in self.verbToNounsReverse
 
     def merge(self,t):
-        for key, value in n.verbToNounsDirect.items():
+        for key, value in t.verbToNounsDirect.items():
             self.addList(key,value,0)
-        for key, value in n.verbToNounsReverset.items():
+        for key, value in t.verbToNounsReverse.items():
             self.addList(key,value,1)
