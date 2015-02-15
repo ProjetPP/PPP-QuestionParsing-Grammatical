@@ -3,34 +3,23 @@ General
 
 * verb+ing: do sthg special (look POS tag)? : What did Richard Feynman say upon hearing he would receive the Nobel Prize in Physics?
 * If nounification becomes powerful enough: use it to analyse superlative (biggest > size...)
-* Multiple words : Where is Inoco based? > base + place = base place :( >> en fait "base" se nounifie en "place" ?
 * Article : enlever numéro apparaissant dans noeud (et idem pour arbre) / enlever encadrement
 * data model : autoriser des listes de prédicats dans les sort ?
-* réecrire demo3 pour le rendre dépendant de DependencyTree
 * Dans le question word processing (et plus généralement) : les connecteurs ne sont pas uniquement les 1000. Les 1000 prennent les conj mais pas le superlatives.
-* Travailler sur la forme normalisée? 
-    >> garantir qu'en entrée de normalize chaque noeud contient une seule alternative
-    >> ajout des infos sur les premières feuilles / prédicats / ...
-    >> traiter les mots interrogatifs (ajout d'infos...)
-    >> seul les prédicats peuvent contenir des alternatives > le garantir
 * Recherche de wexcept/id... : uniquement prefixe/suffixe (sunday ?)
 * Vérifier que les positions/tag sont bien gérées (en particulier sur les alternatives)
-* Multiple predicates pour les sort
 * Tell me where the DuPont company is located. Name the Ranger who was always after Yogi Bear.
 * How do you solve "Rubik's Cube"? > en quoi est transformé how
-* réduire le nb de map, ajouter + d'infos
 * autres auxiliaire (have) : What dictator has the nickname "El Maximo"
-* propagation de types : nsubjRule + qw in strongQuestionWord = R5s
 * Who was the leader of the Branch Davidian Cult confronted by the FBI in Waco, Texas in 1993?    >> gros sujet
-* Where is Inoco based?                                                                           >> revoir la nounification associée
 * Who Clinton defeated?                                                                           >> prq nounification échoue ? non lemmatizé ?
-* Rapprocher/renommer les règles R.. similaires
 * __How many__ : opérateur de comptage 
    > How many films did Ingmar Bergman make?
    > How many children does Barack Obama have?
    > How many gas stations are there in the United States?
    > cf instance_of sur dobj >> on récupère la liste produite en sortie et on renvoie sa taille
    > How much did Mercury spend on advertising in 1993?
+* Typage : refaire une map complète : dependance <-> règle de typage (et pas règle Ri <-> règle de typage)
 
 Remarks
 =======

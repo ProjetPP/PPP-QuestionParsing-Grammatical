@@ -9,7 +9,7 @@ from ppp_datamodel import Resource, Triple, Missing, Intersection, List, Union, 
 
 def prepareInstanceOf(t):
     """
-        Replace by 'inst_of' the dependencies that appears on a path from the root of t to the root of the whole tree
+        Replace by 'inst_of' the dependencies that appear on a path from the root of t to the root of the whole tree
     """
     if t.dependency == 'root':
         return

@@ -39,7 +39,7 @@ def amodRule(t,qw):
 
 def nnRule(t,qw):
     if t.namedEntityTag != t.parent.namedEntityTag and t.namedEntityTag != 'undef':
-        t.dependency = 'R5'
+        t.dependency = 'R2'
     else:
         merge(t,qw)
 
@@ -47,7 +47,7 @@ def prepRule(t,qw):
     if t.parent.wordList[0].pos[0] == 'V':
         t.dependency = 'R3'
     else:
-        t.dependency = 'R5'
+        t.dependency = 'R2'
 
 ##########################
 # General analysis rules #
@@ -56,7 +56,7 @@ def prepRule(t,qw):
 dependenciesMap1 = {
     'undef'     : 'R0',
     'root'      : 'R0',
-    'inst_of'   : 'R6', # <<
+    'inst_of'   : 'RinstOf', # <<
     'dep'       : 'R1',
         'aux'       : remove,
             'auxpass'   : remove,
@@ -65,16 +65,16 @@ dependenciesMap1 = {
             'agent'     : 'R3', # <<
             'comp'      : 'R3',
                 'acomp'     : 'R3',
-                'ccomp'     : 'R5',
-                'xcomp'     : 'R5',
+                'ccomp'     : 'R2',
+                'xcomp'     : 'R2',
                 'pcomp'     : 'R3',
                 'obj'       : impossible,
                     'dobj'      : 'R3',
                     'iobj'      : 'R3',
                     'pobj'      : 'R3',
             'subj'      : impossible,
-                'nsubj'     : 'R5', # <<
-                    'nsubjpass'    : 'R5', # <<
+                'nsubj'     : 'R2', # <<
+                    'nsubjpass'    : 'R2', # <<
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
         'cc'        : impossible,
@@ -86,24 +86,24 @@ dependenciesMap1 = {
         'mod'       : impossible,
             'amod'      : amodRule,
             'appos'     : 'R0', # <<
-            'advcl'     : 'R5',
+            'advcl'     : 'R2',
             'det'       : remove,
             'predet'    : remove,
             'preconj'   : remove,
             'vmod'      : 'R3',
             'mwe'       : merge,
                 'mark'      : remove,
-            'advmod'    : 'R5',
+            'advmod'    : 'R2',
                 'neg'       : 'connectorUp', # need a NOT node
-            'rcmod'     : 'R5',
+            'rcmod'     : 'R2',
                 'quantmod'  : remove,
             'nn'        : nnRule,
-            'npadvmod'  : 'R5',
+            'npadvmod'  : 'R2',
                 'tmod'      : 'R3',
             'num'       : merge,
             'number'    : merge,
             'prep'      : prepRule, # <<
-            'poss'      : 'R5',
+            'poss'      : 'R2',
             'possessive': impossible,
             'prt'       : merge,
         'parataxis' : remove,
@@ -128,12 +128,9 @@ def propagateType(t,qw):
 dependenciesMap2 = {         # how to handle a -b-> c
     'R0'        : propagateType,  # normalize(c)
     'R1'        : propagateType,  # !c
-    'R2'        : propagateType,  # if c is a leaf: (normalize(c),!a,?), otherwise: normalize(c)
+    'R2'        : ignore,         # (normalize(c),!a,?)
     'R3'        : ignore,         # (?,!a,normalize(c))
-    'R4'        : ignore,         # (?,normalize(c),!a)
-    'R5'        : ignore,         # (normalize(c),!a,?)
-    'R6'        : propagateType,  # (?,instance of,c)
-    'R7'        : ignore,         # (!a,normalize(c),?)
+    'RinstOf'   : propagateType,  # (?,instance of,c)
     'Rspl'      : propagateType,  # superlative
     'RconjT'    : propagateType,  # top of a conjunction relation
     'RconjB'    : propagateType,  # bottom of a conjunction relation

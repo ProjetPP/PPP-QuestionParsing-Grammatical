@@ -140,6 +140,9 @@ def mergeNamedEntityTag(t):
 prepSet = ['in','for','to','with','about','at','of','on','from','between','against']
 
 def mergePrepNode(t):
+    """
+        Merge x -> y into 'x y' if y is a preposition
+    """
     temp = list(t.child) # copy, because t.child is changed while iterating
     for c in temp:
         mergePrepNode(c)
@@ -147,6 +150,10 @@ def mergePrepNode(t):
         t.parent.merge(t,True)
 
 def mergePrepEdge(t):
+    """
+        Replace a -prep_x-> b by 'a x' -prep-> b if a is a verb, a -prep-> b otherwise
+        Replace a -agent-> b by 'a by' -agent-> b
+    """
     temp = list(t.child) # copy, because t.child is changed while iterating
     for c in temp:
         mergePrepEdge(c)
