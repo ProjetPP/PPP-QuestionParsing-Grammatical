@@ -369,4 +369,24 @@ expected = {
 
     'What did Roald Dahl write':
     T(R('Roald Dahl'),R('bibliography'),M()),
+
+    'What\'s the name of King Arthur\'s sword?':
+    T(
+        T(R('King Arthur'),R('sword'),M()),
+        R('name'),
+        M()
+    ),
+
+    'What\'s the warmest place on earth?':
+    L(
+        S(
+            T(R('earth'), R('place'), M()),
+            R('temperature')
+        )
+    ),
+
+    'Who\'re the presidents of Europe?':
+    T(R('Europe'),R('president'),M()),
+
+
 }

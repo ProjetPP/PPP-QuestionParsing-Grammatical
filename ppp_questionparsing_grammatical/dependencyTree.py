@@ -154,7 +154,7 @@ def computeTags(r,nameToNodes):
     # Computation of the tags of the nodes
     for word in r['words']:
         index+=1
-        if word[0].isalnum() or word[0] == '$' or  word[0] == '%':
+        if word[0].isalnum() or word[0] == '$' or word[0] == '%' or word[0][0] == '\'': # \' for 's, 're,...
             w=word[0]+'-'+str(index) # key in the nameToNodes map
             try:
                 n = nameToNodes[w]

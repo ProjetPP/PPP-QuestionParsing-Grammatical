@@ -25,32 +25,38 @@ lemmatizer = WordNetLemmatizer()
 # Build resource nodes #
 ########################
 
-def lemmatize(tree,lmtzr=lemmatizer):
+def lemmatize(s,pos,lmtzr=lemmatizer):
     """
-        Apply lemmatization to the word, using the given lemmatizer
+        Lemmatize the string s depending on its part of speech tag
     """
-    if tree.namedEntityTag == 'undef':
-        for w in tree.wordList:
-            if w.pos in ('NN','NNS'):
-                w.word = lmtzr.lemmatize(w.word.lower(),'n')
-            elif w.pos and w.pos[0] == 'V':
-                w.word = lmtzr.lemmatize(w.word.lower(),'v')
+    if s.lower() in ('\'s','\'re','\'m'):
+        return 'be'
+    if s.lower() in ('\'ve','\'d'): # 's : conflict
+        return 'have'
+    elif pos in ('NN','NNS'):
+        return lmtzr.lemmatize(s.lower(),'n')
+    elif pos and pos[0] == 'V': 
+        return lmtzr.lemmatize(s.lower(),'v')
+    else:
+        return s
 
 def buildValue(tree):
     """
         Used to build the values of the normal form (except for predicates)
     """
-    lemmatize(tree)
+    if tree.namedEntityTag == 'undef':
+        for w in tree.wordList:
+            w.word = lemmatize(w.word,w.pos)
     return Resource(tree.printWordList())
 
-def verbStandardize(tree,lmtzr=lemmatizer):
+def verbStandardize(tree):
     """
         Assume that tree.wordList is a verb v
         Produce (v1,v2) where v1=lemmatize(v) and v2 is the past participle of v
     """
     w = tree.printWordList().lower() # rules on / ruled on
     wSplit = w.split() # [rules,on] / [ruled,on]
-    wSplit[0] = lmtzr.lemmatize(wSplit[0],'v') # [rule,on] / [rule,on]
+    wSplit[0] = lemmatize(wSplit[0],'V') # [rule,on] / [rule,on]
     if tree.wordList[0].pos == 'VBN':
         pastPart = w # .. / ruled on
     elif wSplit[0] in pastPartDict: # ICI : map des participes passés
