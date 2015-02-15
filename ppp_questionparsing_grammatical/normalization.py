@@ -149,12 +149,12 @@ def normalize(tree):
         return buildValue(tree)
     if tree.child[0].dependency == 'Rexist':
         return Exists(normalize(tree.child[0]))
-    if tree.child[0].dependency == 'Rspl': # Rspl = superlative, ordinal
+    if tree.child[0].dependency == 'Rspl':
         return normalizeSuperlative(tree)
-    if tree.child[0].dependency.startswith('Rconj'): # Rconj = conjunction
+    if tree.child[0].dependency.startswith('Rconj'):
         return normalizeConjunction(tree)
     result = []
-    for t in tree.child: # R0 ... R7
+    for t in tree.child:
         if t.dependency == 'R0':
             result.append(normalize(t))
         if t.dependency == 'R1':

@@ -142,12 +142,18 @@ cop doesn't always disappear -> needs to remove it manually
 prep
 ====
 
-##### ---
-
 * Who was President of Afghanistan in 1994? ( of -> in)
 * Who won two gold medals in skiing in the Olympic Games in Calgary?
 * Who followed Willy Brandt as chancellor of the Federal Republic of Germany?
 * Where does most of the marijuana entering the United States come from?
+* Which kings ruled on France
+* List movies directed by Spielberg
+* What language is spoken in Argentina?
+* Who was born on 1984
+* What language is spoken in Argentina? :(
+* Who was born on 1984?
+* List of books by Roald Dahl
+* president of France
 
 dobj
 ====
@@ -168,8 +174,9 @@ dobj
 * Who invented the hula hoop?
 * Who killed Gandhi?
 * Who elected the president?
-
-look at the verb ? (passive, acted ...)
+* Who developed Microsoft?
+* What actor married John F. Kennedy's sister?
+* Who wrote the song, "Stardust"?
 
 ##### ---
 
@@ -221,6 +228,8 @@ nsubj
 * How many films did Ingmar Bergman make?
 * Who Clinton defeated?
 * Where does the prime minister of United Kingdom live?
+* What did George Orwell write?
+* Which books did Suzanne Collins write?
 
 nsubj (Rnew):
 
