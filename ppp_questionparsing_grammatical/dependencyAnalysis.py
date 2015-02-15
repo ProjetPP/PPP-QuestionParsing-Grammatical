@@ -37,7 +37,7 @@ def nnRule(t,qw):
     else:
         merge(t,qw)
 
-def prepRule(t,qw): # nsubj, prep
+def prepRule(t,qw):
     if t.parent.wordList[0].pos[0] == 'V':
         t.dependency = 'R3'
     else:
@@ -59,7 +59,7 @@ dependenciesMap1 = {
                 'xcomp'     : 'R5',
                 'pcomp'     : 'R3',
                 'obj'       : impossible,
-                    'dobj'      : 'R5',
+                    'dobj'      : 'R3',
                     'iobj'      : 'R3',
                     'pobj'      : 'R3',
             'subj'      : impossible,
@@ -73,19 +73,19 @@ dependenciesMap1 = {
             'conj_or'   : ignore,
             'conj_negcc': ignore,
         'expl'      : remove,
-        'mod'       : 'R4',
+        'mod'       : impossible,
             'amod'      : amodRule,
-            'appos'     : 'R4',
-            'advcl'     : 'R4',
+            'appos'     : 'R0', # <<
+            'advcl'     : 'R5',
             'det'       : remove,
             'predet'    : remove,
             'preconj'   : remove,
             'vmod'      : 'R3',
             'mwe'       : merge,
                 'mark'      : remove,
-            'advmod'    : 'R2',
+            'advmod'    : 'R5',
                 'neg'       : 'connectorUp', # need a NOT node
-            'rcmod'     : 'R4',
+            'rcmod'     : 'R5',
                 'quantmod'  : remove,
             'nn'        : nnRule,
             'npadvmod'  : 'R5',

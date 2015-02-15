@@ -142,21 +142,21 @@ def normalize(tree):
             result.append(normalize(t))
         if t.dependency == 'R1':
             result.append(buildValue(t))
-        if t.dependency == 'R2':
-            if len(t.child) == 0:
-                result.append(Triple(buildValue(t),buildPredicate(tree,0),Missing()))
-            else:
-                result.append(normalize(t))
+        #if t.dependency == 'R2':
+        #    if len(t.child) == 0:
+        #        result.append(Triple(buildValue(t),buildPredicate(tree,0),Missing()))
+        #    else:
+        #        result.append(normalize(t))
         if t.dependency == 'R3':
             result.append(Triple(Missing(),buildPredicate(tree,1),normalize(t)))
-        if t.dependency == 'R4':
-            result.append(Triple(Missing(),normalize(t),buildValue(tree))) ## normalize dans prédicat ????
+        #if t.dependency == 'R4':
+        #    result.append(Triple(Missing(),normalize(t),buildValue(tree))) ## normalize dans prédicat ????
         if t.dependency == 'R5':
             result.append(Triple(normalize(t),buildPredicate(tree,0),Missing()))
         if t.dependency == 'R6':
            result.append(Triple(Missing(),Resource('instance of'),normalize(t)))
-        if t.dependency == 'R7':
-            result.append(Triple(buildValue(tree),normalize(t),Missing())) ## normalize dans prédicat ???? << plus utilisé ?
+        #if t.dependency == 'R7':
+        #    result.append(Triple(buildValue(tree),normalize(t),Missing())) ## normalize dans prédicat ???? << plus utilisé ?
     if len(result) == 1:
         return result[0]
     else:

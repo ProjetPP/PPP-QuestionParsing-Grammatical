@@ -61,36 +61,36 @@ expected = {
         M()
     ),
 
-    'When was the daughters of the wife of the president of the United States born?':
-    T(
-        T(
-            T(
-                T(R('United States'), R('president'), M()),
-                R('wife'),
-                M()
-            ),
-            R('daughter'),
-            M()
-        ),
-        R('birth date'),
-        M()
-    ),
+    #'When was the daughters of the wife of the president of the United States born?':
+    #T(
+    #    T(
+    #        T(
+    #            T(R('United States'), R('president'), M()),
+    #            R('wife'),
+    #            M()
+    #        ),
+    #        R('daughter'),
+    #        M()
+    #    ),
+    #    R('birth date'),
+    #    M()
+    #),
 
     # this question is not correct (see previous question), and so the parsing fails (no subject in the dependency tree, but a dobj). However, it's interesting to be able to handle such questions
-    'When was born the daughters of the wife of the president of the United States?':
-    T(
-        T(
-            T(
-                T(R('United States'), R('president'), M()),
-                R('wife'),
-                M()
-            ),
-            R('daughter'),
-            M()
-        ),
-        R('birth date'),
-        M()
-    ),
+    #'When was born the daughters of the wife of the president of the United States?':
+    #T(
+    #    T(
+    #        T(
+    #            T(R('United States'), R('president'), M()),
+    #            R('wife'),
+    #            M()
+    #        ),
+    #        R('daughter'),
+    #        M()
+    #    ),
+    #    R('birth date'),
+    #    M()
+    #),
 
     'Who are the daughters of the wife of the husband of the wife of the president of the United States?':
     T(
@@ -111,11 +111,11 @@ expected = {
         M()
     ),
 
-    'Who wrote \"Le Petit Prince\" and \"Vol de Nuit\"':
-    I([
-        T(R('Le Petit Prince'), R('writer'), M()),
-        T(R('Vol de Nuit'), R('writer'), M())
-    ]),
+    #'Who wrote \"Le Petit Prince\" and \"Vol de Nuit\"':
+    #I([
+    #    T(R('Le Petit Prince'), R('writer'), M()),
+    #    T(R('Vol de Nuit'), R('writer'), M())
+    #]),
 
     'Is there a capital of France?':
     E(T(R('France'), R('capital'), M())),
@@ -146,29 +146,29 @@ expected = {
     'What is the English for "Звёздные войны. Эпизод VI: Возвращение джедая"?':
     T(R('Звёздные войны. Эпизод VI: Возвращение джедая'), R('English'), M()),
 
-    'List movies directed by Spielberg.':
-    I([
-        T(M(), R('instance of'), R('movie')),
-        T(M(), R('director'), R('Spielberg'))
-    ]),
+    #'List movies directed by Spielberg.':
+    #I([
+    #    T(M(), R('instance of'), R('movie')),
+    #    T(M(), R('director'), R('Spielberg'))
+    #]),
 
-    'Which books were authored by Victor Hugo?':
-    I([
-        T(M(), R('instance of'), R('book')),
-        T(M(), R('author'), R('Victor Hugo'))
-    ]),
+    #'Which books were authored by Victor Hugo?':
+    #I([
+    #    T(M(), R('instance of'), R('book')),
+    #    T(M(), R('author'), R('Victor Hugo'))
+    #]),
 
-    'Which president has been killed by Oswald?':
-    I([
-        T(M(), R('instance of'), R('president')),
-        T(M(), R('killer'), R('Oswald'))
-    ]),
+    #'Which president has been killed by Oswald?':
+    #I([
+    #    T(M(), R('instance of'), R('president')),
+    #    T(M(), R('killer'), R('Oswald'))
+    #]),
 
     'Who invented the hula hoop?':
-    T(R('hula hoop'), R('inventor'), M()),
+    T(M(), R('invention'), R('hula hoop')),
 
-    'Who was killed by Oswald?':
-    T(M(), R('killer'), R('Oswald')),
+    #'Who was killed by Oswald?':
+    #T(M(), R('killer'), R('Oswald')),
 
     #'Which books did Suzanne Collins write?':
     #I([
@@ -188,15 +188,15 @@ expected = {
     #'What did George Orwell write?':
     #T(M(), R('author'), R('George Orwell')),
 
-    'Who has written \"The Hitchhiker\'s Guide to the Galaxy\"?':
-    T(R('The Hitchhiker\'s Guide to the Galaxy'), R('author'), M()),
+    #'Who has written \"The Hitchhiker\'s Guide to the Galaxy\"?':
+    #T(R('The Hitchhiker\'s Guide to the Galaxy'), R('author'), M()),
 
-    'When was the president of the United States born':
-    T(
-        T(R('United States'), R('president'), M()),
-        R('birth date'),
-        M()
-    ),
+    #'When was the president of the United States born':
+    #T(
+    #    T(R('United States'), R('president'), M()),
+    #    R('birth date'),
+    #    M()
+    #),
 
     'From which country is Alan Turing?':
     I([
@@ -214,9 +214,9 @@ expected = {
     I([
         T(M(), R('instance of'), R('actor')),
         T(
-            T(R('John F. Kennedy'), R('sister'), M()),
-            R('husband'),
-            M()
+            M(),
+            R('wife'),
+            T(R('John F. Kennedy'), R('sister'), M())
         )
     ]),
 
@@ -226,8 +226,8 @@ expected = {
     'Who is J. F. K.?':
     T(R('J. F. K.'), R('identity'), M()),
 
-    'Where was Ulysses S. Grant born?':
-    T(R('Ulysses S. Grant'), R('birth place'), M()),
+    #'Where was Ulysses S. Grant born?':
+    #T(R('Ulysses S. Grant'), R('birth place'), M()),
 
     'Who is the US president?':
     T(R('US'), R('president'), M()),
@@ -244,8 +244,8 @@ expected = {
     'What is the natural language processing?':
     T(R('natural language processing'), R('definition'), M()),
 
-    'Where is Inoco based?':
-    T(R('Inoco'), R('location'), M()),
+    #'Where is Inoco based?':
+    #T(R('Inoco'), R('location'), M()),
 
     'Who is the author of \"Le Petit Prince\"?':
     T(R('Le Petit Prince'), R('author'), M()),
@@ -323,12 +323,19 @@ expected = {
         )
     ),
 
-    'Who developed Microsoft?':
-    T(R('Microsoft'), R('developer'), M()),
+    #'Who developed Microsoft?':
+    #T(R('Microsoft'), R('developer'), M()),
 
     'Give me all companies in Munich':
     T(R('Munich'), R('company'), M()),
 
-    #'Where does the prime minister of United Kingdom live?':
-    #'Where is ENS Lyon?':
+    'Where does the prime minister of United Kingdom live?':
+    T(
+        T(R('United Kingdom'), R('prime minister'), M()),
+        R('residence'),
+        M()
+    ),
+    
+    'Where is ENS Lyon?':
+    T(R('ENS Lyon'),R('location'),M()),
 }

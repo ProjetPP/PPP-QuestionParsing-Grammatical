@@ -115,7 +115,7 @@ class DependenciesTree:
         for c in other.child:
             c.parent = self
         if mergeWords:
-            self.wordList += other.wordList ### !!!
+            self.wordList += other.wordList
         if other.parent:
             other.parent.child.remove(other)
         other.wordList = None
