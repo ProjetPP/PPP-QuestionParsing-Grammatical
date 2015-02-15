@@ -7,6 +7,7 @@ from ppp_datamodel import Exists as E
 from ppp_datamodel import First as F
 from ppp_datamodel import Last as L
 from ppp_datamodel import Sort as S
+from ppp_datamodel import List as Li
 
 # expected[q] is the expected tree produced by the module for the question q.
 
@@ -61,36 +62,20 @@ expected = {
         M()
     ),
 
-    #'When was the daughters of the wife of the president of the United States born?':
-    #T(
-    #    T(
-    #        T(
-    #            T(R('United States'), R('president'), M()),
-    #            R('wife'),
-    #            M()
-    #        ),
-    #        R('daughter'),
-    #        M()
-    #    ),
-    #    R('birth date'),
-    #    M()
-    #),
-
-    # this question is not correct (see previous question), and so the parsing fails (no subject in the dependency tree, but a dobj). However, it's interesting to be able to handle such questions
-    #'When was born the daughters of the wife of the president of the United States?':
-    #T(
-    #    T(
-    #        T(
-    #            T(R('United States'), R('president'), M()),
-    #            R('wife'),
-    #            M()
-    #        ),
-    #        R('daughter'),
-    #        M()
-    #    ),
-    #    R('birth date'),
-    #    M()
-    #),
+    'When was the daughters of the wife of the president of the United States born?':
+    T(
+        T(
+            T(
+                T(R('United States'), R('president'), M()),
+                R('wife'),
+                M()
+            ),
+            R('daughter'),
+            M()
+        ),
+        R('birth date'),
+        M()
+    ),
 
     'Who are the daughters of the wife of the husband of the wife of the president of the United States?':
     T(
@@ -111,11 +96,11 @@ expected = {
         M()
     ),
 
-    #'Who wrote \"Le Petit Prince\" and \"Vol de Nuit\"':
-    #I([
-    #    T(R('Le Petit Prince'), R('writer'), M()),
-    #    T(R('Vol de Nuit'), R('writer'), M())
-    #]),
+    'Who wrote \"Le Petit Prince\" and \"Vol de Nuit\"':
+    I([
+        T(M(), R('bibliography'), R('Le Petit Prince')),
+        T(M(), R('bibliography'), R('Vol de Nuit'))
+    ]),
 
     'Is there a capital of France?':
     E(T(R('France'), R('capital'), M())),
@@ -152,29 +137,29 @@ expected = {
         T(M(), R('director'), R('Spielberg'))
     ]),
 
-    #'Which books were authored by Victor Hugo?':
-    #I([
-    #    T(M(), R('instance of'), R('book')),
-    #    T(M(), R('author'), R('Victor Hugo'))
-    #]),
+    'Which books were authored by Victor Hugo?':
+    I([
+        T(M(), R('instance of'), R('book')),
+        T(M(), R('authored by'), R('Victor Hugo'))
+    ]),
 
-    #'Which president has been killed by Oswald?':
-    #I([
-    #    T(M(), R('instance of'), R('president')),
-    #    T(M(), R('killer'), R('Oswald'))
-    #]),
+    'Which president has been killed by Oswald?':
+    I([
+        T(M(), R('instance of'), R('president')),
+        T(M(), R('killed by'), R('Oswald'))
+    ]),
 
     'Who invented the hula hoop?':
     T(M(), R('invention'), R('hula hoop')),
 
-    #'Who was killed by Oswald?':
-    #T(M(), R('killer'), R('Oswald')),
+    'Who was killed by Oswald?':
+    T(M(), R('killed by'), R('Oswald')),
 
-    #'Which books did Suzanne Collins write?':
-    #I([
-    #    T(M(), R('instance of'), R('book')),
-    #    T(M(), R('author'), R('Suzanne Collins'))
-    #]),
+    'Which books did Suzanne Collins write?':
+    I([
+        T(M(), R('instance of'), R('book')),
+        T(R('Suzanne Collins'), R('bibliography'), M())
+    ]),
 
     'president of France?':
     T(R('France'), R('president'), M()),
@@ -185,18 +170,18 @@ expected = {
     'Who is Babar?':
     T(R('Babar'), R('identity'), M()),
 
-    #'What did George Orwell write?':
-    #T(M(), R('author'), R('George Orwell')),
+    'What did George Orwell write?':
+    T(R('George Orwell'), R('bibliography'), M()),
 
-    #'Who has written \"The Hitchhiker\'s Guide to the Galaxy\"?':
-    #T(R('The Hitchhiker\'s Guide to the Galaxy'), R('author'), M()),
+    'Who has written \"The Hitchhiker\'s Guide to the Galaxy\"?':
+    T(M(), R('bibliography'), R('The Hitchhiker\'s Guide to the Galaxy')),
 
-    #'When was the president of the United States born':
-    #T(
-    #    T(R('United States'), R('president'), M()),
-    #    R('birth date'),
-    #    M()
-    #),
+    'When was the president of the United States born':
+    T(
+        T(R('United States'), R('president'), M()),
+        R('birth date'),
+        M()
+    ),
 
     'From which country is Alan Turing?':
     I([
@@ -226,8 +211,8 @@ expected = {
     'Who is J. F. K.?':
     T(R('J. F. K.'), R('identity'), M()),
 
-    #'Where was Ulysses S. Grant born?':
-    #T(R('Ulysses S. Grant'), R('birth place'), M()),
+    'Where was Ulysses S. Grant born?':
+    T(R('Ulysses S. Grant'), R('birth place'), M()),
 
     'Who is the US president?':
     T(R('US'), R('president'), M()),
@@ -244,8 +229,8 @@ expected = {
     'What is the natural language processing?':
     T(R('natural language processing'), R('definition'), M()),
 
-    #'Where is Inoco based?':
-    #T(R('Inoco'), R('location'), M()),
+    'Where is Inoco based?':
+    T(R('Inoco'), R('location'), M()),
 
     'Who is the author of \"Le Petit Prince\"?':
     T(R('Le Petit Prince'), R('author'), M()),
@@ -339,15 +324,49 @@ expected = {
     'Where is ENS Lyon?':
     T(R('ENS Lyon'),R('location'),M()),
 
-    #'What language is spoken in Argentina?':
-    #'What is the capital of India?':
-    #'What kings ruled on France?':
-    #'Who was born on 1984?":
-    #'What author is the author of 1984?':
-    #'Where does David Cameron live':
-    #'Who wrote \"James and the Giant Peach\"?':
-    #'Where does the animal live?':
-    #'Who lives in the farm?':
-    #'What did Roald Dahl write':
-    #'who was Liz Taylor married to?":
+    'who was Liz Taylor married to?':
+    T(R('Liz Taylor'),R('married to'),M()),
+
+    'What language is spoken in Argentina?':
+    I([
+        T(M(),R('instance of'),R('language')),
+        T(M(),R('spoken in'),R('Argentina'))
+    ]),
+
+    'What is the capital of India?':
+    T(R('India'),R('capital'),M()),
+
+    'What kings ruled on France?':
+    I([
+        T(M(),R('instance of'),R('king')),
+        T(M(),R('ruled on'),R('France'))
+    ]),
+
+    'Who was born on 1984?':
+    T(M(),R('born on'),R('1984')),
+
+    'What author is the author of 1984?':
+    I([
+        T(M(),R('instance of'),R('author')),
+        T(R('1984'),R('author'),M())
+    ]),
+
+    'Where does David Cameron live':
+    T(R('David Cameron'),R('residence'),M()),
+
+    'Where does the animal live?':
+    T(R('animal'),R('residence'),M()),
+
+    'Who lives in the farm?':
+    T(
+        M(),
+        Li([R('lived in'),R('residence')]),
+        R('farm')
+    ),
+
+    'Who wrote \"James and the Giant Peach\"?':
+    T(M(),R('bibliography'),R('James and the Giant Peach')),
+
+    'What did Roald Dahl write':
+    T(R('Roald Dahl'),R('bibliography'),M()),
 }

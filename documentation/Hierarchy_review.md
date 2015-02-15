@@ -110,13 +110,11 @@ nsubjpass
 
 Rule R5 ? Misparsed ?
 
-##### ---
-
+Agent:
 * Which president has been killed by Oswald?
-
-##### +++
-
 * Who was killed by Oswald?
+* which book was authored by Victor Hugo
+
 * Where is Inoco based?
 * Where was George Washington born?
 * who was Liz Taylor married to?

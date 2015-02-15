@@ -62,7 +62,7 @@ dependenciesMap1 = {
             'auxpass'   : remove,
             'cop'       : impossible,
         'arg'       : impossible,
-            'agent'     : 'R5', # <<
+            'agent'     : 'R3', # <<
             'comp'      : 'R3',
                 'acomp'     : 'R3',
                 'ccomp'     : 'R5',
@@ -74,7 +74,7 @@ dependenciesMap1 = {
                     'pobj'      : 'R3',
             'subj'      : impossible,
                 'nsubj'     : 'R5', # <<
-                    'nsubjpass'    : 'R3',# <<
+                    'nsubjpass'    : 'R5', # <<
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
         'cc'        : impossible,

@@ -155,6 +155,9 @@ def mergePrepEdge(t):
         if t.parent.wordList[0].pos[0] == 'V':
             t.parent.wordList[0].word += ' ' + prep
         t.dependency = 'prep'
+    if t.dependency == 'agent':
+        assert t.parent.wordList[0].pos[0] == 'V'
+        t.parent.wordList[0].word += ' by'
 
 ###################
 # Global function #

@@ -2,6 +2,4 @@ les positions 1000, 1001 n'ont plus lieu d'être (si qd on ajoute conjonction ->
 
 processQuestionInfo : gestion des reverse, perte d'infos sur les triplets
 
-fusions des prep : conserver Words distincts
-
 What did Richard Feynman say upon hearing he would receive the Nobel Prize in Physics? >>> prep pas fusionnée définitivement
