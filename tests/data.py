@@ -1,4 +1,4 @@
-from ppp_questionparsing_grammatical import computeTree, simplify, DependenciesTree, normalize
+from ppp_questionparsing_grammatical import computeTree, simplify, preprocessingMerge, DependenciesTree, normalFormProduction
 
 # Parsing result of "John Smith lives in the United Kingdom."
 def give_john_smith():
@@ -67,6 +67,26 @@ def give_john_smith():
 
 # Dot representation of the tree for "John Smith lives in the United Kingdom."
 def give_john_smith_string():
+    s="digraph relations {\n"
+    s+="\t\"6\"[label=\"ROOT\",shape=box];\n"
+    s+="\t\"6\" -> \"5\"[label=\"root\"];\n"
+    s+="\t\"5\"[label=\"lives\",shape=box];\n"
+    s+="\t\"5\" -> \"1\"[label=\"nsubj\"];\n"
+    s+="\t\"5\" -> \"4\"[label=\"prep_in\"];\n"
+    s+="\t\"1\"[label=\"Smith [PERSON]\",shape=box];\n"
+    s+="\t\"1\" -> \"0\"[label=\"nn\"];\n"
+    s+="\t\"0\"[label=\"John [PERSON]\",shape=box];\n"
+    s+="\t\"4\"[label=\"Kingdom [LOCATION]\",shape=box];\n"
+    s+="\t\"4\" -> \"2\"[label=\"det\"];\n"
+    s+="\t\"4\" -> \"3\"[label=\"nn\"];\n"
+    s+="\t\"2\"[label=\"the\",shape=box];\n"
+    s+="\t\"3\"[label=\"United [LOCATION]\",shape=box];\n"
+    s+="\tlabelloc=\"t\"\tlabel=\"John Smith lives in the United Kingdom.\";\n"
+    s+="}"
+    return s
+
+# Dot representation of the tree for "John Smith lives in the United Kingdom." (prepocessing merge)
+def give_john_smith_stringMerge():
     s="digraph relations {\n"
     s+="\t\"4\"[label=\"ROOT\",shape=box];\n"
     s+="\t\"4\" -> \"3\"[label=\"root\"];\n"
