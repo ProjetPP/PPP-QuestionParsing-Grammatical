@@ -13,39 +13,6 @@ Algo de nounification:
    > sinon : buildValue habituel après lemmatization
   - Renvoie une liste l à 2 éléments : l[0]: predicates, l[1] : reverse predicates
 
--------------------------------------
-
-(enlever tous les asserts inutiles à la fin)
-
-dependencyTreeCorrection.py :
- - inchangé
-
-dependencyTree.py : 
- - classe Word
- - classe DependenciesTree + ses fonctions de construction
- > fonction computeTree qui produit l'arbre identique au stanford parser (juste correctTree en +)
- >> QuotationHandler prend fin ici
-
-preprocessingMerge.py : 
- - quotationHandler
- - merge sister-brother
- > fonction merge (pas quotation, donc seulement sister-brother pour l'instant)
-
-dependencyAnalysis.py :
- - inchangé
-
-questionWordProcessing.py :
- - une fonction qui extrait le qw (agit dans dependencyAnalysis.py)
- - une fonction qui place les types (agit dans dependencyAnalysis.py)
- - une fonction qui ajoute les infos (agit dans normalization.py) __TODO__
-
-normalization.py :
- - buildPredicate cf ci-dessus (verbe -> renvoie 2 listes)
- - buildValue (list de Words -> renvoie
- - construction de l'arbre à la volée, en utilisant nounDB.py pour nounification (lemmatization aussi appliquée) __TODO__
- - enrichissement de l'arbre produit grâce au qw __TODO__
- - master fonction : normalFormProduction
-
 ------------
 
 les positions 1000, 1001 n'ont plus lieu d'être
@@ -64,4 +31,4 @@ cf ex de https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/pull/106
 
 What did Richard Feynman say upon hearing he would receive the Nobel Prize in Physics? >>> prep pas fusionnée définitivement
 
-List movies directed by Spielberg. -> prep_by : R5
+Where is Inoco based?

@@ -1,6 +1,5 @@
 import sys
 import ppp_datamodel
-from .dependencyTree import DependenciesTree
 from ppp_datamodel import Resource, Missing, Triple, Last, First, List, Sort, Intersection, Union, Exists
 from .questionWordProcessing import questionWordNormalForm
 from .data.conjunction import conjunctionTab
@@ -12,19 +11,19 @@ from .nounDB import Nounificator
 import pickle
 
 nManual = Nounificator()
-nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManualBetter.pickle'))
+nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManual.pickle'))
 nAuto = Nounificator()
-nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAutoBetter.pickle'))
+nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAuto.pickle'))
+
+file = open(resource_filename('ppp_questionparsing_grammatical', 'data/pastParticiple.pickle'), 'rb')
+pastPartDict = pickle.load(file)
+file.close()
 
 lemmatizer = WordNetLemmatizer()
 
-file = open(resource_filename('ppp_questionparsing_grammatical', 'data/pastParticiple.pickle'), 'rb')
-pastPartSet = pickle.load(file)
-file.close()
-
-################
-# Build values #
-################
+########################
+# Build resource nodes #
+########################
 
 def lemmatize(tree,lmtzr=lemmatizer):
     """
@@ -55,19 +54,19 @@ def buildPredicate(tree,n,lmtzr=lemmatizer):
         wSplit[0] = lmtzr.lemmatize(wSplit[0],'v') # [rule,on] / [rule,on]
         if tree.wordList[0].pos == 'VBN':
             pastPart = w # .. / ruled on
-        elif wSplit[0] in pastPartSet: # ICI : map des participes passés
-            pastPart = ' '.join([pastPartSet[wSplit[0]]]+wSplit[1:]) # ruled on / ..
+        elif wSplit[0] in pastPartDict: # ICI : map des participes passés
+            pastPart = ' '.join([pastPartDict[wSplit[0]]]+wSplit[1:]) # ruled on / ..
         else:
             pastPart = ' '.join([wSplit[0]+'ed']+wSplit[1:])
         # Production of the direct and reverse lists
         lDirect.append(pastPart) # ruled on
         w = ' '.join(wSplit) # rule on
-        if nManual.exists(wSplit[0]):
-            lDirect += nManual.toNouns(wSplit[0],0)
-            lReverse += nManual.toNouns(wSplit[0],1)
-        if len(wSplit) > 1 and nManual.exists(w):
+        if nManual.exists(w):
             lDirect += nManual.toNouns(w,0)
-            #*lReverse += nManual.toNouns(w,1)
+            lReverse += nManual.toNouns(w,1)
+        elif len(wSplit) > 1 and nManual.exists(wSplit[0]):
+            lDirect += nManual.toNouns(wSplit[0],0)
+            #*lReverse += nManual.toNouns(wSplit[0],1)
         if len(lDirect) == 1 and len(lReverse) == 0 and nAuto.exists(wSplit[0]):
             lDirect += nAuto.toNouns(wSplit[0],0)
         # Production of the resource

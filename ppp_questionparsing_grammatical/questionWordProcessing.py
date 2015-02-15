@@ -65,9 +65,6 @@ def identifyQuestionWord(t):
             removeWord(t,start[0])
             removeWord(t,start[1])
             return w
-        #if w in existQuestionWord:
-        #    removeWord(t,start[1])
-        #    return w
     w = start[0].word.lower()
     if w in openQuestionWord or w in semiQuestionWord:
         removeWord(t,start[0])
@@ -127,14 +124,14 @@ def processQuestionInfo(nf,w,excMap=questionExcept,addMap=questionAdd,wisMap=que
         predList = extractPredicates(nf)
         try:
             if 'identity' in predList:
-                if w in strongQuestionWord or isinstance(nf.subject,Resource) or isinstance(nf.object,Resource):
+                if w in strongQuestionWord or isinstance(nf.subject,Resource) or isinstance(nf.object,Resource): # strong qw ou arbre de profondeur 1
                     return Triple(nf.subject,List([Resource(x) for x in wisMap[w]]),nf.object) # perte des autres infos (types, ...)
-                else:
+                else: # supprimer le premier niveau de l'arbre
                     if isinstance(nf.subject,Missing):
                         return nf.object
                     else:
                         return nf.subject
-            elif set(predList) & set(excMap[w]) == set() and not 'instance of' in predList: # intersection not empty
+            elif set(predList) & set(excMap[w]) == set() and not 'instance of' in predList: # information du qw non contenue dans l'arbre (et pas noeud instance of)
                 return Triple(nf.subject,List([Resource(x) for x in predList] + [Resource(x+' '+y) for x in predList for y in addMap[w]]),nf.object) # perte des autres infos (types, ...) !!!!
             else:
                 return nf
@@ -143,8 +140,7 @@ def processQuestionInfo(nf,w,excMap=questionExcept,addMap=questionAdd,wisMap=que
 
 def questionWordNormalForm(nf,w):
     """
-        Try to include the info contained in the question word
-          into the sons of ROOT (ex: When -> add "date")
+        Improve the normal form using the question word
     """
     if w in openQuestionWord:
         return processQuestionInfo(nf,w)

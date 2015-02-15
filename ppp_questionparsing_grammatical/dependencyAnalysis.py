@@ -6,6 +6,10 @@ from copy import deepcopy
 from .data.exceptions import GrammaticalError
 from .data.questionWord import strongQuestionWord
 
+##############################
+# General analysis functions #
+##############################
+
 def remove(t,qw):
     t.parent.child.remove(t)
 
@@ -17,6 +21,10 @@ def ignore(t,qw):
 
 def merge(t,qw):
     t.parent.merge(t,True)
+
+##############################
+# Special analysis functions #
+##############################
 
 def amodRule(t,qw):
     if t.wordList[0].pos == 'JJ':
@@ -42,6 +50,10 @@ def prepRule(t,qw):
         t.dependency = 'R3'
     else:
         t.dependency = 'R5'
+
+##########################
+# General analysis rules #
+##########################
 
 dependenciesMap1 = {
     'undef'     : 'R0',
@@ -225,6 +237,10 @@ def conjConnectorsUp(t):
         temp = list(newTree.child) # copy, because t.child is changed while iterating
         for c in temp:
             conjConnectorsUp(c)
+
+###################
+# Global function #
+###################
 
 def simplify(t):
     """
