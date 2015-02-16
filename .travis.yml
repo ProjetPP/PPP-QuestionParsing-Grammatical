@@ -8,6 +8,9 @@ python:
   - pypy3
 
 install:
+    - sudo add-apt-repository ppa:webupd8team/java -y
+    - sudo apt-get update
+    - sudo apt-get install oracle-java8-installer
     - pip install scrutinizer-ocular coverage webtest httmock requests ppp_datamodel ppp_core jsonrpclib-pelix nltk
     - echo "y
         y
