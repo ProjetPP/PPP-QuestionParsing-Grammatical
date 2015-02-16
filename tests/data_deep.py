@@ -454,7 +454,7 @@ expected = {
     T(R('Algeria'),R('official language'),M()),
 
     'What\'s the Red Planet?':
-    T(R('Red Planet'),R('definition'),M()),
+    T(R('Red planet'),R('definition'),M()),
 
     'What state was Herbert Hoover born in?':
     I([
