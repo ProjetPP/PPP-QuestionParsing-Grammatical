@@ -265,7 +265,7 @@ expected = {
     'What is the continent of Fiji and Guam?':
     I([
         T(R('Fiji'), R('continent'), M()),
-        T(R('guam'), R('continent'), M())
+        T(R('Guam'), R('continent'), M())
     ]),
 
     'Who is the first president of France?':
@@ -454,7 +454,7 @@ expected = {
     T(R('Algeria'),R('official language'),M()),
 
     'What\'s the Red Planet?':
-    T(R('Red planet'),R('definition'),M()),
+    T(R('Red Planet'),R('definition'),M()),
 
     'What state was Herbert Hoover born in?':
     I([
