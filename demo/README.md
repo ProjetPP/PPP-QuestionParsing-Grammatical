@@ -16,9 +16,9 @@ CORENLP="stanford-corenlp-full-2014-08-27" CORENLP_OPTIONS="-parse.flags \" -mak
 
 Here is a description of the demo files:
 
-* `demo1.py`: Output the dependency relations graph from CoreNLP (this file is the only one that does not need to run a server. On the other hand, it's really slow. Moreover, copula relations are not removed)
-* `demo2.py`: Output the dependency relations graph from CoreNLP
-* `demo3.py`: Output the dependency relations graph from CoreNLP in dot format
+* `demo1.py`: Output the dependency graph from CoreNLP (this file is the only one that does not need to run a server. On the other hand, it's really slow. Moreover, copula relations are not removed)
+* `demo2.py`: Output the dependency graph from CoreNLP
+* `demo3.py`: Output the dependency graph from CoreNLP in dot format
 * `demo4.py`: Output the dependency graph in dot format after preprocessing simplifications (merging of some nodes)
 * `demo5.py`: Output the dependency graph in dot format after dependency analysis
 * `demo6.py`: Full algorithm, output the final normal form from question

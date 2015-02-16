@@ -327,7 +327,7 @@ Stanford Parser fails
 * Who held the endurance record for women pilots in 1929?
 * What dictator has the nickname "El Maximo"?
 * Of which country is Paris the capital?
-* List of books by Roald Dahl.
+* List of books by Roald Dahl. (works if you remove the ".")
 * What albums did Pearl Jam record?
 * What is 802.11?
 * What is P=NP?
