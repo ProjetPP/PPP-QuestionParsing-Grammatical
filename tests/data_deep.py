@@ -388,5 +388,113 @@ expected = {
     'Who\'re the presidents of Europe?':
     T(R('Europe'),R('president'),M()),
 
+    'Where do rocks come from?':
+    T(
+        R('rock'),
+        Li([R('come from'),R('origin')]),
+        M()
+    ),
 
+    'When was the U.S. capitol built?':
+    T(R('U.S. capitol'),R('construction date'),M()),
+
+    'What company manufactures Sinemet?':
+    I([
+        T(M(),R('instance of'),R('company')),
+        T(M(),R('manufactured'),R('Sinemet'))
+    ]),
+
+    'How big is the sun?':
+    T(R('sun'),R('size'),M()),
+
+    'How long is the Great Barrier Reef?':
+    T(R('Great barrier reef'),R('length'),M()),
+
+    'What does S.O.S. stand for?':
+    T(R('S.O.S.'),R('meaning'),M()),
+
+    'What does \` PSI\' stand for?':
+    T(R('PSI'),R('meaning'),M()),    
+
+    'What does G.M.T. stand for?':
+    T(R('G.M.T.'),R('meaning'),M()),
+
+    'What\'s the tallest piece on a chessboard?':
+    L(
+        S(
+            T(R('chessboard'), R('piece'), M()),
+            R('height')
+        )
+    ),
+
+    'What is the highest peak in Africa?':
+    L(
+        S(
+            T(R('Africa'), R('peak'), M()),
+            R('height')
+        )
+    ),
+
+    'What is artificial intelligence?':
+    T(R('artificial intelligence'),R('definition'),M()),
+
+    'What is George Lucas\'s e-mail address?':
+    T(R('George Lucas'),R('e-mail address'),M()),
+
+    'What is the definition of cosmology?':
+    T(R('cosmology'),R('definition'),M()),
+
+    'What is the name of Miss India 1994?':
+    T(R('Miss India 1994'),R('name'),M()),
+
+    'What is the population in India?':
+    T(R('India'),R('population'),M()),
+
+    'What\'s the official language of Algeria?':
+    T(R('Algeria'),R('official language'),M()),
+
+    'What\'s the Red Planet?':
+    T(R('Red Planet'),R('definition'),M()),
+
+    'What state was Herbert Hoover born in?':
+    I([
+        T(M(),R('instance of'),R('state')),
+        T(R('Herbert Hoover'),R('born in'),M())
+    ]),
+
+    'Who was Jean Nicolet?':
+    T(R('Jean Nicolet'),R('identity'),M()),
+
+    'What holidays are celebrated in Ireland?':
+    I([
+        T(M(),R('instance of'),R('holiday')),
+        T(M(),R('celebrated in'),R('Ireland'))
+    ]),
+
+    'What state is John F. Kennedy buried in?':
+    I([
+        T(M(),R('instance of'),R('state')),
+        T(R('John F. Kennedy'),R('buried in'),M())
+    ]),
+
+    'What chemicals are used in lethal injection?':
+    I([
+        T(M(),R('instance of'),R('chemical')),
+        T(M(),R('used in'),R('lethal injection'))
+    ]),
+
+    'What country do the Galapagos Islands belong to?':
+    I([
+        T(M(),R('instance of'),R('country')),
+        T(R('Galapagos Islands'),R('part of'),M())
+    ]),
+
+    'What are Brazil\'s national colors?':
+    T(R('Brazil'),R('national color'),M()),
+
+    'Which country colonized Hong Kong?':
+    I([
+        T(M(),R('instance of'),R('country')),
+        T(M(),R('colonized'),R('Hong Kong'))
+    ]),
 }

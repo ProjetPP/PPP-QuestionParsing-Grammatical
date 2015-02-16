@@ -43,7 +43,7 @@ questionExcept = {
     'what time'     : ['time','date','day','month','year'],
     'when'          : ['time','date','day','month','year'],
     'why'           : ['reason','cause','origin'],
-    'where'         : ['place','location','residence','site','country'],
+    'where'         : ['place','location','residence','site','country','origin','source'],
     'how'           : ['manner','way'],
     'how much'      : ['amount','quantity','number'],
     'how many'      : ['amount','quantity','number'],
@@ -58,8 +58,8 @@ questionExcept = {
     'how come'      : ['reason'],
     'whose'         : ['owner'],
     'how big'       : ['size'],
-    'in which'      : ['place','location','residence','site','country'],
-    'from which'    : ['place','location','residence','site','citizenship','nationality','country of citizenship','country'],
+    'in which'      : ['place','location','residence','site','country','origin','source'],
+    'from which'    : ['place','location','residence','site','citizenship','nationality','country of citizenship','country','origin','source'],
 }
 
 questionAdd = {

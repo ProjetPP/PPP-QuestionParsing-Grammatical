@@ -10,7 +10,7 @@ General
 * Vérifier que les positions/tag sont bien gérées (en particulier sur les alternatives)
 * Tell me where the DuPont company is located. Name the Ranger who was always after Yogi Bear.
 * How do you solve "Rubik's Cube"? > en quoi est transformé how
-* autres auxiliaire (have) : What dictator has the nickname "El Maximo"
+* autres auxiliaire (have) : What dictator has the nickname "El Maximo" / What plant has the largest seed?
 * Who was the leader of the Branch Davidian Cult confronted by the FBI in Waco, Texas in 1993?    >> gros sujet
 * Who Clinton defeated?                                                                           >> prq nounification échoue ? non lemmatizé ?
 * __How many__ : opérateur de comptage 
@@ -19,8 +19,13 @@ General
    > How many gas stations are there in the United States?
    > cf instance_of sur dobj >> on récupère la liste produite en sortie et on renvoie sa taille
    > How much did Mercury spend on advertising in 1993?
+   > How many stars are there on the Soviet Union's flag?
+   > How many Gutenberg Bibles are there?
+   > How many people died on D-Day?
 * Typage : refaire une map complète : dependance <-> règle de typage (et pas règle Ri <-> règle de typage)
 * processQuestionInfo : gestion des reverse, perte d'infos sur les triplets
+* Mots interrogatifs : enrichir en ajoutant un mot au participe passé : When was the U.S. capitol built? > built in
+* Ne plus lemmatizer les noms: What are Brazil's national colors? > garder le pluriel
 
 Remarks
 =======
@@ -95,6 +100,10 @@ Améliorer la MWE recognition
 Rattraper un mauvais parsing:
   * who is the president of the United states of america
   * Where is the ENS of Lyon? (merge car majuscule?)
+  * Who is Vlad the Impaler?
+  * What country made the Statue of Liberty?
+  * What is the motto for the Boy Scouts? (NER)
+  * Who is Vlad the Impaler?
 
 Good:
   * Who is the United States president

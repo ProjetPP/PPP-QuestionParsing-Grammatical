@@ -33,6 +33,7 @@ superlativeNoun = {
     'widest'    : 'width',
     'youngest'  : 'age',
     'cheapest'  : 'cost',
+    'tallest'   : 'height',
     #
     'most recent'    : 'date',
     'least recent'   : 'date',
@@ -75,6 +76,7 @@ superlativeOrder = {
     'widest'    : Last,
     'youngest'  : First,
     'cheapest'  : First,
+    'tallest'   : Last,
     #
     'most recent'    : Last,
     'least recent'   : First,
