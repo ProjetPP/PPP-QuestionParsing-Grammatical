@@ -280,7 +280,7 @@ expected = {
     'What is the continent of Fiji and Guam?':
     I([
         T(R('Fiji'), R('continent'), M()),
-        T(R('Guam'), R('continent'), M())
+        T(R('guam'), R('continent'), M())
     ]),
 
     'Who is the first president of France?':
