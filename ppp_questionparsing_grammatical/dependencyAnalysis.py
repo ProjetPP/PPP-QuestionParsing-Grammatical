@@ -37,12 +37,6 @@ def amodRule(t,qw):
     else:
         t.dependency = 'connectorUp'
 
-def nnRule(t,qw):
-    if t.namedEntityTag != t.parent.namedEntityTag and t.namedEntityTag != 'undef':
-        t.dependency = 'R2'
-    else:
-        merge(t,qw)
-
 def prepRule(t,qw):
     if t.parent.wordList[0].pos[0] == 'V':
         t.dependency = 'R3'
@@ -97,7 +91,7 @@ dependenciesMap1 = {
                 'neg'       : 'connectorUp', # need a NOT node
             'rcmod'     : 'R2',
                 'quantmod'  : remove,
-            'nn'        : nnRule,
+            'nn'        : merge,
             'npadvmod'  : 'R2',
                 'tmod'      : 'R3',
             'num'       : merge,

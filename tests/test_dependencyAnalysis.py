@@ -106,21 +106,12 @@ class HierarchyTests(TestCase):
         self.assertEqual(len(is_.child),1)
         self.assertEqual(is_.subtreeType,'PERSON')
         self.assertEqual(is_.dfsTag,0)
-        # President
-        president=is_.child[0]
-        self.assertEqual(president.wordList, [Word("president",6,'NN')])
-        self.assertEqual(president.namedEntityTag,'undef')
-        self.assertEqual(president.dependency,'R2')
-        self.assertEqual(president.parent,is_)
-        self.assertEqual(len(president.child),1)
-        self.assertEqual(president.subtreeType,'undef')
-        self.assertEqual(president.dfsTag,0)
         # US
-        us=president.child[0]
-        self.assertEqual(us.wordList, [Word("United",4,'NNP'),Word("States",5,'NNPS')])
-        self.assertEqual(us.namedEntityTag,'LOCATION')
+        us=is_.child[0]
+        self.assertEqual(us.wordList, [Word("United",4,'NNP'),Word("States",5,'NNPS'),Word("president",6,'NN')])
+        self.assertEqual(us.namedEntityTag,'undef')
         self.assertEqual(us.dependency,'R2')
-        self.assertEqual(us.parent,president)
+        self.assertEqual(us.parent,is_)
         self.assertEqual(len(us.child),0)
         self.assertEqual(us.subtreeType,'undef')
         self.assertEqual(us.dfsTag,0)
@@ -184,21 +175,12 @@ class HierarchyTests(TestCase):
         self.assertEqual(len(gilbert.child),0)
         self.assertEqual(gilbert.subtreeType,'undef')
         self.assertEqual(gilbert.dfsTag,0)      
-        # opera
-        opera=first2.child[0]
-        self.assertEqual(opera.wordList,[Word("opera",8,'NN')])
-        self.assertEqual(opera.namedEntityTag,'undef')
-        self.assertEqual(opera.dependency,'Rspl')
-        self.assertEqual(opera.parent,first2)
-        self.assertEqual(len(opera.child),1)
-        self.assertEqual(opera.subtreeType,'undef')
-        self.assertEqual(opera.dfsTag,0)  
         # sullivan
-        sullivan=opera.child[0]
-        self.assertEqual(sullivan.wordList,[Word("Sullivan",7,'NNP')])
-        self.assertEqual(sullivan.namedEntityTag,'PERSON')
-        self.assertEqual(sullivan.dependency,'R2')
-        self.assertEqual(sullivan.parent,opera)
+        sullivan=first2.child[0]
+        self.assertEqual(sullivan.wordList,[Word("Sullivan",7,'NNP'),Word("opera",8,'NN')])
+        self.assertEqual(sullivan.namedEntityTag,'undef')
+        self.assertEqual(sullivan.dependency,'Rspl')
+        self.assertEqual(sullivan.parent,first2)
         self.assertEqual(len(sullivan.child),0)
         self.assertEqual(sullivan.subtreeType,'undef')
         self.assertEqual(sullivan.dfsTag,0)
