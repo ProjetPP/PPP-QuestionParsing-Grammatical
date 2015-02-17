@@ -105,6 +105,28 @@ Current rule: merge
 * Who was the leader of the Branch Davidian Cult confronted by the FBI in Waco, Texas in 1993?
 * Where was Ulysses S. Grant born?
 
+TAG -> TAG
+> merge
+
+TAG -> nn
+What's the name of king Arthur's sword?
+Who is J. F. Kennedy?
+What is a chocolate sunday?
+What is the D Day?
+> merge
+
+nn -> nn
+
+How long is the Great Barrier Reef
+How wide is a tennis court?
+When was the U.S. capitol built?
+What is the birth date of Bob Marley
+what is the natural lang pro
+> merge
+
+nn -> TAG
+Who is the US president?
+
 nsubjpass
 =========
 

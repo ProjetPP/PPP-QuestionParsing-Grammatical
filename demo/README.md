@@ -9,7 +9,7 @@ May need to install [jsonrpclib](https://github.com/tcalmant/jsonrpclib) (for py
 Go to the folder where CoreNLP is installed (`Scripts/` folder if you have cloned the [scripts repository](https://github.com/ProjetPP/Scripts) and run `bash bootstrap_corenlp.sh`). Run:
 
 ```bash
-CORENLP="stanford-corenlp-full-2014-08-27" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp
+CORENLP="stanford-corenlp-full-2015-01-30" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp
 ```
 
 ## Choosing a demo file
