@@ -500,4 +500,7 @@ expected = {
 
     'Who is Louis XIV?':
     T(R('Louis XIV'),R('identity'),M()),
+
+    'Where is the Panama canal?':
+    T(R('Panama canal'),R('location'),M()),
 }
