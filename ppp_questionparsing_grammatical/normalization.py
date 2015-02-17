@@ -67,43 +67,43 @@ def verbStandardize(tree):
 
 def buildPredicateVerb(tree,n):
     """
-        n=0 : direct triple, n=1 : reverse triple
+        n=0 : direct triple, n=1 : inverse triple
     """
     lem = verbStandardize(tree)
     lDirect = [lem[1]]
-    lReverse = []
+    lInverse = []
     if nManual.exists(lem[0]):
         lDirect += nManual.toNouns(lem[0],0)
-        lReverse += nManual.toNouns(lem[0],1)
+        lInverse += nManual.toNouns(lem[0],1)
     elif len(lem[0].split()) > 1 and nManual.exists(lem[0].split()[0]):
         lDirect += nManual.toNouns(lem[0].split()[0],0)
-        lReverse += nManual.toNouns(lem[0].split()[0],1)
+        lInverse += nManual.toNouns(lem[0].split()[0],1)
     elif nAuto.exists(lem[0].split()[0]):
         lDirect += nAuto.toNouns(lem[0].split()[0],0)
     # Production of the resource
     if len(lDirect) == 1: # at least 1 (past part always added)
-        if len(lReverse) == 0:
-            return Resource(lDirect[0])
-        elif len(lReverse) == 1:
-            return Resource(lDirect[0]) ## value/reverse_value : lReserve[0]
+        if len(lInverse) == 0:
+            return (Resource(lDirect[0]),None)
+        elif len(lInverse) == 1:
+            return (Resource(lDirect[0]),Resource(lInverse[0])) ## value/inverse_value : lReserve[0]
         else:
-            return List([Resource(lDirect[0]) for x in lReverse]) ## value/reverse_value : lReserve
+            return (Resource(lDirect[0]),List([Resource(x) for x in lInverse])) ## value/inverse_value : lReserve
     else: # len(lDirect) > 1
-        if len(lReverse) == 0:
-            return List([Resource(x) for x in lDirect])
-        elif len(lReverse) == 1:
-            return List([Resource(x) for x in lDirect]) ## value/reverse_value : lReserve[0]
+        if len(lInverse) == 0:
+            return (List([Resource(x) for x in lDirect]),None)
+        elif len(lInverse) == 1:
+            return (List([Resource(x) for x in lDirect]),Resource(lInverse[0])) ## value/inverse_value : lReserve[0]
         else:
-            return List([Resource(x) for x in lDirect for y in lReverse]) ## value/reverse_value : lReserve
+            return (List([Resource(x) for x in lDirect]),List([Resource(x) for x in lInverse])) ## value/inverse_value : lReserve
 
 def buildPredicate(tree,n):
     """
-        n=0 : direct triple, n=1 : reverse triple
+        n=0 : direct triple, n=1 : inverse triple
     """
     if tree.wordList[0].pos[0] == 'V':
         return buildPredicateVerb(tree,n)
     else:
-        return buildValue(tree)
+        return (buildValue(tree),None)
 
 ###########################################
 # Recursive production of the normal form #
@@ -160,9 +160,17 @@ def normalize(tree):
         if t.dependency == 'R1':
             result.append(buildValue(t))
         if t.dependency == 'R2':
-            result.append(Triple(normalize(t),buildPredicate(tree,0),Missing()))
+            pred = buildPredicate(tree,0)
+            if pred[1]:
+                result.append(Triple(normalize(t),pred[0],Missing(),pred[1]))
+            else:
+                result.append(Triple(normalize(t),pred[0],Missing()))
         if t.dependency == 'R3':
-            result.append(Triple(Missing(),buildPredicate(tree,1),normalize(t)))
+            pred = buildPredicate(tree,1)
+            if pred[1]:
+                result.append(Triple(Missing(),pred[0],normalize(t),pred[1]))
+            else:
+                result.append(Triple(Missing(),pred[0],normalize(t)))
         if t.dependency == 'RinstOf':
            result.append(Triple(Missing(),Resource('instance of'),normalize(t)))
     if len(result) == 1:

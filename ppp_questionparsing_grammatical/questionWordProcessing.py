@@ -11,12 +11,11 @@ def prepareInstanceOf(t):
     """
         Replace by 'inst_of' the dependencies that appear on a path from the root of t to the root of the whole tree
     """
-    if t.dependency == 'root':
-        return
-    else:
+    if t.parent and t.parent.dependency == 'root':
         t.dependency = 'inst_of'
-        if t.parent:
-            prepareInstanceOf(t.parent)
+        return
+    elif t.parent:
+        prepareInstanceOf(t.parent)
 
 def removeWord(t,word):
     """
@@ -117,6 +116,7 @@ def processQuestionInfo(nf,w,excMap=questionExcept,addMap=questionAdd,wisMap=que
         return type(nf)(result)
     if isinstance(nf, Sort):
         result = []
+        return nf
         for u in nf.list:
             result.append(processQuestionInfo(u,w))
         return Sort(result,nf.predicate)

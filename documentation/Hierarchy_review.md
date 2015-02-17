@@ -30,6 +30,7 @@ Please, don't remove any example (they are used frequently to check the whole al
 * Who built the first pyramid? > consider "pyramide" as (single) triple / predicate
 * Who was the first Taiwanese President?
 * What is the brightest star visible from Earth?
+* What is the coldest Planet of our Solar System?
 
 appos
 =====

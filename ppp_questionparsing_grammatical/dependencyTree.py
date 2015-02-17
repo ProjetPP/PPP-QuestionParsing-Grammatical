@@ -25,10 +25,6 @@ class Word:
                 self.index == other.index and \
                 self.pos == other.pos
 
-    def __lt__(self, other):
-        assert isinstance(other,Word)
-        return (self.index,self.word,self.pos) < (other.index,other.word,other.pos)
-
 ###################
 # Dependency tree #
 ###################

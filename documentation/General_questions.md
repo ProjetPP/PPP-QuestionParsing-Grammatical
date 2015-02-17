@@ -100,15 +100,10 @@ Améliorer la MWE recognition
 Rattraper un mauvais parsing:
   * who is the president of the United states of america
   * Where is the ENS of Lyon? (merge car majuscule?)
-  * Who is Vlad the Impaler?
   * What country made the Statue of Liberty?
   * What is the motto for the Boy Scouts? (NER)
   * Who is Vlad the Impaler?
-
-Good:
-  * Who is the United States president
-  * What was the first Gilbert and Sullivan opera?
-  * Obama is the United States president.
+  * date of birth
 
 Amod:
   * Who is the French president? >> nécessite avant de transformer French en France
