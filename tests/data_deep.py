@@ -497,4 +497,13 @@ expected = {
         T(M(),R('instance of'),R('country')),
         T(M(),R('colonized'),R('Hong Kong'))
     ]),
+
+    'Where is the Panama Canal?':
+    T(R('Panama Canal'),R('location'),M()),
+
+    'Who is the daughter of Louis XIV?':
+    T(R('Louis XIV'),R('daughter'),M()),
+
+    'Who is Louis XIV?':
+    T(R('Louis XIV'),R('identity'),M()),
 }
