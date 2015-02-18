@@ -517,7 +517,6 @@ expected = {
     'Where is the Panama Canal?':
     T(R('Panama Canal'), R('location'), M()),
 
-
     'Where is the Panama canal?':
     T(R('Panama canal'), R('location'), M()),
 
