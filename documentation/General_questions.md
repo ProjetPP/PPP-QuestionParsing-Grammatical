@@ -13,19 +13,13 @@ General
 * autres auxiliaire (have) : What dictator has the nickname "El Maximo" / What plant has the largest seed?
 * Who was the leader of the Branch Davidian Cult confronted by the FBI in Waco, Texas in 1993?    >> gros sujet
 * Who Clinton defeated?                                                                           >> prq nounification échoue ? non lemmatizé ?
-* __How many__ : opérateur de comptage 
-   > How many films did Ingmar Bergman make?
-   > How many children does Barack Obama have?
-   > How many gas stations are there in the United States?
-   > cf instance_of sur dobj >> on récupère la liste produite en sortie et on renvoie sa taille
-   > How much did Mercury spend on advertising in 1993?
-   > How many stars are there on the Soviet Union's flag?
-   > How many Gutenberg Bibles are there?
-   > How many people died on D-Day?
 * Typage : refaire une map complète : dependance <-> règle de typage (et pas règle Ri <-> règle de typage)
 * processQuestionInfo : gestion des reverse, perte d'infos sur les triplets
-* Mots interrogatifs : enrichir en ajoutant un mot au participe passé : When was the U.S. capitol built? > built in
+* Mots interrogatifs : enrichir en ajoutant un mot au participe passé : When was the U.S. capitol built? > built in // ... by
 * Ne plus lemmatizer les noms: What are Brazil's national colors? > garder le pluriel
+* Nouveau qw : In what shows does Jennifer Aniston appears?
+* Traitement du qw : ne pas enrichir les participes passés
+* Donner un score aux prédicats alternatifs
 
 Remarks
 =======
@@ -92,6 +86,23 @@ Merge nn with the 2 nodes if nn above them:
  - Who is section manager for guidance and control systems at JPL?
 
 _________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________
+
+__How many__ : opérateur de comptage 
+====================================
+
+> How many films did Ingmar Bergman make?
+> How many children does Barack Obama have?
+> How many gas stations are there in the United States?
+> cf instance_of sur dobj >> on récupère la liste produite en sortie et on renvoie sa taille
+> How much did Mercury spend on advertising in 1993?
+> How many stars are there on the Soviet Union's flag?
+> How many Gutenberg Bibles are there?
+> How many people died on D-Day?
+> How many employees does Apple have
+> How many people live in China
+> How many episodes does Seinfeld have?
+
 _________________________________________________________________________________________________________________________________
 
 Améliorer la MWE recognition

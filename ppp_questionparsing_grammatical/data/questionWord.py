@@ -67,8 +67,8 @@ questionAdd = {
     # how to add info into the son of ROOT (ex: when + birth = birth date) if it doesn't already contain a word of questionExcept
     'what type'     : ['type','sort'],
     'what sort'     : ['type','sort'],
-    'what time'     : ['time','date'],
-    'when'          : ['time','date'],
+    'what time'     : ['time','date','in'],
+    'when'          : ['time','date','in'],
     'why'           : ['reason','cause','origin'],
     'where'         : ['place','location','residence','country'],
     'how'           : ['manner'],

@@ -615,4 +615,25 @@ expected = {
 
 	'What is the film genre of Full Metal Jacket?':
     T(R('Full metal jacket'), R('film genre'), M()),
+
+    'Which river does the Brooklyn Bridge cross':
+    I([
+        T(M(), R('instance of'), R('river')),
+        T(R('Brooklyn Bridge'), R('crossed'), M())
+    ]),
+
+    'How tall is Kobe Bryant':
+    T(R('Kobe Bryant'), R('height'), M()),
+
+    'List the children of Mandela':
+    T(R('Mandela'), R('child'), M()),
+
+    'Which instrument did John Lennon play?':
+    I([
+        T(M(), R('instance of'), R('instrument')),
+        T(R('John Lennon'), Li([R('plays'), R('instrument')]), M())
+    ]),
+
+    'When was Pink Floyd founded?':
+    T(R('Pink Floyd'), R('founded in'), M()),
 }

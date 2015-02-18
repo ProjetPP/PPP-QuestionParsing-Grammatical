@@ -178,6 +178,10 @@ prep
 * List of books by Roald Dahl
 * president of France
 
+##### ---
+
+* List shows with Hugh Laurie
+
 dobj
 ====
 
@@ -242,6 +246,8 @@ vmod
 ##### ---
 
 * Who was the second man to walk on the moon?
+* Give me all actors starring in Bla
+ > instance of
 
 nsubj
 =====
