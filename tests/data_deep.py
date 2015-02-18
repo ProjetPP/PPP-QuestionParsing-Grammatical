@@ -66,7 +66,7 @@ expected = {
         M()
     ),
 
-    'When was the daughters of the wife of the president of the United States born?':
+    'When were the daughters of the wife of the president of the United States born?':
     T(
         T(
             T(
@@ -147,20 +147,20 @@ expected = {
     'Which books were authored by Victor Hugo?':
     I([
         T(M(), R('instance of'), R('book')),
-        T(M(), Li([R('authored by'), R('author')]), R('Victor Hugo'))
+        T(M(), Li([R('authored by'), R('author')]), R('Victor Hugo'), R('bibliography'))
     ]),
 
     'Which president has been killed by Oswald?':
     I([
         T(M(), R('instance of'), R('president')),
-        T(M(), R('killed by'), R('Oswald'))
+        T(M(), Li([R('killed by'), R('killer')]), R('Oswald'))
     ]),
 
     'Who invented the hula hoop?':
     T(M(), R('invention'), R('hula hoop'), R('inventor')),
 
     'Who was killed by Oswald?':
-    T(M(), R('killed by'), R('Oswald')),
+    T(M(), Li([R('killed by'), R('killer')]), R('Oswald')),
 
     'Which books did Suzanne Collins write?':
     I([
@@ -215,7 +215,8 @@ expected = {
         T(
             M(),
             R('wife'),
-            T(R('John F. Kennedy'), R('sister'), M())
+            T(R('John F. Kennedy'), R('sister'), M()),
+            R('married to')
         )
     ]),
 
@@ -244,7 +245,7 @@ expected = {
     T(R('Inoco'), R('location'), M()),
 
     'Who is the author of \"Le Petit Prince\"?':
-    T(R('Le Petit Prince'), R('author'), M()),
+    T(R('Le Petit Prince'), R('author'), M(), R('bibliography')),
 
     'Who are the Beatles\' members?':
     T(R('Beatles'), R('member'), M()),
@@ -259,8 +260,8 @@ expected = {
 
     'Who is the author of \"Animal Farm\" and \"1984\"?':
     I([
-        T(R('1984'), R('author'), M()),
-        T(R('Animal Farm'), R('author'), M())
+        T(R('1984'), R('author'), M(), R('bibliography')),
+        T(R('Animal Farm'), R('author'), M(), R('bibliography'))
     ]),
 
     'Who was Darth Vader’s son?':
@@ -331,17 +332,17 @@ expected = {
         R('residence'),
         M()
     ),
-    
+
     'Where is ENS Lyon?':
     T(R('ENS Lyon'), R('location'), M()),
 
-    'who was Liz Taylor married to?':
+    'Who was Liz Taylor married to?':
     T(R('Liz Taylor'), R('married to'), M(), R('wife')),
 
     'What language is spoken in Argentina?':
     I([
         T(M(), R('instance of'), R('language')),
-        T(M(), R('spoken in'), R('Argentina'))
+        T(M(), R('spoken in'), R('Argentina'), R('language'))
     ]),
 
     'What is the capital of India?':
@@ -350,16 +351,16 @@ expected = {
     'What kings ruled on France?':
     I([
         T(M(), R('instance of'), R('king')),
-        T(M(), R('ruled on'), R('France'))
+        T(M(), R('ruled on'), R('France'), R('ruler'))
     ]),
 
     'Who was born on 1984?':
-    T(M(), Li([R('born on'), R('birthdate')]), R('1984')),
+    T(M(), Li([R('born on'), R('birthdate')]), R('1984'), R('birth')),
 
     'What author is the author of 1984?':
     I([
         T(M(), R('instance of'), R('author')),
-        T(R('1984'), R('author'), M())
+        T(R('1984'), R('author'), M(), R('bibliography'))
     ]),
 
     'Where does David Cameron live':
@@ -421,7 +422,7 @@ expected = {
     T(R('S.O.S.'), Li([R('meaning'), R('stood for')]), M()),
 
     'What does \` PSI\' stand for?':
-    T(R('PSI'), R('meaning'), M()),    
+    T(R('PSI'), R('meaning'), M()),
 
     'What does G.M.T. stand for?':
     T(R('G.M.T.'), R('meaning'), M()),
@@ -484,13 +485,13 @@ expected = {
     'What holidays are celebrated in Ireland?':
     I([
         T(M(), R('instance of'), R('holiday')),
-        T(M(), R('celebrated in'), R('Ireland'))
+        T(M(), R('celebrated in'), R('Ireland'), R('holiday'))
     ]),
 
     'What state is John F. Kennedy buried in?':
     I([
         T(M(), R('instance of'), R('state')),
-        T(R('John F. Kennedy'), R('buried in'), M())
+        T(R('John F. Kennedy'), Li([R('buried in'), R('location of burial')]), M())
     ]),
 
     'What chemicals are used in lethal injection?':
@@ -529,7 +530,7 @@ expected = {
     'What organization was founded by the Rev. Jerry Falwell?':
     I([
         T(M(), R('instance of'), R('organization')),
-        T(M(), R('founded by'), R('Rev. Jerry Falwell'))
+        T(M(), Li([R('founded by'), R('foundator')]), R('Rev. Jerry Falwell'))
     ]),
 
     'Who wrote "Lucy in the Sky with Diamonds" and "Let It Be"?':
@@ -574,7 +575,7 @@ expected = {
         )
     ),
 
-    'where is the residence of prime minister of india':
+    'Where is the residence of prime minister of india?':
     T(
         T(
             T(R('india'), R('prime minister'), M()),
@@ -600,7 +601,7 @@ expected = {
     'What is the Boston Strangler\'s name?':
     T(R('Boston Strangler'), R('name'), M()),
 
-    'What is an annotated bibliography?': 
+    'What is an annotated bibliography?':
     T(R('annotated bibliography'), R('definition'), M()),
 
     'What is the location of the Great Barrier Reef?':
