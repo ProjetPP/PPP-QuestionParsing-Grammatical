@@ -19,6 +19,12 @@ expected = {
     'Who is Homer J. Simpson?':
     T(R('Homer J. Simpson'), R('identity'), M()),
 
+    'Who is the president of France':
+    T(R('France'), R('president'), M()),
+
+    'Who is the President of Ghana':
+    T(R('Ghana'), R('President'), M()),
+
     'Who is the France\'s prime minister?':
     T(R('France'), R('prime minister'), M()),
 
@@ -135,10 +141,13 @@ expected = {
         T(M(), Li([R('director'), R('directed by')]), R('Spielberg'))
     ]),
 
+    'Who is the director of \"A Clockwork Orange\"?':
+    T(R('A Clockwork Orange'),R('director'),M()),
+
     'Which books were authored by Victor Hugo?':
     I([
         T(M(), R('instance of'), R('book')),
-        T(M(), R('authored by'), R('Victor Hugo'), R('author'))
+        T(M(), Li([R('authored by'), R('author')]), R('Victor Hugo'))
     ]),
 
     'Which president has been killed by Oswald?':
@@ -181,6 +190,13 @@ expected = {
         M()
     ),
 
+    'What is the birth date of the president of the United States?':
+    T(
+        T(R('United States'), R('president'), M()),
+        R('birth date'),
+        M()
+    ),
+
     'From which country is Alan Turing?':
     I([
         T(M(), R('instance of'), R('country')),
@@ -217,6 +233,9 @@ expected = {
 
     'What is the D Day?':
     T(R('D Day'), R('definition'), M()),
+
+    'When was D-Day?':
+    T(R('D-Day'), R('date'), M()),
 
     'What is the natural language processing?':
     T(R('natural language processing'), R('definition'), M()),
@@ -438,8 +457,17 @@ expected = {
     'What is the population in India?':
     T(R('India'), R('population'), M()),
 
+    'What is the world\'s population':
+    T(R('world'), R('population'), M()),
+
+    'What is the atomic number of polonium?':
+    T(R('polonium'), R('atomic number'), M()),
+
     'What\'s the official language of Algeria?':
     T(R('Algeria'), R('official language'), M()),
+
+    'What are the official languages of the European Union?':
+    T(R('European Union'), R('official language'), M()),
 
     'What\'s the Red Planet?':
     T(R('Red Planet'), R('definition'), M()),
@@ -489,14 +517,15 @@ expected = {
     'Where is the Panama Canal?':
     T(R('Panama Canal'), R('location'), M()),
 
+
+    'Where is the Panama canal?':
+    T(R('Panama canal'), R('location'), M()),
+
     'Who is the daughter of Louis XIV?':
     T(R('Louis XIV'), R('daughter'), M()),
 
     'Who is Louis XIV?':
     T(R('Louis XIV'), R('identity'), M()),
-
-    'Where is the Panama canal?':
-    T(R('Panama canal'), R('location'), M()),
 
     'What organization was founded by the Rev. Jerry Falwell?':
     I([
@@ -555,5 +584,35 @@ expected = {
         ),
         R('location'),
         M()
-    )
+    ),
+
+    'What is “P=NP”?':
+    T(R('P=NP'), R('definition'), M()),
+
+    'What is Head Start?':
+    T(R('Head Start'), R('definition'), M()),
+
+    'What is the nationality of Jackson Pollock?':
+    T(R('Jackson Pollock'), R('nationality'), M()),
+
+    'What is the zip code for Lyon?':
+    T(R('Lyon'), R('zip code'), M()),
+
+    'What is the Boston Strangler\'s name?':
+    T(R('Boston Strangler'), R('name'), M()),
+
+    'What is an annotated bibliography?': 
+    T(R('annotated bibliography'), R('definition'), M()),
+
+    'What is the location of the Great Barrier Reef?':
+    T(R('Great Barrier reef'), R('location'), M()),
+
+    'What is the time zone of San Francisco?':
+    T(R('San Francisco'), R('time zone'), M()),
+
+    'What is the music genre of Bob Marley?':
+    T(R('Bob Marley'), R('music genre'), M()),
+
+	'What is the film genre of Full Metal Jacket?':
+    T(R('Full metal jacket'), R('film genre'), M()),
 }
