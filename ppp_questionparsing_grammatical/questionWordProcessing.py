@@ -51,13 +51,11 @@ def identifyQuestionWord(t):
     """
     start = [None,None]
     firstWords(t,start)
-    if not start[0]: # the first word is not in the tree, we extract it directly from the sentence    
-        start[0] = Word(t.text.split(' ',1)[0],1)
-    if not start[1]:
-        try:
-            start[1] = Word(t.text.split(' ',1)[1],2)
-        except IndexError:
-            pass
+    try: # the first words are not in the tree, we extract them directly from the sentence
+        start[0] = start[0] or Word(t.text.split(' ',1)[0],1)
+        start[1] = start[1] or Word(t.text.split(' ',1)[1],2)
+    except IndexError:
+        pass
     if start[1]:
         w = start[0].word.lower() + ' ' + start[1].word.lower()
         if w in openQuestionWord or w in semiQuestionWord or w in existQuestionWord:
