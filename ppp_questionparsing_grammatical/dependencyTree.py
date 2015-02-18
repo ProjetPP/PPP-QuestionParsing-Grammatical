@@ -40,7 +40,7 @@ class DependenciesTree:
         self.namedEntityTag = namedEntityTag  # NER tag (location, ...)
         self.subtreeType = subtreeType        # type of the info represented by the subtree
         self.dependency = dependency          # dependency from self to its parent
-        self.child = child or []              # children of self
+        self.child = child or []              # children list of self
         self.text = ""                        # each node contains the initial whole sentence
         self.parent = parent                  # parent of self
         self.dfsTag = 0                       # number attributed by a dfs
@@ -69,10 +69,10 @@ class DependenciesTree:
 
     def printWordList(self):
         """
-            List of alternatives strings contained into wordList
+            List of strings contained into wordList
         """
         self.wordList.sort(key = lambda x: x.index)
-        return ' '.join([x.word for x in self.wordList if x.pos != 'POS']) # don't print part of speech words (?, !, ...)
+        return ' '.join([x.word for x in self.wordList if x.pos != 'POS']) # don't print punctiation (?, !, ...)
 
     def string(self):
         # Concatenation of the words of the root

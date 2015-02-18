@@ -16,7 +16,7 @@ nAuto = Nounificator()
 nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAuto.pickle'))
 
 file = open(resource_filename('ppp_questionparsing_grammatical', 'data/pastParticiple.pickle'), 'rb')
-pastPartDict = pickle.load(file)
+pastPartDict = pickle.load(file) # verb to past participle
 file.close()
 
 lemmatizer = WordNetLemmatizer()
@@ -33,16 +33,16 @@ def lemmatize(s,pos,lmtzr=lemmatizer):
         return 'be'
     if s.lower() in ('\'ve','\'d'): # 's : conflict between be/have
         return 'have'
-    elif pos in ('NN','NNS'):
+    elif pos in ('NN','NNS'): # noun
         return lmtzr.lemmatize(s.lower(),'n')
-    elif pos and pos[0] == 'V': 
+    elif pos and pos[0] == 'V': # verb
         return lmtzr.lemmatize(s.lower(),'v')
     else:
         return s
 
 def buildValue(tree):
     """
-        Used to build the values of the normal form (except for predicates)
+        Lemmatize the wordList and build a Resource from it
     """
     if tree.namedEntityTag == 'undef':
         for w in tree.wordList:
@@ -54,54 +54,58 @@ def verbStandardize(tree):
         Assume that tree.wordList is a verb v
         Produce (v1,v2) where v1=lemmatize(v) and v2 is the past participle of v
     """
-    w = tree.printWordList().lower() # rules on / ruled on
-    wSplit = w.split() # [rules,on] / [ruled,on]
-    wSplit[0] = lemmatize(wSplit[0],'V') # [rule,on] / [rule,on]
+    w = tree.printWordList().lower()
+    wSplit = w.split()
+    wSplit[0] = lemmatize(wSplit[0],'V')
     if tree.wordList[0].pos == 'VBN':
-        pastPart = w # .. / ruled on
-    elif wSplit[0] in pastPartDict: # ICI : map des participes passés
-        pastPart = ' '.join([pastPartDict[wSplit[0]]]+wSplit[1:]) # ruled on / ..
+        pastPart = w
+    elif wSplit[0] in pastPartDict:
+        pastPart = ' '.join([pastPartDict[wSplit[0]]]+wSplit[1:])
     else:
         pastPart = ' '.join([wSplit[0]+'ed']+wSplit[1:])
     return (' '.join(wSplit),pastPart)
 
-def buildPredicateVerb(tree,n):
+def buildPredicateVerb(tree):
     """
-        n=0 : direct triple, n=1 : inverse triple
+        Produce a predicate from the root of tree, assume that wordList is a verb v
+        Return a couple (a,b) where a must be the predicate, and b the inverse predicate 
+        (b = None if there is no inverse predicate)
     """
-    lem = verbStandardize(tree)
-    lDirect = [lem[1]]
+    lem = verbStandardize(tree) # (v1,v2) where v1=lemmatize(v) and v2 is the past participle of v (v = verb of wordList)
+    lDirect = [lem[1]] # the past participle is always a predicate
     lInverse = []
-    if nManual.exists(lem[0]):
+    if nManual.exists(lem[0]): # try to nounify the whole verb v...
         lDirect += nManual.toNouns(lem[0],0)
         lInverse += nManual.toNouns(lem[0],1)
-    elif len(lem[0].split()) > 1 and nManual.exists(lem[0].split()[0]):
+    elif len(lem[0].split()) > 1 and nManual.exists(lem[0].split()[0]): # ...otherwise, try to nounify the verb withouts its particles...
         lDirect += nManual.toNouns(lem[0].split()[0],0)
         lInverse += nManual.toNouns(lem[0].split()[0],1)
-    elif nAuto.exists(lem[0].split()[0]):
+    elif nAuto.exists(lem[0].split()[0]): # ...otherwise use the automatic nounification
         lDirect += nAuto.toNouns(lem[0].split()[0],0)
     # Production of the resource
-    if len(lDirect) == 1: # at least 1 (past part always added)
-        if len(lInverse) == 0:
+    if len(lDirect) == 1: # at least 1 predicate (past part always added)
+        if len(lInverse) == 0: # no inverse predicate
             return (Resource(lDirect[0]),None)
-        elif len(lInverse) == 1:
-            return (Resource(lDirect[0]),Resource(lInverse[0])) ## value/inverse_value : lReserve[0]
-        else:
-            return (Resource(lDirect[0]),List([Resource(x) for x in lInverse])) ## value/inverse_value : lReserve
+        elif len(lInverse) == 1: # 1 inverse predicate
+            return (Resource(lDirect[0]),Resource(lInverse[0]))
+        else:  # >1 inverse predicates
+            return (Resource(lDirect[0]),List([Resource(x) for x in lInverse]))
     else: # len(lDirect) > 1
         if len(lInverse) == 0:
             return (List([Resource(x) for x in lDirect]),None)
         elif len(lInverse) == 1:
-            return (List([Resource(x) for x in lDirect]),Resource(lInverse[0])) ## value/inverse_value : lReserve[0]
+            return (List([Resource(x) for x in lDirect]),Resource(lInverse[0]))
         else:
-            return (List([Resource(x) for x in lDirect]),List([Resource(x) for x in lInverse])) ## value/inverse_value : lReserve
+            return (List([Resource(x) for x in lDirect]),List([Resource(x) for x in lInverse]))
 
-def buildPredicate(tree,n):
+def buildPredicate(tree):
     """
-        n=0 : direct triple, n=1 : inverse triple
+        Produce a predicate from the root of tree
+        Return a couple (a,b) where a must be the predicate, and b the inverse predicate 
+        (b = None if there is no inverse predicate)
     """
     if tree.wordList[0].pos[0] == 'V':
-        return buildPredicateVerb(tree,n)
+        return buildPredicateVerb(tree)
     else:
         return (buildValue(tree),None)
 
@@ -143,7 +147,7 @@ def normalizeConjunction(tree):
 
 def normalize(tree):
     """
-        Map the tree to a normal form (= final result)
+        Map the tree to a normal form
     """
     if tree.child == []: # leaf
         return buildValue(tree)
@@ -160,13 +164,13 @@ def normalize(tree):
         if t.dependency == 'R1':
             result.append(buildValue(t))
         if t.dependency == 'R2':
-            pred = buildPredicate(tree,0)
+            pred = buildPredicate(tree)
             if pred[1]:
                 result.append(Triple(normalize(t),pred[0],Missing(),pred[1]))
             else:
                 result.append(Triple(normalize(t),pred[0],Missing()))
         if t.dependency == 'R3':
-            pred = buildPredicate(tree,1)
+            pred = buildPredicate(tree)
             if pred[1]:
                 result.append(Triple(Missing(),pred[0],normalize(t),pred[1]))
             else:

@@ -36,31 +36,32 @@ strongQuestionWord = [
 # Question words maps #
 #######################
 
-questionExcept = {
-    # words that already contain the info of the question word
-    'what type'     : ['type','sort'],
-    'what sort'     : ['type','sort'],
-    'what time'     : ['time','date','day','month','year'],
-    'when'          : ['time','date','day','month','year'],
-    'why'           : ['reason','cause','origin'],
-    'where'         : ['place','location','residence','site','country','origin','source'],
-    'how'           : ['manner','way'],
-    'how much'      : ['amount','quantity','number'],
-    'how many'      : ['amount','quantity','number'],
-    'how old'       : ['age'],
-    'how far'       : ['distance'],
-    'how long'      : ['length','runtime'],
-    'how tall'      : ['height'],
-    'how deep'      : ['depth'],
-    'how wide'      : ['width'],
-    'how fast'      : ['speed','velocity'],
-    'how often'     : ['frequency'],
-    'how come'      : ['reason'],
-    'whose'         : ['owner'],
-    'how big'       : ['size'],
-    'in which'      : ['place','location','residence','site','country','origin','source'],
-    'from which'    : ['place','location','residence','site','citizenship','nationality','country of citizenship','country','origin','source'],
-}
+# Not used for the moment
+#questionExcept = {
+#    # words that already contain the info of the question word
+#    'what type'     : ['type','sort'],
+#    'what sort'     : ['type','sort'],
+#    'what time'     : ['time','date','day','month','year'],
+#    'when'          : ['time','date','day','month','year'],
+#    'why'           : ['reason','cause','origin'],
+#    'where'         : ['place','location','residence','site','country','origin','source'],
+#    'how'           : ['manner','way'],
+#    'how much'      : ['amount','quantity','number'],
+#    'how many'      : ['amount','quantity','number'],
+#    'how old'       : ['age'],
+#    'how far'       : ['distance'],
+#    'how long'      : ['length','runtime'],
+#    'how tall'      : ['height'],
+#    'how deep'      : ['depth'],
+#    'how wide'      : ['width'],
+#    'how fast'      : ['speed','velocity'],
+#    'how often'     : ['frequency'],
+#    'how come'      : ['reason'],
+#    'whose'         : ['owner'],
+#    'how big'       : ['size'],
+#    'in which'      : ['place','location','residence','site','country','origin','source'],
+#    'from which'    : ['place','location','residence','site','citizenship','nationality','country of citizenship','country','origin','source'],
+#}
 
 questionAdd = {
     # how to add info into the son of ROOT (ex: when + birth = birth date) if it doesn't already contain a word of questionExcept

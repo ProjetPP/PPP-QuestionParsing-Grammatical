@@ -522,13 +522,13 @@ expected = {
         M()
     ),
 
-    #'List the fastest animals in the world':
-    #L(
-    #    S(
-    #        T(R('world'),R('animal'),M()),
-    #        R('speed')
-    #    )
-    #),
+    'List the fastest animals in the world':
+    L(
+        S(
+            T(R('world'),R('animal'),M()),
+            R('speed')
+        )
+    ),
 
     'What is the coldest Planet of the Solar System?':
     F(
@@ -546,10 +546,14 @@ expected = {
         )
     ),
 
-    #'where is the residence of prime minister of india':
-    #T(
-    #    T(R('india'), R('prime minister'), M()),
-    #    R('residence'),
-    #    M()
-    #),
+    'where is the residence of prime minister of india':
+    T(
+        T(
+            T(R('india'), R('prime minister'), M()),
+            R('residence'),
+            M()
+        ),
+        R('location'),
+        M()
+    )
 }

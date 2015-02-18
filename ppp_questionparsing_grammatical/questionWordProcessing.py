@@ -1,6 +1,6 @@
 import sys
 from .dependencyTree import Word, DependenciesTree
-from .data.questionWord import closeQuestionWord, openQuestionWord, strongQuestionWord, questionAdd, questionWIs, questionType, questionExcept, existQuestionWord, semiQuestionWord
+from .data.questionWord import closeQuestionWord, openQuestionWord, strongQuestionWord, questionAdd, questionWIs, questionType, existQuestionWord, semiQuestionWord
 from ppp_datamodel import Resource, Triple, Missing, Intersection, List, Union, And, Or, Exists, First, Last, Sort
 
 #####################################
@@ -9,7 +9,7 @@ from ppp_datamodel import Resource, Triple, Missing, Intersection, List, Union, 
 
 def prepareInstanceOf(t):
     """
-        Replace by 'inst_of' the dependencies that appear on a path from the root of t to the root of the whole tree
+        Replace by 'inst_of' the highest dependency that appears on a path from the root of t to the root of the whole tree
     """
     if t.parent and t.parent.dependency == 'root':
         t.dependency = 'inst_of'
@@ -23,7 +23,7 @@ def removeWord(t,word):
     """
     if word in t.wordList:
         prepareInstanceOf(t) # <<<
-        for u in t.child: # the question is in the middle of the tree
+        for u in t.child: # the word is in the middle of the tree
             u.dependency = t.dependency
             u.parent = t.parent
             t.parent.child.append(u)
@@ -87,7 +87,7 @@ def processQuestionType(t,w,typeMap=questionType):
 
 def questionWordDependencyTree(t,w):
     processQuestionType(t,w)  # type the ROOT according to the question word 
-    if w in existQuestionWord:
+    if w in existQuestionWord: # prepare the production of an Exists node
         t.child[0].dependency = 'Rexist'
 
 ####################################################
@@ -96,47 +96,52 @@ def questionWordDependencyTree(t,w):
 
 def extractPredicates(nf):
     """
-        Assume that nf is a triple of depth 1
+        Assume that nf is a triple
         Returns the lists of strings (values) that are predicates of the triple
     """
-    assert isinstance(nf,Triple) and (isinstance(nf.predicate,Resource) or isinstance(nf.predicate,List))
     if isinstance(nf.predicate,Resource):
         return [nf.predicate.value]
     else:
         return [x.value for x in nf.predicate.list]
 
-def processQuestionInfo(nf,w,excMap=questionExcept,addMap=questionAdd,wisMap=questionWIs):
+def enhanceTriple(nf,w,addMap=questionAdd,wisMap=questionWIs):
+    """
+        Add info into the triple depending on the question word
+    """
+    predList = extractPredicates(nf)
+    try:
+        if 'identity' in predList:
+             if w in strongQuestionWord or isinstance(nf.subject,Resource) or isinstance(nf.object,Resource): # strong qw or triple of depth 1
+                 return Triple(nf.subject,List([Resource(x) for x in wisMap[w]]),nf.object) # !! Other info lost (type...) (inverse_predicate: not relevant)
+             else: # delete the first level
+                if isinstance(nf.subject,Missing):
+                    return nf.object
+                else:
+                    return nf.subject
+        elif not 'instance of' in predList: # add info into the predicates list (except for instance_of predicate)
+             return Triple(nf.subject,List([Resource(x) for x in predList] + [Resource(x+' '+y) for x in predList for y in addMap[w]]),nf.object,nf.inverse_predicate) # !! Other info lost (type...) (reverse_predicate not enhance?)
+        else:
+            return nf
+    except KeyError:
+         return nf
+
+def processQuestionInfo(nf,w):
     """
         Add info into the first triples depending on the question word
     """
-    if isinstance(nf, (List,Intersection,Union,And,Or,Last,First,Exists)):
+    if isinstance(nf, (List,Intersection,Union,And,Or)):
         result = []
         for u in nf.list:
             result.append(processQuestionInfo(u,w))
         return type(nf)(result)
-    if isinstance(nf, Sort):
-        result = []
-        return nf
-        for u in nf.list:
-            result.append(processQuestionInfo(u,w))
-        return Sort(result,nf.predicate)
-    if isinstance(nf,Triple):
-        predList = extractPredicates(nf)
-        try:
-            if 'identity' in predList:
-                if w in strongQuestionWord or isinstance(nf.subject,Resource) or isinstance(nf.object,Resource): # strong qw ou arbre de profondeur 1
-                    return Triple(nf.subject,List([Resource(x) for x in wisMap[w]]),nf.object) # perte des autres infos (types, ...)
-                else: # supprimer le premier niveau de l'arbre
-                    if isinstance(nf.subject,Missing):
-                        return nf.object
-                    else:
-                        return nf.subject
-            elif set(predList) & set(excMap[w]) == set() and not 'instance of' in predList: # information du qw non contenue dans l'arbre (et pas noeud instance of)
-                return Triple(nf.subject,List([Resource(x) for x in predList] + [Resource(x+' '+y) for x in predList for y in addMap[w]]),nf.object) # perte des autres infos (types, ...) !!!!
-            else:
-                return nf
-        except KeyError:
-            return nf
+    elif isinstance(nf, (Last,First,Exists)):
+        return type(nf)(processQuestionInfo(nf.list,w))
+    elif isinstance(nf, Sort):
+        return Sort(nf.list,nf.predicate)
+    elif isinstance(nf,Triple):
+        return enhanceTriple(nf,w)
+    else:
+        assert False
 
 def questionWordNormalForm(nf,w):
     """

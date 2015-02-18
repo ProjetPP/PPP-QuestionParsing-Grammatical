@@ -157,7 +157,7 @@ def mergePrepEdge(t):
     temp = list(t.child) # copy, because t.child is changed while iterating
     for c in temp:
         mergePrepEdge(c)
-    if t.dependency.startswith('prep'): # prep_x or prepc_x (others?)
+    if t.dependency.startswith('prep'): # prep_x or prepc_x
         prep = ' '.join(t.dependency.split('_')[1:]) # type of the prep (of, in, ...)
         if t.parent.wordList[0].pos[0] == 'V':
             t.parent.wordList[0].word += ' ' + prep
