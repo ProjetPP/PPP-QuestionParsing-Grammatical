@@ -1,4 +1,4 @@
-from ppp_questionparsing_grammatical import computeTree, simplify, DependenciesTree, normalize
+from ppp_questionparsing_grammatical import computeTree, simplify, preprocessingMerge, DependenciesTree, normalFormProduction
 
 # Parsing result of "John Smith lives in the United Kingdom."
 def give_john_smith():
@@ -68,11 +68,31 @@ def give_john_smith():
 # Dot representation of the tree for "John Smith lives in the United Kingdom."
 def give_john_smith_string():
     s="digraph relations {\n"
+    s+="\t\"6\"[label=\"ROOT\",shape=box];\n"
+    s+="\t\"6\" -> \"5\"[label=\"root\"];\n"
+    s+="\t\"5\"[label=\"lives\",shape=box];\n"
+    s+="\t\"5\" -> \"1\"[label=\"nsubj\"];\n"
+    s+="\t\"5\" -> \"4\"[label=\"prep_in\"];\n"
+    s+="\t\"1\"[label=\"Smith [PERSON]\",shape=box];\n"
+    s+="\t\"1\" -> \"0\"[label=\"nn\"];\n"
+    s+="\t\"0\"[label=\"John [PERSON]\",shape=box];\n"
+    s+="\t\"4\"[label=\"Kingdom [LOCATION]\",shape=box];\n"
+    s+="\t\"4\" -> \"2\"[label=\"det\"];\n"
+    s+="\t\"4\" -> \"3\"[label=\"nn\"];\n"
+    s+="\t\"2\"[label=\"the\",shape=box];\n"
+    s+="\t\"3\"[label=\"United [LOCATION]\",shape=box];\n"
+    s+="\tlabelloc=\"t\"\tlabel=\"John Smith lives in the United Kingdom.\";\n"
+    s+="}"
+    return s
+
+# Dot representation of the tree for "John Smith lives in the United Kingdom." (prepocessing merge)
+def give_john_smith_stringMerge():
+    s="digraph relations {\n"
     s+="\t\"4\"[label=\"ROOT\",shape=box];\n"
     s+="\t\"4\" -> \"3\"[label=\"root\"];\n"
-    s+="\t\"3\"[label=\"lives\",shape=box];\n"
+    s+="\t\"3\"[label=\"lives in\",shape=box];\n"
     s+="\t\"3\" -> \"0\"[label=\"nsubj\"];\n"
-    s+="\t\"3\" -> \"2\"[label=\"prep_in\"];\n"
+    s+="\t\"3\" -> \"2\"[label=\"prep\"];\n"
     s+="\t\"0\"[label=\"John Smith [PERSON]\",shape=box];\n"
     s+="\t\"2\"[label=\"United Kingdom [LOCATION]\",shape=box];\n"
     s+="\t\"2\" -> \"1\"[label=\"det\"];\n"
@@ -494,10 +514,6 @@ def birth_place():
 def mistake():
     return {'sentences': [{'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['advmod', 'is-2', 'Where-1'], ['det', 'mistake-4', 'the-3'], ['nsubj', 'is-2', 'mistake-4'], ['det', 'mistake-6', 'the-5'], ['dep', 'mistake-4', 'mistake-6']], 'dependencies': [['root', 'ROOT', 'is'], ['advmod', 'is', 'Where'], ['det', 'mistake', 'the'], ['nsubj', 'is', 'mistake'], ['det', 'mistake', 'the'], ['dep', 'mistake', 'mistake']], 'parsetree': '(ROOT (SBARQ (WHADVP (WRB Where)) (SQ (VBZ is) (NP (DT the) (NN mistake) (NP (DT the) (NN mistake)))) (. ?)))', 'text': 'Where is the mistake the mistake?', 'words': [['Where', {'PartOfSpeech': 'WRB', 'CharacterOffsetEnd': '5', 'CharacterOffsetBegin': '0', 'NamedEntityTag': 'O', 'Lemma': 'where'}], ['is', {'PartOfSpeech': 'VBZ', 'CharacterOffsetEnd': '8', 'CharacterOffsetBegin': '6', 'NamedEntityTag': 'O', 'Lemma': 'be'}], ['the', {'PartOfSpeech': 'DT', 'CharacterOffsetEnd': '12', 'CharacterOffsetBegin': '9', 'NamedEntityTag': 'O', 'Lemma': 'the'}], ['mistake', {'PartOfSpeech': 'NN', 'CharacterOffsetEnd': '20', 'CharacterOffsetBegin': '13', 'NamedEntityTag': 'O', 'Lemma': 'mistake'}], ['the', {'PartOfSpeech': 'DT', 'CharacterOffsetEnd': '24', 'CharacterOffsetBegin': '21', 'NamedEntityTag': 'O', 'Lemma': 'the'}], ['mistake', {'PartOfSpeech': 'NN', 'CharacterOffsetEnd': '32', 'CharacterOffsetBegin': '25', 'NamedEntityTag': 'O', 'Lemma': 'mistake'}], ['?', {'PartOfSpeech': '.', 'CharacterOffsetEnd': '33', 'CharacterOffsetBegin': '32', 'NamedEntityTag': 'O', 'Lemma': '?'}]]}]}
 
-# Parsing result of "Who is Louis XIV, king of France?"
-def king():
-    return {'sentences': [{'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['dep', 'is-2', 'Who-1'], ['nn', 'XIV-4', 'Louis-3'], ['nsubj', 'is-2', 'XIV-4'], ['appos', 'XIV-4', 'king-6'], ['prep_of', 'XIV-4', 'France-8']], 'text': 'Who is Louis XIV, king of France?', 'parsetree': '(ROOT (SBARQ (WHNP (WP Who)) (SQ (VBZ is) (NP (NP (NP (NNP Louis) (NNP XIV)) (, ,) (NP (NN king))) (PP (IN of) (NP (NNP France))))) (. ?)))', 'dependencies': [['root', 'ROOT', 'is'], ['dep', 'is', 'Who'], ['nn', 'XIV', 'Louis'], ['nsubj', 'is', 'XIV'], ['appos', 'XIV', 'king'], ['prep_of', 'XIV', 'France']], 'words': [['Who', {'CharacterOffsetEnd': '3', 'CharacterOffsetBegin': '0', 'Lemma': 'who', 'NamedEntityTag': 'O', 'PartOfSpeech': 'WP'}], ['is', {'CharacterOffsetEnd': '6', 'CharacterOffsetBegin': '4', 'Lemma': 'be', 'NamedEntityTag': 'O', 'PartOfSpeech': 'VBZ'}], ['Louis', {'CharacterOffsetEnd': '12', 'CharacterOffsetBegin': '7', 'Lemma': 'Louis', 'NamedEntityTag': 'PERSON', 'PartOfSpeech': 'NNP'}], ['XIV', {'CharacterOffsetEnd': '16', 'CharacterOffsetBegin': '13', 'Lemma': 'XIV', 'NamedEntityTag': 'PERSON', 'PartOfSpeech': 'NNP'}], [',', {'CharacterOffsetEnd': '17', 'CharacterOffsetBegin': '16', 'Lemma': ',', 'NamedEntityTag': 'O', 'PartOfSpeech': ','}], ['king', {'CharacterOffsetEnd': '22', 'CharacterOffsetBegin': '18', 'Lemma': 'king', 'NamedEntityTag': 'O', 'PartOfSpeech': 'NN'}], ['of', {'CharacterOffsetEnd': '25', 'CharacterOffsetBegin': '23', 'Lemma': 'of', 'NamedEntityTag': 'O', 'PartOfSpeech': 'IN'}], ['France', {'CharacterOffsetEnd': '32', 'CharacterOffsetBegin': '26', 'Lemma': 'France', 'NamedEntityTag': 'LOCATION', 'PartOfSpeech': 'NNP'}], ['?', {'CharacterOffsetEnd': '33', 'CharacterOffsetBegin': '32', 'Lemma': '?', 'NamedEntityTag': 'O', 'PartOfSpeech': '.'}]]}]}
-
 # Parsing result of "What is the highest mountain of Tanzania?"
 def tanzania():
     return {'sentences': [{'text': 'What is the highest mountain of Tanzania?', 'indexeddependencies': [['root', 'ROOT-0', 'is-2'], ['dep', 'is-2', 'What-1'], ['det', 'mountain-5', 'the-3'], ['amod', 'mountain-5', 'highest-4'], ['nsubj', 'is-2', 'mountain-5'], ['prep_of', 'mountain-5', 'Tanzania-7']], 'parsetree': '(ROOT (SBARQ (WHNP (WP What)) (SQ (VBZ is) (NP (NP (DT the) (JJS highest) (NN mountain)) (PP (IN of) (NP (NNP Tanzania))))) (. ?)))', 'words': [['What', {'CharacterOffsetBegin': '0', 'Lemma': 'what', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '4', 'PartOfSpeech': 'WP'}], ['is', {'CharacterOffsetBegin': '5', 'Lemma': 'be', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '7', 'PartOfSpeech': 'VBZ'}], ['the', {'CharacterOffsetBegin': '8', 'Lemma': 'the', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '11', 'PartOfSpeech': 'DT'}], ['highest', {'CharacterOffsetBegin': '12', 'Lemma': 'highest', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '19', 'PartOfSpeech': 'JJS'}], ['mountain', {'CharacterOffsetBegin': '20', 'Lemma': 'mountain', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '28', 'PartOfSpeech': 'NN'}], ['of', {'CharacterOffsetBegin': '29', 'Lemma': 'of', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '31', 'PartOfSpeech': 'IN'}], ['Tanzania', {'CharacterOffsetBegin': '32', 'Lemma': 'Tanzania', 'NamedEntityTag': 'LOCATION', 'CharacterOffsetEnd': '40', 'PartOfSpeech': 'NNP'}], ['?', {'CharacterOffsetBegin': '40', 'Lemma': '?', 'NamedEntityTag': 'O', 'CharacterOffsetEnd': '41', 'PartOfSpeech': '.'}]], 'dependencies': [['root', 'ROOT', 'is'], ['dep', 'is', 'What'], ['det', 'mountain', 'the'], ['amod', 'mountain', 'highest'], ['nsubj', 'is', 'mountain'], ['prep_of', 'mountain', 'Tanzania']]}]}
@@ -517,10 +533,6 @@ def king_england():
 # Parsing result of "List books by Roald Dahl"
 def roald():
     return {'sentences': [{'text': 'List books by Roald Dahl', 'parsetree': '(ROOT (NP (NP (NN List) (NNS books)) (PP (IN by) (NP (NNP Roald) (NNP Dahl)))))', 'indexeddependencies': [['root', 'ROOT-0', 'books-2'], ['nn', 'books-2', 'List-1'], ['nn', 'Dahl-5', 'Roald-4'], ['prep_by', 'books-2', 'Dahl-5']], 'dependencies': [['root', 'ROOT', 'books'], ['nn', 'books', 'List'], ['nn', 'Dahl', 'Roald'], ['prep_by', 'books', 'Dahl']], 'words': [['List', {'NamedEntityTag': 'O', 'PartOfSpeech': 'NN', 'CharacterOffsetEnd': '4', 'Lemma': 'list', 'CharacterOffsetBegin': '0'}], ['books', {'NamedEntityTag': 'O', 'PartOfSpeech': 'NNS', 'CharacterOffsetEnd': '10', 'Lemma': 'book', 'CharacterOffsetBegin': '5'}], ['by', {'NamedEntityTag': 'O', 'PartOfSpeech': 'IN', 'CharacterOffsetEnd': '13', 'Lemma': 'by', 'CharacterOffsetBegin': '11'}], ['Roald', {'NamedEntityTag': 'PERSON', 'PartOfSpeech': 'NNP', 'CharacterOffsetEnd': '19', 'Lemma': 'Roald', 'CharacterOffsetBegin': '14'}], ['Dahl', {'NamedEntityTag': 'PERSON', 'PartOfSpeech': 'NNP', 'CharacterOffsetEnd': '24', 'Lemma': 'Dahl', 'CharacterOffsetBegin': '20'}]]}]}
-
-# Parsing result of "List of US presidents"
-def list_president1():
-    return {'sentences': [{'dependencies': [['root', 'ROOT', 'List'], ['nn', 'presidents', 'US'], ['prep_of', 'List', 'presidents']], 'words': [['List', {'CharacterOffsetBegin': '0', 'Lemma': 'list', 'PartOfSpeech': 'NN', 'CharacterOffsetEnd': '4', 'NamedEntityTag': 'O'}], ['of', {'CharacterOffsetBegin': '5', 'Lemma': 'of', 'PartOfSpeech': 'IN', 'CharacterOffsetEnd': '7', 'NamedEntityTag': 'O'}], ['US', {'CharacterOffsetBegin': '8', 'Lemma': 'US', 'PartOfSpeech': 'NNP', 'CharacterOffsetEnd': '10', 'NamedEntityTag': 'LOCATION'}], ['presidents', {'CharacterOffsetBegin': '11', 'Lemma': 'president', 'PartOfSpeech': 'NNS', 'CharacterOffsetEnd': '21', 'NamedEntityTag': 'O'}]], 'parsetree': '(ROOT (NP (NP (NN List)) (PP (IN of) (NP (NNP US) (NNS presidents)))))', 'text': 'List of US presidents', 'indexeddependencies': [['root', 'ROOT-0', 'List-1'], ['nn', 'presidents-4', 'US-3'], ['prep_of', 'List-1', 'presidents-4']]}]}
 
 # Parsing result of "List of presidents of France"
 def list_president2():

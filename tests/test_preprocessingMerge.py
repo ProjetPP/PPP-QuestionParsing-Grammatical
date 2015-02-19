@@ -1,39 +1,15 @@
 import json
 from nltk.stem.wordnet import WordNetLemmatizer
-from ppp_questionparsing_grammatical import Word, correctTree, QuotationHandler, DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother, QuotationError, NounificationError
+from ppp_questionparsing_grammatical import Word, correctTree, QuotationHandler, DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother, QuotationError, preprocessingMerge
 import data
 
 from unittest import TestCase
 
-class DependenciesTreeTests(TestCase):
+class PreprocessingMergeTests(TestCase):
 
-    def testBasicWordConstructor(self):
-        w=Word('foo',1,'bar')
-        self.assertEqual(w.word,'foo')
-        self.assertEqual(w.index,1)
-        self.assertEqual(w.pos,'bar')
-        self.assertEqual(str(w),"(foo,1,bar)")
-
-    def testAddNamedEntityTag1(self):
-        foo1 = DependenciesTree('foo1', 1, namedEntityTag='42')
-        foo2 = DependenciesTree('foo2', 3, namedEntityTag='42')
-        bar = DependenciesTree('bar', 2, namedEntityTag='undef', dependency = 'nn', parent = foo1)
-        correctTree(foo1, {'foo1-1' : foo1, 'bar-2' : bar, 'foo2-3' : foo2})
-        self.assertEqual(bar.namedEntityTag, '42')
-
-    def testAddNamedEntityTag2(self):
-        foo1 = DependenciesTree('foo1', 1, namedEntityTag='42')
-        foo2 = DependenciesTree('foo2', 3, namedEntityTag='42')
-        bar = DependenciesTree('bar', 2, namedEntityTag='27', dependency = 'nn', parent = foo1)
-        correctTree(foo1, {'foo1-1' : foo1, 'bar-2' : bar, 'foo2-3' : foo2})
-        self.assertEqual(bar.namedEntityTag, '27')
-
-    def testAddNamedEntityTag3(self):
-        foo1 = DependenciesTree('foo1', 1, namedEntityTag='42')
-        foo2 = DependenciesTree('foo2', 3, namedEntityTag='42')
-        bar = DependenciesTree('bar', 2, namedEntityTag='undef', dependency = 'amod', parent = foo1)
-        correctTree(foo1, {'foo1-1' : foo1, 'bar-2' : bar, 'foo2-3' : foo2})
-        self.assertEqual(bar.namedEntityTag, 'undef')
+    #####################
+    # Quotation handler #
+    #####################
 
     def testBasicQuotationHandler(self):
         handler = QuotationHandler("foo")
@@ -45,7 +21,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(handler.quotations["foo1"],"Lucy in the Sky with Diamonds")
         self.assertEqual(handler.quotations["foo2"],"Yellow Submarine")
 
-    def testOtherQuotationMakrs(self):
+    def testOtherQuotationMarks(self):
         handler = QuotationHandler("foo")
         sentence = "The person who sing “Let It Be” and “Lucy in the Sky with Diamonds” also sing \"Yellow Submarine\"."
         expected = "The person who sing foo0 and foo1 also sing foo2."
@@ -70,39 +46,9 @@ class DependenciesTreeTests(TestCase):
         self.assertRaises(QuotationError, handler.pull, sentence1)
         self.assertRaises(QuotationError, handler.pull, sentence2)
 
-    def testStandardization(self):
-        lmtzr = WordNetLemmatizer()
-        w=Word('presidents',1,'N')
-        self.assertEqual(w.standardize(lmtzr),[])
-        self.assertEqual(w,Word('president',1,'N'))
-        w=Word('feet',1,'N')
-        self.assertEqual(w.standardize(lmtzr),[])
-        self.assertEqual(w,Word('foot',1,'N'))
-        w=Word('born',1,'V')
-        self.assertEqual(w.standardize(lmtzr),["birth"])
-        self.assertEqual(w,Word('bear',1,'V'))
-        w=Word('died',1,'V')
-        self.assertEqual(w.standardize(lmtzr),['death'])
-        self.assertEqual(w,Word('die',1,'V'))
-        w=Word('write',1,'V')
-        self.assertEqual(w.standardize(lmtzr),['author','writer'])
-        self.assertEqual(w,Word('write',1,'V'))
-        w=Word('was',1,'V')
-        self.assertEqual(w.standardize(lmtzr),['identity'])
-        self.assertEqual(w,Word('be',1,'V'))
-        w=Word('fooverb',1,'V')
-        self.assertRaises(NounificationError, lambda: w.standardize(lmtzr))
-
-    def testBasicTreeConstructor(self):
-        n = DependenciesTree('foo',1)
-        self.assertEqual(n.wordList, [[Word('foo',1)]])
-        self.assertEqual(n.namedEntityTag, 'undef')
-        self.assertEqual(n.dependency, 'undef')
-        self.assertEqual(n.child, [])
-        self.assertEqual(n.text,"")
-        self.assertEqual(n.parent,None)
-        self.assertEqual(n.subtreeType,'undef')
-        self.assertEqual(n.dfsTag,0)
+    ###############
+    # NER merging #
+    ###############
 
     def testMerge(self):
         root1 = DependenciesTree('root',1)
@@ -117,18 +63,23 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(len(root2.child),0)
         self.assertEqual(len(root1.child),1)
         self.assertEqual(len(node1.child),2)
-        self.assertEqual(node1.wordList,[[Word('n',1),Word('n',2)]])
+        self.assertEqual(node1.wordList,[Word('n',1),Word('n',2)])
         self.assertEqual(node1.namedEntityTag,'tag1')
         self.assertEqual(node1.dependency,'dep1')
         self.assertEqual(node1.parent,root1)
         self.assertEqual(node1.subtreeType,'stype1')
         self.assertEqual(node1.dfsTag,0)
 
+    ######################
+    # preprocessingMerge #
+    ######################
+
     def testStr(self):
         tree=computeTree(data.give_john_smith()['sentences'][0])
+        preprocessingMerge(tree)
         self.maxDiff=None
         tree.sort()
-        self.assertEqual(str(tree),data.give_john_smith_string())
+        self.assertEqual(str(tree),data.give_john_smith_stringMerge())
 
     def testQuotationMerge(self):
         handler = QuotationHandler('foo')
@@ -136,11 +87,12 @@ class DependenciesTreeTests(TestCase):
         nonAmbiguousSentence = handler.pull(sentence)
         result=data.give_LSD_LIB()
         tree=computeTree(result['sentences'][0])
+        preprocessingMerge(tree)
         handler.push(tree)
         tree.sort()
         root=tree
         # Root
-        self.assertEqual(root.wordList,[[Word("ROOT",0)]])
+        self.assertEqual(root.wordList,[Word("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
         self.assertEqual(root.dependency,'undef')
         self.assertEqual(root.parent,None)
@@ -149,7 +101,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(root.dfsTag,0)
         # Wrote
         wrote=root.child[0]
-        self.assertEqual(wrote.wordList,[[Word("wrote",2,'VBD')]])
+        self.assertEqual(wrote.wordList,[Word("wrote",2,'VBD')])
         self.assertEqual(wrote.namedEntityTag,'undef')
         self.assertEqual(wrote.dependency,'root')
         self.assertEqual(wrote.parent,root)
@@ -158,7 +110,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(wrote.dfsTag,0)
         # Who
         who=wrote.child[0]
-        self.assertEqual(who.wordList,[[Word("Who",1,'WP')]])
+        self.assertEqual(who.wordList,[Word("Who",1,'WP')])
         self.assertEqual(who.namedEntityTag,'undef')
         self.assertEqual(who.dependency,'nsubj')
         self.assertEqual(who.parent,wrote)
@@ -167,7 +119,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(who.dfsTag,0)
         # Lucy in the Sky with Diamondss
         lucy=wrote.child[1]
-        self.assertEqual(lucy.wordList,[[Word("Lucy in the Sky with Diamonds",3,'QUOTE')]])
+        self.assertEqual(lucy.wordList,[Word("Lucy in the Sky with Diamonds",3,'QUOTE')])
         self.assertEqual(lucy.namedEntityTag,'QUOTATION')
         self.assertEqual(lucy.dependency,'dobj')
         self.assertEqual(lucy.parent,wrote)
@@ -176,7 +128,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(lucy.dfsTag,0)
         # Let it be
         let=lucy.child[0]
-        self.assertEqual(let.wordList,[[Word("Let It Be",5,'QUOTE')]])
+        self.assertEqual(let.wordList,[Word("Let It Be",5,'QUOTE')])
         self.assertEqual(let.namedEntityTag,'QUOTATION')
         self.assertEqual(let.dependency,'conj_and')
         self.assertEqual(let.parent,lucy)
@@ -186,10 +138,11 @@ class DependenciesTreeTests(TestCase):
 
     def testEntityTagMerge1(self):
         tree=computeTree(data.give_john_smith()['sentences'][0])
+        preprocessingMerge(tree)
         tree.sort()
         root=tree
         # Root
-        self.assertEqual(root.wordList,[[Word("ROOT",0)]])
+        self.assertEqual(root.wordList,[Word("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
         self.assertEqual(root.dependency,'undef')
         self.assertEqual(root.parent,None)
@@ -198,7 +151,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(root.dfsTag,0)
         # Lives
         lives=root.child[0]
-        self.assertEqual(lives.wordList,[[Word("lives",3,'VBZ')]])
+        self.assertEqual(lives.wordList,[Word("lives in",3,'VBZ')])
         self.assertEqual(lives.namedEntityTag,'undef')
         self.assertEqual(lives.dependency,'root')
         self.assertEqual(lives.parent,tree)
@@ -207,7 +160,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(lives.dfsTag,0)
         # John Smith
         smith=lives.child[0]
-        self.assertEqual(smith.wordList,[[Word("John",1,'NNP'),Word("Smith",2,'NNP')]])
+        self.assertEqual(smith.wordList,[Word("John",1,'NNP'),Word("Smith",2,'NNP')])
         self.assertEqual(smith.namedEntityTag,'PERSON')
         self.assertEqual(smith.dependency,'nsubj')
         self.assertEqual(smith.parent,lives)
@@ -216,16 +169,16 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(smith.dfsTag,0)
         # United Kingdom
         kingdom=lives.child[1]
-        self.assertEqual(kingdom.wordList, [[Word("United",6,'NNP'),Word("Kingdom",7,'NNP')]] )
+        self.assertEqual(kingdom.wordList, [Word("United",6,'NNP'),Word("Kingdom",7,'NNP')])
         self.assertEqual(kingdom.namedEntityTag,'LOCATION')
-        self.assertEqual(kingdom.dependency,'prep_in')
+        self.assertEqual(kingdom.dependency,'prep')
         self.assertEqual(kingdom.parent,lives)
         self.assertEqual(len(kingdom.child),1)
         self.assertEqual(kingdom.subtreeType,'undef')
         self.assertEqual(kingdom.dfsTag,0)
         # The
         the=kingdom.child[0]
-        self.assertEqual(the.wordList,[[Word("the",5,'DT')]])
+        self.assertEqual(the.wordList,[Word("the",5,'DT')])
         self.assertEqual(the.namedEntityTag,'undef')
         self.assertEqual(the.dependency,'det')
         self.assertEqual(the.parent,kingdom)
@@ -235,10 +188,11 @@ class DependenciesTreeTests(TestCase):
 
     def testEntityTagMerge2(self):
         tree=computeTree(data.give_obama_president_usa()['sentences'][0])
+        preprocessingMerge(tree)
         tree.sort()
         root=tree
         # Root
-        self.assertEqual(root.wordList,[[Word("ROOT",0)]])
+        self.assertEqual(root.wordList,[Word("ROOT",0)])
         self.assertEqual(root.namedEntityTag,'undef')
         self.assertEqual(root.dependency,'undef')
         self.assertEqual(root.parent,None)
@@ -247,7 +201,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(root.dfsTag,0)
         # Is
         is_=root.child[0]
-        self.assertEqual(is_.wordList,[[Word("is",2,'VBZ')]])
+        self.assertEqual(is_.wordList,[Word("is",2,'VBZ')])
         self.assertEqual(is_.namedEntityTag,'undef')
         self.assertEqual(is_.dependency,'root')
         self.assertEqual(is_.parent,tree)
@@ -256,7 +210,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(is_.dfsTag,0)
         # Obama
         obama=is_.child[0]
-        self.assertEqual(obama.wordList,[[Word("Obama",1,'NNP')]])
+        self.assertEqual(obama.wordList,[Word("Obama",1,'NNP')])
         self.assertEqual(obama.namedEntityTag,'PERSON')
         self.assertEqual(obama.dependency,'nsubj')
         self.assertEqual(obama.parent,is_)
@@ -265,7 +219,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(obama.dfsTag,0)
         # president
         president =is_.child[1]
-        self.assertEqual(president.wordList,[[Word("president",6,'NN')]])
+        self.assertEqual(president.wordList,[Word("president",6,'NN')])
         self.assertEqual(president.namedEntityTag,'undef')
         self.assertEqual(president.dependency,'xcomp')
         self.assertEqual(president.parent,is_)
@@ -274,7 +228,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(president.dfsTag,0)
         # The
         the=president.child[0]
-        self.assertEqual(the.wordList,[[Word("the",3,'DT')]])
+        self.assertEqual(the.wordList,[Word("the",3,'DT')])
         self.assertEqual(the.namedEntityTag,'undef')
         self.assertEqual(the.dependency,'det')
         self.assertEqual(the.parent,president)
@@ -283,7 +237,7 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(the.dfsTag,0)
         # United States
         united=president.child[1]
-        self.assertEqual(united.wordList, [[Word("United",4,'NNP'),Word("States",5,'NNPS')]])
+        self.assertEqual(united.wordList, [Word("United",4,'NNP'),Word("States",5,'NNPS')])
         self.assertEqual(united.namedEntityTag,'LOCATION')
         self.assertEqual(united.dependency,'nn')
         self.assertEqual(united.parent,president)

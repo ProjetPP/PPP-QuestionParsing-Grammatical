@@ -30,6 +30,7 @@ Please, don't remove any example (they are used frequently to check the whole al
 * Who built the first pyramid? > consider "pyramide" as (single) triple / predicate
 * Who was the first Taiwanese President?
 * What is the brightest star visible from Earth?
+* What is the coldest Planet of our Solar System?
 
 appos
 =====
@@ -53,6 +54,8 @@ xcomp
 
 * What did John Hinckley do to impress Jodie Foster?
 * Obama is the United States president.
+* who was Liz Taylor married to?
+* What is 802.11?
 
 ##### +++
 
@@ -103,18 +106,41 @@ Current rule: merge
 * Who was the leader of the Branch Davidian Cult confronted by the FBI in Waco, Texas in 1993?
 * Where was Ulysses S. Grant born?
 
+TAG -> TAG
+> merge
+
+TAG -> nn
+What's the name of king Arthur's sword?
+Who is J. F. Kennedy?
+What is a chocolate sunday?
+What is the D Day?
+> merge
+
+nn -> nn
+
+How long is the Great Barrier Reef
+How wide is a tennis court?
+When was the U.S. capitol built?
+What is the birth date of Bob Marley
+what is the natural lang pro
+> merge
+
+nn -> TAG
+Who is the US president?
+
 nsubjpass
 =========
-  
-##### ---
 
+Rule R5 ? Misparsed ?
+
+Agent:
 * Which president has been killed by Oswald?
-
-##### +++
-
 * Who was killed by Oswald?
+* which book was authored by Victor Hugo
+
 * Where is Inoco based?
 * Where was George Washington born?
+* who was Liz Taylor married to?
 
 agent
 =====
@@ -139,12 +165,22 @@ cop doesn't always disappear -> needs to remove it manually
 prep
 ====
 
-##### ---
-
 * Who was President of Afghanistan in 1994? ( of -> in)
 * Who won two gold medals in skiing in the Olympic Games in Calgary?
 * Who followed Willy Brandt as chancellor of the Federal Republic of Germany?
 * Where does most of the marijuana entering the United States come from?
+* Which kings ruled on France
+* List movies directed by Spielberg
+* What language is spoken in Argentina?
+* Who was born on 1984
+* What language is spoken in Argentina? :(
+* Who was born on 1984?
+* List of books by Roald Dahl
+* president of France
+
+##### ---
+
+* List shows with Hugh Laurie
 
 dobj
 ====
@@ -165,8 +201,9 @@ dobj
 * Who invented the hula hoop?
 * Who killed Gandhi?
 * Who elected the president?
-
-look at the verb ? (passive, acted ...)
+* Who developed Microsoft?
+* What actor married John F. Kennedy's sister?
+* Who wrote the song, "Stardust"?
 
 ##### ---
 
@@ -209,6 +246,8 @@ vmod
 ##### ---
 
 * Who was the second man to walk on the moon?
+* Give me all actors starring in Bla
+ > instance of
 
 nsubj
 =====
@@ -218,6 +257,8 @@ nsubj
 * How many films did Ingmar Bergman make?
 * Who Clinton defeated?
 * Where does the prime minister of United Kingdom live?
+* What did George Orwell write?
+* Which books did Suzanne Collins write?
 
 nsubj (Rnew):
 
@@ -235,9 +276,7 @@ nom :
 
 * Who elected the president of France?
 * What was the first Gilbert and Sullivan opera?
-* Who Clinton defeated?
 * Where is the ENS of Lyon?
-* What did Bob write ? > R3 if weak question word + not 'identity' >> problem or parsing failure ???
 * What actor married John F. Kennedy's sister
 
 ##### ---
@@ -317,5 +356,9 @@ Stanford Parser fails
 * Who held the endurance record for women pilots in 1929?
 * What dictator has the nickname "El Maximo"?
 * Of which country is Paris the capital?
-* List of books by Roald Dahl.
+* List of books by Roald Dahl. (works if you remove the ".")
 * What albums did Pearl Jam record?
+* What is 802.11?
+* What is P=NP?
+* What is forcing?
+* What is Frozen based on?

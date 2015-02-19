@@ -1,59 +1,89 @@
 import sys
 import os
-from pkg_resources import resource_filename
-from .data.exceptions import NounificationError
-from .nounDB import Nounificator
+import random
+import string
+from .data.exceptions import QuotationError
+from .dependencyTree import DependenciesTree
 
-########################################
-# Word lemmatization and nounification #
-########################################
+#####################
+# Quotation merging #
+#####################
 
-nManual = Nounificator()
-nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManual.pickle'))
-nAuto = Nounificator()
-nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAuto.pickle'))
-
-class Word:
+def index(l,pred):
     """
-        One word of the sentence
+        Return the index of the first element of l which is in pred.
+        Raise ValueError if there is not such an element.
     """
-    def __init__(self, word, index, pos=None):
-        self.word = word    # string that represents the word
-        self.index = index  # position in the sentence
-        self.pos = pos      # Part Of Speech tag (verb, noun, ...)
+    for (i, x) in enumerate(l):
+        if x in pred:
+            return i
+    raise ValueError
 
-    def __str__(self):
-        return "({0},{1},{2})".format(str(self.word),str(self.index),str(self.pos))
+class QuotationHandler:
+    """
+        An object to handle quotations in the sentences.
+    """
+    __slots__ = ('replacement', 'replacementIndex', 'quotations')
+    quotationList = ['“','”','"']
+    def __init__(self,replacement=None):
+        self.replacement = replacement
+        self.replacementIndex = 0
+        self.quotations = {}
+        random.seed()
 
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+    def checkQuotation(self,sentence):
+        """
+            Check that there is an even number of quotation marks.
+            Raise QuotationError otherwise.
+        """
+        if len([c for c in sentence if c in self.quotationList]) % 2 == 1:
+            raise QuotationError(sentence,"Odd number of quotation marks.")
 
-    def __lt__(self, other):
-        assert isinstance(other,Word)
-        return (self.index,self.word,self.pos) < (other.index,other.word,other.pos)
-       
-    def nounify(self):
+    def getReplacement(self,sentence):
         """
-            Return the string list of the closest nouns to self (die -> death)
-            Replace by hard-coded exceptions if they exist (e.g. be, have, do, bear...)
+            Return a random string which does not appear in the sentence.
         """
-        if nManual.exists(self.word):
-            return nManual.toNouns(self.word)
-        if nAuto.exists(self.word):
-            return nAuto.toNouns(self.word)
-        raise NounificationError(self.word,"cannot nounify this word")
+        sep = "".join(random.sample(string.ascii_uppercase,3))
+        while sep in sentence:
+            sep = "".join(random.sample(string.ascii_uppercase,3))
+        return sep
 
-    def standardize(self,lmtzr):
+    def pull(self,sentence):
         """
-            Apply lemmatization to the word, using the given lemmatizer
-            Return the list of strings that must replaced self.word if nounification is necessary (ie if the word is a verb), [] otherwise
+            Remove/pull the quotations from the sentence, and replace them.
         """
-        if self.pos and self.pos[0] == 'N':
-            self.word=lmtzr.lemmatize(self.word.lower(),'n')
-        elif self.pos and self.pos[0] == 'V':
-            self.word=lmtzr.lemmatize(self.word.lower(),'v')
-            return self.nounify()
-        return []
+        if not self.replacement:
+            self.replacement = self.getReplacement(sentence)
+        if self.replacementIndex == 0:
+            self.checkQuotation(sentence)
+        try:
+            indexBegin = index(sentence,self.quotationList)
+            indexEnd = indexBegin+index(sentence[indexBegin+1:],self.quotationList)+1
+        except ValueError:
+            return sentence
+        replacement = self.replacement+str(self.replacementIndex)
+        self.replacementIndex += 1
+        self.quotations[replacement] = sentence[indexBegin+1:indexEnd]
+        return self.pull(sentence[0:indexBegin]+replacement+sentence[indexEnd+1:])
+
+    def push(self,tree):
+        """
+            Replace/push the spaces in the nodes of the tree.
+        """
+        for c in tree.child:
+            self.push(c)
+        replaced = False
+        for w in tree.wordList:
+            try:
+                w.word = self.quotations[w.word]
+                w.pos = 'QUOTE'
+                replaced = True
+            except KeyError:
+                continue
+        if replaced:
+            tree.namedEntityTag = 'QUOTATION'
+        for key in self.quotations.keys():
+            tree.text = tree.text.replace(key,"``"+self.quotations[key]+"''")
 
 ###################
 # NER recognition #
@@ -102,3 +132,45 @@ def mergeNamedEntityTagSisterBrother(t):
 def mergeNamedEntityTag(t):
     mergeNamedEntityTagChildParent(t)
     mergeNamedEntityTagSisterBrother(t)
+
+##########################
+# Preposition processing #
+##########################
+
+prepSet = ['in','for','to','with','about','at','of','on','from','between','against']
+
+def mergePrepNode(t):
+    """
+        Merge x -> y into 'x y' if y is a preposition
+    """
+    temp = list(t.child) # copy, because t.child is changed while iterating
+    for c in temp:
+        mergePrepNode(c)
+    if t.printWordList() in prepSet:
+        t.parent.merge(t,True)
+
+def mergePrepEdge(t):
+    """
+        Replace a -prep_x-> b by 'a x' -prep-> b if a is a verb, a -prep-> b otherwise
+        Replace a -agent-> b by 'a by' -agent-> b
+    """
+    temp = list(t.child) # copy, because t.child is changed while iterating
+    for c in temp:
+        mergePrepEdge(c)
+    if t.dependency.startswith('prep'): # prep_x or prepc_x
+        prep = ' '.join(t.dependency.split('_')[1:]) # type of the prep (of, in, ...)
+        if t.parent.wordList[0].pos[0] == 'V':
+            t.parent.wordList[0].word += ' ' + prep
+        t.dependency = 'prep'
+    if t.dependency == 'agent':
+        assert t.parent.wordList[0].pos[0] == 'V'
+        t.parent.wordList[0].word += ' by'
+
+###################
+# Global function #
+###################
+
+def preprocessingMerge(t):
+    mergeNamedEntityTag(t)
+    mergePrepNode(t)
+    mergePrepEdge(t)

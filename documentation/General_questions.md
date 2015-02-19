@@ -3,34 +3,26 @@ General
 
 * verb+ing: do sthg special (look POS tag)? : What did Richard Feynman say upon hearing he would receive the Nobel Prize in Physics?
 * If nounification becomes powerful enough: use it to analyse superlative (biggest > size...)
-* Multiple words : Where is Inoco based? > base + place = base place :( >> en fait "base" se nounifie en "place" ?
 * Article : enlever numéro apparaissant dans noeud (et idem pour arbre) / enlever encadrement
 * data model : autoriser des listes de prédicats dans les sort ?
-* réecrire demo3 pour le rendre dépendant de DependencyTree
 * Dans le question word processing (et plus généralement) : les connecteurs ne sont pas uniquement les 1000. Les 1000 prennent les conj mais pas le superlatives.
-* Travailler sur la forme normalisée? 
-    >> garantir qu'en entrée de normalize chaque noeud contient une seule alternative
-    >> ajout des infos sur les premières feuilles / prédicats / ...
-    >> traiter les mots interrogatifs (ajout d'infos...)
-    >> seul les prédicats peuvent contenir des alternatives > le garantir
 * Recherche de wexcept/id... : uniquement prefixe/suffixe (sunday ?)
 * Vérifier que les positions/tag sont bien gérées (en particulier sur les alternatives)
-* Multiple predicates pour les sort
 * Tell me where the DuPont company is located. Name the Ranger who was always after Yogi Bear.
 * How do you solve "Rubik's Cube"? > en quoi est transformé how
-* réduire le nb de map, ajouter + d'infos
-* autres auxiliaire (have) : What dictator has the nickname "El Maximo"
-* propagation de types : nsubjRule + qw in strongQuestionWord = R5s
+* autres auxiliaire (have) : What dictator has the nickname "El Maximo" / What plant has the largest seed?
 * Who was the leader of the Branch Davidian Cult confronted by the FBI in Waco, Texas in 1993?    >> gros sujet
-* Where is Inoco based?                                                                           >> revoir la nounification associée
 * Who Clinton defeated?                                                                           >> prq nounification échoue ? non lemmatizé ?
-* Rapprocher/renommer les règles R.. similaires
-* __How many__ : opérateur de comptage 
-   > How many films did Ingmar Bergman make?
-   > How many children does Barack Obama have?
-   > How many gas stations are there in the United States?
-   > cf instance_of sur dobj >> on récupère la liste produite en sortie et on renvoie sa taille
-   > How much did Mercury spend on advertising in 1993?
+* Typage : refaire une map complète : dependance <-> règle de typage (et pas règle Ri <-> règle de typage)
+* processQuestionInfo : gestion des reverse, perte d'infos sur les triplets
+* Mots interrogatifs : enrichir en ajoutant un mot au participe passé : When was the U.S. capitol built? > built in // ... by
+* Ne plus lemmatizer les noms: What are Brazil's national colors? > garder le pluriel
+* Nouveau qw : In what shows does Jennifer Aniston appears?
+* Traitement du qw : ne pas enrichir les participes passés
+* Donner un score aux prédicats alternatifs
+* In which country is Lake Victoria > fusion is/in car in ne peut pas être supprimé de l'arbre (prep_in). De toute façon, la suppression du qw se fait après merging
+ >> solution: fusion + propre des prepositions (rajouter des Words au lieu de fusionner dans un seul word)
+* prep_by > supprimer by et inverser le triplet
 
 Remarks
 =======
@@ -45,7 +37,6 @@ Gestion des prep(c)_x
 
 go -prep_to-> ... = go to -prep->
 * What is Frozen based on?
-
 * What two US biochemists won the Nobel Prize in medicine in 1992?
 
 https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/issues/72
@@ -100,138 +91,37 @@ Merge nn with the 2 nodes if nn above them:
 _________________________________________________________________________________________________________________________________
 _________________________________________________________________________________________________________________________________
 
+__How many__ : opérateur de comptage 
+====================================
+
+> How many films did Ingmar Bergman make?
+> How many children does Barack Obama have?
+> How many gas stations are there in the United States?
+> cf instance_of sur dobj >> on récupère la liste produite en sortie et on renvoie sa taille
+> How much did Mercury spend on advertising in 1993?
+> How many stars are there on the Soviet Union's flag?
+> How many Gutenberg Bibles are there?
+> How many people died on D-Day?
+> How many employees does Apple have
+> How many people live in China
+> How many episodes does Seinfeld have?
+
+_________________________________________________________________________________________________________________________________
+
 Améliorer la MWE recognition
 ============================
 
 Rattraper un mauvais parsing:
   * who is the president of the United states of america
   * Where is the ENS of Lyon? (merge car majuscule?)
-
-Good:
-  * Who is the United States president
-  * What was the first Gilbert and Sullivan opera?
-  * Obama is the United States president.
+  * What country made the Statue of Liberty?
+  * What is the motto for the Boy Scouts? (NER)
+  * Who is Vlad the Impaler?
+  * date of birth
 
 Amod:
   * Who is the French president? >> nécessite avant de transformer French en France
   * Who was the first Taiwanese President?
 
 What organization was founded by the Rev. Jerry Falwell? >> tagger Rev car majuscule
-
-_________________________________________________________________________________________________________________________________
-
-Traitement des prep
-===================
-
-Passer prep en Rnew
-  * verbe auxiliaire : 
-   - 
-  * verbe non auxiliaire : 
-   - List movies directed by Spielberg
-   - What language is spoken in Argentina? :(
-   - What kings ruled on France?
-   - Who was born on 1984?
-  * nom : 
-   - List of books by Roald Dahl
-   - president of France
-
-_________________________________________________________________________________________________________________________________
-
-### nsubj
-
-R5
-==
-
-* Where does the president live?
-
-R3
-==
-
-R5 ou R3
-========
-
-* What did George Orwell write?
-* Which books did Suzanne Collins write?
-
-### nsubpass
-
-R5
-==
-
-R3
-==
-
-R5 ou R3
-========
-
-* Where was Ulysses S. Grant born?
-* Where is Inoco based?
-
-### agent
-
-R5
-==
-
-R3
-==
-
-R5 ou R3
-========
-
-* Who was killed by Oswald?
-* Which president has been killed by Oswald?
-* Which books were authored by Victor Hugo?
-
-----------------
-
-### dobj
-
-R5
-==
-
-R3
-==
-
-R5 ou R3
-========
-
-* Who developed Microsoft?
-* What actor married John F. Kennedy's sister?
-* Who has written "The Hitchhiker's Guide to the Galaxy"?
-* Who wrote the song, "Stardust"?
-* Who invented the hula hoop?
-* Who elected the president ?
-* Who killed Gandhi?
-
-### prep (+ V)
-
-R5
-==
-
-R3
-==
-
-* Which kings ruled on France
-* List movies directed by Spielberg
-
-R5 ou R3
-========
-
-* What language is spoken in Argentina?
-* Who followed Willy Brandt as chancellor of the Federal Republic of Germany?
-* Who was born on 1984
-
-----------------
-
-The animal | lives in | the farm.
- Subject     Predicate   Object    >> ( animal , residence , farm )
-
-The animal | lives in | the farm.
-  Object     Predicate   Subject   >> ( farm , inhabitant , animal )
-
----------------
-
-processQuestionInfo dans questionWordProcessing doit être le seul habilité à affaiblir une règle en R2 (ou R3 bis) (mais pas en R0: where is the residence)
-dependency analysis pose un R5/R3 puis processQuestionInfo affaiblie les dépendances de plus haut niveau s'il trouve l'info en-dessous
-
 

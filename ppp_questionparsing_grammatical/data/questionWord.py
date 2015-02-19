@@ -27,7 +27,7 @@ semiQuestionWord = [
 # Other classifications #
 #########################
 
-# question word that implies to add an extra triple (in practice: rule R2 vs R5) (ex: where is the capital of france : (france,capital,?) --> ((france,capital,?),location,?)
+# question word that implies to add extra information (in practice: rule R2 vs R5) (ex: where is the capital of france : (france,capital,?) --> ((france,capital,?),location,?)
 strongQuestionWord = [
     'what kind', 'what type', 'what sort', 'what time', 'when', 'why', 'where', 'how', 'how much', 'how many', 'how old', 'how far', 'how long', 'how tall', 'how deep', 'how wide', 'how fast', 'how often', 'how come', 'whose', 'how big', 'in which', 'from which'
 ]
@@ -36,38 +36,39 @@ strongQuestionWord = [
 # Question words maps #
 #######################
 
-questionExcept = {
-    # words that already contain the info of the question word
-    'what type'     : ['type','sort'],
-    'what sort'     : ['type','sort'],
-    'what time'     : ['time','date','day','month','year'],
-    'when'          : ['time','date','day','month','year'],
-    'why'           : ['reason','cause','origin'],
-    'where'         : ['place','location','residence','site','country'],
-    'how'           : ['manner','way'],
-    'how much'      : ['amount','quantity','number'],
-    'how many'      : ['amount','quantity','number'],
-    'how old'       : ['age'],
-    'how far'       : ['distance'],
-    'how long'      : ['length','runtime'],
-    'how tall'      : ['height'],
-    'how deep'      : ['depth'],
-    'how wide'      : ['width'],
-    'how fast'      : ['speed','velocity'],
-    'how often'     : ['frequency'],
-    'how come'      : ['reason'],
-    'whose'         : ['owner'],
-    'how big'       : ['size'],
-    'in which'      : ['place','location','residence','site','country'],
-    'from which'    : ['place','location','residence','site','citizenship','nationality','country of citizenship','country'],
-}
+# Not used for the moment
+#questionExcept = {
+#    # words that already contain the info of the question word
+#    'what type'     : ['type','sort'],
+#    'what sort'     : ['type','sort'],
+#    'what time'     : ['time','date','day','month','year'],
+#    'when'          : ['time','date','day','month','year'],
+#    'why'           : ['reason','cause','origin'],
+#    'where'         : ['place','location','residence','site','country','origin','source'],
+#    'how'           : ['manner','way'],
+#    'how much'      : ['amount','quantity','number'],
+#    'how many'      : ['amount','quantity','number'],
+#    'how old'       : ['age'],
+#    'how far'       : ['distance'],
+#    'how long'      : ['length','runtime'],
+#    'how tall'      : ['height'],
+#    'how deep'      : ['depth'],
+#    'how wide'      : ['width'],
+#    'how fast'      : ['speed','velocity'],
+#    'how often'     : ['frequency'],
+#    'how come'      : ['reason'],
+#    'whose'         : ['owner'],
+#    'how big'       : ['size'],
+#    'in which'      : ['place','location','residence','site','country','origin','source'],
+#    'from which'    : ['place','location','residence','site','citizenship','nationality','country of citizenship','country','origin','source'],
+#}
 
 questionAdd = {
     # how to add info into the son of ROOT (ex: when + birth = birth date) if it doesn't already contain a word of questionExcept
     'what type'     : ['type','sort'],
     'what sort'     : ['type','sort'],
-    'what time'     : ['time','date'],
-    'when'          : ['time','date'],
+    'what time'     : ['time','date','in'],
+    'when'          : ['time','date','in'],
     'why'           : ['reason','cause','origin'],
     'where'         : ['place','location','residence','country'],
     'how'           : ['manner'],

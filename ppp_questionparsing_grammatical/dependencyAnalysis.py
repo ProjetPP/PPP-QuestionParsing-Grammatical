@@ -1,11 +1,12 @@
 import sys
-from .questionWordProcessing import identifyQuestionWord, processQuestionWord
-from .preprocessing import DependenciesTree
-from .preprocessingMerge import Word
+from .questionWordProcessing import identifyQuestionWord, questionWordDependencyTree
+from .dependencyTree import Word, DependenciesTree
 from copy import deepcopy
-from nltk.stem.wordnet import WordNetLemmatizer
 from .data.exceptions import GrammaticalError
-from .data.questionWord import strongQuestionWord
+
+##############################
+# General analysis functions #
+##############################
 
 def remove(t,qw):
     t.parent.child.remove(t)
@@ -19,55 +20,55 @@ def ignore(t,qw):
 def merge(t,qw):
     t.parent.merge(t,True)
 
+##############################
+# Special analysis functions #
+##############################
+
 def amodRule(t,qw):
-    if t.wordList[0][0].pos == 'JJ':
-        if len(t.child) > 0 and t.child[0].wordList[0][0].pos == 'RBS':
+    if t.wordList[0].pos == 'JJ':
+        if len(t.child) > 0 and t.child[0].wordList[0].pos == 'RBS':
             assert len(t.child) == 1 and len(t.child[0].child) == 0
             merge(t.child[0],qw)
             t.dependency = 'connectorUp'
             return
-    if t.namedEntityTag != 'ORDINAL' and t.wordList[0][0].pos != 'JJS': # [0] : must be improved? (search in the whole list?)
+    if t.namedEntityTag != 'ORDINAL' and t.wordList[0].pos != 'JJS': # [0] : must be improved? (search in the whole list?)
         assert t.parent is not None
         merge(t,qw)
     else:
         t.dependency = 'connectorUp'
 
-def nnRule(t,qw):
-    if t.namedEntityTag != t.parent.namedEntityTag and t.namedEntityTag != 'undef':
-        t.dependency = 'R5'
-    else:
-        merge(t,qw)
-
-def mixedRule(t,qw):
-    if (t.parent.getWords() == ['identity'] and qw in strongQuestionWord) or not t.parent.wordList[0][0].pos.startswith('V'):
-        t.dependency = 'R5'
-    elif t.parent.getWords() == ['identity']:
-        t.dependency = 'R2'
-    else:
+def prepRule(t,qw):
+    if t.parent.wordList[0].pos[0] == 'V':
         t.dependency = 'R3'
+    else:
+        t.dependency = 'R2'
+
+##########################
+# General analysis rules #
+##########################
 
 dependenciesMap1 = {
     'undef'     : 'R0',
     'root'      : 'R0',
-    'inst_of'   : 'R6', # <<
+    'inst_of'   : 'RinstOf', # <<
     'dep'       : 'R1',
         'aux'       : remove,
             'auxpass'   : remove,
             'cop'       : impossible,
         'arg'       : impossible,
-            'agent'     : 'R3',
+            'agent'     : 'R3', # <<
             'comp'      : 'R3',
                 'acomp'     : 'R3',
-                'ccomp'     : 'R5',
-                'xcomp'     : 'R5',
+                'ccomp'     : 'R2',
+                'xcomp'     : 'R2',
                 'pcomp'     : 'R3',
                 'obj'       : impossible,
-                    'dobj'      : 'R5',
+                    'dobj'      : 'R3',
                     'iobj'      : 'R3',
                     'pobj'      : 'R3',
             'subj'      : impossible,
-                'nsubj'     : mixedRule, # <<
-                    'nsubjpass'    : 'R5', # or R2 if necessary
+                'nsubj'     : 'R2', # <<
+                    'nsubjpass'    : 'R2', # <<
                 'csubj'     : impossible,
                     'csubjpass'    : impossible,
         'cc'        : impossible,
@@ -76,10 +77,10 @@ dependenciesMap1 = {
             'conj_or'   : ignore,
             'conj_negcc': ignore,
         'expl'      : remove,
-        'mod'       : 'R4',
+        'mod'       : impossible,
             'amod'      : amodRule,
-            'appos'     : 'R4',
-            'advcl'     : 'R4',
+            'appos'     : 'R0', # <<
+            'advcl'     : 'R2',
             'det'       : remove,
             'predet'    : remove,
             'preconj'   : remove,
@@ -88,15 +89,15 @@ dependenciesMap1 = {
                 'mark'      : remove,
             'advmod'    : 'R2',
                 'neg'       : 'connectorUp', # need a NOT node
-            'rcmod'     : 'R4',
+            'rcmod'     : 'R2',
                 'quantmod'  : remove,
-            'nn'        : nnRule,
-            'npadvmod'  : 'R5',
+            'nn'        : merge,
+            'npadvmod'  : 'R2',
                 'tmod'      : 'R3',
             'num'       : merge,
             'number'    : merge,
-            'prep'      : mixedRule, # <<
-            'poss'      : 'R5',
+            'prep'      : prepRule, # <<
+            'poss'      : 'R2',
             'possessive': impossible,
             'prt'       : merge,
         'parataxis' : remove,
@@ -121,12 +122,9 @@ def propagateType(t,qw):
 dependenciesMap2 = {         # how to handle a -b-> c
     'R0'        : propagateType,  # normalize(c)
     'R1'        : propagateType,  # !c
-    'R2'        : propagateType,  # if c is a leaf: (normalize(c),!a,?), otherwise: normalize(c)
+    'R2'        : ignore,         # (normalize(c),!a,?)
     'R3'        : ignore,         # (?,!a,normalize(c))
-    'R4'        : ignore,         # (?,normalize(c),!a)
-    'R5'        : ignore,         # (normalize(c),!a,?)
-    'R6'        : propagateType,  # (?,instance of,c)
-    'R7'        : ignore,         # (!a,normalize(c),?)
+    'RinstOf'   : propagateType,  # (?,instance of,c)
     'Rspl'      : propagateType,  # superlative
     'RconjT'    : propagateType,  # top of a conjunction relation
     'RconjB'    : propagateType,  # bottom of a conjunction relation
@@ -153,15 +151,9 @@ def collapseMap(t,depMap,qw,down=True):
         for c in temp:
             collapseMap(c,depMap,qw,down)
 
-def collapsePrep(t):
-    """
-        Replace prep(c)_x by prep
-    """
-    temp = list(t.child) # copy, because t.child is changed while iterating
-    for c in temp:
-        collapsePrep(c)
-    if t.dependency.startswith('prep'): # prep_x or prepc_x (others?)
-        t.dependency = 'prep' # suffix of the prep not analyzed for the moment (just removed)
+##########################
+# Connectors rebalancing #
+##########################
 
 def connectorUp(t):
     """
@@ -226,22 +218,9 @@ def conjConnectorsUp(t):
         for c in temp:
             conjConnectorsUp(c)
 
-def subStandardize(t,lmtzr):
-    for c in t.child:
-        subStandardize(c,lmtzr)
-    if t.namedEntityTag == 'undef':
-        assert len(t.wordList) == 1 and len(t.wordList[0]) == 1 # len(t.wordList[0])=1 because the wordList of size>1 have been built by NER merging
-        w = t.wordList[0][0]
-        l = w.standardize(lmtzr)
-        if l !=[]:
-            t.wordList = [[Word(x,w.index,w.pos)] for x in l]
-
-def standardize(t):
-    """
-        Apply lemmatization + nounification
-    """
-    lmtzr = WordNetLemmatizer()
-    subStandardize(t,lmtzr) # standardize words (lemmatization + nounify nouns)
+###################
+# Global function #
+###################
 
 def simplify(t):
     """
@@ -249,12 +228,10 @@ def simplify(t):
         collapse dependencies of tree t
     """
     qw = identifyQuestionWord(t)             # identify and remove question word
-    standardize(t)                           # lemmatize, nounify
-    collapsePrep(t)                          # replace prep(c)_x by prep(c)
     collapseMap(t,dependenciesMap1,qw)       # collapse the tree according to dependenciesMap1
     conjConnectorsUp(t)                      # remove conjonction connectors
     connectorUp(t)                           # remove remaining amod connectors
-    processQuestionWord(t,qw)                # add info contained into the qw (type ...)
+    questionWordDependencyTree(t,qw)         # change the tree depending on the qw
     collapseMap(t,dependenciesMap2,qw)       # propagate types from bottom to top
     collapseMap(t,dependenciesMap2,qw,False) # propagate types from top to bottom
     return qw

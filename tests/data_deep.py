@@ -7,8 +7,12 @@ from ppp_datamodel import Exists as E
 from ppp_datamodel import First as F
 from ppp_datamodel import Last as L
 from ppp_datamodel import Sort as S
+from ppp_datamodel import List as Li
 
 # expected[q] is the expected tree produced by the module for the question q.
+# Warning: be careful before changing a question (e.g. the parsing depends on the uppercase letters)
+
+# Adjective or possessive? See http://ell.stackexchange.com/questions/49984/adjective-or-possessive
 
 expected = {
     'Who is the prime minister of France?':
@@ -17,14 +21,17 @@ expected = {
     'Who is Homer J. Simpson?':
     T(R('Homer J. Simpson'), R('identity'), M()),
 
-    'Who is the France\'s prime minister?':
+    'Who is the president of France':
+    T(R('France'), R('president'), M()),
+
+    'Who is the President of Ghana':
+    T(R('Ghana'), R('President'), M()),
+
+    'Who is France\'s prime minister?':
     T(R('France'), R('prime minister'), M()),
 
     'What is the birth date of Bob Marley?':
     T(R('Bob Marley'), R('birth date'), M()),
-
-    'Who lives in the farm?':
-    T(M(), R('residence'), R('farm')),
 
     'How fast is a cheetah?':
     T(R('cheetah'), R('speed'), M()),
@@ -53,7 +60,7 @@ expected = {
     T(
         L(
             S(
-                T(R('world'), R('car'), M()),
+                T(R('World'), R('car'), M()),
                 R('cost')
             ),
         ),
@@ -61,23 +68,7 @@ expected = {
         M()
     ),
 
-    'When was the daughters of the wife of the president of the United States born?':
-    T(
-        T(
-            T(
-                T(R('United States'), R('president'), M()),
-                R('wife'),
-                M()
-            ),
-            R('daughter'),
-            M()
-        ),
-        R('birth date'),
-        M()
-    ),
-
-    # this question is not correct (see previous question), and so the parsing fails (no subject in the dependency tree, but a dobj). However, it's interesting to be able to handle such questions
-    'When was born the daughters of the wife of the president of the United States?':
+    'When were the daughters of the wife of the president of the United States born?':
     T(
         T(
             T(
@@ -113,8 +104,8 @@ expected = {
 
     'Who wrote \"Le Petit Prince\" and \"Vol de Nuit\"':
     I([
-        T(R('Le Petit Prince'), R('writer'), M()),
-        T(R('Vol de Nuit'), R('writer'), M())
+        T(M(), R('bibliography'), R('Le Petit Prince'), R('author')),
+        T(M(), R('bibliography'), R('Vol de Nuit'), R('author'))
     ]),
 
     'Is there a capital of France?':
@@ -149,31 +140,34 @@ expected = {
     'List movies directed by Spielberg.':
     I([
         T(M(), R('instance of'), R('movie')),
-        T(M(), R('director'), R('Spielberg'))
+        T(M(), Li([R('director'), R('directed by')]), R('Spielberg'))
     ]),
+
+    'Who is the director of \"A Clockwork Orange\"?':
+    T(R('A Clockwork Orange'),R('director'),M()),
 
     'Which books were authored by Victor Hugo?':
     I([
         T(M(), R('instance of'), R('book')),
-        T(M(), R('author'), R('Victor Hugo'))
+        T(M(), Li([R('authored by'), R('author')]), R('Victor Hugo'), R('bibliography'))
     ]),
 
     'Which president has been killed by Oswald?':
     I([
         T(M(), R('instance of'), R('president')),
-        T(M(), R('killer'), R('Oswald'))
+        T(M(), Li([R('killed by'), R('killer')]), R('Oswald'))
     ]),
 
-    'Who invented the hula hoop?':
-    T(R('hula hoop'), R('inventor'), M()),
+    'Who invented the hula hoop?': # Should be 'Who did invent the hula hoop?'
+    T(M(), R('invention'), R('hula hoop'), R('inventor')),
 
     'Who was killed by Oswald?':
-    T(M(), R('killer'), R('Oswald')),
+    T(M(), Li([R('killed by'), R('killer')]), R('Oswald')),
 
     'Which books did Suzanne Collins write?':
     I([
         T(M(), R('instance of'), R('book')),
-        T(M(), R('author'), R('Suzanne Collins'))
+        T(R('Suzanne Collins'), R('bibliography'), M(), R('author'))
     ]),
 
     'president of France?':
@@ -186,12 +180,20 @@ expected = {
     T(R('Babar'), R('identity'), M()),
 
     'What did George Orwell write?':
-    T(M(), R('author'), R('George Orwell')),
+    T(R('George Orwell'), R('bibliography'), M(), R('author')),
 
     'Who has written \"The Hitchhiker\'s Guide to the Galaxy\"?':
-    T(R('The Hitchhiker\'s Guide to the Galaxy'), R('author'), M()),
+    T(M(), R('bibliography'), R('The Hitchhiker\'s Guide to the Galaxy'), R('author')),
 
     'When was the president of the United States born':
+    T(
+        T(R('United States'), R('president'), M()),
+        R('birth date'),
+        M(),
+        R('birth')
+    ),
+
+    'What is the birth date of the president of the United States?':
     T(
         T(R('United States'), R('president'), M()),
         R('birth date'),
@@ -210,13 +212,14 @@ expected = {
         T(R('Lake Victoria'), R('country'), M())
     ]),
 
-    'What actor married John F. Kennedy\'s sister?':
+    'What actor married John F. Kennedy\'s sister?': # Should be 'What actor did marry John F. Kennedy\s sister?'
     I([
         T(M(), R('instance of'), R('actor')),
         T(
+            M(),
+            R('wife'),
             T(R('John F. Kennedy'), R('sister'), M()),
-            R('husband'),
-            M()
+            R('married to')
         )
     ]),
 
@@ -229,29 +232,26 @@ expected = {
     'Where was Ulysses S. Grant born?':
     T(R('Ulysses S. Grant'), R('birth place'), M()),
 
-    'Who is the US president?':
-    T(R('US'), R('president'), M()),
-
-    'Who is the United States president?':
-    T(R('United States'), R('president'), M()),
-
     'What is a chocolate sunday?':
     T(R('chocolate sunday'), R('definition'), M()),
 
     'What is the D Day?':
-    T(R('d Day'), R('definition'), M()),
+    T(R('D Day'), R('definition'), M()),
+
+    'When was D-Day?':
+    T(R('D-Day'), R('date'), M()),
 
     'What is the natural language processing?':
     T(R('natural language processing'), R('definition'), M()),
 
     'Where is Inoco based?':
-    T(R('inoco'), R('location'), M()),
+    T(R('Inoco'), R('location'), M()),
 
     'Who is the author of \"Le Petit Prince\"?':
     T(R('Le Petit Prince'), R('author'), M()),
 
     'Who are the Beatles\' members?':
-    T(R('beatles'), R('member'), M()),
+    T(R('Beatles'), R('member'), M()),
 
     'What is the biggest country in South America?':
     L(
@@ -280,7 +280,7 @@ expected = {
     'What is the continent of Fiji and Guam?':
     I([
         T(R('Fiji'), R('continent'), M()),
-        T(R('guam'), R('continent'), M())
+        T(R('Guam'), R('continent'), M())
     ]),
 
     'Who is the first president of France?':
@@ -323,9 +323,320 @@ expected = {
         )
     ),
 
-    'Who developed Microsoft?':
-    T(R('Microsoft'), R('developer'), M()),
+    'Who developed Microsoft?': # Should be 'Who did develop Microsoft?'
+    T(M(), R('developed'), R('Microsoft'), R('developer')),
 
     'Give me all companies in Munich':
     T(R('Munich'), R('company'), M()),
+
+    'Where does the prime minister of United Kingdom live?':
+    T(
+        T(R('United Kingdom'), R('prime minister'), M()),
+        R('residence'),
+        M()
+    ),
+
+    'Where is ENS Lyon?':
+    T(R('ENS Lyon'), R('location'), M()),
+
+    'who was Liz Taylor married to?':
+    T(R('Liz Taylor'), R('married to'), M(), R('wife')),
+
+    'What language is spoken in Argentina?':
+    I([
+        T(M(), R('instance of'), R('language')),
+        T(M(), R('spoken in'), R('Argentina'), R('language'))
+    ]),
+
+    'What is the capital of India?':
+    T(R('India'), R('capital'), M()),
+
+    'What kings ruled on France?': # Should be 'What king did rule on France?'
+    I([
+        T(M(), R('instance of'), R('king')),
+        T(M(), R('ruled on'), R('France'), R('ruler'))
+    ]),
+
+    'Who was born on 1984?':
+    T(M(), Li([R('born on'), R('birthdate')]), R('1984'), R('birth')),
+
+    'What author is the author of 1984?':
+    I([
+        T(M(), R('instance of'), R('author')),
+        T(R('1984'), R('author'), M())
+    ]),
+
+    'Where does David Cameron live':
+    T(R('David Cameron'), R('residence'), M()),
+
+    'Where does the animal live?':
+    T(R('animal'), R('residence'), M()),
+
+    'Who lives in the farm?':
+    T(M(), Li([R('lived in'), R('residence')]), R('farm'), R('inhabitant')),
+
+    'Who wrote \"James and the Giant Peach\"?':
+    T(M(), R('bibliography'), R('James and the Giant Peach'), R('author')),
+
+    'What did Roald Dahl write':
+    T(R('Roald Dahl'), R('bibliography'), M(), R('author')),
+
+    'What\'s the name of King Arthur\'s sword?':
+    T(
+        T(R('King Arthur'), R('sword'), M()),
+        R('name'),
+        M()
+    ),
+
+    'What\'s the warmest place on earth?':
+    L(
+        S(
+            T(R('earth'), R('place'), M()),
+            R('temperature')
+        )
+    ),
+
+    'Who\'re the presidents of Europe?':
+    T(R('Europe'), R('president'), M()),
+
+    'Where do rocks come from?':
+    T(
+        R('rock'),
+        Li([R('come from'), R('origin')]),
+        M()
+    ),
+
+    'When was the U.S. capitol built?':
+    T(R('U.S. capitol'), R('construction date'), M()),
+
+    'What company manufactures Sinemet?':
+    I([
+        T(M(), R('instance of'), R('company')),
+        T(M(), R('manufactured'), R('Sinemet'))
+    ]),
+
+    'How big is the sun?':
+    T(R('sun'), R('size'), M()),
+
+    'How long is the Great Barrier Reef?':
+    T(R('Great barrier reef'), R('length'), M()),
+
+    'What does S.O.S. stand for?':
+    T(R('S.O.S.'), Li([R('meaning'), R('stood for')]), M()),
+
+    'What does \` PSI\' stand for?':
+    T(R('PSI'), R('meaning'), M()),
+
+    'What does G.M.T. stand for?':
+    T(R('G.M.T.'), R('meaning'), M()),
+
+    'What\'s the tallest piece on a chessboard?':
+    L(
+        S(
+            T(R('chessboard'), R('piece'), M()),
+            R('height')
+        )
+    ),
+
+    'What is the highest peak in Africa?':
+    L(
+        S(
+            T(R('Africa'), R('peak'), M()),
+            R('height')
+        )
+    ),
+
+    'What is artificial intelligence?':
+    T(R('artificial intelligence'), R('definition'), M()),
+
+    'What is George Lucas\'s e-mail address?':
+    T(R('George Lucas'), R('e-mail address'), M()),
+
+    'What is the definition of cosmology?':
+    T(R('cosmology'), R('definition'), M()),
+
+    'What is the name of Miss India 1994?':
+    T(R('Miss India 1994'), R('name'), M()),
+
+    'What is the population in India?':
+    T(R('India'), R('population'), M()),
+
+    'What is the world\'s population?': # Should be 'What is the world population?'
+    T(R('world'), R('population'), M()),
+
+    'What is the atomic number of polonium?':
+    T(R('polonium'), R('atomic number'), M()),
+
+    'What\'s the official language of Algeria?':
+    T(R('Algeria'), R('official language'), M()),
+
+    'What are the official languages of the European Union?':
+    T(R('European Union'), R('official language'), M()),
+
+    'What\'s the Red Planet?':
+    T(R('Red Planet'), R('definition'), M()),
+
+    'What state was Herbert Hoover born in?':
+    I([
+        T(M(), R('instance of'), R('state')),
+        T(R('Herbert Hoover'), Li([R('born in'), R('birthplace')]), M())
+    ]),
+
+    'Who was Jean Nicolet?':
+    T(R('Jean Nicolet'), R('identity'), M()),
+
+    'What holidays are celebrated in Ireland?':
+    I([
+        T(M(), R('instance of'), R('holiday')),
+        T(M(), R('celebrated in'), R('Ireland'), Li([R('holiday'), R('public holiday'), R('celebration')]))
+    ]),
+
+    'What state is John F. Kennedy buried in?':
+    I([
+        T(M(), R('instance of'), R('state')),
+        T(R('John F. Kennedy'),  Li([R('buried in'), R('location of burial'), R('burial place')]), M())
+    ]),
+
+    'What chemicals are used in lethal injection?':
+    I([
+        T(M(), R('instance of'), R('chemical')),
+        T(M(), Li([R('used in'), R('usage')]), R('lethal injection'))
+    ]),
+
+    'What country do the Galapagos Islands belong to?':
+    I([
+        T(M(), R('instance of'), R('country')),
+        T(R('Galapagos Islands'), R('part of'), M())
+    ]),
+
+    'What are Brazil\'s national colors?':
+    T(R('Brazil'), R('national color'), M()),
+
+    'Which country colonized Hong Kong?': # Should be 'Which country did colonize Hong Kong?'
+    I([
+        T(M(), R('instance of'), R('country')),
+        T(M(), Li([R('colonized'), R('colony')]), R('Hong Kong'))
+    ]),
+
+    'Where is the Panama Canal?':
+    T(R('Panama Canal'), R('location'), M()),
+
+    'Where is the Panama canal?':
+    T(R('Panama canal'), R('location'), M()),
+
+    'Who is the daughter of Louis XIV?':
+    T(R('Louis XIV'), R('daughter'), M()),
+
+    'Who is Louis XIV?':
+    T(R('Louis XIV'), R('identity'), M()),
+
+    'What organization was founded by the Rev. Jerry Falwell?':
+    I([
+        T(M(), R('instance of'), R('organization')),
+        T(M(), Li([R('founded by'), R('founder')]), R('Rev. Jerry Falwell'))
+    ]),
+
+    'Who wrote "Lucy in the Sky with Diamonds" and "Let It Be"?':
+    I([
+        T(M(), R('bibliography'), R('Lucy in the Sky with Diamonds'), R('author')),
+        T(M(), R('bibliography'), R('Let It Be'), R('author'))
+    ]),
+
+    'Where is the deepest trench in atlantic ocean?':
+    T(
+        L(
+            S(
+                T(R('atlantic ocean'),R('trench'),M()),
+                R('depth')
+            )
+        ),
+        R('location'),
+        M()
+    ),
+
+    'List the fastest animals in the world':
+    L(
+        S(
+            T(R('world'),R('animal'),M()),
+            R('speed')
+        )
+    ),
+
+    'What is the coldest Planet of the Solar System?':
+    F(
+        S(
+            T(R('Solar System'),R('planet'),M()),
+            R('temperature')
+        )
+    ),
+
+    'Give me the oldest human on earth':
+    L(
+        S(
+            T(R('earth'),R('human'),M()),
+            R('age')
+        )
+    ),
+
+    'where is the residence of prime minister of india':
+    T(
+        T(
+            T(R('india'), R('prime minister'), M()),
+            R('residence'),
+            M()
+        ),
+        R('location'),
+        M()
+    ),
+
+    'What is “P=NP”?':
+    T(R('P=NP'), R('definition'), M()),
+
+    'What is Head Start?':
+    T(R('Head Start'), R('definition'), M()),
+
+    'What is the nationality of Jackson Pollock?':
+    T(R('Jackson Pollock'), R('nationality'), M()),
+
+    'What is the zip code for Lyon?':
+    T(R('Lyon'), R('zip code'), M()),
+
+    'What is the Boston Strangler\'s name?': # 'What is Boston Strangler\'s name?' ?
+    T(R('Boston Strangler'), R('name'), M()),
+
+    'What is an annotated bibliography?':
+    T(R('annotated bibliography'), R('definition'), M()),
+
+    'What is the location of the Great Barrier Reef?':
+    T(R('Great Barrier reef'), R('location'), M()),
+
+    'What is the time zone of San Francisco?':
+    T(R('San Francisco'), R('time zone'), M()),
+
+    'What is the music genre of Bob Marley?':
+    T(R('Bob Marley'), R('music genre'), M()),
+
+	'What is the film genre of Full Metal Jacket?':
+    T(R('Full metal jacket'), R('film genre'), M()),
+
+    'Which river does the Brooklyn Bridge cross':
+    I([
+        T(M(), R('instance of'), R('river')),
+        T(R('Brooklyn Bridge'), R('crossed'), M())
+    ]),
+
+    'How tall is Kobe Bryant':
+    T(R('Kobe Bryant'), R('height'), M()),
+
+    'List the children of Mandela':
+    T(R('Mandela'), R('child'), M()),
+
+    'Which instrument did John Lennon play?':
+    I([
+        T(M(), R('instance of'), R('instrument')),
+        T(R('John Lennon'), Li([R('plays'), R('instrument')]), M())
+    ]),
+
+    'When was Pink Floyd founded?':
+    T(R('Pink Floyd'), R('founded in'), M()),
 }
