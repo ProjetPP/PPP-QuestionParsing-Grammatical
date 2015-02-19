@@ -26,8 +26,8 @@ setup(
     ],
     install_requires=[
         'python3-memcached',
-        'ppp_datamodel>=0.6.4,<0.7',
-        'ppp_libmodule>=0.6,<0.8',
+        'ppp_datamodel>=0.6.4, <0.7',
+        'ppp_libmodule>=0.6, <0.8',
         'jsonrpclib-pelix',
         'nltk'
     ],

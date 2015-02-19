@@ -17,4 +17,4 @@ def app(environ, start_response):
     return HttpRequestHandler(environ, start_response, RequestHandler) \
             .dispatch()
 
-__all__ = ['DependenciesTree','computeTree','QuotationHandler','correctTree','mergeNamedEntityTagChildParent','mergeNamedEntityTagSisterBrother','mergeNamedEntityTag','simplify', 'identifyQuestionWord','QuotationError','GrammaticalError','Nounificator','preprocessingMerge','normalFormProduction']
+__all__ = ['DependenciesTree', 'computeTree', 'QuotationHandler', 'correctTree', 'mergeNamedEntityTagChildParent', 'mergeNamedEntityTagSisterBrother', 'mergeNamedEntityTag', 'simplify', 'identifyQuestionWord', 'QuotationError', 'GrammaticalError', 'Nounificator', 'preprocessingMerge', 'normalFormProduction']

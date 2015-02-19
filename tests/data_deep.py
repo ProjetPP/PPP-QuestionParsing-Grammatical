@@ -144,7 +144,7 @@ expected = {
     ]),
 
     'Who is the director of \"A Clockwork Orange\"?':
-    T(R('A Clockwork Orange'),R('director'),M()),
+    T(R('A Clockwork Orange'), R('director'), M()),
 
     'Which books were authored by Victor Hugo?':
     I([
@@ -546,7 +546,7 @@ expected = {
     T(
         L(
             S(
-                T(R('atlantic ocean'),R('trench'),M()),
+                T(R('atlantic ocean'), R('trench'), M()),
                 R('depth')
             )
         ),
@@ -557,7 +557,7 @@ expected = {
     'List the fastest animals in the world':
     L(
         S(
-            T(R('world'),R('animal'),M()),
+            T(R('world'), R('animal'), M()),
             R('speed')
         )
     ),
@@ -565,7 +565,7 @@ expected = {
     'What is the coldest Planet of the Solar System?':
     F(
         S(
-            T(R('Solar System'),R('planet'),M()),
+            T(R('Solar System'), R('planet'), M()),
             R('temperature')
         )
     ),
@@ -573,7 +573,7 @@ expected = {
     'Give me the oldest human on earth':
     L(
         S(
-            T(R('earth'),R('human'),M()),
+            T(R('earth'), R('human'), M()),
             R('age')
         )
     ),

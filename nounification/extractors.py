@@ -14,10 +14,10 @@ def buildWikidataProperties():
     """
     properties = set()
     maxRange=60
-    for i in range(0,maxRange):
-        print("%d/%d"%(i+1,maxRange))
-        propertiesIDs = '|'.join(['P%d'%x for x in range(50*i+1,50*(i+1)+1)])
-        request = requests.get('http://www.wikidata.org/w/api.php',params={'action':'wbgetentities', 'sites':'itwiki', 'ids':propertiesIDs, 'format':'json'})
+    for i in range(0, maxRange):
+        print("%d/%d"%(i+1, maxRange))
+        propertiesIDs = '|'.join(['P%d'%x for x in range(50*i+1, 50*(i+1)+1)])
+        request = requests.get('http://www.wikidata.org/w/api.php', params={'action':'wbgetentities', 'sites':'itwiki', 'ids':propertiesIDs, 'format':'json'})
         j = request.json()
         if j['success'] == 0:
             continue
@@ -55,5 +55,5 @@ if __name__ == "__main__":
     if sys.argv[2] == '-v':
         data = buildVerbs()
     f = open(sys.argv[1], 'wb')
-    pickle.dump(data,f)
+    pickle.dump(data, f)
     f.close()

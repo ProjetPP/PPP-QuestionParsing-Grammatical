@@ -7,7 +7,7 @@ def addNamedEntityTag(tree, nameToNodes, words):
     def nnDependent(n1, n2):
         return (n1.parent == n2 and n1.dependency == 'nn')\
             or (n2.parent == n1 and n2.dependency == 'nn')
-    for i in range(1,len(words)-1):
+    for i in range(1, len(words)-1):
         previous = nameToNodes[words[i-1]]
         current = nameToNodes[words[i]]
         next = nameToNodes[words[i+1]]

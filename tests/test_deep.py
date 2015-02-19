@@ -10,28 +10,28 @@ import sys
 
 import data_deep
 
-class RequestHandlerTest(PPPTestCase(app),InclusionTestCase):
+class RequestHandlerTest(PPPTestCase(app), InclusionTestCase):
     def getFrench(self, sentence, lenAnswer):
         assert(lenAnswer < 2)
         j = {'id': '1', 'language': 'fr', 'measures': {}, 'trace': [],
             'tree': {'type': 'sentence', 'value': 'Ceci est une phrase'}}
         r = self.request(j)
-        self.assertEqual(len(r),[])
+        self.assertEqual(len(r), [])
 
     def getAnswer(self, sentence, lenAnswer):
         assert(lenAnswer < 2)
         j = {'id': '1', 'language': 'en', 'measures': {}, 'trace': [],
             'tree': {'type': 'sentence', 'value': sentence}}
         r = self.request(j)
-        self.assertEqual(len(r),lenAnswer)
+        self.assertEqual(len(r), lenAnswer)
         if len(r) == 0:
             return None
         else:
             return r[0].tree
 
     def checkQuestion(self, sentence, expectedTree):
-        resultTree = self.getAnswer(sentence,1)
-        self.assertIncluded(expectedTree,resultTree)
+        resultTree = self.getAnswer(sentence, 1)
+        self.assertIncluded(expectedTree, resultTree)
 
     def testNonSentence(self):
         answer = self.request({'id': '1', 'language': 'en', 'measures': {}, 'trace': [],
@@ -39,12 +39,12 @@ class RequestHandlerTest(PPPTestCase(app),InclusionTestCase):
         self.assertEqual(len(answer), 0)
 
     def testQuotationError(self):
-        self.getAnswer("What is \"the birth\" date \"of George Washington?",0)
+        self.getAnswer("What is \"the birth\" date \"of George Washington?", 0)
 
     def testResourceOutput(self):
-        self.getAnswer("Yoda",0)
+        self.getAnswer("Yoda", 0)
 
     def testQuestions(self):
-        for (sentence,expectedTree) in data_deep.expected.items():
-            self.checkQuestion(sentence,expectedTree)
+        for (sentence, expectedTree) in data_deep.expected.items():
+            self.checkQuestion(sentence, expectedTree)
         print("Deep test: %s questions successfully checked." % len(data_deep.expected.items()), file=sys.stderr)

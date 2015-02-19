@@ -11,8 +11,8 @@ class StandardTripleTests(TestCase):
         tree = computeTree(data.give_chief()['sentences'][0])
         preprocessingMerge(tree)
         qw = simplify(tree)
-        result = normalFormProduction(tree,qw)
-        self.assertEqual(result,{
+        result = normalFormProduction(tree, qw)
+        self.assertEqual(result, {
     "list": [
         {
             "type": "triple",
@@ -60,8 +60,8 @@ class StandardTripleTests(TestCase):
         tree = computeTree(data.give_opera()['sentences'][0])
         preprocessingMerge(tree)
         qw = simplify(tree)
-        result = normalFormProduction(tree,qw)
-        self.assertEqual(result,{
+        result = normalFormProduction(tree, qw)
+        self.assertEqual(result, {
     "list": [
         {
             "list": {
@@ -99,8 +99,8 @@ class StandardTripleTests(TestCase):
         tree = computeTree(data.give_president_of_USA()['sentences'][0])
         preprocessingMerge(tree)
         qw = simplify(tree)
-        result = normalFormProduction(tree,qw)
-        self.assertEqual(result,{
+        result = normalFormProduction(tree, qw)
+        self.assertEqual(result, {
     "object": {
         "type": "missing"
     },
@@ -124,8 +124,8 @@ class StandardTripleTests(TestCase):
         handler.push(tree)
         preprocessingMerge(tree)
         qw = simplify(tree)
-        result = normalFormProduction(tree,qw)
-        self.assertEqual(result,{
+        result = normalFormProduction(tree, qw)
+        self.assertEqual(result, {
     "list": [
         {
             "inverse-predicate": {
@@ -231,8 +231,8 @@ class StandardTripleTests(TestCase):
         tree = computeTree(data.give_obama_president_usa()['sentences'][0])
         preprocessingMerge(tree)
         qw = simplify(tree)
-        result = normalFormProduction(tree,qw)
-        self.assertEqual(result,{
+        result = normalFormProduction(tree, qw)
+        self.assertEqual(result, {
     "type": "intersection",
     "list": [
         {
@@ -296,8 +296,8 @@ class StandardTripleTests(TestCase):
         tree = computeTree(data.mistake()['sentences'][0])
         preprocessingMerge(tree)
         qw = simplify(tree)
-        result = normalFormProduction(tree,qw)
-        self.assertEqual(result,{
+        result = normalFormProduction(tree, qw)
+        self.assertEqual(result, {
     "subject": {
         "type": "resource",
         "value": "mistake"
@@ -334,8 +334,8 @@ class StandardTripleTests(TestCase):
         tree = computeTree(data.tanzania()['sentences'][0])
         preprocessingMerge(tree)
         qw = simplify(tree)
-        result = normalFormProduction(tree,qw)
-        self.assertEqual(result,{
+        result = normalFormProduction(tree, qw)
+        self.assertEqual(result, {
     "list": {
         "list": {
             "object": {
@@ -364,8 +364,8 @@ class StandardTripleTests(TestCase):
         tree = computeTree(data.car()['sentences'][0])
         preprocessingMerge(tree)
         qw = simplify(tree)
-        result = normalFormProduction(tree,qw)
-        self.assertEqual(result,{
+        result = normalFormProduction(tree, qw)
+        self.assertEqual(result, {
     "list": {
         "list": {
             "subject": {
@@ -399,8 +399,8 @@ class StandardTripleTests(TestCase):
         tree = computeTree(data.king_england()['sentences'][0])
         preprocessingMerge(tree)
         qw = simplify(tree)
-        result = normalFormProduction(tree,qw)
-        self.assertEqual(result,{
+        result = normalFormProduction(tree, qw)
+        self.assertEqual(result, {
     "list": {
         "predicate": {
             "type": "resource",
@@ -422,8 +422,8 @@ class StandardTripleTests(TestCase):
         tree = computeTree(data.roald()['sentences'][0])
         preprocessingMerge(tree)
         qw = simplify(tree)
-        result = normalFormProduction(tree,qw)
-        self.assertEqual(result,{
+        result = normalFormProduction(tree, qw)
+        self.assertEqual(result, {
     "subject": {
         "value": "Roald Dahl",
         "type": "resource"
@@ -442,8 +442,8 @@ class StandardTripleTests(TestCase):
         tree = computeTree(data.list_president2()['sentences'][0])
         preprocessingMerge(tree)
         qw = simplify(tree)
-        result = normalFormProduction(tree,qw)
-        self.assertEqual(result,{
+        result = normalFormProduction(tree, qw)
+        self.assertEqual(result, {
     "type": "triple",
     "object": {
         "type": "missing"
@@ -462,8 +462,8 @@ class StandardTripleTests(TestCase):
         tree = computeTree(data.capital1()['sentences'][0])
         preprocessingMerge(tree)
         qw = simplify(tree)
-        result = normalFormProduction(tree,qw)
-        self.assertEqual(result,{
+        result = normalFormProduction(tree, qw)
+        self.assertEqual(result, {
     "predicate": {
         "type": "resource",
         "value": "capital"
@@ -482,8 +482,8 @@ class StandardTripleTests(TestCase):
         tree = computeTree(data.capital2()['sentences'][0])
         preprocessingMerge(tree)
         qw = simplify(tree)
-        result = normalFormProduction(tree,qw)
-        self.assertEqual(result,{
+        result = normalFormProduction(tree, qw)
+        self.assertEqual(result, {
     "predicate": {
         "type": "resource",
         "value": "capital"

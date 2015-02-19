@@ -9,7 +9,7 @@ from .dependencyTree import DependenciesTree
 # Quotation merging #
 #####################
 
-def index(l,pred):
+def index(l, pred):
     """
         Return the index of the first element of l which is in pred.
         Raise ValueError if there is not such an element.
@@ -24,31 +24,31 @@ class QuotationHandler:
         An object to handle quotations in the sentences.
     """
     __slots__ = ('replacement', 'replacementIndex', 'quotations')
-    quotationList = ['“','”','"']
-    def __init__(self,replacement=None):
+    quotationList = ['“', '”', '"']
+    def __init__(self, replacement=None):
         self.replacement = replacement
         self.replacementIndex = 0
         self.quotations = {}
         random.seed()
 
-    def checkQuotation(self,sentence):
+    def checkQuotation(self, sentence):
         """
             Check that there is an even number of quotation marks.
             Raise QuotationError otherwise.
         """
         if len([c for c in sentence if c in self.quotationList]) % 2 == 1:
-            raise QuotationError(sentence,"Odd number of quotation marks.")
+            raise QuotationError(sentence, "Odd number of quotation marks.")
 
-    def getReplacement(self,sentence):
+    def getReplacement(self, sentence):
         """
             Return a random string which does not appear in the sentence.
         """
-        sep = "".join(random.sample(string.ascii_uppercase,3))
+        sep = "".join(random.sample(string.ascii_uppercase, 3))
         while sep in sentence:
-            sep = "".join(random.sample(string.ascii_uppercase,3))
+            sep = "".join(random.sample(string.ascii_uppercase, 3))
         return sep
 
-    def pull(self,sentence):
+    def pull(self, sentence):
         """
             Remove/pull the quotations from the sentence, and replace them.
         """
@@ -57,8 +57,8 @@ class QuotationHandler:
         if self.replacementIndex == 0:
             self.checkQuotation(sentence)
         try:
-            indexBegin = index(sentence,self.quotationList)
-            indexEnd = indexBegin+index(sentence[indexBegin+1:],self.quotationList)+1
+            indexBegin = index(sentence, self.quotationList)
+            indexEnd = indexBegin+index(sentence[indexBegin+1:], self.quotationList)+1
         except ValueError:
             return sentence
         replacement = self.replacement+str(self.replacementIndex)
@@ -66,7 +66,7 @@ class QuotationHandler:
         self.quotations[replacement] = sentence[indexBegin+1:indexEnd]
         return self.pull(sentence[0:indexBegin]+replacement+sentence[indexEnd+1:])
 
-    def push(self,tree):
+    def push(self, tree):
         """
             Replace/push the spaces in the nodes of the tree.
         """
@@ -83,7 +83,7 @@ class QuotationHandler:
         if replaced:
             tree.namedEntityTag = 'QUOTATION'
         for key in self.quotations.keys():
-            tree.text = tree.text.replace(key,"``"+self.quotations[key]+"''")
+            tree.text = tree.text.replace(key, "``"+self.quotations[key]+"''")
 
 ###################
 # NER recognition #
@@ -105,7 +105,7 @@ def mergeNamedEntityTagChildParent(t):
         if c.namedEntityTag == t.namedEntityTag and not c.dependency.startswith('conj'):
             sameTagChild.add(c)
     for c in sameTagChild:
-        t.merge(c,True)
+        t.merge(c, True)
 
 def mergeNamedEntityTagSisterBrother(t):
     """
@@ -127,7 +127,7 @@ def mergeNamedEntityTagSisterBrother(t):
     for sameTag in tagToNodes.values():
         x = sameTag.pop()
         for other in sameTag:
-            x.merge(other,True)
+            x.merge(other, True)
 
 def mergeNamedEntityTag(t):
     mergeNamedEntityTagChildParent(t)
@@ -137,7 +137,7 @@ def mergeNamedEntityTag(t):
 # Preposition processing #
 ##########################
 
-prepSet = ['in','for','to','with','about','at','of','on','from','between','against']
+prepSet = ['in', 'for', 'to', 'with', 'about', 'at', 'of', 'on', 'from', 'between', 'against']
 
 def mergePrepNode(t):
     """
@@ -147,7 +147,7 @@ def mergePrepNode(t):
     for c in temp:
         mergePrepNode(c)
     if t.printWordList() in prepSet:
-        t.parent.merge(t,True)
+        t.parent.merge(t, True)
 
 def mergePrepEdge(t):
     """

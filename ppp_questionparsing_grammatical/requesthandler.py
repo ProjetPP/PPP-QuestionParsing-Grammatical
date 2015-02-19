@@ -67,10 +67,10 @@ def parse(sentence):
     handler.push(tree)
     preprocessingMerge(tree)
     qw = simplify(tree)
-    return normalFormProduction(tree,qw)
+    return normalFormProduction(tree, qw)
 
 class RequestHandler:
-    __slots__ = ('request',)
+    __slots__ = ('request', )
     def __init__(self, request):
         self.request = request
 
@@ -88,7 +88,7 @@ class RequestHandler:
         except Exception as e:
             logging.warning(e)
             return []
-        if isinstance(tree,Resource):
+        if isinstance(tree, Resource):
             return []
         meas = {'accuracy': 0.5, 'relevance': 0.5}
         trace = self.request.trace + [TraceItem('QuestionParsing-Grammatical', tree, meas)]

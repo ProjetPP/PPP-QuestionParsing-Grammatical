@@ -8,36 +8,36 @@ from .data.exceptions import GrammaticalError
 # General analysis functions #
 ##############################
 
-def remove(t,qw):
+def remove(t, qw):
     t.parent.child.remove(t)
 
-def impossible(t,qw):
-    raise GrammaticalError(t.dependency,"unexpected dependency")
+def impossible(t, qw):
+    raise GrammaticalError(t.dependency, "unexpected dependency")
 
-def ignore(t,qw):
+def ignore(t, qw):
     pass
 
-def merge(t,qw):
-    t.parent.merge(t,True)
+def merge(t, qw):
+    t.parent.merge(t, True)
 
 ##############################
 # Special analysis functions #
 ##############################
 
-def amodRule(t,qw):
+def amodRule(t, qw):
     if t.wordList[0].pos == 'JJ':
         if len(t.child) > 0 and t.child[0].wordList[0].pos == 'RBS':
             assert len(t.child) == 1 and len(t.child[0].child) == 0
-            merge(t.child[0],qw)
+            merge(t.child[0], qw)
             t.dependency = 'connectorUp'
             return
     if t.namedEntityTag != 'ORDINAL' and t.wordList[0].pos != 'JJS': # [0] : must be improved? (search in the whole list?)
         assert t.parent is not None
-        merge(t,qw)
+        merge(t, qw)
     else:
         t.dependency = 'connectorUp'
 
-def prepRule(t,qw):
+def prepRule(t, qw):
     if t.parent.wordList[0].pos[0] == 'V':
         t.dependency = 'R3'
     else:
@@ -109,7 +109,7 @@ dependenciesMap1 = {
         'discourse' : remove
 }
 
-def propagateType(t,qw):
+def propagateType(t, qw):
     """
         Propagate locally the type of the subtree
     """
@@ -122,16 +122,16 @@ def propagateType(t,qw):
 dependenciesMap2 = {         # how to handle a -b-> c
     'R0'        : propagateType,  # normalize(c)
     'R1'        : propagateType,  # !c
-    'R2'        : ignore,         # (normalize(c),!a,?)
-    'R3'        : ignore,         # (?,!a,normalize(c))
-    'RinstOf'   : propagateType,  # (?,instance of,c)
+    'R2'        : ignore,         # (normalize(c), !a, ?)
+    'R3'        : ignore,         # (?, !a, normalize(c))
+    'RinstOf'   : propagateType,  # (?, instance of, c)
     'Rspl'      : propagateType,  # superlative
     'RconjT'    : propagateType,  # top of a conjunction relation
     'RconjB'    : propagateType,  # bottom of a conjunction relation
     'Rexist'    : propagateType
 }
 
-def collapseMap(t,depMap,qw,down=True):
+def collapseMap(t, depMap, qw, down=True):
     """
         Apply the rules of depMap to t
         If down = false, collapse from top to down, otherwise collapse from down to top
@@ -139,17 +139,17 @@ def collapseMap(t,depMap,qw,down=True):
     temp = list(t.child) # copy, because t.child is changed while iterating
     if down:
         for c in temp:
-            collapseMap(c,depMap,qw,down)
+            collapseMap(c, depMap, qw, down)
     try:
         if isinstance(depMap[t.dependency], str):
             t.dependency = depMap[t.dependency]
         else:
-            depMap[t.dependency](t,qw)
+            depMap[t.dependency](t, qw)
     except KeyError:
-        raise GrammaticalError(t.dependency,"unknown dependency")
+        raise GrammaticalError(t.dependency, "unknown dependency")
     if not down:
         for c in temp:
-            collapseMap(c,depMap,qw,down)
+            collapseMap(c, depMap, qw, down)
 
 ##########################
 # Connectors rebalancing #
@@ -197,7 +197,7 @@ def conjConnectorsUp(t):
             parentTemp.child.remove(t.parent)
             parentTemp.child.append(t)
             t.parent = parentTemp
-            newTree = DependenciesTree(depSave, dependency=parentTemp.dependency, child=[dupl,parentTemp], parent=parentTemp.parent)
+            newTree = DependenciesTree(depSave, dependency=parentTemp.dependency, child=[dupl, parentTemp], parent=parentTemp.parent)
             parentTemp.dependency = 'RconjB'
             parentTemp.parent = newTree
         else:
@@ -207,7 +207,7 @@ def conjConnectorsUp(t):
             t.child += t.parent.child
             for n in t.child:
                 n.parent = t
-            newTree = DependenciesTree(depSave, dependency=parentTemp.dependency, child=[dupl,t], parent=parentTemp.parent)
+            newTree = DependenciesTree(depSave, dependency=parentTemp.dependency, child=[dupl, t], parent=parentTemp.parent)
             t.dependency = 'RconjB'
             t.parent = newTree
         newTree.parent.child.remove(parentTemp)
@@ -228,10 +228,10 @@ def simplify(t):
         collapse dependencies of tree t
     """
     qw = identifyQuestionWord(t)             # identify and remove question word
-    collapseMap(t,dependenciesMap1,qw)       # collapse the tree according to dependenciesMap1
+    collapseMap(t, dependenciesMap1, qw)       # collapse the tree according to dependenciesMap1
     conjConnectorsUp(t)                      # remove conjonction connectors
     connectorUp(t)                           # remove remaining amod connectors
-    questionWordDependencyTree(t,qw)         # change the tree depending on the qw
-    collapseMap(t,dependenciesMap2,qw)       # propagate types from bottom to top
-    collapseMap(t,dependenciesMap2,qw,False) # propagate types from top to bottom
+    questionWordDependencyTree(t, qw)         # change the tree depending on the qw
+    collapseMap(t, dependenciesMap2, qw)       # propagate types from bottom to top
+    collapseMap(t, dependenciesMap2, qw, False) # propagate types from top to bottom
     return qw
