@@ -22,6 +22,7 @@ General
 * Donner un score aux prédicats alternatifs
 * In which country is Lake Victoria > fusion is/in car in ne peut pas être supprimé de l'arbre (prep_in). De toute façon, la suppression du qw se fait après merging
  >> solution: fusion + propre des prepositions (rajouter des Words au lieu de fusionner dans un seul word)
+* prep_by > supprimer by et inverser le triplet
 
 Remarks
 =======

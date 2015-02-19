@@ -488,7 +488,7 @@ expected = {
     'What holidays are celebrated in Ireland?':
     I([
         T(M(), R('instance of'), R('holiday')),
-        T(M(), Li([R('celebrated in'), R('celebration')]), R('Ireland'))
+        T(M(), R('celebrated in'), R('Ireland'), Li([R('holiday'), R('public holiday'), R('celebration')]))
     ]),
 
     'What state is John F. Kennedy buried in?':
