@@ -601,7 +601,7 @@ expected = {
     'What is the zip code for Lyon?':
     T(R('Lyon'), R('zip code'), M()),
 
-    'What is Boston Strangler\'s name?':
+    'What is the Boston Strangler\'s name?': # 'What is Boston Strangler\'s name?' ?
     T(R('Boston Strangler'), R('name'), M()),
 
     'What is an annotated bibliography?':
