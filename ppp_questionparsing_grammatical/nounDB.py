@@ -17,7 +17,7 @@ class Nounificator:
 
     def __str__(self):
         l = sorted([(x, 0) for x in self.verbToNounsDirect.keys()] + [(x, 1) for x in self.verbToNounsInverse.keys()])
-        return '\n'.join([self.select(x) for x in sorted(l)])
+        return '\n'.join([self.select(x) for x in l])
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -106,10 +106,7 @@ class Nounificator:
         self._removeVerb(verb, self.verbToNounsInverse)
 
     def _toNouns(self, verb, target):
-        try:
-            return target[verb]
-        except KeyError:
-            return []
+        return target.get(verb, [])
 
     def directNouns(self, verb):
         """
