@@ -189,7 +189,8 @@ expected = {
     T(
         T(R('United States'), R('president'), M()),
         R('birth date'),
-        M()
+        M(),
+        R('birth')
     ),
 
     'What is the birth date of the president of the United States?':
@@ -460,7 +461,7 @@ expected = {
     'What is the population in India?':
     T(R('India'), R('population'), M()),
 
-    'What is the world\'s population?': # Should be 'What is the world population?
+    'What is the world\'s population?': # Should be 'What is the world population?'
     T(R('world'), R('population'), M()),
 
     'What is the atomic number of polonium?':
@@ -487,7 +488,7 @@ expected = {
     'What holidays are celebrated in Ireland?':
     I([
         T(M(), R('instance of'), R('holiday')),
-        T(M(), R('celebrated in'), R('Ireland'))
+        T(M(), Li([R('celebrated in'), R('celebration')]), R('Ireland'))
     ]),
 
     'What state is John F. Kennedy buried in?':
@@ -499,7 +500,7 @@ expected = {
     'What chemicals are used in lethal injection?':
     I([
         T(M(), R('instance of'), R('chemical')),
-        T(M(), R('used in'), R('lethal injection'))
+        T(M(), Li([R('used in'), R('usage')]), R('lethal injection'))
     ]),
 
     'What country do the Galapagos Islands belong to?':
@@ -514,7 +515,7 @@ expected = {
     'Which country colonized Hong Kong?': # Should be 'Which country did colonize Hong Kong?'
     I([
         T(M(), R('instance of'), R('country')),
-        T(M(), R('colonized'), R('Hong Kong'))
+        T(M(), Li([R('colonized'), R('colony')]), R('Hong Kong'))
     ]),
 
     'Where is the Panama Canal?':
