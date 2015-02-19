@@ -158,7 +158,7 @@ expected = {
         T(M(), Li([R('killed by'), R('killer')]), R('Oswald'))
     ]),
 
-    'Who invented the hula hoop?':
+    'Who invented the hula hoop?': # Should be 'Who did invent the hula hoop?'
     T(M(), R('invention'), R('hula hoop'), R('inventor')),
 
     'Who was killed by Oswald?':
@@ -211,7 +211,7 @@ expected = {
         T(R('Lake Victoria'), R('country'), M())
     ]),
 
-    'What actor married John F. Kennedy\'s sister?':
+    'What actor married John F. Kennedy\'s sister?': # Should be 'What actor did marry John F. Kennedy\s sister?'
     I([
         T(M(), R('instance of'), R('actor')),
         T(
@@ -322,7 +322,7 @@ expected = {
         )
     ),
 
-    'Who developed Microsoft?':
+    'Who developed Microsoft?': # Should be 'Who did develop Microsoft?'
     T(M(), R('developed'), R('Microsoft'), R('developer')),
 
     'Give me all companies in Munich':
@@ -350,7 +350,7 @@ expected = {
     'What is the capital of India?':
     T(R('India'), R('capital'), M()),
 
-    'What kings ruled on France?':
+    'What kings ruled on France?': # Should be 'What king did rule on France?'
     I([
         T(M(), R('instance of'), R('king')),
         T(M(), R('ruled on'), R('France'), R('ruler'))
@@ -460,8 +460,8 @@ expected = {
     'What is the population in India?':
     T(R('India'), R('population'), M()),
 
-    # 'What is the world population?': # 'What is the world's population?' is incorrect English, c.f. https://en.wikipedia.org/wiki/World_population
-    # T(R('world'), R('population'), M()), # Does not work, nn dependency.
+    'What is the world\'s population?': # Should be 'What is the world population?
+    T(R('world'), R('population'), M()),
 
     'What is the atomic number of polonium?':
     T(R('polonium'), R('atomic number'), M()),
@@ -511,7 +511,7 @@ expected = {
     'What are Brazil\'s national colors?':
     T(R('Brazil'), R('national color'), M()),
 
-    'Which country colonized Hong Kong?':
+    'Which country colonized Hong Kong?': # Should be 'Which country did colonize Hong Kong?'
     I([
         T(M(), R('instance of'), R('country')),
         T(M(), R('colonized'), R('Hong Kong'))
