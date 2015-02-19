@@ -76,10 +76,10 @@ def buildPredicateVerb(tree):
     lInverse = []
     if nManual.exists(lem[0]): # try to nounify the whole verb v...
         lDirect += nManual.directNouns(lem[0])
-        lInverse += nManual.reverseNouns(lem[0])
+        lInverse += nManual.inverseNouns(lem[0])
     elif len(lem[0].split()) > 1 and nManual.exists(lem[0].split()[0]): # ...otherwise, try to nounify the verb withouts its particles...
         lDirect += nManual.directNouns(lem[0].split()[0])
-        lInverse += nManual.reverseNouns(lem[0].split()[0])
+        lInverse += nManual.inverseNouns(lem[0].split()[0])
     elif nAuto.exists(lem[0].split()[0]): # ...otherwise use the automatic nounification
         lDirect += nAuto.directNouns(lem[0].split()[0])
     # Production of the resource

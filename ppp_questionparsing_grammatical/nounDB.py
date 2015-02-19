@@ -6,20 +6,20 @@ class Nounificator:
     """
 
     direct = 0
-    reverse = 1
+    inverse = 1
 
     def __init__(self):
         self.verbToNounsDirect = {}
-        self.verbToNounsReverse = {}
+        self.verbToNounsInverse = {}
 
     def select(self, x):
         if x[1] == 0:
             return ('%s:\t->%s' % (x[0], self.verbToNounsDirect[x[0]]))
         else:
-            return ('%s:\t<-%s' % (x[0], self.verbToNounsReverse[x[0]]))
+            return ('%s:\t<-%s' % (x[0], self.verbToNounsInverse[x[0]]))
 
     def __str__(self):
-        l = sorted([(x, 0) for x in self.verbToNounsDirect.keys()] + [(x, 1) for x in self.verbToNounsReverse.keys()])
+        l = sorted([(x, 0) for x in self.verbToNounsDirect.keys()] + [(x, 1) for x in self.verbToNounsInverse.keys()])
         return '\n'.join([self.select(x) for x in sorted(l)])
 
     def __eq__(self, other):
@@ -31,7 +31,7 @@ class Nounificator:
         """
         f = open(file_name, 'rb')
         self.verbToNounsDirect = pickle.load(f)
-        self.verbToNounsReverse = pickle.load(f)
+        self.verbToNounsInverse = pickle.load(f)
         f.close()
 
     def save(self, file_name):
@@ -40,14 +40,14 @@ class Nounificator:
         """
         f = open(file_name, 'wb')
         pickle.dump(self.verbToNounsDirect, f)
-        pickle.dump(self.verbToNounsReverse, f)
+        pickle.dump(self.verbToNounsInverse, f)
         f.close()
 
     def _add(self, verb, noun, mapChoice):
         if mapChoice == self.direct:
             target = self.verbToNounsDirect
-        elif mapChoice == self.reverse:
-            target = self.verbToNounsReverse
+        elif mapChoice == self.inverse:
+            target = self.verbToNounsInverse
         try:
             if not noun in target[verb]:
                 target[verb].append(noun)
@@ -60,11 +60,11 @@ class Nounificator:
         """
         self._add(verb, noun, self.direct)
 
-    def addReverse(self, verb, noun):
+    def addInverse(self, verb, noun):
         """
-            Add the given noun to the reverse nounifications of the given verb.
+            Add the given noun to the inverse nounifications of the given verb.
         """
-        self._add(verb, noun, self.reverse)
+        self._add(verb, noun, self.inverse)
 
     def addListDirect(self, verb, nounList):
         """
@@ -73,18 +73,18 @@ class Nounificator:
         for t in nounList:
             self.addDirect(verb, t)
 
-    def addListReverse(self, verb, nounList):
+    def addListInverse(self, verb, nounList):
         """
-            Add the given list of nouns to the reverse nounifications of the given verb.
+            Add the given list of nouns to the inverse nounifications of the given verb.
         """
         for t in nounList:
-            self.addReverse(verb, t)
+            self.addInverse(verb, t)
 
     def _remove(self, verb, noun, mapChoice):
         if mapChoice == self.direct:
             target = self.verbToNounsDirect
-        elif mapChoice == self.reverse:
-            target = self.verbToNounsReverse
+        elif mapChoice == self.inverse:
+            target = self.verbToNounsInverse
         target[verb].remove(noun)
         if target[verb] == []:
             target.pop(verb)
@@ -95,17 +95,17 @@ class Nounificator:
         """
         self._remove(verb, noun, self.direct)
 
-    def removeReverse(self, verb, noun):
+    def removeInverse(self, verb, noun):
         """
-            Remove the given noun from the reverse nounifications of the given verb.
+            Remove the given noun from the inverse nounifications of the given verb.
         """
-        self._remove(verb, noun, self.reverse)
+        self._remove(verb, noun, self.inverse)
 
     def _removeVerb(self, verb, mapChoice):
         if mapChoice == self.direct:
             target = self.verbToNounsDirect
-        elif mapChoice == self.reverse:
-            target = self.verbToNounsReverse
+        elif mapChoice == self.inverse:
+            target = self.verbToNounsInverse
         target.pop(verb)
 
     def removeVerbDirect(self, verb):
@@ -114,17 +114,17 @@ class Nounificator:
         """
         self._removeVerb(verb, self.direct)
 
-    def removeVerbReverse(self, verb):
+    def removeVerbInverse(self, verb):
         """
-            Remove all the reverse nounifications of the given verb.
+            Remove all the inverse nounifications of the given verb.
         """
-        self._removeVerb(verb, self.reverse)
+        self._removeVerb(verb, self.inverse)
 
     def _toNouns(self, verb, mapChoice):
         if mapChoice == self.direct:
             target = self.verbToNounsDirect
-        elif mapChoice == self.reverse:
-            target = self.verbToNounsReverse
+        elif mapChoice == self.inverse:
+            target = self.verbToNounsInverse
         try:
             return target[verb]
         except KeyError:
@@ -136,17 +136,17 @@ class Nounificator:
         """
         return self._toNouns(verb, self.direct)
 
-    def reverseNouns(self, verb):
+    def inverseNouns(self, verb):
         """
-            Return the list of reverse nounifications of the given noun.
+            Return the list of inverse nounifications of the given noun.
         """
-        return self._toNouns(verb, self.reverse)
+        return self._toNouns(verb, self.inverse)
 
     def exists(self, verb):
         """
-            Return True if and only if there exists (direct or reverse) nounification(s) of the given verb.
+            Return True if and only if there exists (direct or inverse) nounification(s) of the given verb.
         """
-        return verb in self.verbToNounsDirect or verb in self.verbToNounsReverse
+        return verb in self.verbToNounsDirect or verb in self.verbToNounsInverse
 
     def merge(self, t):
         """
@@ -154,5 +154,5 @@ class Nounificator:
         """
         for key, value in t.verbToNounsDirect.items():
             self.addListDirect(key, value)
-        for key, value in t.verbToNounsReverse.items():
-            self.addListReverse(key, value)
+        for key, value in t.verbToNounsInverse.items():
+            self.addListInverse(key, value)
