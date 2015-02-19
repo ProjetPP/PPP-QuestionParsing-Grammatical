@@ -26,12 +26,18 @@ class Nounificator:
         return self.__dict__ == other.__dict__
 
     def load(self, file_name):
+        """
+            Load the database from the file of given name (pickle format).
+        """
         f = open(file_name, 'rb')
         self.verbToNounsDirect = pickle.load(f)
         self.verbToNounsReverse = pickle.load(f)
         f.close()
 
     def save(self, file_name):
+        """
+            Save the database into the file of given name (pickle format).
+        """
         f = open(file_name, 'wb')
         pickle.dump(self.verbToNounsDirect, f)
         pickle.dump(self.verbToNounsReverse, f)
@@ -49,16 +55,28 @@ class Nounificator:
             target[verb] = [noun]
 
     def addDirect(self, verb, noun):
+        """
+            Add the given noun to the direct nounifications of the given verb.
+        """
         self._add(verb, noun, self.direct)
 
     def addReverse(self, verb, noun):
+        """
+            Add the given noun to the reverse nounifications of the given verb.
+        """
         self._add(verb, noun, self.reverse)
 
     def addListDirect(self, verb, nounList):
+        """
+            Add the given list of nouns to the direct nounifications of the given verb.
+        """
         for t in nounList:
             self.addDirect(verb, t)
 
     def addListReverse(self, verb, nounList):
+        """
+            Add the given list of nouns to the reverse nounifications of the given verb.
+        """
         for t in nounList:
             self.addReverse(verb, t)
 
@@ -72,9 +90,15 @@ class Nounificator:
             target.pop(verb)
 
     def removeDirect(self, verb, noun):
+        """
+            Remove the given noun from the direct nounifications of the given verb.
+        """
         self._remove(verb, noun, self.direct)
 
     def removeReverse(self, verb, noun):
+        """
+            Remove the given noun from the reverse nounifications of the given verb.
+        """
         self._remove(verb, noun, self.reverse)
 
     def _removeVerb(self, verb, mapChoice):
@@ -85,9 +109,15 @@ class Nounificator:
         target.pop(verb)
 
     def removeVerbDirect(self, verb):
+        """
+            Remove all the direct nounifications of the given verb.
+        """
         self._removeVerb(verb, self.direct)
 
     def removeVerbReverse(self, verb):
+        """
+            Remove all the reverse nounifications of the given verb.
+        """
         self._removeVerb(verb, self.reverse)
 
     def _toNouns(self, verb, mapChoice):
@@ -101,15 +131,27 @@ class Nounificator:
             return []
 
     def directNouns(self, verb):
+        """
+            Return the list of direct nounifications of the given noun.
+        """
         return self._toNouns(verb, self.direct)
 
     def reverseNouns(self, verb):
+        """
+            Return the list of reverse nounifications of the given noun.
+        """
         return self._toNouns(verb, self.reverse)
 
     def exists(self, verb):
+        """
+            Return True if and only if there exists (direct or reverse) nounification(s) of the given verb.
+        """
         return verb in self.verbToNounsDirect or verb in self.verbToNounsReverse
 
     def merge(self, t):
+        """
+            Merge with the given nounificator.
+        """
         for key, value in t.verbToNounsDirect.items():
             self.addListDirect(key, value)
         for key, value in t.verbToNounsReverse.items():
