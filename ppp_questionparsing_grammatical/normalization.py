@@ -75,13 +75,13 @@ def buildPredicateVerb(tree):
     lDirect = [lem[1]] # the past participle is always a predicate
     lInverse = []
     if nManual.exists(lem[0]): # try to nounify the whole verb v...
-        lDirect += nManual.toNouns(lem[0], 0)
-        lInverse += nManual.toNouns(lem[0], 1)
+        lDirect += nManual.directNouns(lem[0])
+        lInverse += nManual.reverseNouns(lem[0])
     elif len(lem[0].split()) > 1 and nManual.exists(lem[0].split()[0]): # ...otherwise, try to nounify the verb withouts its particles...
-        lDirect += nManual.toNouns(lem[0].split()[0], 0)
-        lInverse += nManual.toNouns(lem[0].split()[0], 1)
+        lDirect += nManual.directNouns(lem[0].split()[0])
+        lInverse += nManual.reverseNouns(lem[0].split()[0])
     elif nAuto.exists(lem[0].split()[0]): # ...otherwise use the automatic nounification
-        lDirect += nAuto.toNouns(lem[0].split()[0], 0)
+        lDirect += nAuto.directNouns(lem[0].split()[0])
     # Production of the resource
     if len(lDirect) == 1: # at least 1 predicate (past part always added)
         if len(lInverse) == 0: # no inverse predicate
