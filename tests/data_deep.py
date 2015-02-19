@@ -12,6 +12,8 @@ from ppp_datamodel import List as Li
 # expected[q] is the expected tree produced by the module for the question q.
 # Warning: be careful before changing a question (e.g. the parsing depends on the uppercase letters)
 
+# Adjective or possessive? See http://ell.stackexchange.com/questions/49984/adjective-or-possessive
+
 expected = {
     'Who is the prime minister of France?':
     T(R('France'), R('prime minister'), M()),
@@ -25,7 +27,7 @@ expected = {
     'Who is the President of Ghana':
     T(R('Ghana'), R('President'), M()),
 
-    'Who is the France\'s prime minister?':
+    'Who is France\'s prime minister?':
     T(R('France'), R('prime minister'), M()),
 
     'What is the birth date of Bob Marley?':
@@ -332,7 +334,7 @@ expected = {
         R('residence'),
         M()
     ),
-    
+
     'Where is ENS Lyon?':
     T(R('ENS Lyon'), R('location'), M()),
 
@@ -458,8 +460,8 @@ expected = {
     'What is the population in India?':
     T(R('India'), R('population'), M()),
 
-    'What is the world\'s population':
-    T(R('world'), R('population'), M()),
+    # 'What is the world population?': # 'What is the world's population?' is incorrect English, c.f. https://en.wikipedia.org/wiki/World_population
+    # T(R('world'), R('population'), M()), # Does not work, nn dependency.
 
     'What is the atomic number of polonium?':
     T(R('polonium'), R('atomic number'), M()),
@@ -598,7 +600,7 @@ expected = {
     'What is the zip code for Lyon?':
     T(R('Lyon'), R('zip code'), M()),
 
-    'What is the Boston Strangler\'s name?':
+    'What is Boston Strangler\'s name?':
     T(R('Boston Strangler'), R('name'), M()),
 
     'What is an annotated bibliography?':
