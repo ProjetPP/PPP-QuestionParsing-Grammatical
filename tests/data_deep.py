@@ -461,7 +461,7 @@ expected = {
     'What is the population in India?':
     T(R('India'), R('population'), M()),
 
-    'What is the world\'s population?':
+    'What is the world\'s population?': # Should be 'What is the world population?'
     T(R('world'), R('population'), M()),
 
     'What is the atomic number of polonium?':
