@@ -76,7 +76,7 @@ class DependenciesTree:
 
     def getWords(self):
         """
-            List of strings contained into wordList
+            Return the string represented by wordList.
         """
         self.wordList.sort(key = lambda x: x.index)
         return ' '.join([x.word for x in self.wordList if x.pos != 'POS']) # don't print punctiation (?, !, ...)
@@ -142,7 +142,7 @@ class TreeGenerator:
 
     def _computeEdges(self):
         """
-            Compute the edges of the dependence tree.
+            Compute the edges of the dependency tree.
         """
         for edge in self.stanfordResult['indexeddependencies']:
             node1 = self._getNode(edge[1])
@@ -154,7 +154,7 @@ class TreeGenerator:
 
     def _computeTags(self):
         """
-            Compute the tags of the dependence tree nodes.
+            Compute the tags of the dependency tree nodes.
         """
         index=0
         # Computation of the tags of the nodes
@@ -200,6 +200,9 @@ class TreeGenerator:
         return self.nameToNodes['ROOT-0']
 
     def computeTree(self):
+        """
+            Generate the tree and return it.
+        """
         self._computeEdges()
         self._computeTags()
         tree = self._getTree()
