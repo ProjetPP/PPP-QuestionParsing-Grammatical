@@ -2,7 +2,7 @@
 
 from ppp_libmodule import HttpRequestHandler
 from .dependencyTree import Word, DependenciesTree, TreeGenerator, computeTree
-from .preprocessingMerge import QuotationHandler
+from .preprocessing import QuotationHandler
 from .questionWordProcessing import identifyQuestionWord, questionWordDependencyTree, questionWordNormalForm
 from .dependencyAnalysis import simplify
 from .normalization import normalFormProduction
