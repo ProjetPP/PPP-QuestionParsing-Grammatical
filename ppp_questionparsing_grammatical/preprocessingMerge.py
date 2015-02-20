@@ -146,7 +146,7 @@ def mergePrepNode(t):
     temp = list(t.child) # copy, because t.child is changed while iterating
     for c in temp:
         mergePrepNode(c)
-    if t.printWordList() in prepSet:
+    if t.getWords() in prepSet:
         t.parent.merge(t, True)
 
 def mergePrepEdge(t):

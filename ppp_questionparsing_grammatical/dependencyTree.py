@@ -47,27 +47,27 @@ class DependenciesTree:
 
     def dfsAnnotate(self, n):
         """
-            Build a dfs annotation on the tree
-            Useful to distinguish (in printing) nodes that are different but contain the same wordList
+            Build a dfs annotation on the tree.
+            Useful to distinguish (in printing) nodes that are different but contain the same wordList.
         """
         if self.child == []:
             self.dfsTag = n
             return n+1
         else:
-            for t in self.child:
-                n = t.dfsAnnotate(n)
+            for child in self.child:
+                n = child.dfsAnnotate(n)
             self.dfsTag = n
             return n+1
 
     def sort(self):
         """
-            Sorting the wordLists of the tree
+            Sort the wordLists of the tree.
         """
-        for t in self.child:
-            t.sort()
+        for child in self.child:
+            child.sort()
         self.wordList.sort(key = lambda x: x.index)
 
-    def printWordList(self):
+    def getWords(self):
         """
             List of strings contained into wordList
         """
@@ -76,7 +76,7 @@ class DependenciesTree:
 
     def string(self):
         # Concatenation of the words of the root
-        w = self.printWordList()
+        w = self.getWords()
         s=''
         # Adding the definition of the root (dot format)
         t=''

@@ -47,14 +47,14 @@ def buildValue(tree):
     if tree.namedEntityTag == 'undef':
         for w in tree.wordList:
             w.word = lemmatize(w.word, w.pos)
-    return Resource(tree.printWordList())
+    return Resource(tree.getWords())
 
 def verbStandardize(tree):
     """
         Assume that tree.wordList is a verb v
         Produce (v1, v2) where v1=lemmatize(v) and v2 is the past participle of v
     """
-    w = tree.printWordList().lower()
+    w = tree.getWords().lower()
     wSplit = w.split()
     wSplit[0] = lemmatize(wSplit[0], 'V')
     if tree.wordList[0].pos == 'VBN':
