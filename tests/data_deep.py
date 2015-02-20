@@ -639,4 +639,90 @@ expected = {
 
     'When was Pink Floyd founded?':
     T(R('Pink Floyd'), R('founded in'), M()),
+
+    'Who said \"Music hath charm to soothe the savage beast\"?':
+    T(M(), Li([R('said'), R('quotation')]), R('Music hath charm to soothe the savage beast'), R('author')),
+
+    'What is the deepest lake in America?':
+    L(
+        S(
+            T(R('America'), R('lake'), M()),
+            R('depth')
+        )
+    ),
+
+    'Where is Anne Frank\'s diary?':
+    T(
+        T(R('Anne Frank'), R('diary'), M()),
+        R('location'),
+        M()
+    ),
+
+    'How old is Bernadette Peters?':
+    T(R('Bernadette Peters'), R('age'), M()),
+
+    'What country covers 8,600,387 square miles?':
+    I([
+        T(M(), R('instance of'), R('country')),
+        T(M(), R('superficy'), R('8,600,387 square mile'))
+    ]),
+
+    'What are enzymes?':
+    T(R('enzyme'), R('definition'), M()),
+
+    'Who discovered oxygen?':
+    T(M(), R('discovered'), R('oxygen'), Li([R('discoverer'), R('discovered by')])),
+
+    'What was the most popular toy in 1957?':
+    L(
+        S(
+            T(R('1957'), R('toy'), M()),
+            R('popularity')
+        )
+    ),
+
+    'What is pastrami made of?':
+    T(R('pastrami'), R('made of'), M()),
+
+    'Which king signed the Magna Carta?':
+    I([
+        T(M(), R('instance of'), R('king')),
+        T(M(), R('signed'), R('Magna Carta'))
+    ]),
+
+    'What Cruise Line does Kathie Lee Gifford advertise for?':
+    I([
+        T(M(), R('instance of'), R('cruise line')),
+        T(R('Kathie Lee Gifford'), R('advertised for'), M())
+    ]),
+
+    'Who owns CNN?':
+    T(M(), Li([R('owned'), R('ownership')]), R('CNN'), Li([R('owner'), R('owned by')])),
+
+    'What is the chemical formula for sulphur dioxide?':
+    T(R('sulphur dioxide'), R('chemical formula'), M()),
+
+    'What golfer has been called Ohio Fats and Blobbo?':
+    I([
+        I([
+            T(M(), R('instance of'), R('golfer')),
+            T(M(), Li([R('called'), R('nickname')]), R('Ohio Fats')),
+        ]),
+        I([
+            T(M(), R('instance of'), R('golfer')),
+            T(M(), Li([R('called'), R('nickname')]), R('Blobbo'))
+        ])
+    ]),
+
+    'What date is Richard Nixon\'s birthday?':
+    I([
+        T(M(), R('instance of'), R('date')),
+        T(R('Richard Nixon'), R('birthday'), M())
+    ]),
+
+    'What\'s the official animal of Canada?':
+    T(R('Canada'), R('official animal'), M()),
+
+    'How old is the universe?':
+    T(R('universe'), R('age'), M()),
 }

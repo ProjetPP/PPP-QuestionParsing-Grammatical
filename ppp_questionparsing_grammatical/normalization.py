@@ -62,7 +62,10 @@ def verbStandardize(tree):
     elif wSplit[0] in pastPartDict:
         pastPart = ' '.join([pastPartDict[wSplit[0]]]+wSplit[1:])
     else:
-        pastPart = ' '.join([wSplit[0]+'ed']+wSplit[1:])
+        if wSplit[0].endswith('e'):
+            pastPart = ' '.join([wSplit[0]+'d']+wSplit[1:])
+        else:
+            pastPart = ' '.join([wSplit[0]+'ed']+wSplit[1:])
     return (' '.join(wSplit), pastPart)
 
 def buildPredicateVerb(tree):
@@ -117,15 +120,16 @@ def normalizeSuperlative(tree):
     """
         Handle Rspl dependency (superlative, ordinal)
     """
-    superlative = buildValue(tree).value
-    if superlative in superlativeNoun:
-        if superlative in superlativeOrder:
-            return superlativeOrder[superlative](Sort(normalize(tree.child[0]), Resource(superlativeNoun[superlative])))
+    order = buildValue(tree).value.split(' ',1)[0] # most important > most, deepest > deepest
+    predicate = buildValue(tree).value.split(' ',1)[-1] # most important > important, deepest > deepest
+    if predicate in superlativeNoun:
+        if order in superlativeOrder:
+            return superlativeOrder[order](Sort(normalize(tree.child[0]), Resource(superlativeNoun[predicate])))
         else:
-            return First(Sort(normalize(tree.child[0]), Resource(superlativeNoun[superlative]))) # First by default
+            return First(Sort(normalize(tree.child[0]), Resource(superlativeNoun[predicate]))) # First by default
     else:
-        if superlative in superlativeOrder:
-            return superlativeOrder[superlative](Sort(normalize(tree.child[0]), Resource('default'))) # default predicate
+        if order in superlativeOrder:
+            return superlativeOrder[order](Sort(normalize(tree.child[0]), Resource('default'))) # default predicate
         else:
             return First(Sort(normalize(tree.child[0]), Resource('default')))
 

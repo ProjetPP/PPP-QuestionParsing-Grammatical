@@ -26,7 +26,7 @@ def merge(t, qw):
 
 def amodRule(t, qw):
     if t.wordList[0].pos == 'JJ':
-        if len(t.child) > 0 and t.child[0].wordList[0].pos == 'RBS':
+        if len(t.child) > 0 and t.child[0].wordList[0].pos == 'RBS': # superlative of type "most popular, most beautiful, ..."
             assert len(t.child) == 1 and len(t.child[0].child) == 0
             merge(t.child[0], qw)
             t.dependency = 'connectorUp'
@@ -35,7 +35,7 @@ def amodRule(t, qw):
         assert t.parent is not None
         merge(t, qw)
     else:
-        t.dependency = 'connectorUp'
+        t.dependency = 'connectorUp' # superlative of type "biggest, deepest,..."
 
 def prepRule(t, qw):
     if t.parent.wordList[0].pos[0] == 'V':

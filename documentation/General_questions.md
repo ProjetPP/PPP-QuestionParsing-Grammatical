@@ -23,6 +23,9 @@ General
 * In which country is Lake Victoria > fusion is/in car in ne peut pas être supprimé de l'arbre (prep_in). De toute façon, la suppression du qw se fait après merging
  >> solution: fusion + propre des prepositions (rajouter des Words au lieu de fusionner dans un seul word)
 * prep_by > supprimer by et inverser le triplet
+* How long were Tyrannosaurus Rex's teeth? > lemmatization de teeth
+* Extraire verbe/participe passé depuis https://simple.wiktionary.org/wiki/found
+* What university did Thomas Jefferson found? > found/founded/find (superlative map changée sur found)
 
 Remarks
 =======
@@ -88,6 +91,18 @@ Merge nn with the 2 nodes if nn above them:
  - When did Princess Diana and Prince Charles get married?
  - Who is section manager for guidance and control systems at JPL?
 
+Prédicat "be" inapproprié
+========================
+
+* What color is indigo?
+* What nationality was Jackson Pollock?
+* What is the tallest mountain?
+* What tourist attractions are there in Reims?
+* What do camels store in their humps?
+* What color are tennis balls?
+* What species is a colt?
+* What animal has the biggest eyes?
+* What nationality is Sean Connery?
 _________________________________________________________________________________________________________________________________
 _________________________________________________________________________________________________________________________________
 
@@ -105,6 +120,10 @@ __How many__ : opérateur de comptage
 > How many employees does Apple have
 > How many people live in China
 > How many episodes does Seinfeld have?
+> How many people watch network television?
+> How much does the human adult female brain weigh?
+> How many presidents have died on the 4th of July?
+> How many NFL teams are there?
 
 _________________________________________________________________________________________________________________________________
 
