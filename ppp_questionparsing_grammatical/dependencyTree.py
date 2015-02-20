@@ -1,7 +1,6 @@
 import sys
 import os
 import string
-from .dependencyTreeCorrection import correctTree
 
 ########
 # Word #
@@ -58,6 +57,14 @@ class DependenciesTree:
                 n = child.dfsAnnotate(n)
             self.dfsTag = n
             return n+1
+
+    def initText(self, text):
+        """
+            Set text attribute for all nodes, with string s.
+        """
+        self.text = text
+        for child in self.child:
+            child.initText(text)
 
     def sort(self):
         """
@@ -116,74 +123,101 @@ class DependenciesTree:
             other.parent.child.remove(other)
         other.wordList = None
 
-def computeEdges(r, nameToNodes):
+class TreeGenerator:
     """
-        Compute the edges of the dependence tree.
-        Take in input a piece of the result produced by StanfordNLP, and the
-        map from names to nodes.
+        A class to generate a dependency tree given the result of the Stanford parser.
     """
-    for edge in r['indexeddependencies']:
-        try:
-            n1 = nameToNodes[edge[1]]
-        except KeyError:
-            t = edge[1].rsplit('-', 1)
-            n1 = DependenciesTree(t[0], int(t[1]))
-            nameToNodes[edge[1]] = n1
-        try:
-            n2 = nameToNodes[edge[2]]
-        except KeyError:
-            t = edge[2].rsplit('-', 1)
-            n2 = DependenciesTree(t[0], int(t[1]))
-            nameToNodes[edge[2]] = n2
-        # n1 is the parent of n2
-        n1.child.append(n2)
-        n2.parent = n1
-        n2.dependency = edge[0]
+    def __init__(self, stanfordResult):
+        self.stanfordResult = stanfordResult
+        self.nameToNodes = {}
 
-def computeTags(r, nameToNodes):
-    """
-        Compute the tags of the dependence tree nodes.
-        Take in input a piece of the result produced by StanfordNLP, and the
-        map from names to nodes.
-    """
-    index=0
-    # Computation of the tags of the nodes
-    for word in r['words']:
-        index+=1
-        if word[0].isalnum() or word[0] == '$' or word[0] == '%' or word[0][0] == '\'': # \' for 's, 're, ...
-            w=word[0]+'-'+str(index) # key in the nameToNodes map
-            try:
-                n = nameToNodes[w]
-                assert len(n.wordList) == 1
-                n.wordList[0].pos = word[1]['PartOfSpeech']
-                if word[1]['NamedEntityTag'] != 'O':
-                    n.namedEntityTag = word[1]['NamedEntityTag']
-            except KeyError:        # this node does not exists (e.g. 'of' preposition)
-                pass
+    def _getNode(self, nodeName):
+        try:
+            node = self.nameToNodes[nodeName]
+        except KeyError:
+            (word,index) = nodeName.rsplit('-', 1)
+            node = DependenciesTree(word, int(index))
+            self.nameToNodes[nodeName] = node
+        return node
 
-def initText(t, s):
-    """
-        Set text attribute for all nodes, with string s.
-    """
-    t.text = s
-    for c in t.child:
-        initText(c, s)
+    def _computeEdges(self):
+        """
+            Compute the edges of the dependence tree.
+        """
+        for edge in self.stanfordResult['indexeddependencies']:
+            node1 = self._getNode(edge[1])
+            node2 = self._getNode(edge[2])
+            # n1 is the parent of n2
+            node1.child.append(node2)
+            node2.parent = node1
+            node2.dependency = edge[0]
+
+    def _computeTags(self):
+        """
+            Compute the tags of the dependence tree nodes.
+        """
+        index=0
+        # Computation of the tags of the nodes
+        for word in self.stanfordResult['words']:
+            index+=1
+            if word[0].isalnum() or word[0] == '$' or word[0] == '%' or word[0][0] == '\'': # \' for 's, 're, ...
+                w=word[0]+'-'+str(index) # key in the nameToNodes map
+                try:
+                    n = self.nameToNodes[w]
+                    assert len(n.wordList) == 1
+                    n.wordList[0].pos = word[1]['PartOfSpeech']
+                    if word[1]['NamedEntityTag'] != 'O':
+                        n.namedEntityTag = word[1]['NamedEntityTag']
+                except KeyError:        # this node does not exists (e.g. 'of' preposition)
+                    pass
+
+    def _addNamedEntityTag(self, tree, words):
+        """
+            If a word v is between 2 words u and w that have the same NER tag,
+            and v is linked to u or w by a nn relation,
+            then add the tag of u and w to v
+        """
+        def nnDependent(n1, n2):
+            return (n1.parent == n2 and n1.dependency == 'nn')\
+                or (n2.parent == n1 and n2.dependency == 'nn')
+        for i in range(1, len(words)-1):
+            previous = self.nameToNodes[words[i-1]]
+            current = self.nameToNodes[words[i]]
+            next = self.nameToNodes[words[i+1]]
+            if current.namedEntityTag == 'undef' and previous.namedEntityTag != 'undef' and previous.namedEntityTag == next.namedEntityTag:
+                if nnDependent(previous, current) or nnDependent(next, current):
+                    current.namedEntityTag = previous.namedEntityTag
+
+    def _correctTree(self, tree):
+        """
+            Correct the tree returned by the Stanford Parser, according to several heuristics.
+        """
+        words = sorted(self.nameToNodes.keys(), key = lambda x: int(x.split('-')[-1]))
+        self._addNamedEntityTag(tree, words)
+
+
+    def _getTree(self):
+        return self.nameToNodes['ROOT-0']
+
+    def computeTree(self):
+        self._computeEdges()
+        self._computeTags()
+        tree = self._getTree()
+        self._correctTree(tree)
+        return tree
 
 ###################
 # Global function #
 ###################
 
-def computeTree(r):
+def computeTree(stanfordResult):
     """
         Compute the dependence tree.
         Take in input a piece of the result produced by StanfordNLP (if foo is this result, then r = foo['sentences'][0])
         Apply quotation and NER merging
         Return the root of the tree (word 'ROOT-0').
     """
-    nameToNodes = {}                             # map from the original string to the node
-    computeEdges(r, nameToNodes)
-    computeTags(r, nameToNodes)
-    tree = nameToNodes['ROOT-0']                 # the tree is built
-    correctTree(tree, nameToNodes, r)            # some obvious corrections on the tree produced by the stanford parser
-    initText(tree, r['text'].replace('"', '\\\"')) # each node contains the input question
+    generator = TreeGenerator(stanfordResult)
+    tree = generator.computeTree()
+    tree.initText(stanfordResult['text'].replace('"', '\\\"')) # each node contains the input question
     return tree

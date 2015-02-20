@@ -1,6 +1,6 @@
 import json
 from nltk.stem.wordnet import WordNetLemmatizer
-from ppp_questionparsing_grammatical import Word, DependenciesTree, computeTree
+from ppp_questionparsing_grammatical import Word, DependenciesTree, TreeGenerator, computeTree
 import data
 
 from unittest import TestCase
@@ -42,3 +42,34 @@ class DependenciesTreeTests(TestCase):
         self.maxDiff=None
         tree.sort()
         self.assertEqual(str(tree), data.give_john_smith_string())
+
+    ###############
+    # correctTree #
+    ###############
+
+    def testAddNamedEntityTag1(self):
+        foo1 = DependenciesTree('foo1', 1, namedEntityTag='42')
+        foo2 = DependenciesTree('foo2', 3, namedEntityTag='42')
+        bar = DependenciesTree('bar', 2, namedEntityTag='undef', dependency = 'nn', parent = foo1)
+        generator = TreeGenerator(None)
+        generator.nameToNodes = {'foo1-1' : foo1, 'bar-2' : bar, 'foo2-3' : foo2}
+        generator._correctTree(foo1)
+        self.assertEqual(bar.namedEntityTag, '42')
+
+    def testAddNamedEntityTag2(self):
+        foo1 = DependenciesTree('foo1', 1, namedEntityTag='42')
+        foo2 = DependenciesTree('foo2', 3, namedEntityTag='42')
+        bar = DependenciesTree('bar', 2, namedEntityTag='27', dependency = 'nn', parent = foo1)
+        generator = TreeGenerator(None)
+        generator.nameToNodes = {'foo1-1' : foo1, 'bar-2' : bar, 'foo2-3' : foo2}
+        generator._correctTree(foo1)
+        self.assertEqual(bar.namedEntityTag, '27')
+
+    def testAddNamedEntityTag3(self):
+        foo1 = DependenciesTree('foo1', 1, namedEntityTag='42')
+        foo2 = DependenciesTree('foo2', 3, namedEntityTag='42')
+        bar = DependenciesTree('bar', 2, namedEntityTag='undef', dependency = 'amod', parent = foo1)
+        generator = TreeGenerator(None)
+        generator.nameToNodes = {'foo1-1' : foo1, 'bar-2' : bar, 'foo2-3' : foo2}
+        generator._correctTree(foo1)
+        self.assertEqual(bar.namedEntityTag, 'undef')

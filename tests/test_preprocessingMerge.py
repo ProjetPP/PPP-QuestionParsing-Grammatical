@@ -1,6 +1,6 @@
 import json
 from nltk.stem.wordnet import WordNetLemmatizer
-from ppp_questionparsing_grammatical import Word, correctTree, QuotationHandler, DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother, QuotationError, preprocessingMerge
+from ppp_questionparsing_grammatical import Word, QuotationHandler, DependenciesTree, computeTree, mergeNamedEntityTagChildParent, mergeNamedEntityTagSisterBrother, QuotationError, preprocessingMerge
 import data
 
 from unittest import TestCase
