@@ -33,6 +33,7 @@ class DependenciesTree:
         One node of the parse tree.
         It is a group of words of the initial sentence.
     """
+    prepositionSet = ['in', 'for', 'to', 'with', 'about', 'at', 'of', 'on', 'from', 'between', 'against']
     __slots__ = ('wordList', 'namedEntityTag', 'subtreeType', 'dependency', 'child', 'text', 'parent', 'dfsTag')
     def __init__(self, word, start=1000, namedEntityTag='undef', subtreeType='undef', dependency='undef', child=None, parent=None):
         self.wordList = [Word(word, start)]    # list of the words contained into the node
@@ -166,6 +167,36 @@ class DependenciesTree:
     def mergeNamedEntityTag(self):
         self.mergeNamedEntityTagChildParent()
         self.mergeNamedEntityTagSisterBrother()
+
+
+    def mergePrepositionNode(self):
+        """
+            Merge x -> y into 'x y' if y is a preposition
+        """
+        for child in self.child:
+            child.mergePrepositionNode()
+            if child.getWords() in self.prepositionSet:
+                self.merge(child, True)
+
+    def mergePrepositionEdge(self):
+        """
+            Replace a -prep_x-> b by 'a x' -prep-> b if a is a verb, a -prep-> b otherwise
+            Replace a -agent-> b by 'a by' -agent-> b
+        """
+        for child in self.child:
+            child.mergePrepositionEdge()
+            if child.dependency.startswith('prep'): # prep_x or prepc_x
+                preposition = ' '.join(child.dependency.split('_')[1:]) # type of the prep (of, in, ...)
+                if self.wordList[0].pos[0] == 'V':
+                    self.wordList[0].word += ' ' + preposition
+                child.dependency = 'prep'
+            if child.dependency == 'agent':
+                assert self.wordList[0].pos[0] == 'V'
+                self.wordList[0].word += ' by'
+
+    def mergePreposition(self):
+        self.mergePrepositionNode()
+        self.mergePrepositionEdge()
 
 class TreeGenerator:
     """

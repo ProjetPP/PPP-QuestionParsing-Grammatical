@@ -37,7 +37,7 @@ class DependenciesTreeTests(TestCase):
     # computeTree #
     ###############
 
-    def testStr(self):
+    def testStr1(self):
         tree=computeTree(data.give_john_smith()['sentences'][0])
         self.maxDiff=None
         tree.sort()
@@ -174,6 +174,14 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(len(united.child), 0)
         self.assertEqual(united.subtreeType, 'undef')
         self.assertEqual(united.dfsTag, 0)
+
+    def testStr2(self):
+        tree=computeTree(data.give_john_smith()['sentences'][0])
+        tree.mergeNamedEntityTag()
+        tree.mergePreposition()
+        self.maxDiff=None
+        tree.sort()
+        self.assertEqual(str(tree), data.give_john_smith_stringMerge())
 
     ###############
     # correctTree #

@@ -1,6 +1,6 @@
 import json
 from nltk.stem.wordnet import WordNetLemmatizer
-from ppp_questionparsing_grammatical import Word, QuotationHandler, DependenciesTree, computeTree, QuotationError, preprocessingMerge
+from ppp_questionparsing_grammatical import Word, QuotationHandler, DependenciesTree, computeTree, QuotationError
 import data
 
 from unittest import TestCase
@@ -46,24 +46,14 @@ class PreprocessingMergeTests(TestCase):
         self.assertRaises(QuotationError, handler.pull, sentence1)
         self.assertRaises(QuotationError, handler.pull, sentence2)
 
-    ######################
-    # preprocessingMerge #
-    ######################
-
-    def testStr(self):
-        tree=computeTree(data.give_john_smith()['sentences'][0])
-        preprocessingMerge(tree)
-        self.maxDiff=None
-        tree.sort()
-        self.assertEqual(str(tree), data.give_john_smith_stringMerge())
-
     def testQuotationMerge(self):
         handler = QuotationHandler('foo')
         sentence = 'Who wrote "Lucy in the Sky with Diamonds" and "Let It Be"?'
         nonAmbiguousSentence = handler.pull(sentence)
         result=data.give_LSD_LIB()
         tree=computeTree(result['sentences'][0])
-        preprocessingMerge(tree)
+        tree.mergeNamedEntityTag()
+        tree.mergePreposition()
         handler.push(tree)
         tree.sort()
         root=tree
