@@ -123,6 +123,50 @@ class DependenciesTree:
             other.parent.child.remove(other)
         other.wordList = None
 
+    def mergeNamedEntityTagChildParent(self):
+        """
+            Merge all nodes n1, n2 such that:
+                * n1 is parent of n2
+                * n1 and n2 have a same namedEntityTag
+            Don't merge if the 2 words are linked by a conjonction
+        """
+        for child in self.child:
+            child.mergeNamedEntityTagChildParent()
+        if self.namedEntityTag == 'undef':
+            return
+        sameTagChild = set()
+        for child in self.child:
+            if child.namedEntityTag == self.namedEntityTag and not child.dependency.startswith('conj'):
+                sameTagChild.add(child)
+        for child in sameTagChild:
+            self.merge(child, True)
+
+    def mergeNamedEntityTagSisterBrother(self):
+        """
+            Merge all nodes n1, n2 such that:
+                * n1 and n2 have a same parent
+                * n1 and n2 have a same namedEntityTag
+                * n1 and n2 have a same dependency
+        """
+        for child in self.child:
+            child.mergeNamedEntityTagSisterBrother()
+        tagToNodes = {}
+        for child in self.child:
+            if child.namedEntityTag == 'undef' or child.dependency.startswith('conj'):
+                continue
+            try:
+                tagToNodes[child.namedEntityTag+child.dependency].add(child)
+            except KeyError:
+                tagToNodes[child.namedEntityTag+child.dependency] = set([child])
+        for sameTag in tagToNodes.values():
+            x = sameTag.pop()
+            for other in sameTag:
+                x.merge(other, True)
+
+    def mergeNamedEntityTag(self):
+        self.mergeNamedEntityTagChildParent()
+        self.mergeNamedEntityTagSisterBrother()
+
 class TreeGenerator:
     """
         A class to generate a dependency tree given the result of the Stanford parser.

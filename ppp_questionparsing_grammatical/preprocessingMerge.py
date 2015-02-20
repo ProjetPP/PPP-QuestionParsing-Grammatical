@@ -87,54 +87,6 @@ class QuotationHandler:
         for (replacement, original) in self.quotations.items():
             tree.text = tree.text.replace(replacement, "``%s''" % original)
 
-###################
-# NER recognition #
-###################
-
-def mergeNamedEntityTagChildParent(t):
-    """
-        Merge all nodes n1, n2 such that:
-            * n1 is parent of n2
-            * n1 and n2 have a same namedEntityTag
-        Don't merge if the 2 words are linked by a conjonction
-    """
-    for c in t.child:
-        mergeNamedEntityTagChildParent(c)
-    sameTagChild = set()
-    if t.namedEntityTag == 'undef':
-        return
-    for c in t.child:
-        if c.namedEntityTag == t.namedEntityTag and not c.dependency.startswith('conj'):
-            sameTagChild.add(c)
-    for c in sameTagChild:
-        t.merge(c, True)
-
-def mergeNamedEntityTagSisterBrother(t):
-    """
-        Merge all nodes n1, n2 such that:
-            * n1 and n2 have a same parent
-            * n1 and n2 have a same namedEntityTag
-            * n1 and n2 have a same dependency
-    """
-    for c in t.child:
-        mergeNamedEntityTagSisterBrother(c)
-    tagToNodes = {}
-    for c in t.child:
-        if c.namedEntityTag == 'undef' or c.dependency.startswith('conj'):
-            continue
-        try:
-            tagToNodes[c.namedEntityTag+c.dependency].add(c)
-        except KeyError:
-            tagToNodes[c.namedEntityTag+c.dependency] = set([c])
-    for sameTag in tagToNodes.values():
-        x = sameTag.pop()
-        for other in sameTag:
-            x.merge(other, True)
-
-def mergeNamedEntityTag(t):
-    mergeNamedEntityTagChildParent(t)
-    mergeNamedEntityTagSisterBrother(t)
-
 ##########################
 # Preposition processing #
 ##########################
@@ -173,6 +125,6 @@ def mergePrepEdge(t):
 ###################
 
 def preprocessingMerge(t):
-    mergeNamedEntityTag(t)
+    t.mergeNamedEntityTag()
     mergePrepNode(t)
     mergePrepEdge(t)
