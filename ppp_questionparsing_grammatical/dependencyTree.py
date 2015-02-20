@@ -213,7 +213,7 @@ class TreeGenerator:
 def computeTree(stanfordResult):
     """
         Compute the dependence tree.
-        Take in input a piece of the result produced by StanfordNLP (if foo is this result, then r = foo['sentences'][0])
+        Take in input a piece of the result produced by StanfordNLP (if foo is this result, then stanfordResult = foo['sentences'][0])
         Apply quotation and NER merging
         Return the root of the tree (word 'ROOT-0').
     """
