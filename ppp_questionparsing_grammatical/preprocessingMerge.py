@@ -31,15 +31,17 @@ class QuotationHandler:
         self.quotations = {}
         random.seed()
 
-    def checkQuotation(self, sentence):
+    @classmethod
+    def checkQuotation(cls, sentence):
         """
             Check that there is an even number of quotation marks.
             Raise QuotationError otherwise.
         """
-        if len([c for c in sentence if c in self.quotationList]) % 2 == 1:
+        if len([c for c in sentence if c in cls.quotationList]) % 2 == 1:
             raise QuotationError(sentence, "Odd number of quotation marks.")
 
-    def getReplacement(self, sentence):
+    @staticmethod
+    def getReplacement(sentence):
         """
             Return a random string which does not appear in the sentence.
         """
@@ -64,26 +66,26 @@ class QuotationHandler:
         replacement = self.replacement+str(self.replacementIndex)
         self.replacementIndex += 1
         self.quotations[replacement] = sentence[indexBegin+1:indexEnd]
-        return self.pull(sentence[0:indexBegin]+replacement+sentence[indexEnd+1:])
+        return self.pull("%s%s%s" % (sentence[0:indexBegin], replacement, sentence[indexEnd+1:]))
 
     def push(self, tree):
         """
             Replace/push the spaces in the nodes of the tree.
         """
-        for c in tree.child:
-            self.push(c)
+        for child in tree.child:
+            self.push(child)
         replaced = False
-        for w in tree.wordList:
+        for word in tree.wordList:
             try:
-                w.word = self.quotations[w.word]
-                w.pos = 'QUOTE'
+                word.word = self.quotations[word.word]
+                word.pos = 'QUOTE'
                 replaced = True
             except KeyError:
                 continue
         if replaced:
             tree.namedEntityTag = 'QUOTATION'
-        for key in self.quotations.keys():
-            tree.text = tree.text.replace(key, "``"+self.quotations[key]+"''")
+        for (replacement, original) in self.quotations.items():
+            tree.text = tree.text.replace(replacement, "``%s''" % original)
 
 ###################
 # NER recognition #
