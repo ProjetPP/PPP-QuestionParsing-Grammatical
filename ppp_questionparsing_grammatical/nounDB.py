@@ -49,7 +49,7 @@ class Nounificator:
             pickle.dump([self.verbToNounsDirect, self.verbToNounsInverse], f)
         elif fileExtension in self.jsonExtension:
             f = open(fileName, 'w')
-            json.dump([self.verbToNounsDirect, self.verbToNounsInverse], f, indent=4)
+            json.dump([self.verbToNounsDirect, self.verbToNounsInverse], f, indent=4, sort_keys=True)
         f.close()
 
     def _add(self, verb, noun, target):
