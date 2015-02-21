@@ -11,7 +11,7 @@ from .nounDB import Nounificator
 import pickle
 
 nManual = Nounificator()
-nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManual.pickle'))
+nManual.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationManual.json'))
 nAuto = Nounificator()
 nAuto.load(resource_filename('ppp_questionparsing_grammatical', 'data/nounificationAuto.pickle'))
 
