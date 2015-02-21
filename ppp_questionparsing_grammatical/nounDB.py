@@ -2,7 +2,7 @@ import pickle
 import json
 import os
 
-class txt:
+class TextStream:
     """
         A class to load and save files containing the nounification maps stored in txt format
     """
@@ -76,7 +76,7 @@ class Nounificator:
             module = json
         elif fileExtension in self.txtExtension:
             f = open(fileName, 'r')
-            module = txt()
+            module = TextStream()
         [self.verbToNounsDirect, self.verbToNounsInverse] = module.load(f)
         f.close()
 
@@ -93,7 +93,7 @@ class Nounificator:
             json.dump([self.verbToNounsDirect, self.verbToNounsInverse], f, indent=4, sort_keys=True)
         elif fileExtension in self.txtExtension:
             f = open(fileName, 'w')
-            txt().dump([self.verbToNounsDirect, self.verbToNounsInverse], f)
+            TextStream().dump([self.verbToNounsDirect, self.verbToNounsInverse], f)
         f.close()
 
     def _add(self, verb, noun, target):
