@@ -18,6 +18,16 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(w.pos, 'bar')
         self.assertEqual(str(w), "(foo, 1, bar)")
 
+    def testPOS(self):
+        for pos in {'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'}:
+            w = Word('foo', 1, pos)
+            self.assertTrue(w.isVerb())
+            self.assertFalse(w.isNoun())
+        for pos in {'NN', 'NNS', 'NNP', 'NNPS'}:
+            w = Word('foo', 1, pos)
+            self.assertFalse(w.isVerb())
+            self.assertTrue(w.isNoun())
+
     ###################
     # Dependency tree #
     ###################
@@ -32,6 +42,19 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(n.parent, None)
         self.assertEqual(n.subtreeType, 'undef')
         self.assertEqual(n.dfsTag, 0)
+        self.assertFalse(n.isVerb())
+        self.assertFalse(n.isNoun())
+
+    def testTreePos(self):
+        n = DependenciesTree('foo', 1)
+        n.wordList += [Word('eat', 2, 'VB'), Word('bar', 3)]
+        self.assertTrue(n.isVerb())
+        self.assertFalse(n.isNoun())
+        n = DependenciesTree('foo', 1)
+        n.wordList += [Word('broomstick', 2, 'NN'), Word('bar', 3)]
+        self.assertFalse(n.isVerb())
+        self.assertTrue(n.isNoun())
+
 
     ###############
     # computeTree #

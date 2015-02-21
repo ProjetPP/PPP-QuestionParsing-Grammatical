@@ -14,7 +14,7 @@ class Word:
     def __init__(self, word, index, pos=None):
         self.word = word    # string that represents the word
         self.index = index  # position in the sentence
-        self.pos = pos      # Part Of Speech tag (verb, noun, ...)
+        self.pos = pos or ""  # Part Of Speech tag (verb, noun, ...)
 
     def __str__(self):
         return "({0}, {1}, {2})".format(str(self.word), str(self.index), str(self.pos))
@@ -23,6 +23,18 @@ class Word:
         return self.word == other.word and \
                 self.index == other.index and \
                 self.pos == other.pos
+
+    def isNoun(self):
+        """
+            Return True if and onlf if the word is a verb (according to its POS tag).
+        """
+        return self.pos.startswith('N')
+
+    def isVerb(self):
+        """
+            Return True if and onlf if the word is a noun (according to its POS tag).
+        """
+        return self.pos.startswith('V')
 
 ###################
 # Dependency tree #
@@ -44,6 +56,18 @@ class DependenciesTree:
         self.text = ""                        # each node contains the initial whole sentence
         self.parent = parent                  # parent of self
         self.dfsTag = 0                       # number attributed by a dfs
+
+    def isVerb(self):
+        """
+            Return True if and onlf if one word of wordList is a verb (according to its POS tag).
+        """
+        return any(word.isVerb() for word in self.wordList)
+
+    def isNoun(self):
+        """
+            Return True if and onlf if one word of wordList is a noun (according to its POS tag).
+        """
+        return any(word.isNoun() for word in self.wordList)
 
     def dfsAnnotate(self, n):
         """
