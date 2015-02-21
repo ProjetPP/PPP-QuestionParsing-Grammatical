@@ -46,11 +46,10 @@ class Nounificator:
         fileExtension = os.path.splitext(fileName)[1][1:]
         if fileExtension in self.pickleExtension:
             f = open(fileName, 'wb')
-            module = pickle
+            pickle.dump([self.verbToNounsDirect, self.verbToNounsInverse], f)
         elif fileExtension in self.jsonExtension:
             f = open(fileName, 'w')
-            module = json
-        module.dump([self.verbToNounsDirect, self.verbToNounsInverse], f)
+            json.dump([self.verbToNounsDirect, self.verbToNounsInverse], f, indent=4)
         f.close()
 
     def _add(self, verb, noun, target):
