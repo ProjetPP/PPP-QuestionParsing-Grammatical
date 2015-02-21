@@ -1,10 +1,13 @@
 import pickle
+import json
+import os
 
 class Nounificator:
     """
         A class to handle the correspondances from the verbs to the nouns.
     """
-
+    pickleExtension = {'pickle', 'pkl', 'p'}
+    jsonExtension = {'json', 'txt'}
     def __init__(self):
         self.verbToNounsDirect = {}
         self.verbToNounsInverse = {}
@@ -22,22 +25,32 @@ class Nounificator:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
-    def load(self, file_name):
+    def load(self, fileName):
         """
-            Load the database from the file of given name (pickle format).
+            Load the database from the file of given name (pickle or json format).
         """
-        f = open(file_name, 'rb')
-        self.verbToNounsDirect = pickle.load(f)
-        self.verbToNounsInverse = pickle.load(f)
+        fileExtension = os.path.splitext(fileName)[1][1:]
+        if fileExtension in self.pickleExtension:
+            f = open(fileName, 'rb')
+            module = pickle
+        elif fileExtension in self.jsonExtension:
+            f = open(fileName, 'r')
+            module = json
+        [self.verbToNounsDirect, self.verbToNounsInverse] = module.load(f)
         f.close()
 
-    def save(self, file_name):
+    def save(self, fileName):
         """
             Save the database into the file of given name (pickle format).
         """
-        f = open(file_name, 'wb')
-        pickle.dump(self.verbToNounsDirect, f)
-        pickle.dump(self.verbToNounsInverse, f)
+        fileExtension = os.path.splitext(fileName)[1][1:]
+        if fileExtension in self.pickleExtension:
+            f = open(fileName, 'wb')
+            module = pickle
+        elif fileExtension in self.jsonExtension:
+            f = open(fileName, 'w')
+            module = json
+        module.dump([self.verbToNounsDirect, self.verbToNounsInverse], f)
         f.close()
 
     def _add(self, verb, noun, target):
