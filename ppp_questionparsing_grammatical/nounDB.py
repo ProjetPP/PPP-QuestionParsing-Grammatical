@@ -2,12 +2,50 @@ import pickle
 import json
 import os
 
+class txt:
+    """
+        A class to load and save files containing the nounification maps stored in txt format
+    """
+    def load(self, f):
+        """
+            Load the content of f
+        """
+        verbToNounsDirect = {}
+        verbToNounsInverse = {}
+        for line in f:
+            line = line.replace('\n', '')
+            if ' -> ' in line:
+                [key, nounList] = line.split(' -> ', 1)
+                target = verbToNounsDirect
+            if ' <- ' in line:
+                [key, nounList] = line.split(' <- ', 1)
+                target = verbToNounsInverse
+            for noun in nounList.split(', '):
+                if not key in target:
+                    target[key] = [noun]
+                elif not noun in target[key]:
+                    target[key].append(noun)
+        return [verbToNounsDirect, verbToNounsInverse]
+
+    def dump(self, data, f):
+        """
+            Save data into f
+        """
+        [verbToNounsDirect, verbToNounsInverse] = data
+        l = sorted([(x, 0) for x in verbToNounsDirect.keys()] + [(x, 1) for x in verbToNounsInverse.keys()])
+        for couple in l:
+            if couple[1] == 0:
+                f.write('%s -> %s\n' % (couple[0], ', '.join(verbToNounsDirect[couple[0]])))
+            if couple[1] == 1:
+                f.write('%s <- %s\n' % (couple[0], ', '.join(verbToNounsInverse[couple[0]])))
+
 class Nounificator:
     """
         A class to handle the correspondances from the verbs to the nouns.
     """
     pickleExtension = {'pickle', 'pkl', 'p'}
-    jsonExtension = {'json', 'txt'}
+    jsonExtension = {'json'}
+    txtExtension = {'txt'}
     def __init__(self):
         self.verbToNounsDirect = {}
         self.verbToNounsInverse = {}
@@ -36,6 +74,9 @@ class Nounificator:
         elif fileExtension in self.jsonExtension:
             f = open(fileName, 'r')
             module = json
+        elif fileExtension in self.txtExtension:
+            f = open(fileName, 'r')
+            module = txt()
         [self.verbToNounsDirect, self.verbToNounsInverse] = module.load(f)
         f.close()
 
@@ -50,6 +91,9 @@ class Nounificator:
         elif fileExtension in self.jsonExtension:
             f = open(fileName, 'w')
             json.dump([self.verbToNounsDirect, self.verbToNounsInverse], f, indent=4, sort_keys=True)
+        elif fileExtension in self.txtExtension:
+            f = open(fileName, 'w')
+            txt().dump([self.verbToNounsDirect, self.verbToNounsInverse], f)
         f.close()
 
     def _add(self, verb, noun, target):

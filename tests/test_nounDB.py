@@ -42,7 +42,9 @@ class DependenciesTreeTests(TestCase):
         n.addInverse('a', 'c')
         n.addDirect('s', 't')
         n.addInverse('x', 'z')
-        for ext in {'pickle', 'json'}:
+        n.addInverse('s', 'e f')
+        n.addInverse('r s', 'e f g')
+        for ext in {'pickle', 'json', 'txt'}:
             n.save('/tmp/test.%s' % ext)
             m = Nounificator()
             m.load('/tmp/test.%s' % ext)
