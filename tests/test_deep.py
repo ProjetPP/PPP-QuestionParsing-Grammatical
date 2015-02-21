@@ -44,7 +44,7 @@ class RequestHandlerTest(PPPTestCase(app), InclusionTestCase):
     def testResourceOutput(self):
         self.getAnswer("Yoda", 0)
 
-    # def testQuestions(self):
-    #     for (sentence, expectedTree) in data_deep.expected.items():
-    #         self.checkQuestion(sentence, expectedTree)
-    #     print("Deep test: %s questions successfully checked." % len(data_deep.expected.items()), file=sys.stderr)
+    def testQuestions(self):
+        for (sentence, expectedTree) in data_deep.expected.items():
+            self.checkQuestion(sentence, expectedTree)
+        print("Deep test: %s questions successfully checked." % len(data_deep.expected.items()), file=sys.stderr)
