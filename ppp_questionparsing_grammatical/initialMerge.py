@@ -6,7 +6,8 @@ class NamedEntityMerging:
     def __init__(self, tree):
         self.tree = tree
 
-    def _mergeChildParent(self, tree):
+    @classmethod
+    def _mergeChildParent(cls, tree):
         """
             Merge all nodes n1, n2 such that:
                 * n1 is parent of n2
@@ -14,7 +15,7 @@ class NamedEntityMerging:
             Don't merge if the 2 words are linked by a conjonction
         """
         for child in tree.child:
-            self._mergeChildParent(child)
+            cls._mergeChildParent(child)
         if tree.namedEntityTag == 'undef':
             return
         sameTagChild = set()
@@ -24,7 +25,8 @@ class NamedEntityMerging:
         for child in sameTagChild:
             tree.merge(child, True)
 
-    def _mergeSisterBrother(self, tree):
+    @classmethod
+    def _mergeSisterBrother(cls, tree):
         """
             Merge all nodes n1, n2 such that:
                 * n1 and n2 have a same parent
@@ -32,7 +34,7 @@ class NamedEntityMerging:
                 * n1 and n2 have a same dependency
         """
         for child in tree.child:
-            self._mergeSisterBrother(child)
+            cls._mergeSisterBrother(child)
         tagToNodes = {}
         for child in tree.child:
             if child.namedEntityTag == 'undef' or child.dependency.startswith('conj'):
@@ -70,24 +72,26 @@ class PrepositionMerging:
     def __init__(self, tree):
         self.tree = tree
 
-    def _mergeNode(self, tree):
+    @classmethod
+    def _mergeNode(cls, tree):
         """
             Merge x -> y into 'x y' if y is a preposition
         """
         for child in tree.child:
-            self._mergeNode(child)
-            if child.getWords() in self.prepositionSet:
+            cls._mergeNode(child)
+            if child.getWords() in cls.prepositionSet:
                 tree.merge(child, True)
 
-    def _mergeEdge(self, tree):
+    @classmethod
+    def _mergeEdge(cls, tree):
         """
             Replace a -prep_x-> b by 'a x' -prep-> b if a is a verb, a -prep-> b otherwise
             Replace a -agent-> b by 'a by' -agent-> b
         """
         for child in tree.child:
-            self._mergeEdge(child)
+            cls._mergeEdge(child)
             if child.dependency.startswith('prep'): # prep_x or prepc_x
-                preposition = self.getPreposition(child.dependency) # type of the prep (of, in, ...)
+                preposition = cls.getPreposition(child.dependency) # type of the prep (of, in, ...)
                 if tree.isVerb():
                     tree.appendWord(preposition)
                 child.dependency = 'prep'
