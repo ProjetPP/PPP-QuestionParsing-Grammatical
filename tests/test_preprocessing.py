@@ -52,8 +52,6 @@ class PreprocessingMergeTests(TestCase):
         nonAmbiguousSentence = handler.pull(sentence)
         result=data.give_LSD_LIB()
         tree=computeTree(result['sentences'][0])
-        tree.mergeNamedEntityTag()
-        tree.mergePreposition()
         handler.push(tree)
         tree.sort()
         root=tree

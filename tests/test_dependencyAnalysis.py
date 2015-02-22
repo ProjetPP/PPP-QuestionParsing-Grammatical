@@ -1,6 +1,6 @@
 import json
 
-from ppp_questionparsing_grammatical import Word, DependenciesTree, computeTree, simplify
+from ppp_questionparsing_grammatical import Word, DependenciesTree, computeTree, simplify, NamedEntityMerging, PrepositionMerging
 import data
 
 from unittest import TestCase
@@ -9,20 +9,20 @@ class HierarchyTests(TestCase):
 
     def testQuestion(self):
         tree=computeTree(data.give_president_of_USA()['sentences'][0])
-        tree.mergeNamedEntityTag()
-        tree.mergePreposition()
+        NamedEntityMerging(tree).merge()
+        PrepositionMerging(tree).merge()
         self.assertEqual(simplify(tree), 'who')
 
     def testQuestion2(self):
         tree=computeTree(data.give_how_old()['sentences'][0])
-        tree.mergeNamedEntityTag()
-        tree.mergePreposition()
+        NamedEntityMerging(tree).merge()
+        PrepositionMerging(tree).merge()
         self.assertEqual(simplify(tree), 'how old')
 
     def testHierarchySimplification(self):
         tree=computeTree(data.give_president_of_USA()['sentences'][0])
-        tree.mergeNamedEntityTag()
-        tree.mergePreposition()
+        NamedEntityMerging(tree).merge()
+        PrepositionMerging(tree).merge()
         simplify(tree)
         tree.sort()
         root=tree
@@ -64,8 +64,8 @@ class HierarchyTests(TestCase):
 
     def testIgnore(self):
         tree=computeTree(data.give_how_old()['sentences'][0])
-        tree.mergeNamedEntityTag()
-        tree.mergePreposition()
+        NamedEntityMerging(tree).merge()
+        PrepositionMerging(tree).merge()
         simplify(tree)
         tree.sort()
         root=tree
@@ -89,8 +89,8 @@ class HierarchyTests(TestCase):
 
     def testHierarchySimplification2(self):
         tree=computeTree(data.give_USA_president()['sentences'][0])
-        tree.mergeNamedEntityTag()
-        tree.mergePreposition()
+        NamedEntityMerging(tree).merge()
+        PrepositionMerging(tree).merge()
         simplify(tree)
         tree.sort()
         root=tree
@@ -123,8 +123,8 @@ class HierarchyTests(TestCase):
 
     def testHierarchyConnectors1(self):
         tree=computeTree(data.give_opera()['sentences'][0])
-        tree.mergeNamedEntityTag()
-        tree.mergePreposition()
+        NamedEntityMerging(tree).merge()
+        PrepositionMerging(tree).merge()
         simplify(tree)
         tree.sort()
         root=tree
@@ -193,8 +193,8 @@ class HierarchyTests(TestCase):
 
     def testHierarchyConnectors2(self):
         tree=computeTree(data.give_chief()['sentences'][0])
-        tree.mergeNamedEntityTag()
-        tree.mergePreposition()
+        NamedEntityMerging(tree).merge()
+        PrepositionMerging(tree).merge()
         simplify(tree)
         tree.sort()
         root=tree
@@ -254,8 +254,8 @@ class HierarchyTests(TestCase):
 
     def testYesNoQuestion(self):
         tree=computeTree(data.give_born()['sentences'][0])
-        tree.mergeNamedEntityTag()
-        tree.mergePreposition()
+        NamedEntityMerging(tree).merge()
+        PrepositionMerging(tree).merge()
         simplify(tree)
         tree.sort()
         root=tree
@@ -288,8 +288,8 @@ class HierarchyTests(TestCase):
 
     def testNoQW(self):
         tree=computeTree(data.birth_date()['sentences'][0])
-        tree.mergeNamedEntityTag()
-        tree.mergePreposition()
+        NamedEntityMerging(tree).merge()
+        PrepositionMerging(tree).merge()
         simplify(tree)
         tree.sort()
         root=tree
@@ -322,8 +322,8 @@ class HierarchyTests(TestCase):
 
     def testQuestionInfo(self):
         tree=computeTree(data.birth_place()['sentences'][0])
-        tree.mergeNamedEntityTag()
-        tree.mergePreposition()
+        NamedEntityMerging(tree).merge()
+        PrepositionMerging(tree).merge()
         simplify(tree)
         tree.sort()
         root=tree
@@ -356,10 +356,10 @@ class HierarchyTests(TestCase):
 
     def testPassIdentity(self):
         tree=computeTree(data.mickey()['sentences'][0])
-        tree.mergeNamedEntityTag()
-        tree.mergePreposition()
-        tree.mergeNamedEntityTag()
-        tree.mergePreposition()
+        NamedEntityMerging(tree).merge()
+        PrepositionMerging(tree).merge()
+        NamedEntityMerging(tree).merge()
+        PrepositionMerging(tree).merge()
         simplify(tree)
         tree.sort()
         root=tree

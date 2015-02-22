@@ -1,6 +1,7 @@
 """Natural language processing module for the PPP."""
 
 from ppp_libmodule import HttpRequestHandler
+from .initialMerge import NamedEntityMerging, PrepositionMerging
 from .dependencyTree import Word, DependenciesTree, TreeGenerator, computeTree
 from .preprocessing import QuotationHandler
 from .questionWordProcessing import identifyQuestionWord, questionWordDependencyTree, questionWordNormalForm
@@ -16,4 +17,4 @@ def app(environ, start_response):
     return HttpRequestHandler(environ, start_response, RequestHandler) \
             .dispatch()
 
-__all__ = ['DependenciesTree', 'computeTree', 'QuotationHandler', 'TreeGenerator', 'simplify', 'identifyQuestionWord', 'QuotationError', 'GrammaticalError', 'Nounificator', 'normalFormProduction']
+__all__ = ['DependenciesTree', 'computeTree', 'QuotationHandler', 'NamedEntityMerging', 'PrepositionMerging', 'TreeGenerator', 'simplify', 'identifyQuestionWord', 'QuotationError', 'GrammaticalError', 'Nounificator', 'normalFormProduction']
