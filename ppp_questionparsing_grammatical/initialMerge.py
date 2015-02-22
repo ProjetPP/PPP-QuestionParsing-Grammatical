@@ -59,6 +59,14 @@ class PrepositionMerging:
         dependencies.
     """
     prepositionSet = ['in', 'for', 'to', 'with', 'about', 'at', 'of', 'on', 'from', 'between', 'against']
+
+    @staticmethod
+    def getPreposition(dep):
+        """
+            Return the preposition associated to a prep dependency.
+        """
+        return ' '.join(dep.split('_')[1:])
+
     def __init__(self, tree):
         self.tree = tree
 
@@ -79,7 +87,7 @@ class PrepositionMerging:
         for child in tree.child:
             self._mergeEdge(child)
             if child.dependency.startswith('prep'): # prep_x or prepc_x
-                preposition = ' '.join(child.dependency.split('_')[1:]) # type of the prep (of, in, ...)
+                preposition = self.getPreposition(child.dependency) # type of the prep (of, in, ...)
                 if tree.isVerb():
                     tree.appendWord(preposition)
                 child.dependency = 'prep'
