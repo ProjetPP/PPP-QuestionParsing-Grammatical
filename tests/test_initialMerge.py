@@ -1,4 +1,5 @@
 import json
+import itertools
 from nltk.stem.wordnet import WordNetLemmatizer
 from ppp_questionparsing_grammatical import Word, DependenciesTree, computeTree, NamedEntityMerging, PrepositionMerging
 import data
@@ -7,7 +8,80 @@ from unittest import TestCase
 
 class PreprocessingMergeTests(TestCase):
 
-    def testEntityTagMerge1(self):
+    def testBasicNamedEntityChildParent(self):
+        tagList = ['LOCATION', 'PERSON', 'NUMBER', 'MONEY', 'MISC']
+        for tag in tagList:
+            parent = DependenciesTree('parent', 1, namedEntityTag = tag)
+            child = DependenciesTree('child', 2, parent = parent, namedEntityTag = tag)
+            parent.child.append(child)
+            child.dependency = 'conj_and'
+            NamedEntityMerging(parent).merge()
+            self.assertEqual(parent.wordList, [Word('parent', 1)])
+            self.assertEqual(parent.child, [child])
+            self.assertEqual(child.parent, parent)
+            child.dependency = 'foo'
+            NamedEntityMerging(parent).merge()
+            self.assertIn(Word('parent', 1), parent.wordList)
+            self.assertIn(Word('child', 2), parent.wordList)
+            self.assertEqual(parent.child, [])
+        for (tag1, tag2) in itertools.permutations(tagList, 2):
+            parent = DependenciesTree('parent', 1, namedEntityTag = tag1)
+            child = DependenciesTree('child', 2, parent = parent, namedEntityTag = tag2)
+            parent.child.append(child)
+            child.dependency = 'conj_and'
+            NamedEntityMerging(parent).merge()
+            self.assertEqual(parent.wordList, [Word('parent', 1)])
+            self.assertEqual(parent.child, [child])
+            self.assertEqual(child.parent, parent)
+            child.dependency = 'foo'
+            NamedEntityMerging(parent).merge()
+            self.assertEqual(parent.wordList, [Word('parent', 1)])
+            self.assertEqual(parent.child, [child])
+            self.assertEqual(child.parent, parent)
+
+    def testBasicNamedEntitySisterBrother(self):
+        tagList = ['LOCATION', 'PERSON', 'NUMBER', 'MONEY', 'MISC']
+        for tag in tagList:
+            parent = DependenciesTree('parent', 1, namedEntityTag = 'undef')
+            child1 = DependenciesTree('child1', 2, parent = parent, namedEntityTag = tag)
+            child2 = DependenciesTree('child2', 3, parent = parent, namedEntityTag = tag)
+            parent.child += [child1, child2]
+            child1.dependency = 'conj_and'
+            child2.dependency = 'conj_and'
+            NamedEntityMerging(parent).merge()
+            self.assertEqual(parent.wordList, [Word('parent', 1)])
+            self.assertEqual(parent.child, [child1, child2])
+            self.assertEqual(child1.parent, parent)
+            self.assertEqual(child2.parent, parent)
+            child1.dependency = 'foo'
+            child2.dependency = 'foo'
+            NamedEntityMerging(parent).merge()
+            self.assertEqual(parent.wordList, [Word('parent', 1)])
+            self.assertEqual(len(parent.child), 1)
+            self.assertIn(Word('child1', 2), parent.child[0].wordList)
+            self.assertIn(Word('child2', 3), parent.child[0].wordList)
+            self.assertEqual(parent.child[0].parent, parent)
+        for (tag1, tag2) in itertools.permutations(tagList, 2):
+            parent = DependenciesTree('parent', 1, namedEntityTag = 'undef')
+            child1 = DependenciesTree('child1', 2, parent = parent, namedEntityTag = tag1)
+            child2 = DependenciesTree('child2', 3, parent = parent, namedEntityTag = tag2)
+            parent.child += [child1, child2]
+            child1.dependency = 'conj_and'
+            child2.dependency = 'conj_and'
+            NamedEntityMerging(parent).merge()
+            self.assertEqual(parent.wordList, [Word('parent', 1)])
+            self.assertEqual(parent.child, [child1, child2])
+            self.assertEqual(child1.parent, parent)
+            self.assertEqual(child2.parent, parent)
+            child1.dependency = 'foo'
+            child2.dependency = 'foo'
+            NamedEntityMerging(parent).merge()
+            self.assertEqual(parent.wordList, [Word('parent', 1)])
+            self.assertEqual(parent.child, [child1, child2])
+            self.assertEqual(child1.parent, parent)
+            self.assertEqual(child2.parent, parent)
+
+    def testNamedEntity1(self):
         tree=computeTree(data.give_john_smith()['sentences'][0])
         NamedEntityMerging(tree).merge()
         tree.sort()
@@ -57,7 +131,7 @@ class PreprocessingMergeTests(TestCase):
         self.assertEqual(the.subtreeType, 'undef')
         self.assertEqual(the.dfsTag, 0)
 
-    def testEntityTagMerge2(self):
+    def testNamedEntity2(self):
         tree=computeTree(data.give_obama_president_usa()['sentences'][0])
         NamedEntityMerging(tree).merge()
         tree.sort()
