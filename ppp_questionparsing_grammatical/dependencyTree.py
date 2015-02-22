@@ -51,7 +51,6 @@ class DependenciesTree:
         One node of the parse tree.
         It is a group of words of the initial sentence.
     """
-    prepositionSet = ['in', 'for', 'to', 'with', 'about', 'at', 'of', 'on', 'from', 'between', 'against']
     __slots__ = ('wordList', 'namedEntityTag', 'subtreeType', 'dependency', 'child', 'text', 'parent', 'dfsTag')
     def __init__(self, word, start=1000, namedEntityTag='undef', subtreeType='undef', dependency='undef', child=None, parent=None):
         self.wordList = [Word(word, start)]    # list of the words contained into the node

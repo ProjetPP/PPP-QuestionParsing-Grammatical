@@ -58,6 +58,7 @@ class PrepositionMerging:
         Perform several merging on the dependency tree according to the preposition
         dependencies.
     """
+    prepositionSet = ['in', 'for', 'to', 'with', 'about', 'at', 'of', 'on', 'from', 'between', 'against']
     def __init__(self, tree):
         self.tree = tree
 
@@ -67,7 +68,7 @@ class PrepositionMerging:
         """
         for child in tree.child:
             self._mergeNode(child)
-            if child.getWords() in tree.prepositionSet:
+            if child.getWords() in self.prepositionSet:
                 tree.merge(child, True)
 
     def _mergeEdge(self, tree):
@@ -84,7 +85,7 @@ class PrepositionMerging:
                 child.dependency = 'prep'
             if child.dependency == 'agent':
                 assert tree.isVerb()
-                tree.append('by')
+                tree.appendWord('by')
 
     def merge(self):
         """

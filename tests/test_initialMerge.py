@@ -43,11 +43,9 @@ class PreprocessingMergeTests(TestCase):
         tagList = ['LOCATION', 'PERSON', 'NUMBER', 'MONEY', 'MISC']
         for tag in tagList:
             parent = DependenciesTree('parent', 1, namedEntityTag = 'undef')
-            child1 = DependenciesTree('child1', 2, parent = parent, namedEntityTag = tag)
-            child2 = DependenciesTree('child2', 3, parent = parent, namedEntityTag = tag)
+            child1 = DependenciesTree('child1', 2, parent = parent, dependency = 'conj_and', namedEntityTag = tag)
+            child2 = DependenciesTree('child2', 3, parent = parent, dependency = 'conj_and', namedEntityTag = tag)
             parent.child += [child1, child2]
-            child1.dependency = 'conj_and'
-            child2.dependency = 'conj_and'
             NamedEntityMerging(parent).merge()
             self.assertEqual(parent.wordList, [Word('parent', 1)])
             self.assertEqual(parent.child, [child1, child2])
@@ -63,11 +61,9 @@ class PreprocessingMergeTests(TestCase):
             self.assertEqual(parent.child[0].parent, parent)
         for (tag1, tag2) in itertools.permutations(tagList, 2):
             parent = DependenciesTree('parent', 1, namedEntityTag = 'undef')
-            child1 = DependenciesTree('child1', 2, parent = parent, namedEntityTag = tag1)
-            child2 = DependenciesTree('child2', 3, parent = parent, namedEntityTag = tag2)
+            child1 = DependenciesTree('child1', 2, parent = parent, dependency = 'conj_and', namedEntityTag = tag1)
+            child2 = DependenciesTree('child2', 3, parent = parent, dependency = 'conj_and', namedEntityTag = tag2)
             parent.child += [child1, child2]
-            child1.dependency = 'conj_and'
-            child2.dependency = 'conj_and'
             NamedEntityMerging(parent).merge()
             self.assertEqual(parent.wordList, [Word('parent', 1)])
             self.assertEqual(parent.child, [child1, child2])
@@ -80,6 +76,42 @@ class PreprocessingMergeTests(TestCase):
             self.assertEqual(parent.child, [child1, child2])
             self.assertEqual(child1.parent, parent)
             self.assertEqual(child2.parent, parent)
+
+    def testBasicPrepositionNode(self):
+        parent = DependenciesTree('parent', 1)
+        child = DependenciesTree('child', 2, parent = parent, dependency = 'foo')
+        parent.child.append(child)
+        PrepositionMerging(parent).merge()
+        self.assertEqual(parent.wordList, [Word('parent', 1)])
+        self.assertEqual(parent.child, [child])
+        self.assertEqual(child.parent, parent)
+        for prep in PrepositionMerging.prepositionSet:
+            parent = DependenciesTree('parent', 1)
+            child = DependenciesTree(prep, 2, parent = parent, dependency = 'foo')
+            parent.child.append(child)
+            child.dependency = 'conj_and'
+            PrepositionMerging(parent).merge()
+            self.assertIn(Word('parent', 1), parent.wordList)
+            self.assertIn(Word(prep, 2), parent.wordList)
+            self.assertEqual(parent.child, [])
+
+    def testBasicPrepositionEdge(self):
+        for prep in ['in', 'of', 'with', 'by']:
+            parent = DependenciesTree('parent', 1)
+            parent.wordList[0].pos = 'VB'
+            child = DependenciesTree('child', 2, parent = parent, dependency = 'prep_'+prep)
+            parent.child.append(child)
+            PrepositionMerging(parent).merge()
+            self.assertEqual(parent.wordList, [Word('parent '+prep, 1, 'VB')])
+            self.assertEqual(parent.child, [child])
+            self.assertEqual(child.dependency, 'prep')
+        parent = DependenciesTree('parent', 1)
+        parent.wordList[0].pos = 'VB'
+        child = DependenciesTree('child', 2, parent = parent, dependency = 'agent')
+        parent.child.append(child)
+        PrepositionMerging(parent).merge()
+        self.assertEqual(parent.wordList, [Word('parent by', 1, 'VB')])
+        self.assertEqual(parent.child, [child])
 
     def testNamedEntity1(self):
         tree=computeTree(data.give_john_smith()['sentences'][0])
