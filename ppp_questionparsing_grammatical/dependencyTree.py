@@ -14,7 +14,7 @@ class Word:
     def __init__(self, word, index, pos=None):
         self.word = word    # string that represents the word
         self.index = index  # position in the sentence
-        self.pos = pos or ""  # Part Of Speech tag (verb, noun, ...)
+        self.pos = pos      # Part Of Speech tag (verb, noun, ...)
 
     def __str__(self):
         return "({0}, {1}, {2})".format(str(self.word), str(self.index), str(self.pos))
@@ -28,13 +28,13 @@ class Word:
         """
             Return True if and onlf if the word is a verb (according to its POS tag).
         """
-        return self.pos.startswith('N')
+        return self.pos is not None and self.pos.startswith('N')
 
     def isVerb(self):
         """
             Return True if and onlf if the word is a noun (according to its POS tag).
         """
-        return self.pos.startswith('V')
+        return self.pos is not None and self.pos.startswith('V')
 
     def append(self, other):
         """
