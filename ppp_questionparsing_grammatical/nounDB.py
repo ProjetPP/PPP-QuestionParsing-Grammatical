@@ -6,6 +6,12 @@ class TextStream:
     """
         A class to load and save files containing the nounification maps stored in txt format
     """
+
+    def __init__(self, directSymbol = ' -> ', inverseSymbol = ' <- ', separator = ', '):
+        self.directSymbol = directSymbol
+        self.inverseSymbol = inverseSymbol
+        self.separator = separator
+
     def load(self, f):
         """
             Load the content of f
@@ -14,13 +20,17 @@ class TextStream:
         verbToNounsInverse = {}
         for line in f:
             line = line.replace('\n', '')
-            if ' -> ' in line:
-                [key, nounList] = line.split(' -> ', 1)
+            if self.directSymbol in line:
+                assert self.inverseSymbol not in line
+                [key, nounList] = line.split(self.directSymbol, 1)
                 target = verbToNounsDirect
-            if ' <- ' in line:
-                [key, nounList] = line.split(' <- ', 1)
+            elif self.inverseSymbol in line:
+                assert self.directSymbol not in line
+                [key, nounList] = line.split(self.inverseSymbol, 1)
                 target = verbToNounsInverse
-            for noun in nounList.split(', '):
+            else:
+                raise Exception("[nounDB] incorrect file format.")
+            for noun in nounList.split(self.separator):
                 if not key in target:
                     target[key] = [noun]
                 elif not noun in target[key]:
@@ -35,9 +45,9 @@ class TextStream:
         l = sorted([(x, 0) for x in verbToNounsDirect.keys()] + [(x, 1) for x in verbToNounsInverse.keys()])
         for couple in l:
             if couple[1] == 0:
-                f.write('%s -> %s\n' % (couple[0], ', '.join(verbToNounsDirect[couple[0]])))
+                f.write('%s%s%s\n' % (couple[0], self.directSymbol, self.separator.join(verbToNounsDirect[couple[0]])))
             if couple[1] == 1:
-                f.write('%s <- %s\n' % (couple[0], ', '.join(verbToNounsInverse[couple[0]])))
+                f.write('%s%s%s\n' % (couple[0], self.inverseSymbol, self.separator.join(verbToNounsInverse[couple[0]])))
 
 class Nounificator:
     """

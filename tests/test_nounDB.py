@@ -38,10 +38,10 @@ class DependenciesTreeTests(TestCase):
 
     def testLoadSave(self):
         n = Nounificator()
-        n.addDirect('a', 'b')
+        n.addListDirect('a', ['b1', 'b2', 'b3'] )
         n.addInverse('a', 'c')
         n.addDirect('s', 't')
-        n.addInverse('x', 'z')
+        n.addListInverse('x', ['z1', 'z2'])
         n.addInverse('s', 'e f')
         n.addInverse('r s', 'e f g')
         for ext in {'pickle', 'json', 'txt'}:
