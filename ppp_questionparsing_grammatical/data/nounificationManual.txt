@@ -28,6 +28,8 @@ do -> process
 do <- process
 elect -> election
 elect <- elector, voter, election
+follow -> follows
+follow <- followed by
 found <- founder, creator, promoter, founded by
 found by -> founder, creator, promoter
 have -> possession
@@ -53,7 +55,7 @@ play -> plays, instrument
 play <- player
 rule on <- ruler
 say -> speech, quotation, say, sentence, state, talk
-say <- author
+say <- author, said by
 sing -> music
 sing <- signer
 speak in <- language

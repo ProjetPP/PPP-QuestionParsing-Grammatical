@@ -213,9 +213,11 @@ dobj
 ccomp
 =====
 
-##### +++
+Disappear with quotation merge (becomes dobbj):
 
 * Who said "I am a Berliner"?
+* What follows "Searchers Search"?
+* Who said "Music hath charm to soothe the savage beast"?
 
 pobj
 ====

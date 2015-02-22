@@ -641,7 +641,13 @@ expected = {
     T(R('Pink Floyd'), R('founded in'), M()),
 
     'Who said \"Music hath charm to soothe the savage beast\"?':
-    T(M(), Li([R('said'), R('quotation')]), R('Music hath charm to soothe the savage beast'), R('author')),
+    T(M(), Li([R('said'), R('quotation')]), R('Music hath charm to soothe the savage beast'), Li([R('author'), R('said by')])),
+
+    'Who said \"I am a Berliner\"?':
+    T(M(), Li([R('said'), R('quotation')]), R('I am a Berliner'), Li([R('author'), R('said by')])),
+
+    'What follows \"Searchers Search\"?':
+    T(M(), R('follows'), R('Searchers Search'), R('followed by')),
 
     'What is the deepest lake in America?':
     L(
