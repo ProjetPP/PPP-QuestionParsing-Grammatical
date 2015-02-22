@@ -30,7 +30,7 @@ class NamedEntityMerging:
         """
             Merge all nodes n1, n2 such that:
                 * n1 and n2 have a same parent
-                * n1 and n2 have a same namedEntityTag
+                * n1 and n2 have a same namedEntityTag (except conj)
                 * n1 and n2 have a same dependency
         """
         for child in tree.child:
