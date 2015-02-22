@@ -17,6 +17,8 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(w.index, 1)
         self.assertEqual(w.pos, 'bar')
         self.assertEqual(str(w), "(foo, 1, bar)")
+        w.append('aaa')
+        self.assertEqual(Word('foo aaa', 1, 'bar'), w)
 
     def testPOS(self):
         for pos in {'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'}:
@@ -44,6 +46,8 @@ class DependenciesTreeTests(TestCase):
         self.assertEqual(n.dfsTag, 0)
         self.assertFalse(n.isVerb())
         self.assertFalse(n.isNoun())
+        n.appendWord('bar')
+        self.assertEqual(str(DependenciesTree('foo bar', 1)), str(n))
 
     def testTreePos(self):
         n = DependenciesTree('foo', 1)

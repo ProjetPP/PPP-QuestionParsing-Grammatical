@@ -36,6 +36,12 @@ class Word:
         """
         return self.pos.startswith('V')
 
+    def append(self, other):
+        """
+            Append the given string at the end of the word.
+        """
+        self.word += " " + other
+
 ###################
 # Dependency tree #
 ###################
@@ -68,6 +74,14 @@ class DependenciesTree:
             Return True if and onlf if one word of wordList is a noun (according to its POS tag).
         """
         return any(word.isNoun() for word in self.wordList)
+
+    def appendWord(self, word):
+        """
+            Assume the wordList contains only one element.
+            Append the given string at the end of the word of the wordList.
+        """
+        assert len(self.wordList) == 1
+        self.wordList[0].append(word)
 
     def dfsAnnotate(self, n):
         """
@@ -211,12 +225,12 @@ class DependenciesTree:
             child.mergePrepositionEdge()
             if child.dependency.startswith('prep'): # prep_x or prepc_x
                 preposition = ' '.join(child.dependency.split('_')[1:]) # type of the prep (of, in, ...)
-                if self.wordList[0].pos[0] == 'V':
-                    self.wordList[0].word += ' ' + preposition
+                if self.isVerb():
+                    self.appendWord(preposition)
                 child.dependency = 'prep'
             if child.dependency == 'agent':
-                assert self.wordList[0].pos[0] == 'V'
-                self.wordList[0].word += ' by'
+                assert self.isVerb()
+                self.append('by')
 
     def mergePreposition(self):
         self.mergePrepositionNode()
