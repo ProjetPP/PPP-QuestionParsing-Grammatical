@@ -1,0 +1,268 @@
+[
+    {
+        "author": [
+            "works",
+            "literary works",
+            "bibliography",
+            "work"
+        ],
+        "author by": [
+            "author",
+            "writer"
+        ],
+        "base": [
+            "place",
+            "location",
+            "residence",
+            "country",
+            "adress"
+        ],
+        "be": [
+            "identity"
+        ],
+        "bear": [
+            "birth"
+        ],
+        "bear in": [
+            "birthplace",
+            "place of birth",
+            "birth place"
+        ],
+        "bear on": [
+            "birth date",
+            "birthday",
+            "birthdate"
+        ],
+        "belong to": [
+            "owner",
+            "part of"
+        ],
+        "build": [
+            "construction"
+        ],
+        "bury in": [
+            "location of burial",
+            "burial place"
+        ],
+        "call": [
+            "name",
+            "nickname"
+        ],
+        "come from": [
+            "origin"
+        ],
+        "cover": [
+            "superficy"
+        ],
+        "die": [
+            "death"
+        ],
+        "direct by": [
+            "director",
+            "direction"
+        ],
+        "do": [
+            "process"
+        ],
+        "elect": [
+            "election"
+        ],
+        "found by": [
+            "founder",
+            "creator",
+            "promoter"
+        ],
+        "have": [
+            "possession"
+        ],
+        "invent": [
+            "invention"
+        ],
+        "kill by": [
+            "killer",
+            "murderer"
+        ],
+        "live": [
+            "place",
+            "home",
+            "residence",
+            "adress"
+        ],
+        "live in": [
+            "place",
+            "home",
+            "residence",
+            "adress"
+        ],
+        "make of": [
+            "component",
+            "ingredient",
+            "composition"
+        ],
+        "marry": [
+            "husband",
+            "wife",
+            "married to"
+        ],
+        "marry to": [
+            "husband",
+            "wife"
+        ],
+        "mean": [
+            "meaning",
+            "significance",
+            "signification"
+        ],
+        "own": [
+            "ownership",
+            "possession"
+        ],
+        "play": [
+            "plays",
+            "instrument"
+        ],
+        "say": [
+            "speech",
+            "quotation",
+            "say",
+            "sentence",
+            "state",
+            "talk"
+        ],
+        "sing": [
+            "music"
+        ],
+        "stand for": [
+            "meaning"
+        ],
+        "write": [
+            "literary works",
+            "bibliography",
+            "work",
+            "works"
+        ]
+    },
+    {
+        "author": [
+            "author",
+            "writer"
+        ],
+        "author by": [
+            "works",
+            "literary works",
+            "bibliography",
+            "work"
+        ],
+        "be": [
+            "identity"
+        ],
+        "bear": [
+            "birth"
+        ],
+        "bear on": [
+            "birth"
+        ],
+        "build": [
+            "architecht",
+            "builder",
+            "constructor"
+        ],
+        "celebrate in": [
+            "celebration",
+            "holiday",
+            "public holiday"
+        ],
+        "cook": [
+            "toque",
+            "cooker",
+            "chef"
+        ],
+        "develop": [
+            "developer"
+        ],
+        "direct": [
+            "director",
+            "direction"
+        ],
+        "discover": [
+            "discoverer",
+            "discovered by"
+        ],
+        "do": [
+            "process"
+        ],
+        "elect": [
+            "elector",
+            "voter",
+            "election"
+        ],
+        "found": [
+            "founder",
+            "creator",
+            "promoter",
+            "founded by"
+        ],
+        "have": [
+            "possessor"
+        ],
+        "invent": [
+            "inventor"
+        ],
+        "kill": [
+            "killer",
+            "murderer"
+        ],
+        "lead": [
+            "leader",
+            "chef"
+        ],
+        "live": [
+            "inhabitant",
+            "resident",
+            "citizen",
+            "habitant",
+            "dweller",
+            "occupant"
+        ],
+        "live in": [
+            "inhabitant",
+            "resident",
+            "citizen",
+            "habitant",
+            "dweller",
+            "occupant"
+        ],
+        "marry": [
+            "husband",
+            "wife",
+            "married to"
+        ],
+        "marry to": [
+            "husband",
+            "wife"
+        ],
+        "own": [
+            "owner",
+            "owned by"
+        ],
+        "play": [
+            "player"
+        ],
+        "rule on": [
+            "ruler"
+        ],
+        "say": [
+            "author"
+        ],
+        "sing": [
+            "signer"
+        ],
+        "speak in": [
+            "language"
+        ],
+        "write": [
+            "author",
+            "writer"
+        ]
+    }
+]

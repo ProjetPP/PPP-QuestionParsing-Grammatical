@@ -36,13 +36,16 @@ class DependenciesTreeTests(TestCase):
         n.removeVerbDirect('k')
         self.assertFalse('l' in n.directNouns('k'))
 
-    def testPickle(self):
+    def testLoadSave(self):
         n = Nounificator()
-        n.addDirect('a', 'b')
+        n.addListDirect('a', ['b1', 'b2', 'b3'] )
         n.addInverse('a', 'c')
         n.addDirect('s', 't')
-        n.addInverse('x', 'z')
-        n.save('/tmp/test.pickle')
-        m = Nounificator()
-        m.load('/tmp/test.pickle')
-        self.assertEqual(n, m)
+        n.addListInverse('x', ['z1', 'z2'])
+        n.addInverse('s', 'e f')
+        n.addInverse('r s', 'e f g')
+        for ext in {'pickle', 'json', 'txt'}:
+            n.save('/tmp/test.%s' % ext)
+            m = Nounificator()
+            m.load('/tmp/test.%s' % ext)
+            self.assertEqual(n, m)
