@@ -22,6 +22,7 @@ before_script:
   - ./setup.py install
 
 script:
+  - rm ppp_questionparsing_grammatical* -rf
   - coverage3 run run_tests.py
 
 after_script:
