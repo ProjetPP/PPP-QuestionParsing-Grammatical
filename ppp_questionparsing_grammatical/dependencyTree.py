@@ -26,7 +26,7 @@ class Word:
 
     def isNoun(self):
         """
-            Return True if and onlf if the word is a verb (according to its POS tag).
+            Return True if and only if the word is a verb (according to its POS tag).
         """
         return self.pos is not None and self.pos.startswith('N')
 
@@ -53,7 +53,7 @@ class DependenciesTree:
     """
     __slots__ = ('wordList', 'namedEntityTag', 'subtreeType', 'dependency', 'child', 'text', 'parent', 'dfsTag')
     def __init__(self, word, start=1000, namedEntityTag='undef', subtreeType='undef', dependency='undef', child=None, parent=None):
-        self.wordList = [Word(word, start)]    # list of the words contained into the node
+        self.wordList = [Word(word, start)]   # list of the words contained into the node
         self.namedEntityTag = namedEntityTag  # NER tag (location, ...)
         self.subtreeType = subtreeType        # type of the info represented by the subtree
         self.dependency = dependency          # dependency from self to its parent
@@ -64,13 +64,13 @@ class DependenciesTree:
 
     def isVerb(self):
         """
-            Return True if and onlf if one word of wordList is a verb (according to its POS tag).
+            Return True if and only if one word of wordList is a verb (according to its POS tag).
         """
         return any(word.isVerb() for word in self.wordList)
 
     def isNoun(self):
         """
-            Return True if and onlf if one word of wordList is a noun (according to its POS tag).
+            Return True if and only if one word of wordList is a noun (according to its POS tag).
         """
         return any(word.isNoun() for word in self.wordList)
 
@@ -161,6 +161,10 @@ class DependenciesTree:
             other.parent.child.remove(other)
         other.wordList = None
 
+#############################
+# Dependency tree generator #
+#############################
+
 class TreeGenerator:
     """
         A class to generate a dependency tree given the result of the Stanford parser.
@@ -212,7 +216,7 @@ class TreeGenerator:
     def _addNamedEntityTag(self, tree, words):
         """
             If a word v is between 2 words u and w that have the same NER tag,
-            and v is linked to u or w by a nn relation,
+               and v is linked to u or w by a nn relation,
             then add the tag of u and w to v
         """
         def nnDependent(n1, n2):
