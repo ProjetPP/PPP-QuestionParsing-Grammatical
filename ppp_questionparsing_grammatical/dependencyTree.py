@@ -129,10 +129,10 @@ class DependenciesTree:
             t+= " [{0}]".format(self.namedEntityTag)
         if self.subtreeType != 'undef':
             t+= " [$ {0}]".format(self.subtreeType)
-        s+="\t\"{0}\"[label=\"{1}{2}\", shape=box];\n".format(str(self.dfsTag), w, t)
+        s+='\t"{0}"[label="{1}{2}", shape=box];\n'.format(str(self.dfsTag), w, t)
         # Adding definitions of the edges
         for n in self.child:
-            s+="\t\"{0}\" -> \"{1}\"[label=\"{2}\"];\n".format(str(self.dfsTag), str(n.dfsTag), n.dependency)
+            s+='\t"{0}" -> "{1}"[label="{2}"];\n'.format(str(self.dfsTag), str(n.dfsTag), n.dependency)
         # Recursive calls
         for n in self.child:
             assert n.parent == self
@@ -144,7 +144,7 @@ class DependenciesTree:
             Print dependency graph in dot format
         """
         self.dfsAnnotate(0)
-        return "digraph relations {"+"\n{0}\tlabelloc=\"t\"\tlabel=\"{1}\";\n".format(self.string(), self.text)+"}"
+        return 'digraph relations {' + '\n{0}\tlabelloc="t"\tlabel="{1}";\n'.format(self.string(), self.text)+'}'
 
     def merge(self, other, mergeWords):
         """
@@ -260,5 +260,5 @@ def computeTree(stanfordResult):
     """
     generator = TreeGenerator(stanfordResult)
     tree = generator.computeTree()
-    tree.initText(stanfordResult['text'].replace('"', '\\\"')) # each node contains the input question
+    tree.initText(stanfordResult['text'].replace('"', '\\"')) # each node contains the input question
     return tree
