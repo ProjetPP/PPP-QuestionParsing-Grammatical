@@ -1,7 +1,7 @@
-author -> works, literary works, bibliography, work
+author -> literary works, bibliography
 author <- author, writer
 author by -> author, writer
-author by <- works, literary works, bibliography, work
+author by <- literary works, bibliography
 base -> place, location, residence, country, adress
 be -> identity
 be <- identity
@@ -60,5 +60,5 @@ sing -> music
 sing <- signer
 speak in <- language
 stand for -> meaning
-write -> literary works, bibliography, work, works
+write -> literary works, bibliography
 write <- author, writer

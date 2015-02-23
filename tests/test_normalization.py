@@ -162,14 +162,6 @@ class StandardTripleTests(TestCase):
                     {
                         "value": "bibliography",
                         "type": "resource"
-                    },
-                    {
-                        "value": "work",
-                        "type": "resource"
-                    },
-                    {
-                        "value": "works",
-                        "type": "resource"
                     }
                 ],
                 "type": "list"
@@ -209,14 +201,6 @@ class StandardTripleTests(TestCase):
                     },
                     {
                         "value": "bibliography",
-                        "type": "resource"
-                    },
-                    {
-                        "value": "work",
-                        "type": "resource"
-                    },
-                    {
-                        "value": "works",
                         "type": "resource"
                     }
                 ],
