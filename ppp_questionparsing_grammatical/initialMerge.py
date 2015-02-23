@@ -26,7 +26,7 @@ class NamedEntityMerging:
             tree.merge(child, True)
 
     @classmethod
-    def _mergeSisterBrother(cls, tree):
+    def _mergeSibling(cls, tree):
         """
             Merge all nodes n1, n2 such that:
                 * n1 and n2 have a same parent
@@ -34,7 +34,7 @@ class NamedEntityMerging:
                 * n1 and n2 have a same dependency
         """
         for child in tree.child:
-            cls._mergeSisterBrother(child)
+            cls._mergeSibling(child)
         tagToNodes = {}
         for child in tree.child:
             if child.namedEntityTag == 'undef' or child.dependency.startswith('conj'):
@@ -53,7 +53,7 @@ class NamedEntityMerging:
             Perform the different merges.
         """
         self._mergeChildParent(self.tree)
-        self._mergeSisterBrother(self.tree)
+        self._mergeSibling(self.tree)
 
 class PrepositionMerging:
     """
