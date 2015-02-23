@@ -4,7 +4,7 @@ import jsonrpclib
 import fileinput
 import os
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.sys.path.insert(0,parentdir) 
+os.sys.path.insert(0,parentdir)
 os.environ['PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'] = '../example_config.json'
 import ppp_questionparsing_grammatical
 
@@ -23,7 +23,8 @@ def get_tree():
     result = nlp.parse(simplifiedSentence)
     tree = ppp_questionparsing_grammatical.computeTree(result['sentences'][0])
     handler.push(tree)
-    ppp_questionparsing_grammatical.preprocessingMerge(tree)
+    ppp_questionparsing_grammatical.NamedEntityMerging(tree).merge()
+    ppp_questionparsing_grammatical.PrepositionMerging(tree).merge()
     qw = ppp_questionparsing_grammatical.simplify(tree)
     return tree
 

@@ -23,7 +23,7 @@ class RequestHandlerTest(PPPTestCase(app), InclusionTestCase):
         j = {'id': '1', 'language': 'en', 'measures': {}, 'trace': [],
             'tree': {'type': 'sentence', 'value': sentence}}
         r = self.request(j)
-        self.assertEqual(len(r), lenAnswer)
+        self.assertEqual(len(r), lenAnswer, sentence)
         if len(r) == 0:
             return None
         else:

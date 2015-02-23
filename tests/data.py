@@ -1,4 +1,4 @@
-from ppp_questionparsing_grammatical import computeTree, simplify, preprocessingMerge, DependenciesTree, normalFormProduction
+from ppp_questionparsing_grammatical import computeTree, simplify, DependenciesTree, normalFormProduction
 
 # Parsing result of "John Smith lives in the United Kingdom."
 def give_john_smith():
