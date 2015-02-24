@@ -134,8 +134,8 @@ def processQuestionInfo(nf, w):
         return type(nf)(result)
     elif isinstance(nf, (Last, First, Exists)):
         return type(nf)(processQuestionInfo(nf.list, w))
-    elif isinstance(nf, Sort):
-        return Sort(nf.list, nf.predicate)
+    elif isinstance(nf, Sort) or isinstance(nf, Resource):
+        return nf
     elif isinstance(nf, Triple):
         return enhanceTriple(nf, w)
     else:
