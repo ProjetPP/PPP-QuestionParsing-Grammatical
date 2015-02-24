@@ -18,7 +18,7 @@ except ImportError:
     except ImportError:
         raise ImportError('Neither pylibmc or python3-memcached is installed')
 
-from ppp_datamodel import Sentence, Resource
+from ppp_datamodel import Sentence, Resource, List
 from ppp_datamodel.communication import TraceItem, Response
 from ppp_libmodule.exceptions import ClientError
 
@@ -90,7 +90,7 @@ class RequestHandler:
         except Exception as e:
             logging.warning(e)
             return []
-        if isinstance(tree, Resource):
+        if isinstance(tree, (Resource, List)):
             return []
         meas = {'accuracy': 0.5, 'relevance': 0.5}
         trace = self.request.trace + [TraceItem('QuestionParsing-Grammatical', tree, meas)]
