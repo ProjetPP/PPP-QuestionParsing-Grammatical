@@ -15,17 +15,9 @@ General
 * Who Clinton defeated?                                                                           >> prq nounification échoue ? non lemmatizé ?
 * Typage : refaire une map complète : dependance <-> règle de typage (et pas règle Ri <-> règle de typage)
 * processQuestionInfo : gestion des reverse, perte d'infos sur les triplets
-* Mots interrogatifs : enrichir en ajoutant un mot au participe passé : When was the U.S. capitol built? > built in // ... by
 * Ne plus lemmatizer les noms: What are Brazil's national colors? > garder le pluriel
 * Nouveau qw : In what shows does Jennifer Aniston appears?
-* Traitement du qw : ne pas enrichir les participes passés
-* Donner un score aux prédicats alternatifs
-* In which country is Lake Victoria > fusion is/in car in ne peut pas être supprimé de l'arbre (prep_in). De toute façon, la suppression du qw se fait après merging
- >> solution: fusion + propre des prepositions (rajouter des Words au lieu de fusionner dans un seul word)
-* prep_by > supprimer by et inverser le triplet, toujours ajouter en prédicat inverse ... by
 * How long were Tyrannosaurus Rex's teeth? > lemmatization de teeth
-* Extraire verbe/participe passé depuis https://simple.wiktionary.org/wiki/found
-* What university did Thomas Jefferson found? > found/founded/find (superlative map changée sur found)
 
 Remarks
 =======
@@ -104,6 +96,40 @@ Prédicat "be" inapproprié
 * What animal has the biggest eyes?
 * What nationality is Sean Connery?
 _________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________
+
+Prédicats alternatifs
+=====================
+
+- https://github.com/json-ld/json-ld.org/issues/221
+
+* Reconstruire map des participes passés avec le wiktionary
+ > What university did Thomas Jefferson found? > found/founded/find (superlative map changée sur found)
+ > https://simple.wiktionary.org/wiki/found
+* Fusion des prep
+ > What is Frozen based on?
+ > go -prep_to-> ... = go to -prep->
+ > prep_by > supprimer by et inverser le triplet
+ > Mots interrogatifs : enrichir en ajoutant un mot au participe passé : When was the U.S. capitol built? > built in // ... by
+ > In which country is Lake Victoria > fusion is/in car in ne peut pas être supprimé de l'arbre (prep_in). De toute façon, la suppression du qw se fait après merging
+   >> solution: fusion + propre des prepositions (rajouter des Words au lieu de fusionner dans un seul word)
+* Nounification map :
+ > ne plus faire verbe (lemmatizé) > prédicats
+ > à la place : set de sets. Chaque set = ensemble de prédicats équivalents
+ > lien entre un set et son inverse
+ > placer des prédicats alternatifs aussi pour les noms
+* Obtenir prédicat de base (depuis verbe):
+ > verbe > participe passé
+ > si by > inverse sans by (et inversement)
+* Trouver le bon set : 
+ > si pas un verbe, le chercher directement
+ > si verbe, chercher son participe passé p
+* Construire les sets :
+ > cf inverse : https://www.wikidata.org/wiki/User:Joshbaumgartner/property_available_summary/100-199
+ > prendre les ensembles de propriétés/alias sur wikidata
+* Traitement du qw : ne pas enrichir les participes passés
+* Donner un score aux prédicats alternatifs > ou juste trier par ordre de pertinence ?
+
 _________________________________________________________________________________________________________________________________
 
 __How many__ : opérateur de comptage 

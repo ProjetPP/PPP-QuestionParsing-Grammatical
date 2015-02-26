@@ -53,6 +53,8 @@ own -> ownership, possession
 own <- owner, owned by
 play -> plays, instrument
 play <- player
+prove -> proof
+prove <- proved by, prover
 rule on <- ruler
 say -> speech, quotation, say, sentence, state, talk
 say <- author, said by
