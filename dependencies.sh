@@ -7,4 +7,4 @@ if [ ! -f $JAVA_PATH ]
 then
     export JAVA_PATH=/usr/lib/jvm/java-8-oracle/bin/java
 fi
-CORENLP="stanford-corenlp-full-2015-01-30" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp &
+CORENLP="stanford-corenlp-full-*" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp &

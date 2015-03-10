@@ -616,7 +616,7 @@ expected = {
     'What is the music genre of Bob Marley?':
     T(R('Bob Marley'), R('music genre'), M()),
 
-	'What is the film genre of Full Metal Jacket?':
+    'What is the film genre of Full Metal Jacket?':
     T(R('Full metal jacket'), R('film genre'), M()),
 
     'Which river does the Brooklyn Bridge cross':
