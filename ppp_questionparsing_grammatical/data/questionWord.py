@@ -70,7 +70,7 @@ questionAdd = {
     'what time'     : ['time', 'date', 'in'],
     'when'          : ['time', 'date', 'in'],
     'why'           : ['reason', 'cause', 'origin'],
-    'where'         : ['place', 'location', 'residence', 'country'],
+    'where'         : ['place', 'location', 'residence', 'country', 'city', 'town', 'state', 'locality'],
     'how'           : ['manner'],
     'how much'      : ['amount', 'quantity', 'number'],
     'how many'      : ['amount', 'quantity', 'number'],
@@ -86,8 +86,8 @@ questionAdd = {
     #'which'         : ['choice'],
     'whose'         : ['owner'],
     'how big'       : ['size'],
-    'in which'      : ['place', 'location', 'residence', 'country'],
-    'from which'    : ['place', 'location', 'residence', 'origin', 'citizenship', 'nationality', 'country of citizenship', 'country']
+    'in which'      : ['place', 'location', 'residence', 'country', 'city', 'town', 'state', 'locality'],
+    'from which'    : ['place', 'location', 'residence', 'origin', 'citizenship', 'nationality', 'country of citizenship', 'country', 'city', 'town', 'state', 'locality'],
 }
 
 
@@ -100,7 +100,7 @@ questionWIs = {
     'what time'     : ['time'],
     'when'          : ['date'],
     'why'           : ['reason'],
-    'where'         : ['place', 'location', 'residence', 'country'],
+    'where'         : ['place', 'location', 'residence', 'country', 'city', 'town', 'state', 'locality'],
     'who'           : ['identity'],
     'how'           : ['manner'],
     'how much'      : ['amount'],
@@ -118,8 +118,8 @@ questionWIs = {
     'whom'          : ['identity'],
     'whose'         : ['owner'],
     'how big'       : ['size'],
-    'in which'      : ['place', 'location', 'residence', 'country'],
-    'from which'    : ['place', 'location', 'residence', 'origin', 'citizenship', 'nationality', 'country of citizenship', 'country']
+    'in which'      : ['place', 'location', 'residence', 'country', 'city', 'town', 'state', 'locality'],
+    'from which'    : ['place', 'location', 'residence', 'origin', 'citizenship', 'nationality', 'country of citizenship', 'country', 'city', 'town', 'state', 'locality'],
 }
 
 questionType = {

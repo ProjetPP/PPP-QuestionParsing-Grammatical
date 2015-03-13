@@ -106,6 +106,7 @@ Prédicats alternatifs
 * Reconstruire map des participes passés avec le wiktionary
  > What university did Thomas Jefferson found? > found/founded/find (superlative map changée sur found)
  > https://simple.wiktionary.org/wiki/found
+ > wordnet
 * Fusion des prep
  > What is Frozen based on?
  > go -prep_to-> ... = go to -prep->
