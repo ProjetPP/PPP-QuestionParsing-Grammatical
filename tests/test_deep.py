@@ -38,9 +38,6 @@ class RequestHandlerTest(PPPTestCase(app), InclusionTestCase):
             'tree': {'type': 'resource', 'value': 'foo'}})
         self.assertEqual(len(answer), 0)
 
-    def testQuotationError(self):
-        self.getAnswer("What is \"the birth\" date \"of George Washington?", 0)
-
     def testResourceOutput(self):
         self.getAnswer("Yoda", 0)
 

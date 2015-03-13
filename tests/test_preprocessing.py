@@ -1,4 +1,5 @@
 import json
+import itertools
 from nltk.stem.wordnet import WordNetLemmatizer
 from ppp_questionparsing_grammatical import Word, QuotationHandler, DependenciesTree, computeTree, QuotationError
 import data
@@ -12,39 +13,33 @@ class PreprocessingMergeTests(TestCase):
     #####################
 
     def testBasicQuotationHandler(self):
-        handler = QuotationHandler("foo")
-        sentence = "The person who sing \"Let It Be\" and \"Lucy in the Sky with Diamonds\" also sing \"Yellow Submarine\"."
-        expected = "The person who sing foo0 and foo1 also sing foo2."
-        real = handler.pull(sentence)
-        self.assertEqual(real, expected)
-        self.assertEqual(handler.quotations["foo0"], "Let It Be")
-        self.assertEqual(handler.quotations["foo1"], "Lucy in the Sky with Diamonds")
-        self.assertEqual(handler.quotations["foo2"], "Yellow Submarine")
-
-    def testOtherQuotationMarks(self):
-        handler = QuotationHandler("foo")
-        sentence = "The person who sing “Let It Be” and “Lucy in the Sky with Diamonds” also sing \"Yellow Submarine\"."
-        expected = "The person who sing foo0 and foo1 also sing foo2."
-        real = handler.pull(sentence)
-        self.assertEqual(real, expected)
-        self.assertEqual(handler.quotations["foo0"], "Let It Be")
-        self.assertEqual(handler.quotations["foo1"], "Lucy in the Sky with Diamonds")
-        self.assertEqual(handler.quotations["foo2"], "Yellow Submarine")
+        for quotes in ['""', '“”', '‘’', '«»']:
+            handler = QuotationHandler("foo")
+            sentence = 'The person who sings {0}Let It Be{1} and {0}Lucy in the Sky with Diamonds{1} also sings {0}Yellow Submarine{1}.'.format(quotes[0], quotes[1])
+            expected = 'The person who sings foo21 and foo37 also sings foo80.'
+            real = handler.pull(sentence)
+            self.assertEqual(real, expected)
+            self.assertEqual(handler.quotations['foo21'], 'Let It Be')
+            self.assertEqual(handler.quotations['foo37'], 'Lucy in the Sky with Diamonds')
+            self.assertEqual(handler.quotations['foo80'], 'Yellow Submarine')
 
     def testRandomQuotationHandler(self):
-        handler = QuotationHandler()
-        sentence = "The person who sing \"Let It Be\" and \"Lucy in the Sky with Diamonds\" also sing \"Yellow Submarine\"."
-        real = handler.pull(sentence)
-        for key in handler.quotations.keys():
-            real = real.replace(key, '"'+handler.quotations[key]+'"')
-        self.assertEqual(real, sentence)
+        for quotes in ['""', '“”', '‘’', '«»']:
+            handler = QuotationHandler()
+            sentence = 'The person who sings {0}Let It Be{1} and {0}Lucy in the Sky with Diamonds{1} also sings {0}Yellow Submarine{1}.'.format(quotes[0], quotes[1])
+            real = handler.pull(sentence)
+            for replacement, original in handler.quotations.items():
+                real = real.replace(replacement, '%s%s%s' % (quotes[0], original, quotes[1]))
+            self.assertEqual(real, sentence)
 
-    def testWrongQuotation(self):
-        handler = QuotationHandler()
-        sentence1 = "What is \"bla?"
-        sentence2 = "What is \"bla of \"blu\"?"
-        self.assertRaises(QuotationError, handler.pull, sentence1)
-        self.assertRaises(QuotationError, handler.pull, sentence2)
+    def testNestedQuotation(self):
+        for quotes in itertools.permutations(['""', '“”', '‘’', '«»'], 2):
+            handler = QuotationHandler('foo')
+            sentence = 'This {0}is {2}a nested{3} quotation{1} for tests purposes.'.format(quotes[0][0], quotes[0][1], quotes[1][0], quotes[1][1])
+            expected = 'This foo5 for tests purposes.'
+            real = handler.pull(sentence)
+            self.assertEqual(real, expected)
+            self.assertEqual(handler.quotations['foo5'], 'is {0}a nested{1} quotation'.format(quotes[1][0], quotes[1][1]))
 
     def testQuotationMerge(self):
         handler = QuotationHandler('foo')

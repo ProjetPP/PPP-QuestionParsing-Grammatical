@@ -2,6 +2,7 @@ import sys
 import os
 import random
 import string
+import re
 from .data.exceptions import QuotationError
 from .dependencyTree import DependenciesTree
 
@@ -24,21 +25,15 @@ class QuotationHandler:
         An object to handle quotations in the sentences.
     """
     __slots__ = ('replacement', 'replacementIndex', 'quotations')
-    quotationList = ['“', '”', '"']
+    quotationRegexp = '|'.join(r'{0}(?:\.|[^{0}{1}\\])*{1}'.format(quote[0], quote[1])
+        for quote in ['""', '“”', '‘’', '«»']
+    )
+
     def __init__(self, replacement=None):
         self.replacement = replacement
         self.replacementIndex = 0
         self.quotations = {}
         random.seed()
-
-    @classmethod
-    def checkQuotation(cls, sentence):
-        """
-            Check that there is an even number of quotation marks.
-            Raise QuotationError otherwise.
-        """
-        if len([c for c in sentence if c in cls.quotationList]) % 2 == 1:
-            raise QuotationError(sentence, "Odd number of quotation marks.")
 
     @staticmethod
     def getReplacement(sentence):
@@ -54,19 +49,10 @@ class QuotationHandler:
         """
             Remove/pull the quotations from the sentence, and replace them.
         """
-        if not self.replacement:
-            self.replacement = self.getReplacement(sentence)
-        if self.replacementIndex == 0:
-            self.checkQuotation(sentence)
-        try:
-            indexBegin = index(sentence, self.quotationList)
-            indexEnd = indexBegin+index(sentence[indexBegin+1:], self.quotationList)+1
-        except ValueError:
-            return sentence
-        replacement = self.replacement+str(self.replacementIndex)
-        self.replacementIndex += 1
-        self.quotations[replacement] = sentence[indexBegin+1:indexEnd]
-        return self.pull("%s%s%s" % (sentence[0:indexBegin], replacement, sentence[indexEnd+1:]))
+        self.replacement = self.replacement or self.getReplacement(sentence)
+        for quote in re.finditer(self.quotationRegexp, sentence):
+            self.quotations[self.replacement+str(quote.start())] = sentence[quote.start()+1 : quote.end()-1]
+        return re.subn(self.quotationRegexp, lambda quote: self.replacement+str(quote.start()), sentence)[0]
 
     def push(self, tree):
         """
