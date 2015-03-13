@@ -297,6 +297,7 @@ class StandardTripleTests(TestCase):
         qw = simplify(tree)
         result = normalFormProduction(tree, qw)
         self.assertEqual(result, {
+    "type": "triple",
     "subject": {
         "type": "resource",
         "value": "mistake"
@@ -322,10 +323,25 @@ class StandardTripleTests(TestCase):
             {
                 "type": "resource",
                 "value": "country"
+            },
+            {
+                "type": "resource",
+                "value": "city"
+            },
+            {
+                "type": "resource",
+                "value": "town"
+            },
+            {
+                "type": "resource",
+                "value": "state"
+            },
+            {
+                "type": "resource",
+                "value": "locality"
             }
         ]
-    },
-    "type": "triple"
+    }
 })
 
 
