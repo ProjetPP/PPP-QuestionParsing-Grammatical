@@ -49,8 +49,9 @@ def prepRule(t, qw):
 
 dependenciesMap1 = {
     'undef'     : 'R0',
-    'root'      : 'R0',
+    'ROOT'      : 'R0',
     'inst_of'   : 'RinstOf', # <<
+    'nmod'      : 'RinstOf', # new dependency type, to discuss...
     'dep'       : 'R1',
         'aux'       : remove,
             'auxpass'   : remove,
@@ -106,7 +107,8 @@ dependenciesMap1 = {
         'sdep'      : impossible,
             'xsubj'     : 'R3',
         'goeswith'  : merge,
-        'discourse' : remove
+        'discourse' : remove,
+        'compound' : merge # new dependency type, to discuss...
 }
 
 def propagateType(t, qw):

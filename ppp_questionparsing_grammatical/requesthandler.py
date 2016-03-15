@@ -5,7 +5,7 @@ import pickle
 import hashlib
 import random
 import logging
-import jsonrpclib
+import requests
 
 # Import pylibmc if possible; import memcache otherwise.
 # pylibmc is is more strict (ie. detects and raises errors instead
@@ -32,10 +32,14 @@ def connect_memcached():
 
 class StanfordNLP:
     def __init__(self, urls):
-        self.servers = list(map(jsonrpclib.Server, urls))
+        self.servers = urls
 
     def _parse(self, text):
-        return json.loads(random.choice(self.servers).parse(text))
+        server = random.choice(self.servers)
+        r = requests.post(server, params={'properties' : '{"annotators": "tokenize,ssplit,pos,lemma,ner,parse", "outputFormat": "json", "parse.flags": " -makeCopulaHead"}'}, data=text)
+        result = r.json()['sentences'][0]
+        result['text'] = text
+        return result
 
     def parse(self, text):
         """Perform a query to all configured APIs and concatenates all
@@ -64,7 +68,7 @@ def parse(sentence):
     handler = QuotationHandler()
     nonAmbiguousSentence = handler.pull(sentence)
     result = stanfordnlp.parse(nonAmbiguousSentence)
-    tree = computeTree(result['sentences'][0])
+    tree = computeTree(result)
     handler.push(tree)
     NamedEntityMerging(tree).merge()
     PrepositionMerging(tree).merge()

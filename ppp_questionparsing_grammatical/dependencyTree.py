@@ -173,26 +173,25 @@ class TreeGenerator:
         self.stanfordResult = stanfordResult
         self.nameToNodes = {}
 
-    def _getNode(self, nodeName):
+    def _getNode(self, nodeName, nodeIndex):
         try:
-            node = self.nameToNodes[nodeName]
+            node = self.nameToNodes[(nodeName, nodeIndex)]
         except KeyError:
-            (word,index) = nodeName.rsplit('-', 1)
-            node = DependenciesTree(word, int(index))
-            self.nameToNodes[nodeName] = node
+            node = DependenciesTree(nodeName, nodeIndex)
+            self.nameToNodes[(nodeName, nodeIndex)] = node
         return node
 
     def _computeEdges(self):
         """
             Compute the edges of the dependency tree.
         """
-        for edge in self.stanfordResult['indexeddependencies']:
-            node1 = self._getNode(edge[1])
-            node2 = self._getNode(edge[2])
+        for edge in self.stanfordResult['basic-dependencies']: # use 'collapsed-dependencies' ?
+            node1 = self._getNode(edge['governorGloss'], edge['governor'])
+            node2 = self._getNode(edge['dependentGloss'], edge['dependent'])
             # n1 is the parent of n2
             node1.child.append(node2)
             node2.parent = node1
-            node2.dependency = edge[0]
+            node2.dependency = edge['dep']
 
     def _computeTags(self):
         """
@@ -200,16 +199,17 @@ class TreeGenerator:
         """
         index=0
         # Computation of the tags of the nodes
-        for word in self.stanfordResult['words']:
+        for word in self.stanfordResult['tokens']:
             index+=1
-            if word[0].isalnum() or word[0] == '$' or word[0] == '%' or word[0][0] == '\'': # \' for 's, 're, ...
-                w=word[0]+'-'+str(index) # key in the nameToNodes map
+            nodeName = word['originalText']
+            nodeIndex = word['index']
+            if nodeName.isalnum() or nodeName == '$' or nodeName == '%' or nodeName[0] == '\'': # \' for 's, 're, ...
                 try:
-                    n = self.nameToNodes[w]
+                    n = self.nameToNodes[(nodeName, nodeIndex)]
                     assert len(n.wordList) == 1
-                    n.wordList[0].pos = word[1]['PartOfSpeech']
-                    if word[1]['NamedEntityTag'] != 'O':
-                        n.namedEntityTag = word[1]['NamedEntityTag']
+                    n.wordList[0].pos = word['pos']
+                    if word['ner'] != 'O':
+                        n.namedEntityTag = word['ner']
                 except KeyError:        # this node does not exists (e.g. 'of' preposition)
                     pass
 
@@ -234,12 +234,12 @@ class TreeGenerator:
         """
             Correct the tree returned by the Stanford Parser, according to several heuristics.
         """
-        words = sorted(self.nameToNodes.keys(), key = lambda x: int(x.split('-')[-1]))
+        words = sorted(self.nameToNodes.keys(), key = lambda x: x[1])
         self._addNamedEntityTag(tree, words)
 
 
     def _getTree(self):
-        return self.nameToNodes['ROOT-0']
+        return self.nameToNodes[('ROOT', 0)]
 
     def computeTree(self):
         """
