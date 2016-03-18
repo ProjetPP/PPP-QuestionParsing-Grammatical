@@ -71,6 +71,7 @@ def parse(sentence):
     tree = computeTree(result)
     handler.push(tree)
     NamedEntityMerging(tree).merge()
+    PrepositionMerging(tree).merge()
     qw = simplify(tree)
     return normalFormProduction(tree, qw)
 
