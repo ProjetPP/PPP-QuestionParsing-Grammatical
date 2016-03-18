@@ -251,6 +251,25 @@ class TreeGenerator:
         self._correctTree(tree)
         return tree
 
+def processConjonctions(tree):
+    """
+        Transform conjonctions to get a tree similar to the old parsing tree.
+        If n1--cc-->nconj and n1--conj-->n2, then it removes the first dependency
+        and transforms the second one into n1--conj_nconj-->n2.
+        The node nconj seems to always be a leaf. It contains a conjonction, such
+        as "or" or "and".
+        This function is a temporary fix for compatibility with the new version
+        of CoreNLP (from December 2015).
+    """
+    for child in tree.child:
+        processConjonctions(child)
+    if tree.dependency == 'cc':
+        assert tree.parent is not None
+        for sibling in tree.parent.child:
+            if sibling.dependency == 'conj':
+                sibling.dependency = 'conj_%s' % tree.getWords()
+        tree.parent.child.remove(tree)
+
 ###################
 # Global function #
 ###################
@@ -265,4 +284,5 @@ def computeTree(stanfordResult):
     generator = TreeGenerator(stanfordResult)
     tree = generator.computeTree()
     tree.initText(stanfordResult['text'].replace('"', '\\"')) # each node contains the input question
+    processConjonctions(tree)
     return tree

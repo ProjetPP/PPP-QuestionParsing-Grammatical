@@ -108,7 +108,8 @@ dependenciesMap1 = {
             'xsubj'     : 'R3',
         'goeswith'  : merge,
         'discourse' : remove,
-        'compound' : merge # new dependency type, to discuss...
+        'compound'  : merge, # new dependency type, to discuss...
+        'punct'     : remove
 }
 
 def propagateType(t, qw):
