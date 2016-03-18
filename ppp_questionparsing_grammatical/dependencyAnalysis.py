@@ -51,7 +51,7 @@ dependenciesMap1 = {
     'undef'     : 'R0',
     'ROOT'      : 'R0',
     'inst_of'   : 'RinstOf', # <<
-    'nmod'      : 'RinstOf', # new dependency type, to discuss...
+    'nmod'      : prepRule, # new dependency type, to discuss... I would have said rule 'R5', but it does not seem to be implemented
     'dep'       : 'R1',
         'aux'       : remove,
             'auxpass'   : remove,
@@ -109,7 +109,8 @@ dependenciesMap1 = {
         'goeswith'  : merge,
         'discourse' : remove,
         'compound'  : merge, # new dependency type, to discuss...
-        'punct'     : remove
+        'punct'     : remove,
+        'case'      : remove,
 }
 
 def propagateType(t, qw):

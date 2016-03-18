@@ -27,7 +27,6 @@ def get_tree():
     tree = ppp_questionparsing_grammatical.computeTree(result)
     handler.push(tree)
     ppp_questionparsing_grammatical.NamedEntityMerging(tree).merge()
-    ppp_questionparsing_grammatical.PrepositionMerging(tree).merge()
     qw = ppp_questionparsing_grammatical.simplify(tree)
     return tree
 
