@@ -11,7 +11,7 @@ def prepareInstanceOf(t):
     """
         Replace by 'inst_of' the highest dependency that appears on a path from the root of t to the root of the whole tree
     """
-    if t.parent and t.parent.dependency == 'root':
+    if t.parent and t.parent.dependency.lower() == 'root':
         t.dependency = 'inst_of'
         return
     elif t.parent:

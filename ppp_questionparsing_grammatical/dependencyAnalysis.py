@@ -51,7 +51,7 @@ dependenciesMap1 = {
     'undef'     : 'R0',
     'ROOT'      : 'R0',
     'inst_of'   : 'RinstOf', # <<
-    'nmod'      : 'RinstOf', # new dependency type, to discuss...
+    'nmod'      : impossible, # new dependency type, to discuss...
     'dep'       : 'R1',
         'aux'       : remove,
             'auxpass'   : remove,
@@ -96,6 +96,7 @@ dependenciesMap1 = {
             'npadvmod'  : 'R2',
                 'tmod'      : 'R3',
             'num'       : merge,
+            'nummod'    : merge,
             'number'    : merge,
             'prep'      : prepRule, # <<
             'poss'      : 'R2',

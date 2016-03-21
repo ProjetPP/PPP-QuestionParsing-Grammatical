@@ -270,6 +270,37 @@ def processConjonctions(tree):
                 sibling.dependency = 'conj_%s' % tree.getWords()
         tree.parent.child.remove(tree)
 
+def processPrepositions(tree):
+    """
+        Transform prepositions to get a tree similar to the old parsing tree.
+        If n1--nmod-->n2 and n2--case-->n3, then it removes the second dependency
+        and transforms the first one into n1--f(n3)-->n2.
+        The node n3 seems to always be a leaf. It contains a preposition, such as
+        "of" or "by".
+        For instance, f("of") = "prep_of" and f("by") = "agent".
+        This function is a temporary fix for compatibility with the new version
+        of CoreNLP (from December 2015).
+    """
+    prepositionMaping = {
+        'of' : 'prep_of',
+        'by' : 'agent',
+        'for' : 'prep_for',
+        'in'  : 'prep_in',
+        'on'  : 'prep_on'
+    }
+    for child in tree.child:
+        processPrepositions(child)
+    if tree.dependency.startswith('nmod'):
+        for child in tree.child:
+            if child.dependency == 'case':
+                break
+        if ':' in tree.dependency: # example : 'nmod:poss'
+            assert child.getWords() == '' # any counter example?
+            tree.dependency = tree.dependency[tree.dependency.index(':')+1:]
+        else:
+            tree.dependency = prepositionMaping[child.getWords()]
+        tree.child.remove(child)
+
 ###################
 # Global function #
 ###################
@@ -285,4 +316,5 @@ def computeTree(stanfordResult):
     tree = generator.computeTree()
     tree.initText(stanfordResult['text'].replace('"', '\\"')) # each node contains the input question
     processConjonctions(tree)
+    processPrepositions(tree)
     return tree
