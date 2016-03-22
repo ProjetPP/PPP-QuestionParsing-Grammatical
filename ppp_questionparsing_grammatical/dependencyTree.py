@@ -301,7 +301,7 @@ def processPrepositions(tree):
             assert child.getWords() == '' # any counter example?
             tree.dependency = tree.dependency[tree.dependency.index(':')+1:]
         else:
-            tree.dependency = prepositionMaping[child.getWords()]
+            tree.dependency = prepositionMaping[child.getWords().lower()]
         tree.child.remove(child)
 
 def processPunctuation(tree):
