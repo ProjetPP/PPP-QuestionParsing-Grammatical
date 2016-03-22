@@ -301,6 +301,22 @@ def processPrepositions(tree):
             tree.dependency = prepositionMaping[child.getWords()]
         tree.child.remove(child)
 
+def processPunctuation(tree):
+    """
+        Remove the nodes with a 'punct' dependency.
+        This function is a temporary fix for compatibility with the new version
+        of CoreNLP (from December 2015).
+    """
+    for child in tree.child:
+        processPunctuation(child)
+    if tree.dependency == 'punct':
+        tree.parent.child.remove(tree)
+
+def processForCompatibility(tree):
+    processConjonctions(tree)
+    processPrepositions(tree)
+    processPunctuation(tree)
+
 ###################
 # Global function #
 ###################
@@ -315,6 +331,5 @@ def computeTree(stanfordResult):
     generator = TreeGenerator(stanfordResult)
     tree = generator.computeTree()
     tree.initText(stanfordResult['text'].replace('"', '\\"')) # each node contains the input question
-    processConjonctions(tree)
-    processPrepositions(tree)
+    processForCompatibility(tree)
     return tree
