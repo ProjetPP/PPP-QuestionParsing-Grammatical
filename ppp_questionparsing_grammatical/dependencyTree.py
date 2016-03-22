@@ -291,6 +291,9 @@ def processPrepositions(tree):
     for child in tree.child:
         processPrepositions(child)
     if tree.dependency.startswith('nmod'):
+        if len(tree.child) == 0:
+            tree.parent.child.remove(tree)
+            return
         for child in tree.child:
             if child.dependency == 'case':
                 break
