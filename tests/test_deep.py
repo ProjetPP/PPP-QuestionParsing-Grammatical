@@ -42,6 +42,14 @@ class RequestHandlerTest(PPPTestCase(app), InclusionTestCase):
         self.getAnswer("Yoda", 0)
 
     def testQuestions(self):
+        nbFailure = 0
         for (sentence, expectedTree) in data_deep.expected.items():
-            self.checkQuestion(sentence, expectedTree)
-        print("Deep test: %s questions successfully checked." % len(data_deep.expected.items()), file=sys.stderr)
+            try:
+                self.checkQuestion(sentence, expectedTree)
+            except AssertionError:
+                print("[Deep test] The following question check failed: %s" % sentence, file=sys.stderr)
+                nbFailure += 1
+        print("[Deep test] %s question checks succeeded." % (len(data_deep.expected.items())-nbFailure), file=sys.stderr)
+        if nbFailure > 0:
+            print("[Deep test] %s question checks failed." % nbFailure, file=sys.stderr)
+            raise AssertionError
