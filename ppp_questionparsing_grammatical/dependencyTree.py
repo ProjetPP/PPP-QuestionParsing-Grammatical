@@ -286,13 +286,14 @@ def processPrepositions(tree):
         'by' : 'agent',
         'for' : 'prep_for',
         'in'  : 'prep_in',
-        'on'  : 'prep_on'
+        'on'  : 'prep_on',
+        'from' : 'prep_from',
     }
     for child in tree.child:
         processPrepositions(child)
     if tree.dependency.startswith('nmod'):
         if len(tree.child) == 0:
-            tree.parent.child.remove(tree)
+            tree.parent.merge(tree, True)
             return
         for child in tree.child:
             if child.dependency == 'case':
