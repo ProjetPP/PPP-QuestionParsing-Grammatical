@@ -283,7 +283,7 @@ def processPrepositions(tree):
     """
     prepositionMaping = {
         'of' : 'prep_of',
-        'by' : 'agent',
+        'by' : 'prep_by',
         'for' : 'prep_for',
         'in'  : 'prep_in',
         'on'  : 'prep_on',
