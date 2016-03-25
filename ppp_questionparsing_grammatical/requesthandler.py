@@ -35,8 +35,12 @@ class StanfordNLP:
         self.servers = urls
 
     def _parse(self, text):
+        '''
+            Need to run CoreNLP server with version > 3.6.0.
+            See http://stackoverflow.com/questions/36206407/utf-8-issue-with-corenlp-server
+        '''
         server = random.choice(self.servers)
-        r = requests.post(server, params={'properties' : '{"annotators": "tokenize,ssplit,pos,lemma,ner,parse", "outputFormat": "json", "parse.flags": " -makeCopulaHead"}'}, data=text)
+        r = requests.post(server, params={'properties' : '{"annotators": "tokenize,ssplit,pos,lemma,ner,parse", "outputFormat": "json", "parse.flags": " -makeCopulaHead"}'}, data=text.encode('utf8'))
         result = r.json()['sentences'][0]
         result['text'] = text
         return result

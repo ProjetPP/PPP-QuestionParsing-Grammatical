@@ -299,7 +299,6 @@ def processPrepositions(tree):
             if child.dependency == 'case':
                 break
         if ':' in tree.dependency: # example : 'nmod:poss'
-            assert child.getWords() == '' # any counter example?
             tree.dependency = tree.dependency[tree.dependency.index(':')+1:]
         else:
             tree.dependency = prepositionMaping[child.getWords().lower()]

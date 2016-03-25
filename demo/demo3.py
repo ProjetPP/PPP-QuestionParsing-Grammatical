@@ -13,7 +13,7 @@ class StanfordNLP:
         self.server = "http://localhost:%d" % port_number
 
     def parse(self, text):
-        r = requests.post(self.server, params={'properties' : '{"annotators": "tokenize,ssplit,pos,lemma,ner,parse", "outputFormat": "json", "parse.flags": " -makeCopulaHead"}'}, data=text)
+        r = requests.post(self.server, params={'properties' : '{"annotators": "tokenize,ssplit,pos,lemma,ner,parse", "outputFormat": "json", "parse.flags": " -makeCopulaHead"}'}, data=text.encode('utf8'))
         result = r.json()['sentences'][0]
         result['text'] = text
         return result
