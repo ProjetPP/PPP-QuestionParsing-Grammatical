@@ -46,7 +46,7 @@ class PreprocessingMergeTests(TestCase):
         sentence = 'Who wrote "Lucy in the Sky with Diamonds" and "Let It Be"?'
         nonAmbiguousSentence = handler.pull(sentence)
         result=data.give_LSD_LIB()
-        tree=computeTree(result['sentences'][0])
+        tree=computeTree(result)
         handler.push(tree)
         tree.sort()
         root=tree
@@ -62,7 +62,7 @@ class PreprocessingMergeTests(TestCase):
         wrote=root.child[0]
         self.assertEqual(wrote.wordList, [Word("wrote", 2, 'VBD')])
         self.assertEqual(wrote.namedEntityTag, 'undef')
-        self.assertEqual(wrote.dependency, 'root')
+        self.assertEqual(wrote.dependency, 'ROOT')
         self.assertEqual(wrote.parent, root)
         self.assertEqual(len(wrote.child), 2)
         self.assertEqual(wrote.subtreeType, 'undef')

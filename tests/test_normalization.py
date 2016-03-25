@@ -9,7 +9,7 @@ from unittest import TestCase
 class StandardTripleTests(TestCase):
 
     def testAndnormalFormProduction(self):
-        tree = computeTree(data.give_chief()['sentences'][0])
+        tree = computeTree(data.give_chief())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         qw = simplify(tree)
@@ -59,7 +59,7 @@ class StandardTripleTests(TestCase):
 })
 
     def testSuperlativenormalFormProduction(self):
-        tree = computeTree(data.give_opera()['sentences'][0])
+        tree = computeTree(data.give_opera())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         qw = simplify(tree)
@@ -99,7 +99,7 @@ class StandardTripleTests(TestCase):
 })
 
     def testnormalFormProduction1(self):
-        tree = computeTree(data.give_president_of_USA()['sentences'][0])
+        tree = computeTree(data.give_president_of_USA())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         qw = simplify(tree)
@@ -124,7 +124,7 @@ class StandardTripleTests(TestCase):
         sentence = 'Who wrote "Lucy in the Sky with Diamonds" and "Let It Be"?'
         nonAmbiguousSentence = handler.pull(sentence)
         result=data.give_LSD_LIB()
-        tree=computeTree(result['sentences'][0])
+        tree=computeTree(result)
         handler.push(tree)
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
@@ -225,7 +225,7 @@ class StandardTripleTests(TestCase):
 })
 
     def testnormalFormProduction3(self):
-        tree = computeTree(data.give_obama_president_usa()['sentences'][0])
+        tree = computeTree(data.give_obama_president_usa())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         qw = simplify(tree)
@@ -291,7 +291,7 @@ class StandardTripleTests(TestCase):
 })
 
     def testnormalFormProductionR8(self):
-        tree = computeTree(data.mistake()['sentences'][0])
+        tree = computeTree(data.mistake())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         qw = simplify(tree)
@@ -346,7 +346,7 @@ class StandardTripleTests(TestCase):
 
 
     def testnormalFormProductionSuperl(self):
-        tree = computeTree(data.tanzania()['sentences'][0])
+        tree = computeTree(data.tanzania())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         qw = simplify(tree)
@@ -377,7 +377,7 @@ class StandardTripleTests(TestCase):
 })
 
     def testnormalFormProductionSuperl2(self):
-        tree = computeTree(data.car()['sentences'][0])
+        tree = computeTree(data.car())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         qw = simplify(tree)
@@ -408,13 +408,13 @@ class StandardTripleTests(TestCase):
 })
 
     def testCop(self):
-        tree = computeTree(data.black()['sentences'][0])
+        tree = computeTree(data.black())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         self.assertRaises(GrammaticalError, lambda: simplify(tree))
 
     def testExists(self):
-        tree = computeTree(data.king_england()['sentences'][0])
+        tree = computeTree(data.king_england())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         qw = simplify(tree)
@@ -438,7 +438,7 @@ class StandardTripleTests(TestCase):
 })
 
     def testSemiQuestionWord1(self):
-        tree = computeTree(data.roald()['sentences'][0])
+        tree = computeTree(data.roald())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         qw = simplify(tree)
@@ -459,7 +459,7 @@ class StandardTripleTests(TestCase):
 })
 
     def testSemiQuestionWord3(self):
-        tree = computeTree(data.list_president2()['sentences'][0])
+        tree = computeTree(data.list_president2())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         qw = simplify(tree)
@@ -480,7 +480,7 @@ class StandardTripleTests(TestCase):
 })
 
     def testSemiQuestionWord4(self):
-        tree = computeTree(data.capital1()['sentences'][0])
+        tree = computeTree(data.capital1())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         qw = simplify(tree)
@@ -501,7 +501,7 @@ class StandardTripleTests(TestCase):
 })
 
     def testSemiQuestionWord5(self):
-        tree = computeTree(data.capital2()['sentences'][0])
+        tree = computeTree(data.capital2())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         qw = simplify(tree)

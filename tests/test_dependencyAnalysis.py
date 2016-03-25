@@ -8,19 +8,19 @@ from unittest import TestCase
 class HierarchyTests(TestCase):
 
     def testQuestion(self):
-        tree=computeTree(data.give_president_of_USA()['sentences'][0])
+        tree=computeTree(data.give_president_of_USA())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         self.assertEqual(simplify(tree), 'who')
 
     def testQuestion2(self):
-        tree=computeTree(data.give_how_old()['sentences'][0])
+        tree=computeTree(data.give_how_old())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         self.assertEqual(simplify(tree), 'how old')
 
     def testHierarchySimplification(self):
-        tree=computeTree(data.give_president_of_USA()['sentences'][0])
+        tree=computeTree(data.give_president_of_USA())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         simplify(tree)
@@ -63,7 +63,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(us.dfsTag, 0)
 
     def testIgnore(self):
-        tree=computeTree(data.give_how_old()['sentences'][0])
+        tree=computeTree(data.give_how_old())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         simplify(tree)
@@ -88,7 +88,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(are.dfsTag, 0)
 
     def testHierarchySimplification2(self):
-        tree=computeTree(data.give_USA_president()['sentences'][0])
+        tree=computeTree(data.give_USA_president())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         simplify(tree)
@@ -122,7 +122,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(us.dfsTag, 0)
 
     def testHierarchyConnectors1(self):
-        tree=computeTree(data.give_opera()['sentences'][0])
+        tree=computeTree(data.give_opera())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         simplify(tree)
@@ -192,7 +192,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(sullivan.dfsTag, 0)
 
     def testHierarchyConnectors2(self):
-        tree=computeTree(data.give_chief()['sentences'][0])
+        tree=computeTree(data.give_chief())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         simplify(tree)
@@ -253,7 +253,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(prime.dfsTag, 0)
 
     def testYesNoQuestion(self):
-        tree=computeTree(data.give_born()['sentences'][0])
+        tree=computeTree(data.give_born())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         simplify(tree)
@@ -287,7 +287,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(date.dfsTag, 0)
 
     def testNoQW(self):
-        tree=computeTree(data.birth_date()['sentences'][0])
+        tree=computeTree(data.birth_date())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         simplify(tree)
@@ -321,7 +321,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(france.dfsTag, 0)
 
     def testQuestionInfo(self):
-        tree=computeTree(data.birth_place()['sentences'][0])
+        tree=computeTree(data.birth_place())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         simplify(tree)
@@ -355,7 +355,7 @@ class HierarchyTests(TestCase):
         self.assertEqual(obama.dfsTag, 0)
 
     def testPassIdentity(self):
-        tree=computeTree(data.mickey()['sentences'][0])
+        tree=computeTree(data.mickey())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         NamedEntityMerging(tree).merge()
