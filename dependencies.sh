@@ -1,5 +1,5 @@
-git clone https://github.com/ProjetPP/Scripts.git
-cd Scripts
+git clone https://github.com/ProjetPP/Deployment.git
+cd Deployment
 ./bootstrap_corenlp.sh --nouser
 
 export JAVA_PATH=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
