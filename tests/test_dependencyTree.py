@@ -65,7 +65,7 @@ class DependenciesTreeTests(TestCase):
     ###############
 
     def testStr1(self):
-        tree=computeTree(data.give_john_smith()['sentences'][0])
+        tree=computeTree(data.give_john_smith())
         self.maxDiff=None
         tree.sort()
         self.assertEqual(str(tree), data.give_john_smith_string())
@@ -102,7 +102,7 @@ class DependenciesTreeTests(TestCase):
         foo2 = DependenciesTree('foo2', 3, namedEntityTag='42')
         bar = DependenciesTree('bar', 2, namedEntityTag='undef', dependency = 'nn', parent = foo1)
         generator = TreeGenerator(None)
-        generator.nameToNodes = {'foo1-1' : foo1, 'bar-2' : bar, 'foo2-3' : foo2}
+        generator.nameToNodes = {('foo1',1) : foo1, ('bar',2) : bar, ('foo2', 3) : foo2}
         generator._correctTree(foo1)
         self.assertEqual(bar.namedEntityTag, '42')
 
@@ -111,7 +111,7 @@ class DependenciesTreeTests(TestCase):
         foo2 = DependenciesTree('foo2', 3, namedEntityTag='42')
         bar = DependenciesTree('bar', 2, namedEntityTag='27', dependency = 'nn', parent = foo1)
         generator = TreeGenerator(None)
-        generator.nameToNodes = {'foo1-1' : foo1, 'bar-2' : bar, 'foo2-3' : foo2}
+        generator.nameToNodes = {('foo1',1) : foo1, ('bar',2) : bar, ('foo2', 3) : foo2}
         generator._correctTree(foo1)
         self.assertEqual(bar.namedEntityTag, '27')
 
@@ -120,6 +120,6 @@ class DependenciesTreeTests(TestCase):
         foo2 = DependenciesTree('foo2', 3, namedEntityTag='42')
         bar = DependenciesTree('bar', 2, namedEntityTag='undef', dependency = 'amod', parent = foo1)
         generator = TreeGenerator(None)
-        generator.nameToNodes = {'foo1-1' : foo1, 'bar-2' : bar, 'foo2-3' : foo2}
+        generator.nameToNodes = {('foo1',1) : foo1, ('bar',2) : bar, ('foo2', 3) : foo2}
         generator._correctTree(foo1)
         self.assertEqual(bar.namedEntityTag, 'undef')

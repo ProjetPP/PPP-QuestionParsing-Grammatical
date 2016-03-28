@@ -114,7 +114,7 @@ class PreprocessingMergeTests(TestCase):
         self.assertEqual(parent.child, [child])
 
     def testNamedEntity1(self):
-        tree=computeTree(data.give_john_smith()['sentences'][0])
+        tree=computeTree(data.give_john_smith())
         NamedEntityMerging(tree).merge()
         tree.sort()
         root=tree
@@ -130,7 +130,7 @@ class PreprocessingMergeTests(TestCase):
         lives=root.child[0]
         self.assertEqual(lives.wordList, [Word("lives", 3, 'VBZ')])
         self.assertEqual(lives.namedEntityTag, 'undef')
-        self.assertEqual(lives.dependency, 'root')
+        self.assertEqual(lives.dependency, 'ROOT')
         self.assertEqual(lives.parent, tree)
         self.assertEqual(len(lives.child), 2)
         self.assertEqual(lives.subtreeType, 'undef')
@@ -164,7 +164,7 @@ class PreprocessingMergeTests(TestCase):
         self.assertEqual(the.dfsTag, 0)
 
     def testNamedEntity2(self):
-        tree=computeTree(data.give_obama_president_usa()['sentences'][0])
+        tree=computeTree(data.give_obama_president_usa())
         NamedEntityMerging(tree).merge()
         tree.sort()
         root=tree
@@ -180,7 +180,7 @@ class PreprocessingMergeTests(TestCase):
         is_=root.child[0]
         self.assertEqual(is_.wordList, [Word("is", 2, 'VBZ')])
         self.assertEqual(is_.namedEntityTag, 'undef')
-        self.assertEqual(is_.dependency, 'root')
+        self.assertEqual(is_.dependency, 'ROOT')
         self.assertEqual(is_.parent, tree)
         self.assertEqual(len(is_.child), 2)
         self.assertEqual(is_.subtreeType, 'undef')
@@ -216,14 +216,14 @@ class PreprocessingMergeTests(TestCase):
         united=president.child[1]
         self.assertEqual(united.wordList, [Word("United", 4, 'NNP'), Word("States", 5, 'NNPS')])
         self.assertEqual(united.namedEntityTag, 'LOCATION')
-        self.assertEqual(united.dependency, 'nn')
+        self.assertEqual(united.dependency, 'compound')
         self.assertEqual(united.parent, president)
         self.assertEqual(len(united.child), 0)
         self.assertEqual(united.subtreeType, 'undef')
         self.assertEqual(united.dfsTag, 0)
 
     def testStr2(self):
-        tree=computeTree(data.give_john_smith()['sentences'][0])
+        tree=computeTree(data.give_john_smith())
         NamedEntityMerging(tree).merge()
         PrepositionMerging(tree).merge()
         self.maxDiff=None

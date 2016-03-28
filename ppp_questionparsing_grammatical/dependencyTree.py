@@ -173,26 +173,25 @@ class TreeGenerator:
         self.stanfordResult = stanfordResult
         self.nameToNodes = {}
 
-    def _getNode(self, nodeName):
+    def _getNode(self, nodeName, nodeIndex):
         try:
-            node = self.nameToNodes[nodeName]
+            node = self.nameToNodes[(nodeName, nodeIndex)]
         except KeyError:
-            (word,index) = nodeName.rsplit('-', 1)
-            node = DependenciesTree(word, int(index))
-            self.nameToNodes[nodeName] = node
+            node = DependenciesTree(nodeName, nodeIndex)
+            self.nameToNodes[(nodeName, nodeIndex)] = node
         return node
 
     def _computeEdges(self):
         """
             Compute the edges of the dependency tree.
         """
-        for edge in self.stanfordResult['indexeddependencies']:
-            node1 = self._getNode(edge[1])
-            node2 = self._getNode(edge[2])
+        for edge in self.stanfordResult['basic-dependencies']: # use 'collapsed-dependencies' ?
+            node1 = self._getNode(edge['governorGloss'], edge['governor'])
+            node2 = self._getNode(edge['dependentGloss'], edge['dependent'])
             # n1 is the parent of n2
             node1.child.append(node2)
             node2.parent = node1
-            node2.dependency = edge[0]
+            node2.dependency = edge['dep']
 
     def _computeTags(self):
         """
@@ -200,16 +199,17 @@ class TreeGenerator:
         """
         index=0
         # Computation of the tags of the nodes
-        for word in self.stanfordResult['words']:
+        for word in self.stanfordResult['tokens']:
             index+=1
-            if word[0].isalnum() or word[0] == '$' or word[0] == '%' or word[0][0] == '\'': # \' for 's, 're, ...
-                w=word[0]+'-'+str(index) # key in the nameToNodes map
+            nodeName = word['originalText']
+            nodeIndex = word['index']
+            if nodeName.isalnum() or nodeName == '$' or nodeName == '%' or nodeName[0] == '\'': # \' for 's, 're, ...
                 try:
-                    n = self.nameToNodes[w]
+                    n = self.nameToNodes[(nodeName, nodeIndex)]
                     assert len(n.wordList) == 1
-                    n.wordList[0].pos = word[1]['PartOfSpeech']
-                    if word[1]['NamedEntityTag'] != 'O':
-                        n.namedEntityTag = word[1]['NamedEntityTag']
+                    n.wordList[0].pos = word['pos']
+                    if word['ner'] != 'O':
+                        n.namedEntityTag = word['ner']
                 except KeyError:        # this node does not exists (e.g. 'of' preposition)
                     pass
 
@@ -234,12 +234,12 @@ class TreeGenerator:
         """
             Correct the tree returned by the Stanford Parser, according to several heuristics.
         """
-        words = sorted(self.nameToNodes.keys(), key = lambda x: int(x.split('-')[-1]))
+        words = sorted(self.nameToNodes.keys(), key = lambda x: x[1])
         self._addNamedEntityTag(tree, words)
 
 
     def _getTree(self):
-        return self.nameToNodes['ROOT-0']
+        return self.nameToNodes[('ROOT', 0)]
 
     def computeTree(self):
         """
@@ -250,6 +250,75 @@ class TreeGenerator:
         tree = self._getTree()
         self._correctTree(tree)
         return tree
+
+def processConjonctions(tree):
+    """
+        Transform conjonctions to get a tree similar to the old parsing tree.
+        If n1--cc-->nconj and n1--conj-->n2, then it removes the first dependency
+        and transforms the second one into n1--conj_nconj-->n2.
+        The node nconj seems to always be a leaf. It contains a conjonction, such
+        as "or" or "and".
+        This function is a temporary fix for compatibility with the new version
+        of CoreNLP (from December 2015).
+    """
+    for child in tree.child:
+        processConjonctions(child)
+    if tree.dependency == 'cc':
+        assert tree.parent is not None
+        for sibling in tree.parent.child:
+            if sibling.dependency == 'conj':
+                sibling.dependency = 'conj_%s' % tree.getWords()
+        tree.parent.child.remove(tree)
+
+def processPrepositions(tree):
+    """
+        Transform prepositions to get a tree similar to the old parsing tree.
+        If n1--nmod-->n2 and n2--case-->n3, then it removes the second dependency
+        and transforms the first one into n1--f(n3)-->n2.
+        The node n3 seems to always be a leaf. It contains a preposition, such as
+        "of" or "by".
+        For instance, f("of") = "prep_of" and f("by") = "agent".
+        This function is a temporary fix for compatibility with the new version
+        of CoreNLP (from December 2015).
+    """
+    prepositionMaping = {
+        'of' : 'prep_of',
+        'by' : 'prep_by',
+        'for' : 'prep_for',
+        'in'  : 'prep_in',
+        'on'  : 'prep_on',
+        'from' : 'prep_from',
+    }
+    for child in tree.child:
+        processPrepositions(child)
+    if tree.dependency.startswith('nmod'):
+        if len(tree.child) == 0:
+            tree.parent.merge(tree, True)
+            return
+        for child in tree.child:
+            if child.dependency == 'case':
+                break
+        if ':' in tree.dependency: # example : 'nmod:poss'
+            tree.dependency = tree.dependency[tree.dependency.index(':')+1:]
+        else:
+            tree.dependency = prepositionMaping[child.getWords().lower()]
+        tree.child.remove(child)
+
+def processPunctuation(tree):
+    """
+        Remove the nodes with a 'punct' dependency.
+        This function is a temporary fix for compatibility with the new version
+        of CoreNLP (from December 2015).
+    """
+    for child in tree.child:
+        processPunctuation(child)
+    if tree.dependency == 'punct':
+        tree.parent.child.remove(tree)
+
+def processForCompatibility(tree):
+    processConjonctions(tree)
+    processPrepositions(tree)
+    processPunctuation(tree)
 
 ###################
 # Global function #
@@ -265,4 +334,5 @@ def computeTree(stanfordResult):
     generator = TreeGenerator(stanfordResult)
     tree = generator.computeTree()
     tree.initText(stanfordResult['text'].replace('"', '\\"')) # each node contains the input question
+    processForCompatibility(tree)
     return tree

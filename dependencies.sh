@@ -7,4 +7,8 @@ if [ ! -f $JAVA_PATH ]
 then
     export JAVA_PATH=/usr/lib/jvm/java-8-oracle/bin/java
 fi
-CORENLP="stanford-corenlp-full-*" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp &
+cd CoreNLP
+export CLASSPATH="`find . -name '*.jar'`"
+java -mx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer &
+sleep 1 # Let the server some time to start...
+echo "CoreNLP server launched in background: PID $! "

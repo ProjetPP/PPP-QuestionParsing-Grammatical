@@ -11,6 +11,7 @@ bear in -> birthplace, place of birth, birth place
 bear on -> birth date, birthday, birthdate
 bear on <- birth
 belong to -> owner, part of
+belong -> owner, part of
 build -> construction
 build <- architecht, builder, constructor
 bury in -> location of burial, burial place

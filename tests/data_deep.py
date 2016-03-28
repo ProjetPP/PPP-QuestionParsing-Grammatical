@@ -236,7 +236,7 @@ expected = {
     T(R('chocolate sunday'), R('definition'), M()),
 
     'What is the D Day?':
-    T(R('D Day'), R('definition'), M()),
+    T(R('d day'), R('definition'), M()),
 
     'When was D-Day?':
     T(R('D-Day'), R('date'), M()),
