@@ -6,10 +6,10 @@ The files `demo*.py` enable you to test the main steps of the Question Parsing a
 
 May need to install [jsonrpclib](https://github.com/tcalmant/jsonrpclib) (for python3).
 
-Go to the folder where CoreNLP is installed (`Scripts/` folder if you have cloned the [scripts repository](https://github.com/ProjetPP/Scripts) and run `bash bootstrap_corenlp.sh`). Run:
+Go to the folder where CoreNLP is installed (`Deployment/` folder if you have cloned the [deployment repository](https://github.com/ProjetPP/Deployment) and run `bash bootstrap_corenlp.sh`). Run:
 
 ```bash
-CORENLP="stanford-corenlp-full-2015-01-30" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp
+CORENLP="stanford-corenlp-full-2015-01-30" CORENLP_OPTIONS="-parse.flags \" -makeCopulaHead\"" python3 -m corenlp -p 9000
 ```
 
 ## Choosing a demo file
