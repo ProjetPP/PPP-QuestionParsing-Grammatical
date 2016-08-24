@@ -8,7 +8,7 @@ Question Parsing module for the PPP using a grammatical approach.
 
 ## Introduction
 
-The purpose of this Question Parsing module is to transform questions into trees of triples, as described into [our datamodel](https://github.com/ProjetPP/Documentation/blob/master/data-model.md), which can be handled by backend modules. 
+The purpose of this Question Parsing module is to transform questions into trees of triples, as described into [our datamodel](https://github.com/ProjetPP/Documentation/blob/master/data-model.md), which can be handled by backend modules.
 
 For instance, we aim at producing the triple `(Rwanda,president,?)` from the question `Who is the president of Rwanda?`. The formal representation of this triple is:
 ```
@@ -31,6 +31,12 @@ For instance, we aim at producing the triple `(Rwanda,president,?)` from the que
 See [our website](http://projetpp.github.io/) to learn more about the project and [test our question answering tool](http://askplatyp.us/).
 
 ## How to install
+
+#### Stanford CoreNLP
+
+Run the script [dependencies.sh](https://github.com/ProjetPP/PPP-QuestionParsing-Grammatical/blob/master/dependencies.sh) to install and launch the CoreNLP server.
+
+#### QuestionParsing module
 
 With a recent version of pip:
 
