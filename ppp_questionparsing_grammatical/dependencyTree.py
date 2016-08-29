@@ -185,7 +185,7 @@ class TreeGenerator:
         """
             Compute the edges of the dependency tree.
         """
-        for edge in self.stanfordResult['basic-dependencies']: # use 'collapsed-dependencies' ?
+        for edge in self.stanfordResult['basicDependencies']: # use 'collapsed-dependencies' ?
             node1 = self._getNode(edge['governorGloss'], edge['governor'])
             node2 = self._getNode(edge['dependentGloss'], edge['dependent'])
             # n1 is the parent of n2
