@@ -78,7 +78,8 @@ class StandardTripleTests(TestCase):
                 },
                 "type": "sort"
             },
-            "type": "first"
+            "index": 0,
+            "type": "nth"
         },
         {
             "list": {
@@ -92,7 +93,8 @@ class StandardTripleTests(TestCase):
                 },
                 "type": "sort"
             },
-            "type": "first"
+            "index": 0,
+            "type": "nth"
         }
     ],
     "type": "intersection"
@@ -373,7 +375,8 @@ class StandardTripleTests(TestCase):
                 },
         "type": "sort"
     },
-    "type": "last"
+    "index": -1,
+    "type": "nth"
 })
 
     def testnormalFormProductionSuperl2(self):
@@ -404,7 +407,8 @@ class StandardTripleTests(TestCase):
                 },
         "type": "sort"
     },
-    "type": "last"
+    "index": -1,
+    "type": "nth"
 })
 
     def testCop(self):

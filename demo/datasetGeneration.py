@@ -55,7 +55,7 @@ def stringOfTree(t, indent=BASE_INDENT):
     elif t.type in {'list', 'intersection', 'union'}:
         l = ',\n'.join(stringOfTree(x, indent+1) for x in t.list)
         return '{0}{1}([\n{2}\n{0}])'.format(' '*indent*INDENT_NUMBER, symbol[t.type], l)
-    elif t.type in {'exists', 'first', 'last', 'sort'}:
+    elif t.type in {'exists', 'nth', 'sort'}:
         l = stringOfTree(t.list, indent+1)
         return '{0}{1}(\n{2}\n{0})'.format(' '*indent*INDENT_NUMBER, symbol[t.type], l)
     raise TripleError(t,"Wrong triple (new datamodel connectors?).")
