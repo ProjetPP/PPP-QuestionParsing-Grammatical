@@ -1,6 +1,6 @@
 import sys
 import ppp_datamodel
-from ppp_datamodel import Resource, Missing, Triple, Last, First, List, Sort, Intersection, Union, Exists
+from ppp_datamodel import Resource, Missing, Triple, first, List, Sort, Intersection, Exists
 from .questionWordProcessing import questionWordNormalForm
 from .data.conjunction import conjunctionTab
 from .data.superlative import superlativeNoun, superlativeOrder
@@ -126,12 +126,12 @@ def normalizeSuperlative(tree):
         if order in superlativeOrder:
             return superlativeOrder[order](Sort(normalize(tree.child[0]), Resource(superlativeNoun[predicate])))
         else:
-            return First(Sort(normalize(tree.child[0]), Resource(superlativeNoun[predicate]))) # First by default
+            return first(Sort(normalize(tree.child[0]), Resource(superlativeNoun[predicate]))) # First by default
     else:
         if order in superlativeOrder:
             return superlativeOrder[order](Sort(normalize(tree.child[0]), Resource('default'))) # default predicate
         else:
-            return First(Sort(normalize(tree.child[0]), Resource('default')))
+            return first(Sort(normalize(tree.child[0]), Resource('default')))
 
 def normalizeConjunction(tree):
     """

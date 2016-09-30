@@ -4,8 +4,8 @@ from ppp_datamodel import Missing as M
 from ppp_datamodel import Intersection as I
 from ppp_datamodel import Union as U
 from ppp_datamodel import Exists as E
-from ppp_datamodel import First as F
-from ppp_datamodel import Last as L
+from ppp_datamodel import first as F
+from ppp_datamodel import last as L
 from ppp_datamodel import Sort as S
 from ppp_datamodel import List as Li
 

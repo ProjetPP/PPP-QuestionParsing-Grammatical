@@ -1,7 +1,8 @@
 import sys
 from .dependencyTree import Word, DependenciesTree
 from .data.questionWord import closeQuestionWord, openQuestionWord, strongQuestionWord, questionAdd, questionWIs, questionType, existQuestionWord, semiQuestionWord
-from ppp_datamodel import Resource, Triple, Missing, Intersection, List, Union, And, Or, Exists, First, Last, Sort
+from ppp_datamodel import Resource, Triple, Missing, Intersection, List, Union, And, Or, Exists, Sort, Nth
+
 
 #####################################
 # Identify and remove question word #
@@ -132,7 +133,7 @@ def processQuestionInfo(nf, w):
         for u in nf.list:
             result.append(processQuestionInfo(u, w))
         return type(nf)(result)
-    elif isinstance(nf, (Last, First, Exists)):
+    elif isinstance(nf, (Nth, Exists)):
         return type(nf)(processQuestionInfo(nf.list, w))
     elif isinstance(nf, Sort) or isinstance(nf, Resource):
         return nf
